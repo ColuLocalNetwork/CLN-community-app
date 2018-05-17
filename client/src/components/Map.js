@@ -1,19 +1,19 @@
-import React, {Component} from "react"
+import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { compose, withProps, withStateHandlers, withState, withHandlers } from "recompose"
-import { mapStyle, googleMapsUrl, pagePath } from '../constants/uiConstants'
+import { compose, withProps, withStateHandlers, withState, withHandlers } from 'recompose'
+import { mapStyle, googleMapsUrl } from 'constants/uiConstants'
 import {
 	withScriptjs,
 	withGoogleMap,
 	GoogleMap,
 	OverlayView
-} from "react-google-maps"
+} from 'react-google-maps'
 import classNames from 'classnames'
-import { isBrowser, isMobile, BrowserView, MobileView } from "react-device-detect"
-import addresses from '../constants/addresses'
+import { isBrowser, isMobile, BrowserView, MobileView } from 'react-device-detect'
+import addresses from 'constants/addresses'
 import Marker from 'components/Marker'
-import * as uiActions from '../actions/ui'
+import * as uiActions from 'actions/ui'
 
 const panByHorizontalOffset = isMobile ? 0 : 1.4 // because of the community sidebar, so it's a bit off the center
 const defaultZoom = isMobile ? 3 : 4
@@ -56,49 +56,17 @@ const GoogleMapComponent = compose(
 		ref={props.onMapMounted}
 		style={{backgroundColor: 'rgb(229, 227, 223)'}}
 		zoom={props.ui.zoom || defaultZoom}>
-
-		{ props.tokens && props.tokens[addresses.TelAvivCoin] && props.tokens[addresses.TelAvivCoin].metadata &&
-			<OverlayView position={props.tokens[addresses.TelAvivCoin].metadata.location.geo}
-				mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}>
-				<Marker
-					id={addresses.TelAvivCoin}
-					pagePath={pagePath.telaviv.path}
-					community={{name: props.tokens[addresses.TelAvivCoin].name, price: '0.9CLN'}}
-					onClick={props.onClick.bind(this, props.tokens[addresses.TelAvivCoin].metadata.location.geo, addresses.TelAvivCoin,  props.uiActions)}/>
-			</OverlayView>
-		}
-
-		{ props.tokens && props.tokens[addresses.HaifaCoin] && props.tokens[addresses.HaifaCoin].metadata &&
-			<OverlayView position={props.tokens[addresses.HaifaCoin].metadata.location.geo}
-				mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}>
-				<Marker
-					id={addresses.HaifaCoin}
-					pagePath={pagePath.haifa.path}
-					community={{name: props.tokens[addresses.HaifaCoin].name, price: '0.7CLN'}}
-					onClick={props.onClick.bind(this, props.tokens[addresses.HaifaCoin].metadata.location.geo, addresses.HaifaCoin, props.uiActions)}/>
-			</OverlayView>
-		}
-
-		{ props.tokens && props.tokens[addresses.LondonCoin] && props.tokens[addresses.LondonCoin].metadata &&
-			<OverlayView position={props.tokens[addresses.LondonCoin].metadata.location.geo}
-				mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}>
-				<Marker
-					id={addresses.LondonCoin}
-					pagePath={pagePath.london.path}
-					community={{name: props.tokens[addresses.LondonCoin].name, price: '0.7CLN'}}
-					onClick={props.onClick.bind(this, props.tokens[addresses.LondonCoin].metadata.location.geo, addresses.LondonCoin, props.uiActions)}/>
-			</OverlayView>
-		}
-
-		{ props.tokens && props.tokens[addresses.LiverpoolCoin] && props.tokens[addresses.LiverpoolCoin].metadata &&
-			<OverlayView position={props.tokens[addresses.LiverpoolCoin].metadata.location.geo}
-				mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}>
-				<Marker
-					id={addresses.LiverpoolCoin}
-					pagePath={pagePath.liverpool.path}
-					community={{name: props.tokens[addresses.LiverpoolCoin].name, price: '0.7CLN'}}
-					onClick={props.onClick.bind(this, props.tokens[addresses.LiverpoolCoin].metadata.location.geo, addresses.LiverpoolCoin, props.uiActions)}/>
-			</OverlayView>
+		{
+			props.communities.map(community => (
+				<OverlayView position={community.metadata.location.geo}
+					mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}>
+					<Marker
+						id={community.address}
+						pagePath={`/view/community/${community.metadata.name}`}
+						community={community}
+						onClick={props.onClick.bind(this, community.metadata.location.geo, community.address,  props.uiActions)}/>
+				</OverlayView>
+			))
 		}
 	</GoogleMap>
 ));
@@ -109,10 +77,9 @@ class MapComponent extends Component {
 			"active": this.props.active,
 			"map-wrapper": true
 		})
-
 		return (
 			<div className={mapWrapperClass} >
-				<GoogleMapComponent tokens={this.props.tokens} ui={this.props.ui} uiActions={this.props.uiActions}/>
+				<GoogleMapComponent communities={this.props.communities} ui={this.props.ui} uiActions={this.props.uiActions}/>
 			</div>
 		)
 	}
@@ -120,7 +87,6 @@ class MapComponent extends Component {
 
 const mapStateToProps = state => {
 	return {
-		tokens: state.tokens,
 		ui: state.ui
 	}
 }

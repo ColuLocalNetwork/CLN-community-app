@@ -6,7 +6,7 @@ import { isBrowser, isMobile } from "react-device-detect"
 import classNames from 'classnames'
 import * as uiActions from '../actions/ui'
 import { pagePath } from '../constants/uiConstants'
-
+import { getSelectedCommunity } from 'selectors/basicToken'
 
 class CommunitySidebar extends Component {
 	state = {
@@ -105,9 +105,7 @@ class CommunitySidebar extends Component {
 			topPosition =  this.state.pos.y + 'px'
 		}
 
-		const currentCoin = (this.props.tokens && this.props.ui && this.props.ui.activeMarker && this.props.tokens[this.props.ui.activeMarker])
-							|| (this.props.tokens && this.props.tokens[currentCoinAdress]) || {}
-
+		const currentCoin = (this.props.selectedCommunity && this.props.selectedCommunity.metadata) ? this.props.selectedCommunity : {}
 		let control
 
 		if (isMobile && !this.state.open) {
@@ -185,7 +183,7 @@ class CommunitySidebar extends Component {
 							</div>
 							<div className="box-data column">
 								<p>{currentCoin.metadata && currentCoin.metadata.website}</p>
-								<p></p>
+								<p>{currentCoin.metadata && currentCoin.metadata.location.name}</p>
 								<p>{currentCoin.metadata && currentCoin.metadata.social.facebook}</p>
 							</div>
 						</div>
@@ -197,9 +195,9 @@ class CommunitySidebar extends Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
 	return {
-		tokens: state.tokens,
+		selectedCommunity: getSelectedCommunity(state, props),
 		ui: state.ui
 	}
 }

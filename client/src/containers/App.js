@@ -1,13 +1,13 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
-import Map from 'components/Map'
-import TopNav from 'components/TopNav'
-// import CommunitiesList from 'components/CommunitiesList'
 import classNames from 'classnames'
 
 import {fetchContractData} from 'actions/basicToken'
 import {getNetworkType} from 'actions/web3'
+import {getCommunities} from 'selectors/basicToken'
 import addresses from 'constants/addresses'
+import Map from 'components/Map'
+import TopNav from 'components/TopNav'
 
 const coluTokens = [
 	addresses.ColuLocalNetwork,
@@ -62,19 +62,17 @@ class App extends Component {
 						</div>
 
 		return <div className="flex column center">
-			{}
 			<div className={mainContainerClass}>
 				<TopNav active={!this.state.isWelcome}/>
-				<Map key="map" active={!this.state.isWelcome}/>
+				<Map key="map" active={!this.state.isWelcome} communities={this.props.communities} />
 			</div>
 		</div>
 	}
 }
 
-
 //<CommunitiesList active={!this.state.isWelcome}/>
 const mapStateToProps = state => {
-	return {}
+	communities: getCommunities(state)
 }
 
 export default connect(
