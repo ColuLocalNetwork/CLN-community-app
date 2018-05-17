@@ -1,5 +1,6 @@
 {
   "web3": {
-    "provider": "COMMUNITY_WEB3_PROVIDER"
+    "provider": "COMMUNITY_WEB3_PROVIDER",
+    "correctNetwork": "COMMUNITY_CORRECT_NETWORK"
   }
 }

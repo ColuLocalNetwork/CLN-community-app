@@ -1,6 +1,7 @@
 {
   "web3": {
-    "provider": "http://localhost:8545"
+    "provider": "http://localhost:8545",
+    "correctNetwork": "mainnet"
   },
   "api": {
     "url": "/api/v1"
