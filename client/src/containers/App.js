@@ -29,7 +29,7 @@ class App extends Component {
 		coluTokens.forEach(this.props.fetchContractData)
 	}
 
-	onClickExplore() {
+	onClickExplore = () => {
 		this.setState({
 			isWelcome: !this.state.isWelcome,
 			panBy: { x: -100, y: 0 }
@@ -58,7 +58,7 @@ class App extends Component {
 		const welcome = <div className={welcomeClass}>
 							<h3>Welcome to the CLN Community dApp</h3>
 							<h4>Here you can monitor the status of the CLN economies, buy and sell local community currencies issued on the network and more</h4>
-							<div className="button" onClick={this.onClickExplore.bind(this)}>EXPLORE</div>
+							<div className="button" onClick={this.onClickExplore}>EXPLORE</div>
 						</div>
 
 		return <div className="flex column center">
@@ -71,9 +71,9 @@ class App extends Component {
 }
 
 //<CommunitiesList active={!this.state.isWelcome}/>
-const mapStateToProps = state => {
+const mapStateToProps = state => ({
 	communities: getCommunities(state)
-}
+})
 
 export default connect(
 	mapStateToProps, {

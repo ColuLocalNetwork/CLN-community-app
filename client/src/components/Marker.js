@@ -120,7 +120,6 @@ class Marker extends React.PureComponent {
 
 const mapStateToProps = state => {
 	return {
-		tokens: state.tokens,
 		activeMarker: state.ui.activeMarker
 	}
 }
