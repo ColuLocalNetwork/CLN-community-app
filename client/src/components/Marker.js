@@ -22,7 +22,7 @@ class Marker extends React.PureComponent {
 	//	else return false
 	//}
 	componentWillReceiveProps(nextProps) {
-		
+
 		if (nextProps.activeMarker !== this.props.activeMarker && nextProps.activeMarker === this.props.id) {
 			setTimeout(() => {
 				this.setState({grow: true})
@@ -100,8 +100,8 @@ class Marker extends React.PureComponent {
 		//console.log("RENDER MARKER")
 
 		return (
-			<Link to={this.props.pagePath}>
-				<div className='marker' 
+			<Link to={`/view/community/${this.props.community.name}`}>
+				<div className='marker'
 					onMouseEnter={this.handleHover.bind(this, true)}
 					onMouseLeave={this.handleHover.bind(this, false)}
 					onClick={this.props.onClick}>
@@ -110,7 +110,7 @@ class Marker extends React.PureComponent {
 					</div>
 					<div className={communityLabel}>
 						<div className="coin-label-name">{this.props.community.name}</div>
-						<div className="coin-label-price">{this.props.community.price}</div>
+						<div className="coin-label-price">{`${this.props.community.currentPrice}CLN`}</div>
 					</div>
 				</div>
 			</Link>
@@ -120,7 +120,6 @@ class Marker extends React.PureComponent {
 
 const mapStateToProps = state => {
 	return {
-		tokens: state.tokens,
 		activeMarker: state.ui.activeMarker
 	}
 }

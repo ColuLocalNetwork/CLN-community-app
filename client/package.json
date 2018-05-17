@@ -13,13 +13,16 @@
   "license": "MIT",
   "standard": {
     "parser": "babel-eslint",
-    "globals": ["CONFIG"]
+    "globals": [
+      "CONFIG"
+    ]
   },
   "dependencies": {
     "bignumber.js": "^6.0.0",
     "classnames": "^2.2.5",
     "formik": "^0.11.11",
     "history": "^4.7.2",
+    "lodash": "^4.17.10",
     "osseus-wallet": "0.0.6",
     "popmotion": "^8.1.22",
     "prop-types": "^15.6.1",
@@ -40,6 +43,7 @@
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
     "redux-saga": "^0.16.0",
+    "reselect": "^3.0.1",
     "superagent": "^3.8.3",
     "web3": "1.0.0-beta.33",
     "yup": "^0.24.1"

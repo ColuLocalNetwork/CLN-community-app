@@ -8,7 +8,7 @@ import { AnimatedRoute } from 'react-router-transition'
 import { isMobile } from 'react-device-detect'
 
 import App from 'containers/App'
-import CommunitySidebar from 'components/CommunitySidebar'
+import CommunitySidebar from 'containers/CommunitySidebar'
 import ContactForm from 'components/ContactForm'
 import CurrencyFactoryContract from 'containers/CurrencyFactoryContract'
 import Web3Loader from 'containers/Web3Loader'
@@ -88,25 +88,7 @@ export default class Root extends Component {
 							<App />
 							<div className="sidebar">
 								<AnimatedRoute
-									path={pagePath.telaviv.path}
-									component={CommunitySidebar}
-									mapStyles={isMobile ? mapStylesMobile : mapStyles}
-									{...sidebarAnimation}
-								/>
-								<AnimatedRoute
-									path={pagePath.london.path}
-									component={CommunitySidebar}
-									mapStyles={isMobile ? mapStylesMobile : mapStyles}
-									{...sidebarAnimation}
-								/>
-								<AnimatedRoute
-									path={pagePath.haifa.path}
-									component={CommunitySidebar}
-									mapStyles={isMobile ? mapStylesMobile : mapStyles}
-									{...sidebarAnimation}
-								/>
-								<AnimatedRoute
-									path={pagePath.liverpool.path}
+									path="/view/community/:name"
 									component={CommunitySidebar}
 									mapStyles={isMobile ? mapStylesMobile : mapStyles}
 									{...sidebarAnimation}

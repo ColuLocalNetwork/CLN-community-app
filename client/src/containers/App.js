@@ -1,20 +1,20 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
-import Map from 'components/Map'
-import TopNav from 'components/TopNav'
-// import CommunitiesList from 'components/CommunitiesList'
 import classNames from 'classnames'
 
 import {fetchContractData} from 'actions/basicToken'
 import {getNetworkType} from 'actions/web3'
+import {getCommunities} from 'selectors/basicToken'
 import addresses from 'constants/addresses'
+import Map from 'components/Map'
+import TopNav from 'components/TopNav'
 
 const coluTokens = [
 	addresses.ColuLocalNetwork,
-	addresses.TelAvivCoinAddress,
-	addresses.LondonCoinAddress,
-	addresses.HaifaCoinAddress,
-	addresses.LiverpoolCoinAddress
+	addresses.TelAvivCoin,
+	addresses.LondonCoin,
+	addresses.HaifaCoin,
+	addresses.LiverpoolCoin
 ]
 
 import 'scss/styles.scss'
@@ -29,7 +29,7 @@ class App extends Component {
 		coluTokens.forEach(this.props.fetchContractData)
 	}
 
-	onClickExplore() {
+	onClickExplore = () => {
 		this.setState({
 			isWelcome: !this.state.isWelcome,
 			panBy: { x: -100, y: 0 }
@@ -58,24 +58,22 @@ class App extends Component {
 		const welcome = <div className={welcomeClass}>
 							<h3>Welcome to the CLN Community dApp</h3>
 							<h4>Here you can monitor the status of the CLN economies, buy and sell local community currencies issued on the network and more</h4>
-							<div className="button" onClick={this.onClickExplore.bind(this)}>EXPLORE</div>
+							<div className="button" onClick={this.onClickExplore}>EXPLORE</div>
 						</div>
 
 		return <div className="flex column center">
-			{}
 			<div className={mainContainerClass}>
 				<TopNav active={!this.state.isWelcome}/>
-				<Map key="map" active={!this.state.isWelcome}/>
+				<Map key="map" active={!this.state.isWelcome} communities={this.props.communities} />
 			</div>
 		</div>
 	}
 }
 
-
 //<CommunitiesList active={!this.state.isWelcome}/>
-const mapStateToProps = state => {
-	return {}
-}
+const mapStateToProps = state => ({
+	communities: getCommunities(state)
+})
 
 export default connect(
 	mapStateToProps, {
