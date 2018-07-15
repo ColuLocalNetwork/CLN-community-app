@@ -56,7 +56,6 @@ app.use(function (req, res, next) {
 /// error handlers
 if (!isProduction) {
   app.use(function (err, req, res, next) {
-
     console.log(err.stack)
 
     res.status(err.status || 500)
