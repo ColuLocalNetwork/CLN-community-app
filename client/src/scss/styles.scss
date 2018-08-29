@@ -605,6 +605,14 @@ button:disabled, button[disabled] {
 
 		}
 
+		.coin-balance {
+			display: inline-block;
+			color: $colu-green;
+			font-size: 16px;
+			margin-left: 15px;
+			font-weight: 500;
+		}
+
 		.price-wrapper {
 			font-size: 14px;
 			@include flex-box();
@@ -922,6 +930,38 @@ button:disabled, button[disabled] {
 			.balance-text {
 				font-size: 16px;
 				font-weight: 500;
+			}
+		}
+		.top-nav-show-coins {
+			position: relative;
+			padding-right: 25px;
+			&::after {
+				content: '';
+				width: 0;
+			  height: 0;
+				border-left: 5px solid transparent;
+			  border-right: 5px solid transparent;
+				border-bottom: 5px solid $dark-grey;
+				position: absolute;
+		    right: 10px;
+		    top: 50%;
+		    margin-top: -3px;
+			}
+		}
+		.top-nav-hide-coins {
+			position: relative;
+			padding-right: 25px;
+			&::after {
+				content: '';
+				width: 0;
+			  height: 0;
+				border-left: 5px solid transparent;
+			  border-right: 5px solid transparent;
+			  border-top: 5px solid $dark-grey;
+				position: absolute;
+		    right: 10px;
+		    top: 50%;
+		    margin-top: -3px;
 			}
 		}
 		@media (max-width: $breakpoint-tablet) {
@@ -1931,6 +1971,10 @@ input[type="checkbox" i] {
 							}
 						}
 					}
+
+					.coin-balance {
+						font-size: 12px;
+					}
 				}
 
 				&:hover {
@@ -1966,6 +2010,9 @@ input[type="checkbox" i] {
 									margin: 0;
 								}
 							}
+						}
+						.coin-balance {
+							font-size: 12px;
 						}
 					}
 				}
