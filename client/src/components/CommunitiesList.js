@@ -3,9 +3,11 @@ import posed from 'react-pose'
 import { isMobile } from 'react-device-detect'
 import classNames from 'classnames'
 import * as actions from 'actions/ui'
+import {BigNumber} from 'bignumber.js'
 
 import { connect } from 'react-redux'
 import CoinHeader from './CoinHeader'
+import {getBalances} from 'selectors/accounts'
 import {getSelectedCommunity, getCommunities} from 'selectors/communities'
 import find from 'lodash/find'
 import sortBy from 'lodash/sortBy'
@@ -26,7 +28,7 @@ const CoinWrapper = posed.div({
   closedCoinInfo: {damping: 0, staggerChildren: 0, height: 'auto', duration: 300}
 })
 
-const Nav = ({ isOpen, coins, currentCoin, onClick, openCoinInfo, keyProp, setRef }) => {
+const Nav = ({ isOpen, coins, currentCoin, onClick, openCoinInfo, keyProp, setRef, coinBalance, showBalance }) => {
   let poseValue = isOpen ? 'open' : 'closed'
   let top = (keyProp) * 110 + (keyProp + 1) * 20
   let communityCoins = coins && coins.filter((coin) => {
@@ -43,7 +45,7 @@ const Nav = ({ isOpen, coins, currentCoin, onClick, openCoinInfo, keyProp, setRe
         })
         return <NavItem className='list-item' key={i} pose={isOpen ? 'open' : 'closed'} onClick={onClick.bind(this, coin.address, i)}>
           <CoinWrapper className={coinWrapperStyle} >
-            <CoinHeader coinImage={coin.metadata && coin.metadata.imageLink} name={coin.name} price={coin.currentPrice} />
+            <CoinHeader coinImage={coin.metadata && coin.metadata.imageLink} name={coin.name} price={coin.currentPrice} balance={new BigNumber(coinBalance[coin.address]).div(1e18).toFormat(2, 1)} showBalance={showBalance}/>
           </CoinWrapper>
         </NavItem>
       }
@@ -123,7 +125,7 @@ class CommunitiesList extends Component {
       return null
     }
     if (!isMobile) {
-      return <Nav isOpen={this.state.active} coins={communityCoins} onClick={this.onClick.bind(this)} openCoinInfo={currentCoin} keyProp={this.state.key} />
+      return <Nav isOpen={this.state.active} coins={communityCoins} onClick={this.onClick.bind(this)} openCoinInfo={currentCoin} keyProp={this.state.key} coinBalance={getBalances(this.props.account)} showBalance={this.props.ui.coinBalance} />
     } else {
       const communitiesListStyle = classNames({
         'communities-list': true,
@@ -137,7 +139,7 @@ class CommunitiesList extends Component {
           })
           return <div className='list-item' key={i} onClick={this.onClick.bind(this, coin.address, i)}>
             <div className={coinWrapperStyle} style={{transform: 'translateX(-' + (currentCoin ? this.state.scrollOffset : 0) + 'px)'}}>
-              <CoinHeader coinImage={coin.metadata && coin.metadata.imageLink} name={coin.name} price={coin.currentPrice} />
+              <CoinHeader coinImage={coin.metadata && coin.metadata.imageLink} name={coin.name} price={coin.currentPrice} showBalance={this.props.ui.coinBalance} />
             </div>
           </div>
         })}
@@ -150,7 +152,8 @@ const mapStateToProps = state => {
   return {
     tokens: getCommunities(state),
     ui: state.ui,
-    selectedCommunity: getSelectedCommunity(state)
+    selectedCommunity: getSelectedCommunity(state),
+    account: state
   }
 }
 
