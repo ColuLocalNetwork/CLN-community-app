@@ -9,6 +9,9 @@
     "protocol": "https",
     "timeout": 3000
   },
+  "web3": {
+    "provider": "localhost:8545"
+  },
   "mongo": {
     "uri": "mongodb://localhost/CLN-community-app",
     "options": {}
