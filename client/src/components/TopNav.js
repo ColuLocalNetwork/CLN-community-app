@@ -59,15 +59,15 @@ class TopNav extends Component {
     })
 
   toggleCoinBalance (communityCoins) {
-		if (communityCoins.length > 1) {
-			return this.props.toggleBalance(!this.props.ui.coinBalance)
-		}
-	}
+    if (communityCoins.length > 1) {
+      return this.props.toggleBalance(!this.props.ui.coinBalance)
+    }
+  }
 
   render () {
     let communityCoins = Object.values(this.props.tokens) && Object.values(this.props.tokens).filter((token) => {
-			return token.isLocalCurrency
-		})
+      return token.isLocalCurrency
+    })
     const topNavClass = classNames({
       'active': this.props.active,
       'top-navigator': true
@@ -77,9 +77,9 @@ class TopNav extends Component {
       'top-nav-links': true
     })
     const topNavBalanceClass = classNames({
-		  "top-nav-balance": true,
-		  "top-nav-hide-coins": this.props.ui.coinBalance && communityCoins.length > 0,
-	    "top-nav-show-coins": !this.props.ui.coinBalance,
+      "top-nav-balance": true,
+      "top-nav-hide-coins": this.props.ui.coinBalance && communityCoins.length > 0,
+      "top-nav-show-coins": !this.props.ui.coinBalance,
     })
 
     return <div className={topNavClass}>
@@ -130,7 +130,7 @@ const mapStateToProps = state => {
     network: state.network,
     clnBalance: getClnBalance(state),
     tokens: state.tokens,
-		ui: state.ui
+    ui: state.ui
   }
 }
 
