@@ -3,6 +3,7 @@ import {action} from './utils'
 export const ACTIVE_MARKER = 'ACTIVE_MARKER'
 export const ZOOM = 'ZOOM'
 
+export const TOGGLE_BALANCE = 'TOGGLE_BALANCE'
 export const SHOW_MODAL = 'SHOW_MODAL'
 export const HIDE_MODAL = 'HIDE_MODAL'
 export const SET_MODAL_PROPS = 'SET_MODAL_PROPS'
@@ -27,6 +28,13 @@ export const loadModal = (modalType, modalProps) => {
 export const hideModal = () => {
   return {
     type: HIDE_MODAL
+  }
+}
+
+export const showBalance = (coinBalance) => {
+  return {
+    type: TOGGLE_BALANCE,
+    coinBalance
   }
 }
 
