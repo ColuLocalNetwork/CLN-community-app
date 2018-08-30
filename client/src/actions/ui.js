@@ -31,7 +31,7 @@ export const hideModal = () => {
   }
 }
 
-export const toggleBalance = (coinBalance) => {
+export const showBalance = (coinBalance) => {
   return {
     type: TOGGLE_BALANCE,
     coinBalance

@@ -936,32 +936,32 @@ button:disabled, button[disabled] {
 			position: relative;
 			padding-right: 25px;
 			&::after {
-				content: '';
-				width: 0;
-				height: 0;
-				border-left: 5px solid transparent;
-				border-right: 5px solid transparent;
-				border-bottom: 5px solid $dark-grey;
-				position: absolute;
-				right: 10px;
-				top: 50%;
-				margin-top: -3px;
+			  content: '';
+			  width: 0;
+			  height: 0;
+			  border-left: 5px solid transparent;
+			  border-right: 5px solid transparent;
+			  border-bottom: 5px solid $dark-grey;
+			  position: absolute;
+			  right: 10px;
+			  top: 50%;
+			  margin-top: -3px;
 			}
 		}
 		.top-nav-hide-coins {
 			position: relative;
 			padding-right: 25px;
 			&::after {
-				content: '';
-				width: 0;
-				height: 0;
-				border-left: 5px solid transparent;
-				border-right: 5px solid transparent;
-				border-top: 5px solid $dark-grey;
-				position: absolute;
-				right: 10px;
-				top: 50%;
-				margin-top: -3px;
+			  content: '';
+			  width: 0;
+			  height: 0;
+			  border-left: 5px solid transparent;
+			  border-right: 5px solid transparent;
+			  border-top: 5px solid $dark-grey;
+			  position: absolute;
+			  right: 10px;
+			  top: 50%;
+			  margin-top: -3px;
 			}
 		}
 		@media (max-width: $breakpoint-tablet) {

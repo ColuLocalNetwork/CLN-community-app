@@ -45,7 +45,7 @@ const Nav = ({ isOpen, coins, currentCoin, onClick, openCoinInfo, keyProp, setRe
         })
         return <NavItem className='list-item' key={i} pose={isOpen ? 'open' : 'closed'} onClick={onClick.bind(this, coin.address, i)}>
           <CoinWrapper className={coinWrapperStyle} >
-            <CoinHeader coinImage={coin.metadata && coin.metadata.imageLink} name={coin.name} price={coin.currentPrice} balance={new BigNumber(coinBalance[coin.address]).div(1e18).toFormat(2, 1)} showBalance={showBalance}/>
+            <CoinHeader coinImage={coin.metadata && coin.metadata.imageLink} name={coin.name} price={coin.currentPrice} balance={new BigNumber(coinBalance[coin.address]).div(1e18).toFormat(4, 1)} showBalance={showBalance}/>
           </CoinWrapper>
         </NavItem>
       }
@@ -125,7 +125,7 @@ class CommunitiesList extends Component {
       return null
     }
     if (!isMobile) {
-      return <Nav isOpen={this.state.active} coins={communityCoins} onClick={this.onClick.bind(this)} openCoinInfo={currentCoin} keyProp={this.state.key} coinBalance={getBalances(this.props.account)} showBalance={this.props.ui.coinBalance} />
+      return <Nav isOpen={this.state.active} coins={communityCoins} onClick={this.onClick.bind(this)} openCoinInfo={currentCoin} keyProp={this.state.key} coinBalance={this.props.accountBalance} showBalance={this.props.ui.coinBalance} />
     } else {
       const communitiesListStyle = classNames({
         'communities-list': true,
@@ -153,7 +153,7 @@ const mapStateToProps = state => {
     tokens: getCommunities(state),
     ui: state.ui,
     selectedCommunity: getSelectedCommunity(state),
-    account: state
+    accountBalance: getBalances(state)
   }
 }
 

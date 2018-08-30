@@ -60,7 +60,7 @@ class TopNav extends Component {
 
   toggleCoinBalance (communityCoins) {
     if (communityCoins.length > 1) {
-      return this.props.toggleBalance(!this.props.ui.coinBalance)
+      return this.props.showBalance(!this.props.ui.coinBalance)
     }
   }
 
@@ -77,9 +77,9 @@ class TopNav extends Component {
       'top-nav-links': true
     })
     const topNavBalanceClass = classNames({
-      "top-nav-balance": true,
-      "top-nav-hide-coins": this.props.ui.coinBalance && communityCoins.length > 0,
-      "top-nav-show-coins": !this.props.ui.coinBalance,
+      'top-nav-balance': true,
+      'top-nav-hide-coins': this.props.ui.coinBalance && communityCoins.length > 0,
+      'top-nav-show-coins': !this.props.ui.coinBalance,
     })
 
     return <div className={topNavClass}>

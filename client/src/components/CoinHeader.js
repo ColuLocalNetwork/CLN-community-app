@@ -6,14 +6,14 @@ export default class CoinHeader extends Component {
   render () {
     const { price, coinImage, name, balance, showBalance } = this.props
     const formattedPrice = (price || price === 0) && formatEther(price)
-    const formattedBalance = (balance || balance === 0) && formatEther(balance)
+    const formattedBalance = (balance || balance === 0) && balance
     return (
       <div className='coin-header'>
         {coinImage ? <img src={coinImage} /> : <Loader className='loader image' />}
         <div className='coin-details'>
           <h1>
             {name || <Loader className='loader' />}
-            {showBalance && <p className='coin-balance'>{formattedBalance ? formattedBalance : <Loader className='loader' />}</p>}
+            {showBalance && <p className='coin-balance'>{formattedBalance || <Loader className='loader' />}</p>}
           </h1>
           <div className='separator' />
           <div className='price-wrapper'>
