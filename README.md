@@ -28,13 +28,11 @@ For the best experience, stop the client docker container and start it natively 
 
 ### dependencies
 
-[mongoDB](https://www.mongodb.com/)
-
-[ipfs](https://ipfs.io/docs/install/)
+- [mongoDB](https://www.mongodb.com/)
+- [ipfs](https://ipfs.io/docs/install/)
 
 Optional:
-
-[geth](https://ethereum.gitbooks.io/frontier-guide/content/getting_a_client.html)
+- [geth](https://ethereum.gitbooks.io/frontier-guide/content/getting_a_client.html)
 
 ### Setup database
 

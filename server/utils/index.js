@@ -13,7 +13,6 @@ const abis = require('../constants/abi')
 // const addresses = require('../constants/addresses')
 
 const ipfsConfig = config.get('ipfs')
-console.log('ipfsConfig', ipfsConfig)
 const ipfs = new IpfsAPI(ipfsConfig)
 
 const web3Config = config.get('web3')
