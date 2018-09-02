@@ -7,7 +7,7 @@ import {PRICE_EXPLANATION_MODAL} from 'constants/uiConstants'
 
 export default class CoinHeader extends Component {
   loadModal = (e) => {
-    this.props.loadModal(PRICE_EXPLANATION_MODAL)
+    this.props.loadModal(PRICE_EXPLANATION_MODAL, {token: this.props.token})
     e.stopPropagation()
   }
 
@@ -28,7 +28,7 @@ export default class CoinHeader extends Component {
             <p>{formattedPrice ? formattedPrice + ' CLN' : <Loader className='loader' />}</p>
           </div>
           <div className='price-wrapper'>
-            <h2>Price:</h2>
+            <h2>Est. Denomination:</h2>
             <p>{fiatPrice ? <span>
               {formatEther(fiatPrice)} USD<img src={Info} className='info' onClick={this.loadModal} /></span> : <Loader className='loader' />}
             </p>
