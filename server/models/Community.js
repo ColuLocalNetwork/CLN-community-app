@@ -7,7 +7,6 @@ module.exports = (mongoose) => {
   const CommunitySchema = new Schema({
     ccAddress: {type: String, required: [true, "can't be blank"]},
     mmAddress: {type: String, required: [true, "can't be blank"]},
-    tokenURI: {type: String},
     factoryAddress: {type: String, required: [true, "can't be blank"]},
     factoryType: {type: String, enum: ['CurrencyFactory', 'IssuanceFactory'], default: 'CurrencyFactory'},
     factoryVersion: {type: Number, default: 0},
@@ -16,7 +15,6 @@ module.exports = (mongoose) => {
 
   CommunitySchema.index({ccAddress: 1}, {unique: true})
   CommunitySchema.index({mmAddress: 1}, {unique: true})
-  CommunitySchema.index({tokenURI: 1})
   CommunitySchema.index({factoryAddress: 1})
   CommunitySchema.index({factoryAddress: 1, factoryType: 1, factoryVersion: 1})
 
@@ -30,11 +28,10 @@ module.exports = (mongoose) => {
         updatedAt: ret.updated_at,
         ccAddress: ret.ccAddress,
         mmAddress: ret.mmAddress,
-        tokenURI: ret.tokenURI,
         factoryAddress: ret.factoryAddress,
         factoryType: ret.factoryType,
         factoryVersion: ret.factoryVersion,
-        verified: ret.verified,
+        verified: ret.verified
       }
       return safeRet
     }

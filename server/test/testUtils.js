@@ -1,4 +1,4 @@
-process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = 'test'
 
 const mongoose = require('mongoose')
 const config = require('config')
@@ -22,7 +22,7 @@ let currencyFactory, cln, metadataAns, metadataHash, ccAddress, communityData
 const clearCollections = async () => {
   for (let collection in mongoose.connection.collections) {
     console.log('clear collection', collection)
-    await mongoose.connection.collections[collection].remove({});
+    await mongoose.connection.collections[collection].remove({})
   }
 }
 
@@ -40,12 +40,10 @@ const assertCommunityData = (comm1, comm2) => {
   assert.equal(comm1.factoryType, comm2.factoryType)
   assert.equal(comm1.factoryVersion, comm2.factoryVersion)
   assert.equal(comm1.mmAddress, comm2.mmAddress)
-  assert.equal(comm1.tokenURI, comm2.tokenURI)
 }
 
 contract('COMMUNITY', async (accounts) => {
-  
-  before(async function () {
+  before(async () => {
     this.timeout(60000)
 
     await mongoose.connect(config.get('mongo.uri'), config.get('mongo.options'))
@@ -89,8 +87,7 @@ contract('COMMUNITY', async (accounts) => {
       factoryAddress: currencyFactory.address,
       factoryType: 'CurrencyFactory',
       factoryVersion: 0,
-      mmAddress: mmAddress,
-      tokenURI: tokenURI
+      mmAddress: mmAddress
     })
   })
 
@@ -103,5 +100,4 @@ contract('COMMUNITY', async (accounts) => {
     let dbData = await mongoose.community.getByccAddress(ccAddress)
     assertCommunityData(communityData, dbData)
   })
-
-});
+})

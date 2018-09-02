@@ -1,6 +1,5 @@
 const router = require('express').Router()
 
-const auth = require('../auth')
 const utils = require('../../utils')
 
 router.get('/:protocol/:hash', async (req, res, next) => {

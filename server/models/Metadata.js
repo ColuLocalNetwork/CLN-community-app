@@ -90,5 +90,3 @@ module.exports = (mongoose) => {
 
   return metadata
 }
-
-

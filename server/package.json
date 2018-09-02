@@ -13,6 +13,18 @@
     "type": "git",
     "url": "git+https://github.com/colucom/CLN-community-server.git"
   },
+  "standard": {
+    "ignore": [
+      "constants/abi",
+      "migrations"
+    ],
+    "env": ["mocha"],
+    "globals": [
+      "artifacts",
+      "assert",
+      "contract"
+    ]
+  },
   "license": "MIT",
   "dependencies": {
     "async": "^2.6.1",
