@@ -11,9 +11,7 @@ router.get('/:protocol/:hash', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  const metadata = Buffer.from(JSON.stringify(req.body.metadata))
-
-  res.json(await utils.addMetadata(metadata))
+  res.json(await utils.addMetadata(req.body.metadata))
 })
 
 module.exports = router

@@ -1,10 +1,14 @@
-const to = require('await-to-js')
+const to = require('await-to-js').to
 const mongoose = require('mongoose')
 const config = require('config')
 const IpfsAPI = require('ipfs-api')
 const Web3 = require('web3');
 const contract = require("truffle-contract");
 
+const DEFAULT_FACTORY_TYPE = 'CurrencyFactory'
+const DEFAULT_FACTORY_VERSION = 0
+
+require('../models')(mongoose)
 const abis = require('../constants/abi')
 const addresses = require('../constants/addresses')
 
@@ -12,12 +16,19 @@ const ipfsConfig = config.get('ipfs')
 const ipfs = new IpfsAPI(ipfsConfig)
 
 const web3Config = config.get('web3')
-const web3 = new Web3(new Web3.providers.HttpProvider(web3Config.provider));
+Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send
+const provider = new Web3.providers.HttpProvider(web3Config.provider)
 
 const metadata = mongoose.metadata
 const community = mongoose.community
 
-const contracts = Object.assign(...Object.entries(abis).map(([name, abi]) => ({[name]: contract({abi: abi})})))
+const createContract = (abi) => {
+  cntrct = contract({abi: abi})
+  cntrct.setProvider(provider)
+  return cntrct
+}
+
+const contracts = Object.assign(...Object.entries(abis).map(([name, abi]) => ({[name]: createContract(abi)})))
 
 const utils = {}
 
@@ -26,8 +37,6 @@ utils.later = (delay, value) => {
 }
 
 utils.getCommunityData = async (factory, currencyAddress) => {
-  const DEFAULT_FACTORY_TYPE = 'CurrencyFactory'
-  const DEFAULT_FACTORY_VERSION = 0
   const communityData = {
     ccAddress: currencyAddress
   }
@@ -44,7 +53,7 @@ utils.getCommunityData = async (factory, currencyAddress) => {
     communityData.factoryVersion = factory.factoryVersion || DEFAULT_FACTORY_VERSION
   }
   const factoryInstance = await contracts[communityData.factoryType].at(communityData.factoryAddress)
-  communityData.mmAddress = (await factoryInstance.currencyMap(currencyAddress))[4]
+  communityData.mmAddress = await factoryInstance.getMarketMakerAddressFromToken(currencyAddress)
   const currencyInstance = await contracts.ColuLocalCurrency.at(currencyAddress)
   communityData.tokenURI = await currencyInstance.tokenURI();
   return communityData
@@ -82,26 +91,26 @@ utils.getMetadata = async (protocol, hash) => {
       const metadataObj = await metadata.getByProtocolAndHash(protocol, hash)
       return {source: 'mongo', data: metadataObj.toJSON()}
     }
-    return {source: 'ipfs', data: {hash, protocol, metadata: JSON.parse(data.toString())}}
+    return {source: 'ipfs', data: {hash, protocol, metadata: data}}
   } else {
     const metadataObj = await metadata.getByProtocolAndHash(protocol, hash)
     return {source: 'mongo', data: metadataObj.toJSON()}
   }
 }
 
-utils.addMetadata = async (metadata) => {
-  const filesAdded = await ipfs.files.add(metadata)
+utils.addMetadata = async (md) => {
+  const metadataBuf = Buffer.from(JSON.stringify(md))
+  const filesAdded = await ipfs.files.add(metadataBuf)
   const hash = filesAdded[0].hash
 
   let metadataObj = {
     hash,
-    metadata,
+    metadata: metadataBuf,
     protocol: 'ipfs'
   }
 
-  let error
 
-  [error, metadataObj] = await to(metadata.create(metadataObj))
+  let [error] = await to(metadata.create(metadataObj))
   // duplication error, someone already added this hash to db
   if (error) {
     if (error.name === 'MongoError' && error.code === 11000) {
@@ -109,7 +118,7 @@ utils.addMetadata = async (metadata) => {
     }
     throw error
   }
-  return {data: metadataObj.toJSON()}
+  return {data: metadataObj}
 }
 
 module.exports = utils
