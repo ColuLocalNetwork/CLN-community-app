@@ -28,10 +28,10 @@ For the best experience, stop the client docker container and start it natively 
 
 ### dependencies
 
-(mongoDB)[https://www.mongodb.com/]
-(ipfs)[https://ipfs.io/docs/install/]
+[mongoDB](https://www.mongodb.com/)
+[ipfs](https://ipfs.io/docs/install/)
 Optional:
-(geth)[https://ethereum.gitbooks.io/frontier-guide/content/getting_a_client.html]
+[geth](https://ethereum.gitbooks.io/frontier-guide/content/getting_a_client.html)
 
 ### Setup database
 
@@ -49,7 +49,7 @@ Then define following environment variables for the server's shell
 ```
 cp ./server/config/defaults.json ./server/config/local.json
 ```
-You can edit the `./server/config/local.json` as you like.
+You can edit the `./server/config/local.json` file as you like.
 
 ### Setup Ethereum node
 
