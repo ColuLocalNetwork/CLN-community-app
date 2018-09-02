@@ -15,7 +15,7 @@ module.exports = (mongoose) => {
     return {
       protocol: this.protocol,
       hash: this.hash,
-      metadata: this.metadata
+      metadata: JSON.parse(this.metadata.toString())
     }
   }
 

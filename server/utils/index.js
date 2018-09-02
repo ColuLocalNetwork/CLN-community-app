@@ -91,7 +91,7 @@ utils.getMetadata = async (protocol, hash) => {
       const metadataObj = await metadata.getByProtocolAndHash(protocol, hash)
       return {source: 'mongo', data: metadataObj.toJSON()}
     }
-    return {source: 'ipfs', data: {hash, protocol, metadata: data}}
+    return {source: 'ipfs', data: {hash, protocol, metadata: JSON.parse(data.toString())}}
   } else {
     const metadataObj = await metadata.getByProtocolAndHash(protocol, hash)
     return {source: 'mongo', data: metadataObj.toJSON()}
@@ -111,6 +111,7 @@ utils.addMetadata = async (md) => {
 
 
   let [error] = await to(metadata.create(metadataObj))
+  metadataObj.metadata = JSON.parse(metadataObj.metadata.toString())
   // duplication error, someone already added this hash to db
   if (error) {
     if (error.name === 'MongoError' && error.code === 11000) {

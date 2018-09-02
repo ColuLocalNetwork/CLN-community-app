@@ -29,7 +29,9 @@ const clearCollections = async () => {
 const assertEqualMetadata = (meta1, meta2) => {
   assert.equal(meta1.hash, meta2.hash)
   assert.equal(meta1.protocol, meta2.protocol)
-  assert(meta1.metadata.equals(meta2.metadata))
+  Object.entries(meta1, async key => {
+    assert.equal(meta1[key], meta2[key])
+  })
 }
 
 const assertCommunityData = (comm1, comm2) => {
@@ -60,14 +62,14 @@ contract('COMMUNITY', async (accounts) => {
   it('should add metadata', async () => {
     metadataAns = await utils.addMetadata(testMetada)
     metadataHash = metadataAns.data.hash
-    let dbAns = await mongoose.metadata.getByHash(metadataHash)
+    let dbAns = (await mongoose.metadata.getByHash(metadataHash)).toJSON()
     assertEqualMetadata(metadataAns.data, dbAns)
   })
 
   it('should add same metadata twice', async () => {
     metadataAns = await utils.addMetadata(testMetada)
     metadataHash = metadataAns.data.hash
-    let dbAns = await mongoose.metadata.getByHash(metadataHash)
+    let dbAns = (await mongoose.metadata.getByHash(metadataHash)).toJSON()
     assertEqualMetadata(metadataAns.data, dbAns)
   })
 
