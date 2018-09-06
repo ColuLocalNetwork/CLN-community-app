@@ -869,6 +869,20 @@ button:disabled, button[disabled] {
 		padding: 10px 28px;
 		position: fixed;
 	}
+	&.top-nav-blur {
+		&::after {
+			position: absolute;
+			content: '';
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: rgba(255, 255, 255, 0.6);
+			width: 100%;
+			height: 100%;
+			z-index: 40;
+		}
+	}
 	.top-nav-links {
 		@include flex-box();
 		justify-content: center;
@@ -962,6 +976,7 @@ button:disabled, button[disabled] {
 		.top-nav-hide-coins {
 		  position: relative;
 		  padding-right: 25px;
+			z-index: 50;
 		  &::after {
 	      content: '';
 	      width: 0;
@@ -1898,17 +1913,17 @@ input[type="checkbox" i] {
 		overflow: visible;
 		&:after {
 			content: '';
-			background-color: rgba(255, 255, 255, 0.5);
+			background-color: rgba(255, 255, 255, 0.6);
 			position: absolute;
-			width: 200%;
-			height: 200%;
-			left: -210%;
+			width: 400%;
+			height: 400%;
+			left: -410%;
 			top: 0;
 			display: block;
 		}
 		&:before {
 			content: '';
-			background-color: rgba(255, 255, 255, 0.5);
+			background-color: rgba(255, 255, 255, 0.6);
 			position: absolute;
 			width: 110%;
 			height: 100%;

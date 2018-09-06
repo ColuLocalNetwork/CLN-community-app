@@ -69,7 +69,8 @@ class TopNav extends Component {
     })
     const topNavClass = classNames({
       'active': this.props.active,
-      'top-navigator': true
+      'top-navigator': true,
+      'top-nav-blur': this.props.ui.coinBalance,
     })
     const navLinksClass = classNames({
       'hide': !this.state.openMenu && isMobile,
