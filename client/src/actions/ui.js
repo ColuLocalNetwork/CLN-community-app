@@ -5,6 +5,7 @@ export const ZOOM = 'ZOOM'
 
 export const SHOW_MODAL = 'SHOW_MODAL'
 export const HIDE_MODAL = 'HIDE_MODAL'
+export const TOGGLE_BALANCE = 'TOGGLE_BALANCE'
 export const SET_MODAL_PROPS = 'SET_MODAL_PROPS'
 export const UPDATE_MODAL_PROPS = 'UPDATE_MODAL_PROPS'
 
@@ -27,6 +28,13 @@ export const loadModal = (modalType, modalProps) => {
 export const hideModal = () => {
   return {
     type: HIDE_MODAL
+  }
+}
+
+export const toggleBalance = (coinBalance) => {
+  return {
+    type: TOGGLE_BALANCE,
+    coinBalance
   }
 }
 
