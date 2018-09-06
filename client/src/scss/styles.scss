@@ -4,6 +4,8 @@ $dark-grey: #3d3d3d;
 $light-grey: #f8f8f8;
 $colu-green: #4dd9b4;
 $colu-purple: #301eaa;
+
+$color-violet: #47399f;
 $disabled: #979797;
 
 $nav-height: 60px;
@@ -605,6 +607,14 @@ button:disabled, button[disabled] {
 
 		}
 
+		.coin-balance {
+		  color: black;
+		  font-size: 14px;
+		  font-weight: 300;
+			margin-top: 5px;
+			margin-bottom: 5px;
+		}
+
 		.price-wrapper {
       padding: 3px 0px;
 			font-size: 14px;
@@ -932,6 +942,38 @@ button:disabled, button[disabled] {
 				font-size: 16px;
 				font-weight: 500;
 			}
+		}
+		.top-nav-show-coins {
+		  position: relative;
+		  padding-right: 25px;
+		  &::after {
+	      content: '';
+	      width: 0;
+	      height: 0;
+	      border-left: 5px solid transparent;
+	      border-right: 5px solid transparent;
+	      border-bottom: 5px solid $dark-grey;
+	      position: absolute;
+	      right: 10px;
+	      top: 50%;
+	      margin-top: -3px;
+		  }
+		}
+		.top-nav-hide-coins {
+		  position: relative;
+		  padding-right: 25px;
+		  &::after {
+	      content: '';
+	      width: 0;
+	      height: 0;
+	      border-left: 5px solid transparent;
+	      border-right: 5px solid transparent;
+	      border-top: 5px solid $dark-grey;
+	      position: absolute;
+	      right: 10px;
+	      top: 50%;
+	      margin-top: -3px;
+		  }
 		}
 		@media (max-width: $breakpoint-tablet) {
 			@include flex-direction(column);
@@ -1852,6 +1894,30 @@ input[type="checkbox" i] {
 	top: $nav-height;
 	overflow: hidden;
 
+	&.active-coins {
+		overflow: visible;
+		&:after {
+			content: '';
+			background-color: rgba(255, 255, 255, 0.5);
+			position: absolute;
+			width: 200%;
+			height: 200%;
+			left: -210%;
+			top: 0;
+			display: block;
+		}
+		&:before {
+			content: '';
+			background-color: rgba(255, 255, 255, 0.5);
+			position: absolute;
+			width: 110%;
+			height: 100%;
+			top: 110%;
+			right: 0;
+			display: block;
+		}
+	}
+
 	.list-item {
 		height: auto;
 		.coin-wrapper {
@@ -1878,9 +1944,28 @@ input[type="checkbox" i] {
 				h2 {
 
 				}
+				.coin-logo {
+					position: relative;
+					display: flex;
+					align-items: center;
+					text-align: center;
+					.logo-title {
+						position: absolute;
+						margin-top: -8px;
+						top: 0;
+						left: 0;
+						bottom: 0;
+						right: 0;
+						top: 50%;
+						font-weight: bold;
+						color: $color-violet;
+						font-weight: 600;
+						font-size: 16px;
+					}
+				}
 				.logo {
-					width: 70px;
-					height: 70px;
+					width: 110px;
+					height: 110px;
 				}
 				.price-wrapper {
 					font-size: 14px;
@@ -1945,6 +2030,10 @@ input[type="checkbox" i] {
 								font-size: 10px;
 							}
 						}
+
+						.coin-balance {
+						  font-size: 12px;
+						}
 					}
 				}
 
@@ -1980,6 +2069,10 @@ input[type="checkbox" i] {
 									font-size: 14px;
 									margin: 0;
 								}
+							}
+
+							.coin-balance {
+							  font-size: 12px;
 							}
 						}
 					}
