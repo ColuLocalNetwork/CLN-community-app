@@ -21,7 +21,8 @@ class App extends Component {
   state = {
     isWelcome: true,
     out: false,
-    welcomeDone: false
+    welcomeDone: false,
+    toggleMenu: false
   }
 
   componentWillReceiveProps = (nextProps) => {
@@ -81,10 +82,11 @@ class App extends Component {
       'column': true,
       'center': true,
       'fullscreen': !isMobile,
-      'mobile-screen': isMobile
+      'mobile-screen': isMobile,
+      'open-mobile-nav': this.state.toggleMenu
     })
 
-    const communityNav = (!this.state.isWelcome || this.state.welcomeDone || isMobile) && currentRoute !== '/view/contact-us' && !currentRoute.includes('community') ? <CommunitiesList history={this.props.history} /> : null
+    const communityNav = (!this.state.isWelcome || this.state.welcomeDone || isMobile) && currentRoute !== '/view/issuance' && currentRoute !== '/view/contact-us' && !currentRoute.includes('community') ? <CommunitiesList history={this.props.history} /> : null
 
     const welcome = currentRoute === '/' && !this.state.welcomeDone ? <div className={welcomeClass}>
       <div className='welcome-container'>
@@ -100,7 +102,12 @@ class App extends Component {
       {welcome}
       {signUpEmail}
       <div className={mainContainerClass}>
-        <TopNav active={!this.state.isWelcome} history={this.props.history} />
+        <TopNav
+          active={!this.state.isWelcome}
+          history={this.props.history}
+          toggleMenu={this.state.toggleMenu}
+          setToggleMenu={() => this.setState({toggleMenu: !this.state.toggleMenu})}
+        />
         <Map key='map' active={this.state.welcomeDone} currentRoute={currentRoute} history={this.props.history} />
         {communityNav}
         <ModalContainer />
