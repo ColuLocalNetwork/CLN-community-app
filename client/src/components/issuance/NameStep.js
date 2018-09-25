@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
-import classNames from 'classnames'
-import ContinueArrow from 'images/continue-arrow.svg'
+import React from 'react'
+import FontAwesome from 'react-fontawesome'
 import TextInput from './../TextInput'
 
 const NameStep = ({communityName, handleChangeCommunityName, setNextStep}) => {
@@ -16,14 +15,14 @@ const NameStep = ({communityName, handleChangeCommunityName, setNextStep}) => {
         onChange={handleChangeCommunityName}
       />
       <button
-        className="next-button"
+        className='next-button'
         disabled={communityName.length < 3}
         onClick={setNextStep}
       >
-        <img src={ContinueArrow} className='next-icon' alt='' />
+        <FontAwesome className='next-icon' name='arrow-right' />
       </button>
     </div>
   )
 }
 
-export default NameStep;
+export default NameStep

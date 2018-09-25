@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
-import FontAwesome from 'react-fontawesome'
-import Online from 'images/online.png'
-import Geographical from 'images/geographical.png'
+import Online from 'images/Online.svg'
+import Geographical from 'images/Geographical.svg'
 import PropTypes from 'prop-types'
 import CoinIcon1 from 'images/Coin1.svg'
 import CoinIcon2 from 'images/Coin2.svg'
@@ -10,17 +9,17 @@ import CoinIcon3 from 'images/Coin3.svg'
 import TextInput from './../TextInput'
 
 export default class DetailsStep extends Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
-      showOtherSupply: false,
+      showOtherSupply: false
     }
   }
 
-  renderDetailsContent(communityType, setCommunityType, onlineImg, geoImg) {
-    let detailsContent = [];
-    const communityTypes = [{'text': 'Online', 'img': onlineImg}, {'text': 'Geographical', 'img': geoImg}];
-    {communityTypes.forEach((item, key) => {
+  renderDetailsContent (communityType, setCommunityType, onlineImg, geoImg) {
+    let detailsContent = []
+    const communityTypes = [{'text': 'Online', 'img': onlineImg}, {'text': 'Geographical', 'img': geoImg}]
+    communityTypes.forEach((item, key) => {
       const stepDetailsClass = classNames({
         'step-content-details-type': true,
         'chosen-type': communityType.text === item.text
@@ -35,18 +34,18 @@ export default class DetailsStep extends Component {
           {item.text}
         </div>
       )
-    })}
-    return detailsContent;
+    })
+    return detailsContent
   }
 
-  renderTotalContent(totalSupply, setTotalSupply) {
-    let totalContent = [];
+  renderTotalContent (totalSupply, setTotalSupply) {
+    let totalContent = []
     const formatter = new Intl.NumberFormat('en-US', {
       style: 'decimal',
       minimumFractionDigits: 0
     })
-    const totalSupplies = [1000000, 30000000, 65000000];
-    {totalSupplies.forEach((item, key) => {
+    const totalSupplies = [1000000, 30000000, 65000000]
+    totalSupplies.forEach((item, key) => {
       const totalSupplyClass = classNames({
         'step-content-details-type': true,
         'number-type': true,
@@ -61,30 +60,29 @@ export default class DetailsStep extends Component {
           {formatter.format(item)}
         </div>
       )
-    })}
-    return totalContent;
+    })
+    return totalContent
   }
 
-  renderLogo(communityLogo, setCommunityLogo, renderCurrencySymbol) {
-    let logoArr = [];
+  renderLogo (communityLogo, setCommunityLogo, renderCurrencySymbol) {
+    let logoArr = []
     const communityLogos = [CoinIcon1, CoinIcon2, CoinIcon3]
-    {communityLogos.forEach((item, key) => {
-        const totalSupplyClass = classNames({
-          'step-content-details-type': true,
-          'chosen-type': communityLogo === item
-        })
-        logoArr.push(
-          <div className={totalSupplyClass} key={key} onClick={() => setCommunityLogo(item)}>
-            <img src={item} className='logo-img' />
-            <span className='symbol-text'>{renderCurrencySymbol}</span>
-          </div>
-        )
+    communityLogos.forEach((item, key) => {
+      const totalSupplyClass = classNames({
+        'step-content-details-type': true,
+        'chosen-type': communityLogo === item
       })
-    }
-    return logoArr;
+      logoArr.push(
+        <div className={totalSupplyClass} key={key} onClick={() => setCommunityLogo(item)}>
+          <img src={item} className='logo-img' />
+          <span className='symbol-text'>{renderCurrencySymbol}</span>
+        </div>
+      )
+    })
+    return logoArr
   }
 
-  render() {
+  render () {
     return (
       <div className='step-content-details'>
         <div className='step-content-details-block'>
@@ -108,8 +106,8 @@ export default class DetailsStep extends Component {
             Total CC Supply
           </h3>
           <div className='step-content-details-container total-container'>
-            {this.state.showOtherSupply ?
-              <div className='step-content-details-supply'>
+            {this.state.showOtherSupply
+              ? <div className='step-content-details-supply'>
                 <TextInput
                   className='step-community-name'
                   id='communityName'
@@ -118,21 +116,21 @@ export default class DetailsStep extends Component {
                   value={this.props.totalSupply}
                   onChange={(event) => this.props.setTotalSupply(event.target.value)}
                 />
-                <div className="other-details" onClick={() => this.setState({showOtherSupply: false})}>
+                <div className='other-details' onClick={() => this.setState({showOtherSupply: false})}>
                   Cancel
                 </div>
               </div>
               : this.renderTotalContent(this.props.totalSupply, this.props.setTotalSupply)}
             {!this.state.showOtherSupply &&
-              <div className="other-details" onClick={() => this.setState({showOtherSupply: !this.state.showOtherSupply})}>
+              <div className='other-details' onClick={() => this.setState({showOtherSupply: !this.state.showOtherSupply})}>
                 Other
               </div>
             }
           </div>
         </div>
-        <div className="text-center">
+        <div className='text-center'>
           <button
-            className="symbol-btn"
+            className='symbol-btn'
             disabled={
               !this.props.communityType || !this.props.totalSupply || !this.props.communityLogo
             }

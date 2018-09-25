@@ -88,7 +88,7 @@ class TopNav extends Component {
 
     return <div className={topNavClass}>
       <a href='https://cln.network/' target='_blank'><img src={ClnIcon} /></a>
-      <FontAwesome name="align-justify" className='burger-menu' onClick={this.props.setToggleMenu}/>
+      <FontAwesome name='align-justify' className='burger-menu' onClick={this.props.setToggleMenu} />
       <div className={navLinksClass}>
         <div onClick={this.showIssuance} >
           <div className='top-nav-text'>Issuance</div>

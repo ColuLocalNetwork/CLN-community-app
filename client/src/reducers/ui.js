@@ -10,12 +10,7 @@ export default (state = {
   activeMarker: null,
   modalType: null,
   signupHide: false,
-  scrollPosition: 0,
-  elementsPosition: {
-    elementName: null,
-    stickIt: false,
-    position: 0
-  }
+  scrollPosition: 0
 }, action) => {
   if (relevantQuoteActions.hasOwnProperty(action.type)) {
     return {...state, modalProps: {...state.modalProps, ...action.response}}
@@ -39,8 +34,6 @@ export default (state = {
       return {...state, signupClose: action.close}
     case ui.SET_SCROLL_POSITION:
       return {...state, scrollPosition: action.scrollPosition}
-    case ui.SET_ELEMENT_POSITION:
-      return {...state, elementsPosition: {...action.elementsPosition}}
     default:
       return state
   }

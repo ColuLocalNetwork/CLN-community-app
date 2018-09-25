@@ -11,6 +11,23 @@ $nav-height: 60px;
 $nav-height-mobile: 50px;
 $page-width: 1024px;
 
+$color-step: #6e6d9f;
+$color-active-step: #c095ff;
+$color-step-line: #271d53;
+$color-step-border: #4b3b80;
+$color-step-text: #fff;
+$color-issuance: #1c1442;
+$color-issuance-bg: linear-gradient(to bottom, rgba(60, 45, 119, 0.25), $color-issuance);
+$color-step-bg: #241c4a;
+$color-symbol-field-brdr: #b6b5d8;
+$color-shadow: rgba(0, 0, 0, 0.3);
+$color-step-field: #5fddbb;
+$color-step-container-logo: #343166;
+$font-family-lucida: 'Lucida Grande';
+$font-family-lato: 'Lato', sans-serif;
+$color-hover-details: #7effdc;
+$color-shadow-btn: rgba(22, 14, 58, 0.34);
+
 $breakpoint-mobile: 576px;
 $breakpoint-tablet: 1024px;
 
@@ -1719,27 +1736,10 @@ input[type="checkbox" i] {
 	}
 }
 
-$color-step: #6e6d9f;
-$color-active-step: #c095ff;
-$color-step-line: #271d53;
-$color-step-border: #4b3b80;
-$color-step-text: #fff;
-$color-issuance: #1c1442;
-$color-issuance-bg: linear-gradient(to bottom, rgba(60, 45, 119, 0.25), $color-issuance);
-$color-step-bg: #241c4a;
-$color-symbol-field-brdr: #b6b5d8;
-$color-shadow: rgba(0, 0, 0, 0.3);
-$color-step-field: #5fddbb;
-$color-step-container-logo: #343166;
-$font-family-lucida: 'Lucida Grande';
-$font-family-lato: 'Lato', sans-serif;
-$color-hover-details: #7effdc;
-$color-shadow-btn: rgba(22, 14, 58, 0.34);
-
 .issuance {
 	&-form-wrapper {
 		position: absolute;
-	  top: 60px;
+	  top: 0;
 	  width: auto;
 	  bottom: 0;
 	  right: 0;
@@ -1748,7 +1748,7 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 		overflow: auto;
 		background-image: $color-issuance-bg;
 		@media (max-width: $breakpoint-mobile) {
-			margin-top: -314px;
+			margin-top: -327px;
 			position: relative;
 			overflow: hidden;
 			top: 0;
@@ -1811,6 +1811,11 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 			top: -27px;
 		}
 	}
+	&.done-step {
+		&::before {
+			background-color: $color-active-step;
+		}
+	}
 	&.active-step {
 		color: $color-active-step;
 		&::after {
@@ -1818,6 +1823,15 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 			background-color: $color-active-step;
 			box-shadow: 0 0 6px 0 $color-active-step,
 	            		inset $color-step-bg 0 0 1px 4px,
+		}
+		&:before {
+			background-color: $color-step-line;
+		}
+		& + .done-step,
+		& + .done-step + .done-step {
+			&:before {
+				background-color: $color-step-line;
+			}
 		}
 	}
 	&.done-step {
@@ -1840,9 +1854,6 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 	  	background-color: $color-active-step;
 	  	border: solid 2px $color-active-step;
 		}
-		&::before {
-			background-color: $color-active-step;
-		}
 	}
 	&s-container {
 		text-align: center;
@@ -1852,7 +1863,7 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 		@media (max-width: $breakpoint-mobile) {
 			padding-top: 200px;
 			&.step-with-sticky {
-				padding-bottom: 57px;
+				padding-bottom: 68px;
 			}
 		}
 		.steps-indicator {
@@ -1860,7 +1871,7 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 				background-image: linear-gradient(to bottom, #342962, #1c1442);
   			box-shadow: 0 0 14px 0 rgba(0, 0, 0, 0.37);
 				position: fixed;
-				top: 50px;
+				top: 0;
 				left: 0;
 				right: 0;
 				padding-top: 31px;
@@ -1889,10 +1900,10 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 	&-content {
 		background-image: linear-gradient(352deg, $color-issuance, #2d235e);
   	box-shadow: 0 0 10px 0 rgba(135, 118, 255, 0.49);
-		min-height: calc(100vh - 310px - 60px);
+		min-height: calc(100vh - 310px);
 		padding-top: 50px;
 		@media (max-width: $breakpoint-mobile) {
-			min-height: calc(100vh - 222px - 60px);
+			min-height: calc(100vh - 269px);
 			padding-top: 35px;
 			padding-bottom: 20px;
 		}
@@ -1930,7 +1941,6 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 				margin-top: 20px;
 				width: 100%;
 				border-radius: 5px;
-				border: 1px dotted $color-symbol-field-brdr;
 				font-size: 106px;
   			font-weight: bold;
 				text-align: center;
@@ -1938,11 +1948,19 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 				padding: 10px;
 				margin-bottom: 40px;
 				text-transform: uppercase;
+				background: linear-gradient(to right, $color-symbol-field-brdr 50%, rgba(255, 255, 255, 0) 0%),
+										linear-gradient($color-symbol-field-brdr 50%, rgba(255, 255, 255, 0) 0%),
+										linear-gradient(to right, $color-symbol-field-brdr 50%, rgba(255, 255, 255, 0) 0%),
+										linear-gradient($color-symbol-field-brdr 50%, rgba(255, 255, 255, 0) 0%);
+			  background-position: top, right, bottom, left;
+			  background-repeat: repeat-x, repeat-y;
+			  background-size: 15px 1px, 1px 15px;
 				@media (max-width: $breakpoint-mobile) {
 					width: 270px;
 					margin-left: auto;
 					margin-right: auto;
 					font-size: 80px;
+					margin-bottom: 25px;
 				}
 			}
 			@media (max-width: $breakpoint-mobile) {
@@ -1954,8 +1972,14 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 			width: 935px;
 			margin: 0 auto;
 			padding-bottom: 100px;
+			@media (max-width: $breakpoint-tablet) {
+				width: 100%;
+				padding-left: 20px;
+				padding-right: 20px;
+			}
 			@media (max-width: $breakpoint-mobile) {
 				width: 94%;
+				padding: 0;
 			}
 			&-supply {
 				display: flex;
@@ -1978,7 +2002,7 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 						padding-bottom: 25px;
 					}
 				}
-				@media (max-width: $breakpoint-mobile) {
+				@media (max-width: $breakpoint-tablet) {
 					flex-direction: column;
 				}
 			}
@@ -1987,7 +2011,7 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 				font-weight: bold;
 				color: #d2d0da;
 				min-width: 230px;
-				@media (max-width: $breakpoint-mobile) {
+				@media (max-width: $breakpoint-tablet) {
 					margin-bottom: 20px;
 					text-align: center;
 					font-size: 21px;
@@ -2031,7 +2055,7 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 					margin-bottom: 15px;
 					@media (max-width: $breakpoint-mobile) {
 						width: 70px;
-						margin-bottom: 10px;
+						margin-bottom: 7px;
 					}
 				}
 				.logo-img {
@@ -2072,6 +2096,19 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 			&-container {
 				display: flex;
 				&.total-container {
+					@media (max-width: $breakpoint-tablet) {
+						flex-direction: column;
+						width: 50%;
+	    			align-items: center;
+						.number-type {
+							margin-right: 0;
+							font-size: 16px;
+							width: 100%;
+							&:not(:last-child) {
+								margin-bottom: 10px;
+							}
+						}
+					}
 					@media (max-width: $breakpoint-mobile) {
 						flex-direction: column;
 						width: 80%;
@@ -2148,7 +2185,7 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 				background-image: linear-gradient(348deg, #262451, $color-step-container-logo);
 				box-shadow: 0 -4px 18px 0 rgba(0, 0, 0, 0.12);
 				position: relative;
-				padding-top: 80px;
+				padding-top: 60px;
 			}
 			&-title {
 				font-size: 15px;
@@ -2271,6 +2308,7 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 		margin-left: 10px;
 		display: inline-block;
 		color: white;
+		font-size: 14px;
 	}
 	&:hover {
 		color: $color-hover-details;
@@ -2286,6 +2324,7 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 	text-align: center;
 	border: none;
 	padding: 0;
+	line-height: 28px;
 	&:focus,
 	&:active,
 	&:focus:active {
@@ -2305,6 +2344,7 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 	.fa {
 		color: $color-step-field;
 		margin-right: 5px;
+		font-size: 18px;
 	}
 	&:hover {
 		color: $color-hover-details;
@@ -2318,19 +2358,16 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 		padding: 10px 13px;
 		margin-top: 40px;
 		border: none;
-		fill: $color-issuance;
+		color: $color-issuance;
 		border: none;
 		border-radius: 50%;
 		font-size: 22px;
-		.next-icon {
-			color: $color-issuance;
-		}
 		&:disabled,
 		&[disabled] {
 			background-color: #231b4d !important;
 	    box-shadow: 0 0 15px 0 $color-shadow-btn, 0 0 4px 0 rgba(21, 15, 48, 0.92);
 	    margin-top: 40px;
-	    padding: 15px;
+	    padding: 10px 13px;
 	    color: rgba(95, 221, 187, 0.36);
 			cursor: not-allowed;
 		}
@@ -2356,6 +2393,10 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 	text-transform: uppercase;
 	border: none;
 	font-weight: bold;
+	min-width: 200px;
+	.symbol-icon {
+		margin-left: 10px;
+	}
 	&:focus,
 	&:active,
 	&:focus:active {
@@ -2363,7 +2404,7 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 	}
 	&:hover {
 		background-color: $color-step-field;
-		color: #fff;
+		color: $color-step-text;
 		cursor: pointer;
 	}
 	&[disabled] {
@@ -2422,7 +2463,7 @@ $color-shadow-btn: rgba(22, 14, 58, 0.34);
 	}
 
 	@media (max-width: $breakpoint-mobile) {
-		top: 70px;
+		top: 40px;
 		.ctrl-icon {
 			font-size: 18px;
 		}

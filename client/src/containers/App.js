@@ -102,12 +102,12 @@ class App extends Component {
       {welcome}
       {signUpEmail}
       <div className={mainContainerClass}>
-        <TopNav
+        {currentRoute !== '/view/issuance' ? <TopNav
           active={!this.state.isWelcome}
           history={this.props.history}
           toggleMenu={this.state.toggleMenu}
           setToggleMenu={() => this.setState({toggleMenu: !this.state.toggleMenu})}
-        />
+        /> : null }
         <Map key='map' active={this.state.welcomeDone} currentRoute={currentRoute} history={this.props.history} />
         {communityNav}
         <ModalContainer />

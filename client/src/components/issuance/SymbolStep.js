@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import classNames from 'classnames'
+import React from 'react'
 import FontAwesome from 'react-fontawesome'
 
 const SymbolStep = ({communityName, renderCurrencySymbol, setNextStep}) => {
@@ -9,13 +8,13 @@ const SymbolStep = ({communityName, renderCurrencySymbol, setNextStep}) => {
       <h2 className='step-content-title'>Currency Symbol</h2>
       <div className='step-content-symbol-field'>{renderCurrencySymbol}</div>
       <button
-        className="symbol-btn"
+        className='symbol-btn'
         onClick={setNextStep}
       >
-        Approve symbol >
+        Approve symbol <FontAwesome name='angle-right' className='symbol-icon' />
       </button>
     </div>
   )
 }
 
-export default SymbolStep;
+export default SymbolStep
