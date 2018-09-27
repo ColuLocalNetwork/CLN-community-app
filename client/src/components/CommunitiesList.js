@@ -3,9 +3,11 @@ import posed from 'react-pose'
 import { isMobile } from 'react-device-detect'
 import classNames from 'classnames'
 import * as actions from 'actions/ui'
+import {BigNumber} from 'bignumber.js'
 
 import { connect } from 'react-redux'
 import CoinHeader from './CoinHeader'
+import {getBalances} from 'selectors/accounts'
 import {getSelectedCommunity, getCommunities} from 'selectors/communities'
 import find from 'lodash/find'
 import sortBy from 'lodash/sortBy'
@@ -26,16 +28,19 @@ const CoinWrapper = posed.div({
   closedCoinInfo: {damping: 0, staggerChildren: 0, height: 'auto', duration: 300}
 })
 
-const Nav = ({ isOpen, coins, currentCoin, onClick, openCoinInfo, keyProp, setRef, fiat, loadModal }) => {
+const Nav = ({ isOpen, coins, currentCoin, onClick, openCoinInfo, keyProp, setRef, fiat, loadModal, coinBalance, showBalance }) => {
   let poseValue = isOpen ? 'open' : 'closed'
   let top = (keyProp) * 110 + (keyProp + 1) * 20
   let communityCoins = coins && coins.filter((coin) => {
     return coin.isLocalCurrency
   })
   const sidebarStyle = isMobile ? {} : {transform: openCoinInfo ? 'translateY(-' + top + 'px)' : 'none'}
-
-  return (
-    <Sidebar pose={poseValue} className='communities-list' style={sidebarStyle}>
+  const communitiesListStyle = classNames({
+    'communities-list': true,
+    'active-coins': true
+  })
+  return showBalance
+    ? <Sidebar pose={poseValue} className={communitiesListStyle} style={sidebarStyle}>
       {communityCoins.map((coin, i) => {
         const coinWrapperStyle = classNames({
           'coin-wrapper': true,
@@ -43,12 +48,12 @@ const Nav = ({ isOpen, coins, currentCoin, onClick, openCoinInfo, keyProp, setRe
         })
         return <NavItem className='list-item' key={i} pose={isOpen ? 'open' : 'closed'} onClick={onClick.bind(this, coin.address, i)}>
           <CoinWrapper className={coinWrapperStyle} >
-            <CoinHeader token={coin} fiat={fiat} loadModal={loadModal} />
+            <CoinHeader token={coin} fiat={fiat} loadModal={loadModal} balance={new BigNumber(coinBalance[coin.address]).div(1e18).toFormat(4, 1)} />
           </CoinWrapper>
         </NavItem>
       }
       )}
-    </Sidebar>)
+    </Sidebar> : null
 }
 
 class CommunitiesList extends Component {
@@ -123,13 +128,14 @@ class CommunitiesList extends Component {
       return null
     }
     if (!isMobile) {
-      return <Nav isOpen={this.state.active} coins={communityCoins} onClick={this.onClick.bind(this)} openCoinInfo={currentCoin} keyProp={this.state.key} fiat={this.props.fiat} loadModal={this.props.loadModal} />
+      return <Nav isOpen={this.state.active} coins={communityCoins} onClick={this.onClick.bind(this)} openCoinInfo={currentCoin} keyProp={this.state.key} fiat={this.props.fiat} loadModal={this.props.loadModal} coinBalance={this.props.accountBalance} showBalance={this.props.ui.coinBalance} />
     } else {
       const communitiesListStyle = classNames({
         'communities-list': true,
-        'open-mobile': currentCoin
+        'open-mobile': currentCoin,
+        'active-coins': this.props.ui.coinBalance
       })
-      return <div className={communitiesListStyle} ref='CommunitiesList'>
+      return this.props.ui.coinBalance ? <div className={communitiesListStyle} ref='CommunitiesList'>
         {communityCoins.map((coin, i) => {
           const coinWrapperStyle = classNames({
             'coin-wrapper': true,
@@ -137,11 +143,11 @@ class CommunitiesList extends Component {
           })
           return <div className='list-item' key={i} onClick={this.onClick.bind(this, coin.address, i)}>
             <div className={coinWrapperStyle} style={{transform: 'translateX(-' + (currentCoin ? this.state.scrollOffset : 0) + 'px)'}}>
-              <CoinHeader token={coin} fiat={this.props.fiat} loadModal={this.props.loadModal} />
+              <CoinHeader token={coin} fiat={this.props.fiat} loadModal={this.props.loadModal} balance={new BigNumber(this.props.accountBalance[coin.address]).div(1e18).toFormat(4, 1)} />
             </div>
           </div>
         })}
-      </div>
+      </div> : null
     }
   }
 };
@@ -151,6 +157,7 @@ const mapStateToProps = state => {
     tokens: getCommunities(state),
     ui: state.ui,
     selectedCommunity: getSelectedCommunity(state),
+    accountBalance: getBalances(state),
     fiat: state.fiat
   }
 }

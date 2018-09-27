@@ -57,15 +57,29 @@ class TopNav extends Component {
       action: 'Click',
       label: event.target.name
     })
+  toggleCoinBalance (communityCoins) {
+    if (communityCoins.length > 1) {
+      return this.props.toggleBalance(!this.props.ui.coinBalance)
+    }
+  }
 
   render () {
+    let communityCoins = Object.values(this.props.tokens) && Object.values(this.props.tokens).filter((token) => {
+      return token.isLocalCurrency
+    })
     const topNavClass = classNames({
       'active': this.props.active,
-      'top-navigator': true
+      'top-navigator': true,
+      'top-nav-blur': this.props.ui.coinBalance
     })
     const navLinksClass = classNames({
       'hide': !this.state.openMenu && isMobile,
       'top-nav-links': true
+    })
+    const topNavBalanceClass = classNames({
+      'top-nav-balance': true,
+      'top-nav-hide-coins': this.props.ui.coinBalance && communityCoins.length > 0,
+      'top-nav-show-coins': !this.props.ui.coinBalance
     })
 
     return <div className={topNavClass}>
@@ -95,7 +109,7 @@ class TopNav extends Component {
           <span>{this.props.network.accountAddress || 'Connect Metamask'}</span>
         </div>
         {(this.props.clnBalance)
-          ? <div className='top-nav-balance'>
+          ? <div className={topNavBalanceClass} onClick={() => this.toggleCoinBalance(communityCoins)}>
             <span>Balance:</span>
             <img src={ClnCoinIcon} />
             <span className='balance-text'>{new BigNumber(this.props.clnBalance).div(1e18).toFormat(2, 1)}</span>
@@ -114,7 +128,9 @@ class TopNav extends Component {
 const mapStateToProps = state => {
   return {
     network: state.network,
-    clnBalance: getClnBalance(state)
+    clnBalance: getClnBalance(state),
+    tokens: state.tokens,
+    ui: state.ui
   }
 }
 
