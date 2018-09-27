@@ -13,10 +13,9 @@ export default class CoinHeader extends Component {
   }
 
   render () {
-    const {currentPrice, name, metadata, symbol} = this.props.token
+    const {currentPrice, name, symbol} = this.props.token
     const {balance} = this.props
     const formattedPrice = (currentPrice || currentPrice === 0) && formatEther(currentPrice)
-    const coinImage = metadata && metadata.imageLink
     const fiatCurrencyPrice = this.props.fiat.USD && this.props.fiat.USD.price
     const fiatPrice = currentPrice * fiatCurrencyPrice
     const formattedBalance = (balance || balance === 0) && balance

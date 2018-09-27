@@ -70,7 +70,7 @@ class TopNav extends Component {
     const topNavClass = classNames({
       'active': this.props.active,
       'top-navigator': true,
-      'top-nav-blur': this.props.ui.coinBalance,
+      'top-nav-blur': this.props.ui.coinBalance
     })
     const navLinksClass = classNames({
       'hide': !this.state.openMenu && isMobile,
@@ -79,7 +79,7 @@ class TopNav extends Component {
     const topNavBalanceClass = classNames({
       'top-nav-balance': true,
       'top-nav-hide-coins': this.props.ui.coinBalance && communityCoins.length > 0,
-      'top-nav-show-coins': !this.props.ui.coinBalance,
+      'top-nav-show-coins': !this.props.ui.coinBalance
     })
 
     return <div className={topNavClass}>

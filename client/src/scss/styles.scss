@@ -959,7 +959,7 @@ button:disabled, button[disabled] {
 		}
 		.top-nav-show-coins {
 		  position: relative;
-		  padding-right: 25px;
+		  padding-bottom: 15px;
 		  &::after {
 	      content: '';
 	      width: 0;
@@ -969,13 +969,13 @@ button:disabled, button[disabled] {
 	      border-bottom: 5px solid $dark-grey;
 	      position: absolute;
 	      right: 10px;
-	      top: 50%;
+	      bottom: 10px;
 	      margin-top: -3px;
 		  }
 		}
 		.top-nav-hide-coins {
 		  position: relative;
-		  padding-right: 25px;
+			padding-bottom: 15px;
 			z-index: 50;
 		  &::after {
 	      content: '';
@@ -986,7 +986,7 @@ button:disabled, button[disabled] {
 	      border-top: 5px solid $dark-grey;
 	      position: absolute;
 	      right: 10px;
-	      top: 50%;
+	      bottom: 10px;
 	      margin-top: -3px;
 		  }
 		}
@@ -1903,9 +1903,9 @@ input[type="checkbox" i] {
 	position: absolute;
 	z-index: 11;
 	display: flex;
-    flex-direction: column;
-    right: 0px;
-    width: 450px;
+  flex-direction: column;
+  right: 3px;
+  width: 450px;
 	top: $nav-height;
 	overflow: hidden;
 
@@ -1915,9 +1915,9 @@ input[type="checkbox" i] {
 			content: '';
 			background-color: rgba(255, 255, 255, 0.6);
 			position: absolute;
-			width: 400%;
+			width: 402%;
 			height: 400%;
-			left: -410%;
+			left: -406%;
 			top: 0;
 			display: block;
 		}
@@ -1925,10 +1925,10 @@ input[type="checkbox" i] {
 			content: '';
 			background-color: rgba(255, 255, 255, 0.6);
 			position: absolute;
-			width: 110%;
+			width: calc(104% + 3px);
 			height: 100%;
-			top: 110%;
-			right: 0;
+			top: 116%;
+			right: -3px;
 			display: block;
 		}
 	}
@@ -1947,7 +1947,7 @@ input[type="checkbox" i] {
 				border-left: 10px $colu-green solid;
 			}
 			.coin-header {
-				margin-top:20px;
+				margin-top:25px;
 				padding: 20px 24px;
 
 				h1 {

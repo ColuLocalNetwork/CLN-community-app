@@ -39,8 +39,8 @@ const Nav = ({ isOpen, coins, currentCoin, onClick, openCoinInfo, keyProp, setRe
     'communities-list': true,
     'active-coins': true
   })
-  return showBalance ?
-    <Sidebar pose={poseValue} className={communitiesListStyle} style={sidebarStyle}>
+  return showBalance
+    ? <Sidebar pose={poseValue} className={communitiesListStyle} style={sidebarStyle}>
       {communityCoins.map((coin, i) => {
         const coinWrapperStyle = classNames({
           'coin-wrapper': true,
