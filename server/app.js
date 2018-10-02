@@ -7,6 +7,7 @@ const path = require('path')
 const compression = require('compression')
 const config = require('config')
 require('express-async-errors')
+require('./utils/subscriber')
 
 var isProduction = process.env.NODE_ENV === 'production'
 
