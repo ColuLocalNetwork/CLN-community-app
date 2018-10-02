@@ -2290,6 +2290,9 @@ input[type="checkbox" i] {
 	padding-top: 40px;
 	padding-bottom: 40px;
 }
+.edit-symbol {
+	margin-bottom: 30px;
+}
 .add-btn {
 	font-family: $font-family-lato;
 	font-size: 11px;
@@ -2345,6 +2348,11 @@ input[type="checkbox" i] {
 		color: $color-step-field;
 		margin-right: 5px;
 		font-size: 18px;
+	}
+	&:focus,
+	&:active,
+	&:focus:active {
+		outline: none;
 	}
 	&:hover {
 		color: $color-hover-details;

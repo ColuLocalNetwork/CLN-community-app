@@ -13,8 +13,6 @@ export const SIGNUP_CLOSE = 'SIGNUP_CLOSE'
 export const BUY_STAGE = 'BUY_STAGE'
 export const RESET_EXCHANGE = 'RESET_EXCHANGE'
 
-export const SET_SCROLL_POSITION = 'SET_SCROLL_POSITION'
-
 export const setActiveMarker = (coinAddress) => action(ACTIVE_MARKER, {coinAddress})
 export const zoomToMarker = (zoom) => action(ZOOM, { zoom })
 
@@ -57,12 +55,5 @@ export const closeSignup = (close) => {
   return {
     type: SIGNUP_CLOSE,
     close
-  }
-}
-
-export const setScrollPosition = (scrollPosition) => {
-  return {
-    type: SET_SCROLL_POSITION,
-    scrollPosition
   }
 }

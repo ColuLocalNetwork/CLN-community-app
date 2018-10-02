@@ -1,7 +1,4 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { BigNumber } from 'bignumber.js'
 import FontAwesome from 'react-fontawesome'
 import classNames from 'classnames'
 import StepsIndicator from './StepsIndicator'
@@ -10,10 +7,8 @@ import SymbolStep from './SymbolStep'
 import DetailsStep from './DetailsStep'
 import SummaryStep from './SummaryStep'
 import { nameToSymbol } from 'utils/format'
-import { setScrollPosition } from 'actions/ui'
-import * as actionsCommunities from 'actions/communities'
 
-class IssuanceFactory extends Component {
+class Issuance extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -25,45 +20,55 @@ class IssuanceFactory extends Component {
       totalSupply: '',
       communityLogo: '',
       stepPosition: {},
-      isSticky: false
+      scrollPosition: 0
     }
     this.handleChangeCommunityName = this.handleChangeCommunityName.bind(this)
+    this.handleScroll = this.handleScroll.bind(this)
   }
+  shouldComponentUpdate (nextProps, nextState) {
+    if (nextState.scrollPosition !== this.state.scrollPosition ||
+      (nextState.scrollPosition > this.state.stepPosition - 34) ||
+      nextState.activeStep !== this.state.activeStep ||
+      nextState.doneStep !== this.state.doneStep ||
+      nextState.communityName !== this.state.communityName ||
+      nextState.customSupply !== this.state.customSupply ||
+      nextState.communityType !== this.state.communityType ||
+      nextState.totalSupply !== this.state.totalSupply ||
+      nextState.communityLogo !== this.state.communityLogo ||
+      nextState.stepPosition !== this.state.stepPosition ||
+      nextState.isSticky !== this.state.isSticky
+    ) {
+      return true
+    }
+    return false
+  }
+
   componentDidMount () {
-    if (window) {
-      window.addEventListener('scroll', this.handleScroll)
-      this.setState({ stepPosition: this.stepIndicator.getBoundingClientRect().top })
+    window.addEventListener('scroll', this.handleScroll)
+    this.setState({ stepPosition: this.stepIndicator.getBoundingClientRect().top })
+    window.addEventListener('keypress', this.handleKeyPress)
+  }
+
+  handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      switch (this.state.activeStep) {
+        case 0: return this.state.communityName.length > 1 ? this.setNextStep() : null
+        case 1: return this.setNextStep()
+        case 2: return (this.state.customSupply !== '' || this.state.totalSupply !== '') &&
+        Object.keys(this.state.communityType).length !== 0 && this.state.communityLogo !== ''
+          ? this.setNextStep() : null
+      }
     }
   }
 
   componentWillUnmount () {
-    if (window && this.props.ui.scrollPosition) {
+    if (this.state.scrollPosition) {
       window.removeEventListener('scroll', this.handleScroll, false)
     }
   }
 
   handleScroll = () => {
-    this.props.setScrollPosition(window.scrollY);
-    (this.props.ui.scrollPosition > this.state.stepPosition - 35) ? this.setState({ isSticky: true }) : this.setState({ isSticky: false })
-  }
-
-  createCurrency = () => {
-    const currencyData = {
-      name: 'TestIssuanceCoin',
-      symbol: 'TIC',
-      decimals: 18,
-      totalSupply: new BigNumber(1e24)
-    }
-    const communityMetadata =
-      {'location':
-         {'geo': {'lat': '32.0853', 'lng': '34.7818'}, 'name': 'TLV - JAFFA'},
-      'image': 'ipfs://QmPKbrwmzCRZVTsUSe4xKujCKcuMN1NLVi2wNXWNUxqU4L',
-      'description': 'TLV - The TLV Coin is the official CLN community coin of Tel Aviv, Israel.',
-      'website': 'https : //www.colu.com/community/tel-aviv',
-      'social': {'facebook': 'https://www.facebook.com/ColuTelAviv/',
-        'instagram': 'https://www.instagram.com/colu_telaviv/'}
-      }
-    this.props.issueCommunity(communityMetadata, currencyData)
+    this.setState({scrollPosition: window.scrollY})
   }
 
   setQuitIssuance () {
@@ -131,6 +136,7 @@ class IssuanceFactory extends Component {
       case 3:
         return (
           <SummaryStep
+            communityName={name}
             communityLogo={this.state.communityLogo}
             totalSupply={this.state.totalSupply}
             renderCurrencySymbol={nameToSymbol(name)}
@@ -143,11 +149,11 @@ class IssuanceFactory extends Component {
     const steps = ['Name', 'Symbol', 'Details', 'Summary']
     const stepsIndicatorClassStyle = classNames({
       'steps-indicator': true,
-      'step-sticky': this.state.isSticky
+      'step-sticky': this.state.scrollPosition > this.state.stepPosition - 35
     })
     const stepsContainerClassStyle = classNames({
       'steps-container': true,
-      'step-with-sticky': this.state.isSticky
+      'step-with-sticky': this.state.scrollPosition > this.state.stepPosition - 35
     })
     return (
       <div className='issuance-form-wrapper' ref={wrapper => (this.wrapper = wrapper)}>
@@ -186,16 +192,4 @@ class IssuanceFactory extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    ui: state.ui
-  }
-}
-const mapDispatchToProps = dispatch => ({
-  actionsCommunities: bindActionCreators(actionsCommunities, dispatch)
-})
-
-export default connect(mapStateToProps, {
-  setScrollPosition,
-  mapDispatchToProps
-})(IssuanceFactory)
+export default Issuance

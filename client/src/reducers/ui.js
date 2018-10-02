@@ -9,8 +9,7 @@ relevantQuoteActions[CHANGE.PENDING] = CHANGE
 export default (state = {
   activeMarker: null,
   modalType: null,
-  signupHide: false,
-  scrollPosition: 0
+  signupHide: false
 }, action) => {
   if (relevantQuoteActions.hasOwnProperty(action.type)) {
     return {...state, modalProps: {...state.modalProps, ...action.response}}
@@ -32,8 +31,6 @@ export default (state = {
       return {...state, signupHide: action.hide}
     case ui.SIGNUP_CLOSE:
       return {...state, signupClose: action.close}
-    case ui.SET_SCROLL_POSITION:
-      return {...state, scrollPosition: action.scrollPosition}
     default:
       return state
   }

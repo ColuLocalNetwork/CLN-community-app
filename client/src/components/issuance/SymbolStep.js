@@ -7,6 +7,11 @@ const SymbolStep = ({communityName, renderCurrencySymbol, setNextStep}) => {
       <h2 className='step-symbol-title'>{'\'' + communityName + '\''}</h2>
       <h2 className='step-content-title'>Currency Symbol</h2>
       <div className='step-content-symbol-field'>{renderCurrencySymbol}</div>
+      <div className='text-center'>
+        <button className='btn-download edit-symbol'>
+          <FontAwesome name='edit' /> Edit
+        </button>
+      </div>
       <button
         className='symbol-btn'
         onClick={setNextStep}
