@@ -2,7 +2,7 @@ import React from 'react'
 import CalculatorIcon from 'images/calculator-Icon.svg'
 import FontAwesome from 'react-fontawesome'
 
-const SummaryStep = ({ communityName, communityLogo, renderCurrencySymbol, totalSupply }) => {
+const SummaryStep = ({ communityName, communityLogo, renderCurrencySymbol, totalSupply, setIssuanceTransaction }) => {
   return [
     <h2 key={0} className='step-content-title text-center'>Your community currency is ready to use!</h2>,
     <div key={1} className='step-content-summary'>
@@ -36,7 +36,7 @@ const SummaryStep = ({ communityName, communityLogo, renderCurrencySymbol, total
       </div>
     </div>,
     <div key={3} className='text-center wallet-container'>
-      <button className='btn-download'>
+      <button className='btn-download' onClick={setIssuanceTransaction}>
         <FontAwesome name='download' /> Metamask wallet
       </button>
     </div>,

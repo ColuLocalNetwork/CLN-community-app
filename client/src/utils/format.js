@@ -15,6 +15,6 @@ export const nameToSymbol = (name) => {
     case 2: return pickLetters(words[0], 2) + pickLetters(words[1], 1)
     case 3: return pickLetters(words[0], 1) + pickLetters(words[1], 1) + pickLetters(words[2], 1)
     case 4: return pickLetters(words[0], 1) + pickLetters(words[1], 1) + pickLetters(words[2], 1) + pickLetters(words[3], 1)
-    default: return pickLetters(words[0], 2) + pickLetters(words[1], 1)
+    default: return pickLetters(words[0], 1) + pickLetters(words[1], 1) + pickLetters(words[2], 1) + pickLetters(words[3], 1)
   }
 }

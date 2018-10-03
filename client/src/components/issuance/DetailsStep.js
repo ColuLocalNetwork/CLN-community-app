@@ -66,15 +66,19 @@ export default class DetailsStep extends Component {
 
   renderLogo (communityLogo, setCommunityLogo, renderCurrencySymbol) {
     let logoArr = []
-    const communityLogos = [CoinIcon1, CoinIcon2, CoinIcon3]
-    communityLogos.forEach((item, key) => {
+    const communityLogos = {
+      CoinIcon1: CoinIcon1,
+      CoinIcon2: CoinIcon2,
+      CoinIcon3: CoinIcon3
+    }
+    Object.keys(communityLogos).forEach((key) => {
       const totalSupplyClass = classNames({
         'step-content-details-type': true,
-        'chosen-type': communityLogo === item
+        'chosen-type': communityLogo && communityLogo.icon ? communityLogo.icon === communityLogos[key] : false
       })
       logoArr.push(
-        <div className={totalSupplyClass} key={key} onClick={() => setCommunityLogo(item)}>
-          <img src={item} className='logo-img' />
+        <div className={totalSupplyClass} key={key} onClick={() => setCommunityLogo({ name: key + '.svg', icon: communityLogos[key] })}>
+          <img src={communityLogos[key]} className='logo-img' />
           <span className='symbol-text'>{renderCurrencySymbol}</span>
         </div>
       )
@@ -150,6 +154,6 @@ DetailsStep.propTypes = {
   totalSupply: PropTypes.any,
   setTotalSupply: PropTypes.func.isRequired,
   renderCurrencySymbol: PropTypes.string,
-  communityLogo: PropTypes.string,
+  communityLogo: PropTypes.object,
   setNextStep: PropTypes.func.isRequired
 }

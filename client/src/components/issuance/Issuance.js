@@ -1,12 +1,15 @@
 import React, {Component} from 'react'
+import { BigNumber } from 'bignumber.js'
 import FontAwesome from 'react-fontawesome'
 import classNames from 'classnames'
+import {connect} from 'react-redux'
 import StepsIndicator from './StepsIndicator'
 import NameStep from './NameStep'
 import SymbolStep from './SymbolStep'
 import DetailsStep from './DetailsStep'
 import SummaryStep from './SummaryStep'
 import { nameToSymbol } from 'utils/format'
+import * as actions from 'actions/communities'
 
 class Issuance extends Component {
   constructor (props) {
@@ -18,29 +21,12 @@ class Issuance extends Component {
       customSupply: '',
       communityType: {},
       totalSupply: '',
-      communityLogo: '',
+      communityLogo: {},
       stepPosition: {},
       scrollPosition: 0
     }
     this.handleChangeCommunityName = this.handleChangeCommunityName.bind(this)
     this.handleScroll = this.handleScroll.bind(this)
-  }
-  shouldComponentUpdate (nextProps, nextState) {
-    if (nextState.scrollPosition !== this.state.scrollPosition ||
-      (nextState.scrollPosition > this.state.stepPosition - 34) ||
-      nextState.activeStep !== this.state.activeStep ||
-      nextState.doneStep !== this.state.doneStep ||
-      nextState.communityName !== this.state.communityName ||
-      nextState.customSupply !== this.state.customSupply ||
-      nextState.communityType !== this.state.communityType ||
-      nextState.totalSupply !== this.state.totalSupply ||
-      nextState.communityLogo !== this.state.communityLogo ||
-      nextState.stepPosition !== this.state.stepPosition ||
-      nextState.isSticky !== this.state.isSticky
-    ) {
-      return true
-    }
-    return false
   }
 
   componentDidMount () {
@@ -52,7 +38,7 @@ class Issuance extends Component {
   handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       switch (this.state.activeStep) {
-        case 0: return this.state.communityName.length > 1 ? this.setNextStep() : null
+        case 0: return this.state.communityName.length > 2 ? this.setNextStep() : null
         case 1: return this.setNextStep()
         case 2: return (this.state.customSupply !== '' || this.state.totalSupply !== '') &&
         Object.keys(this.state.communityType).length !== 0 && this.state.communityLogo !== ''
@@ -67,6 +53,17 @@ class Issuance extends Component {
     }
   }
 
+  setIssuanceTransaction = (communityType, communityLogo) => {
+    const currencyData = {
+      name: 'TestIssuanceCoin',
+      symbol: 'TIC',
+      decimals: 18,
+      totalSupply: new BigNumber(1e24)
+    }
+    const communityMetadata = {'communityType': communityType.text, 'communityLogo': communityLogo.name}
+    this.props.issueCommunity(communityMetadata, currencyData)
+  }
+
   handleScroll = () => {
     this.setState({scrollPosition: window.scrollY})
   }
@@ -79,7 +76,7 @@ class Issuance extends Component {
     this.setState({communityName: event.target.value})
   }
 
-  setPreviousStep () {
+  setPreviousStep = () => {
     this.setState({
       activeStep: this.state.activeStep - 1
     })
@@ -101,7 +98,7 @@ class Issuance extends Component {
   setCommunityLogo = logo =>
     this.setState({communityLogo: logo})
 
-  renderStepContent (activeStep, name) {
+  renderStepContent (activeStep, name, communityType, communityLogo) {
     switch (activeStep) {
       case 0:
         return (
@@ -137,9 +134,10 @@ class Issuance extends Component {
         return (
           <SummaryStep
             communityName={name}
-            communityLogo={this.state.communityLogo}
+            communityLogo={this.state.communityLogo.icon}
             totalSupply={this.state.totalSupply}
             renderCurrencySymbol={nameToSymbol(name)}
+            setIssuanceTransaction={() => this.setIssuanceTransaction(communityType, communityLogo)}
           />
         )
     }
@@ -147,13 +145,14 @@ class Issuance extends Component {
 
   render () {
     const steps = ['Name', 'Symbol', 'Details', 'Summary']
+    const stepIndicatorInset = 25
     const stepsIndicatorClassStyle = classNames({
       'steps-indicator': true,
-      'step-sticky': this.state.scrollPosition > this.state.stepPosition - 35
+      'step-sticky': this.state.scrollPosition > this.state.stepPosition - stepIndicatorInset
     })
     const stepsContainerClassStyle = classNames({
       'steps-container': true,
-      'step-with-sticky': this.state.scrollPosition > this.state.stepPosition - 35
+      'step-with-sticky': this.state.scrollPosition > this.state.stepPosition - stepIndicatorInset
     })
     return (
       <div className='issuance-form-wrapper' ref={wrapper => (this.wrapper = wrapper)}>
@@ -161,7 +160,7 @@ class Issuance extends Component {
           <div className='issuance-control'>
             {this.state.activeStep > 0 && <button
               className='prev-button ctrl-btn'
-              onClick={() => this.setPreviousStep()}
+              onClick={this.setPreviousStep}
             >
               <FontAwesome className='ctrl-icon' name='arrow-left' />
               <span className='btn-text'>Back</span>
@@ -184,7 +183,7 @@ class Issuance extends Component {
             </div>
           </div>
           <div className='step-content'>
-            {this.renderStepContent(this.state.activeStep, this.state.communityName)}
+            {this.renderStepContent(this.state.activeStep, this.state.communityName, this.state.communityType, this.state.communityLogo)}
           </div>
         </div>
       </div>
@@ -192,4 +191,4 @@ class Issuance extends Component {
   }
 }
 
-export default Issuance
+export default connect(null, actions)(Issuance)
