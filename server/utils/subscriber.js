@@ -3,13 +3,17 @@ const config = require('config')
 const websocketProviderUri = config.get('web3.websocketProvider')
 const CurrencyFactoryAbi = require('../constants/abi/CurrencyFactory')
 const websocketProvider = new Web3.providers.WebsocketProvider(websocketProviderUri)
-const web3 = new Web3(websocketProvider)
-const CurrencyFactoryContract = new web3.eth.Contract(CurrencyFactoryAbi, '0xA1F05144f9d3298a702c8EEE3ca360bc87d05207')
 const fs = require('fs')
+
+const getAddresses = require('./network').getAddresses
+const addresses = getAddresses()
+
+const web3 = new Web3(websocketProvider)
+const CurrencyFactoryContract = new web3.eth.Contract(CurrencyFactoryAbi, addresses.CurrencyFactory)
 
 const saveLastBlockNumber = (blockNumber) => {
   console.log('saving', blockNumber)
-  fs.writeFile('blockNumber', blockNumber, (error) => error && console.error(error))
+  // fs.writeFile('blockNumber', blockNumber, (error) => error && console.error(error))
 }
 
 const getLastBlockNumber = (blockNumber) => {
@@ -23,6 +27,14 @@ const eventCallback = (error, event) => {
     console.error(error)
     return
   }
+  // console.log(event)
+  const eventArgs = event.returnValues
+  const ccAddress = eventArgs.token
+  const owner = eventArgs.owner
+  const factoryAddress = addresses.CurrencyFactory
+  const factoryType = 'CurrencyFactory'
+  console.log(owner)
+  console.log(ccAddress)
   saveLastBlockNumber(event.blockNumber + 1)
 }
 
@@ -35,7 +47,6 @@ const eventsCallback = (error, events) => {
 }
 
 const lastBlockNumber = getLastBlockNumber()
-// console.log(lastBlockNumber)
 
 CurrencyFactoryContract.events.TokenCreated(eventCallback)
 

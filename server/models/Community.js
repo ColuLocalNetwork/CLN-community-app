@@ -7,6 +7,7 @@ module.exports = (mongoose) => {
   const CommunitySchema = new Schema({
     ccAddress: {type: String, required: [true, "can't be blank"]},
     mmAddress: {type: String, required: [true, "can't be blank"]},
+    owner: {type: String, required: [true, "can't be blank"]},
     factoryAddress: {type: String, required: [true, "can't be blank"]},
     factoryType: {type: String, enum: ['CurrencyFactory', 'IssuanceFactory'], default: 'CurrencyFactory'},
     factoryVersion: {type: Number, default: 0},
@@ -15,6 +16,7 @@ module.exports = (mongoose) => {
 
   CommunitySchema.index({ccAddress: 1}, {unique: true})
   CommunitySchema.index({mmAddress: 1}, {unique: true})
+  CommunitySchema.index({owner: 1})
   CommunitySchema.index({factoryAddress: 1})
   CommunitySchema.index({factoryAddress: 1, factoryType: 1, factoryVersion: 1})
 

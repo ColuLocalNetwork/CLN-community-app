@@ -11,7 +11,8 @@
   },
   "web3": {
     "provider": "http://127.0.0.1:8545",
-    "websocketProvider": "ws://127.0.0.1:8546"
+    "websocketProvider": "ws://127.0.0.1:8546",
+    "network": "ropsten"
   },
   "mongo": {
     "uri": "mongodb://localhost/CLN-community-app",
