@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import { BigNumber } from 'bignumber.js'
 import FontAwesome from 'react-fontawesome'
 import classNames from 'classnames'
 import {connect} from 'react-redux'
@@ -53,12 +52,12 @@ class Issuance extends Component {
     }
   }
 
-  setIssuanceTransaction = (communityType, communityLogo) => {
+  setIssuanceTransaction = (communityName, symbol, communityType, communityLogo, totalSupply) => {
     const currencyData = {
-      name: 'TestIssuanceCoin',
-      symbol: 'TIC',
+      name: communityName,
+      symbol: symbol,
       decimals: 18,
-      totalSupply: new BigNumber(1e24)
+      totalSupply: totalSupply
     }
     const communityMetadata = {'communityType': communityType.text, 'communityLogo': communityLogo.name}
     this.props.issueCommunity(communityMetadata, currencyData)
@@ -137,7 +136,7 @@ class Issuance extends Component {
             communityLogo={this.state.communityLogo.icon}
             totalSupply={this.state.totalSupply}
             renderCurrencySymbol={nameToSymbol(name)}
-            setIssuanceTransaction={() => this.setIssuanceTransaction(communityType, communityLogo)}
+            setIssuanceTransaction={() => this.setIssuanceTransaction(name, nameToSymbol(name), communityType, communityLogo, this.state.totalSupply)}
           />
         )
     }
