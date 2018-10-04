@@ -2124,18 +2124,6 @@ input[type="checkbox" i] {
 					}
 				}
 			}
-			.other-details {
-				font-size: 15px;
-				text-align: center;
-  			color: $color-step-field;
-				line-height: 50px;
-				font-weight: 500;
-				text-decoration: underline;
-				&:hover {
-					cursor: pointer;
-					color: $color-hover-details;
-				}
-			}
 		}
 		&-summary {
 			width: 400px;
@@ -2284,6 +2272,18 @@ input[type="checkbox" i] {
 				border-radius: 5px;
 			}
 		}
+	}
+}
+.other-details {
+	font-size: 15px;
+	text-align: center;
+	color: $color-step-field;
+	line-height: 50px;
+	font-weight: 500;
+	text-decoration: underline;
+	&:hover {
+		cursor: pointer;
+		color: $color-hover-details;
 	}
 }
 .wallet-container {

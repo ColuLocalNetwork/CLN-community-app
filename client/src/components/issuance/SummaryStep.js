@@ -36,9 +36,9 @@ const SummaryStep = ({ communityName, communityLogo, renderCurrencySymbol, total
       </div>
     </div>,
     <div key={3} className='text-center wallet-container'>
-      <button className='btn-download' onClick={setIssuanceTransaction}>
+      <a href='https://metamask.io/' target='_blank' className='btn-download'>
         <FontAwesome name='download' /> Metamask wallet
-      </button>
+      </a>
     </div>,
     <div key={4} className='text-center'>
       <button className='symbol-btn'>

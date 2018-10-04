@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import FontAwesome from 'react-fontawesome'
 import classNames from 'classnames'
 import {connect} from 'react-redux'
+import {BigNumber} from 'bignumber.js'
 import StepsIndicator from './StepsIndicator'
 import NameStep from './NameStep'
 import SymbolStep from './SymbolStep'
@@ -17,6 +18,8 @@ class Issuance extends Component {
       activeStep: 0,
       doneStep: null,
       communityName: '',
+      showCustomSymbol: false,
+      communitySymbol: '',
       customSupply: '',
       communityType: {},
       totalSupply: '',
@@ -25,6 +28,7 @@ class Issuance extends Component {
       scrollPosition: 0
     }
     this.handleChangeCommunityName = this.handleChangeCommunityName.bind(this)
+    this.handleChangeCommunitySymbol = this.handleChangeCommunitySymbol.bind(this)
     this.handleScroll = this.handleScroll.bind(this)
   }
 
@@ -57,7 +61,7 @@ class Issuance extends Component {
       name: communityName,
       symbol: symbol,
       decimals: 18,
-      totalSupply: totalSupply
+      totalSupply: new BigNumber(totalSupply).mul(1e18)
     }
     const communityMetadata = {'communityType': communityType.text, 'communityLogo': communityLogo.name}
     this.props.issueCommunity(communityMetadata, currencyData)
@@ -73,6 +77,7 @@ class Issuance extends Component {
 
   handleChangeCommunityName (event) {
     this.setState({communityName: event.target.value})
+    this.setState({communitySymbol: nameToSymbol(event.target.value)})
   }
 
   setPreviousStep = () => {
@@ -86,6 +91,14 @@ class Issuance extends Component {
       doneStep: this.state.activeStep,
       activeStep: this.state.activeStep + 1
     })
+  }
+
+  handleChangeCommunitySymbol (event) {
+    this.setState({communitySymbol: event.target.value})
+  }
+
+  toggleCustomSymbol = () => {
+    this.setState({showCustomSymbol: !this.state.showCustomSymbol})
   }
 
   setCommunityType = type =>
@@ -111,8 +124,11 @@ class Issuance extends Component {
         return (
           <SymbolStep
             communityName={name}
-            renderCurrencySymbol={nameToSymbol(name)}
             setNextStep={() => this.setNextStep()}
+            handleChangeCommunitySymbol={this.handleChangeCommunitySymbol}
+            communitySymbol={this.state.communitySymbol}
+            showCustomSymbol={this.state.showCustomSymbol}
+            toggleCustomSymbol={() => this.toggleCustomSymbol()}
           />
         )
       case 2:
@@ -122,7 +138,7 @@ class Issuance extends Component {
             setCommunityType={this.setCommunityType}
             totalSupply={this.state.totalSupply}
             setTotalSupply={this.setTotalSupply}
-            renderCurrencySymbol={nameToSymbol(name)}
+            renderCurrencySymbol={this.state.communitySymbol}
             communityLogo={this.state.communityLogo}
             setCommunityLogo={this.setCommunityLogo}
             showOtherSupply={this.state.showOtherSupply}
@@ -135,7 +151,7 @@ class Issuance extends Component {
             communityName={name}
             communityLogo={this.state.communityLogo.icon}
             totalSupply={this.state.totalSupply}
-            renderCurrencySymbol={nameToSymbol(name)}
+            renderCurrencySymbol={this.state.communitySymbol}
             setIssuanceTransaction={() => this.setIssuanceTransaction(name, nameToSymbol(name), communityType, communityLogo, this.state.totalSupply)}
           />
         )
@@ -144,7 +160,7 @@ class Issuance extends Component {
 
   render () {
     const steps = ['Name', 'Symbol', 'Details', 'Summary']
-    const stepIndicatorInset = 25
+    const stepIndicatorInset = 35
     const stepsIndicatorClassStyle = classNames({
       'steps-indicator': true,
       'step-sticky': this.state.scrollPosition > this.state.stepPosition - stepIndicatorInset
