@@ -4,6 +4,7 @@ const websocketProviderUri = config.get('web3.websocketProvider')
 const CurrencyFactoryAbi = require('../constants/abi/CurrencyFactory')
 const websocketProvider = new Web3.providers.WebsocketProvider(websocketProviderUri)
 const eventUtils = require('../utils/events')
+const communityUtils = require('../utils/community')
 
 const getAddresses = require('../utils/network').getAddresses
 const addresses = getAddresses()
@@ -27,8 +28,12 @@ const eventsCallback = (error, events) => {
   events.forEach((event) => eventCallback(error, event))
 }
 
-const lastBlockNumber = eventUtils.getLastBlockNumber()
-
 CurrencyFactoryContract.events.TokenCreated(eventCallback)
 
-CurrencyFactoryContract.getPastEvents('TokenCreated', {fromBlock: lastBlockNumber, toBlock: 'latest'}, eventsCallback)
+const getPastEvents = async () => {
+  const lastBlockNumber = await communityUtils.getLastBlockNumber()
+  console.log(lastBlockNumber)
+  CurrencyFactoryContract.getPastEvents('TokenCreated', {fromBlock: lastBlockNumber, toBlock: 'latest'}, eventsCallback)
+}
+
+getPastEvents()

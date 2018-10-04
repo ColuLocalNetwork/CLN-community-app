@@ -11,7 +11,8 @@ module.exports = (mongoose) => {
     factoryAddress: {type: String, required: [true, "can't be blank"]},
     factoryType: {type: String, enum: ['CurrencyFactory', 'IssuanceFactory'], default: 'CurrencyFactory'},
     factoryVersion: {type: Number, default: 0},
-    verified: {type: Boolean, default: false}
+    verified: {type: Boolean, default: false},
+    blockNumber: {type: Number}
   }).plugin(timestamps())
 
   CommunitySchema.index({ccAddress: 1}, {unique: true})

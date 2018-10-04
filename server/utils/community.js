@@ -54,4 +54,9 @@ utils.addNewCommunity = async (data) => {
   return community.create(data)
 }
 
+utils.getLastBlockNumber = async () => {
+  const communityObj = await community.getModel().find().sort({blockNumber: -1}).limit(1)
+  return communityObj.length ? communityObj[0].blockNumber : 0
+}
+
 module.exports = utils
