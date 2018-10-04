@@ -7,7 +7,6 @@ const path = require('path')
 const compression = require('compression')
 const config = require('config')
 require('express-async-errors')
-require('./utils/subscriber')
 
 var isProduction = process.env.NODE_ENV === 'production'
 
@@ -40,6 +39,8 @@ if (!isProduction) {
 require('./models')(mongoose)
 
 app.use(require('./routes'))
+
+require('./services/events')
 
 /// catch 404 and forward to error handler
 app.use(function (req, res, next) {

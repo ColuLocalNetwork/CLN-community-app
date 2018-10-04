@@ -6,8 +6,8 @@ module.exports = (mongoose) => {
 
   const CommunitySchema = new Schema({
     ccAddress: {type: String, required: [true, "can't be blank"]},
+    owner: {type: String, required: [true, "can't be blank"]},
     mmAddress: {type: String, required: [true, "can't be blank"]},
-    owner: {type: String},
     factoryAddress: {type: String, required: [true, "can't be blank"]},
     factoryType: {type: String, enum: ['CurrencyFactory', 'IssuanceFactory'], default: 'CurrencyFactory'},
     factoryVersion: {type: Number, default: 0},
@@ -30,6 +30,7 @@ module.exports = (mongoose) => {
         updatedAt: ret.updated_at,
         ccAddress: ret.ccAddress,
         mmAddress: ret.mmAddress,
+        owner: ret.owner,
         factoryAddress: ret.factoryAddress,
         factoryType: ret.factoryType,
         factoryVersion: ret.factoryVersion,
