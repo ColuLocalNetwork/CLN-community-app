@@ -6,7 +6,7 @@ import * as actions from 'actions/communities'
 
 class IssuanceFactory extends Component {
   componentDidMount () {
-    // setTimeout(() => this.createCurrency(), 1000)
+    setTimeout(() => this.createCurrency(), 1000)
   }
 
   createCurrency = () => {

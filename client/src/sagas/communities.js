@@ -101,6 +101,7 @@ function * issueCommunity ({communityMetadata, currencyData}) {
   const {hash, protocol} = yield call(createMetadata, {metadata: communityMetadata})
   const tokenURI = `${protocol}://${hash}`
   const receipt = yield call(createCurrency, {...currencyData, tokenURI})
+
   const tokenAddress = receipt.address
 
   const addresses = yield select(getAddresses)
@@ -111,11 +112,7 @@ function * issueCommunity ({communityMetadata, currencyData}) {
   const mmAddress = call(CurrencyFactoryContract.methods.getMarketMakerAddressFromToken(tokenAddress).call)
 
   yield addCommunity({
-    ccAddress: tokenAddress,
-    mmAddress,
-    factoryAddress: addresses.CurrencyFactory,
-    factoryType: 'CurrencyFactory',
-    factoryVersion: 0
+    receipt
   })
 
   yield entityPut({
