@@ -102,18 +102,11 @@ function * issueCommunity ({communityMetadata, currencyData}) {
   const tokenURI = `${protocol}://${hash}`
   const receipt = yield call(createCurrency, {...currencyData, tokenURI})
 
-  const tokenAddress = receipt.address
-
-  const addresses = yield select(getAddresses)
-
-  const CurrencyFactoryContract = contract.getContract({abiName: 'CurrencyFactory',
-    address: addresses.CurrencyFactory
-  })
-  const mmAddress = call(CurrencyFactoryContract.methods.getMarketMakerAddressFromToken(tokenAddress).call)
-
   yield addCommunity({
     receipt
   })
+
+  const tokenAddress = receipt.events.TokenCreated.returnValues.token
 
   yield entityPut({
     type: actions.ISSUE_COMMUNITY.SUCCESS,
