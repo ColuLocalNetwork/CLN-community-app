@@ -12,6 +12,23 @@ $page-width: 1024px;
 
 $breakpoint-tablet: 1024px;
 
+$color-step: #6e6d9f;
+$color-active-step: #c095ff;
+$color-step-line: #271d53;
+$color-step-border: #4b3b80;
+$color-step-text: #fff;
+$color-issuance: #1c1442;
+$color-issuance-bg: linear-gradient(to bottom, rgba(60, 45, 119, 0.25), $color-issuance);
+$color-step-bg: #241c4a;
+$color-symbol-field-brdr: #b6b5d8;
+$color-shadow: rgba(0, 0, 0, 0.3);
+$color-step-field: #5fddbb;
+$color-step-container-logo: #343166;
+$font-family-lucida: 'Lucida Grande';
+$font-family-lato: 'Lato', sans-serif;
+$color-hover-details: #7effdc;
+$color-shadow-btn: rgba(22, 14, 58, 0.34);
+
 body > * {
 	box-sizing: border-box;
 	-webkit-overflow-scrolling: touch;
@@ -844,16 +861,15 @@ button:disabled, button[disabled] {
 .top-navigator {
 	@include flex-box();
 	height: $nav-height;
-	background-color: $light-grey;
 	width: 100%;
 	align-items: center;
-	//top: $nav-height;
 	top: 0;
 	justify-content: space-between;
 	padding: 10px 30px;
 	position: absolute;
 	z-index: 200;
-	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+	background-image: linear-gradient(to top, #1c1442, #2a2057);
+ 	box-shadow: 0 0 21px 0 rgba(135, 118, 255, 0.29);
 	@media (max-width: $breakpoint-tablet) {
 		height: $nav-height-mobile;
 		padding: 10px 28px;
