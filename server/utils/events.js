@@ -10,7 +10,7 @@ const processTokenCreatedEvent = async (event) => {
   const communityData = await utils.getCommunityData(factoryAddress, ccAddress)
 
   try {
-    const community = await utils.addNewCommunity({ccAddress, owner, blockNumber, ...communityData})
+    const community = await utils.upsertCommunity({ccAddress, owner, blockNumber, ...communityData})
     return community
   } catch (error) {
     if (error.name === 'MongoError' && error.code === 11000) {
