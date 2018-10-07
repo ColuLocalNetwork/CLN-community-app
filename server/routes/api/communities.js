@@ -8,7 +8,7 @@ router.get('/', async (req, res, next) => {
   console.log(req.query)
 
   const [ results, itemCount ] = await Promise.all([
-    Community.find({}).limit(req.query.limit).skip(req.skip).lean().exec(),
+    Community.find({}).limit(req.query.limit).skip(req.skip),
     Community.count({})
   ])
 
