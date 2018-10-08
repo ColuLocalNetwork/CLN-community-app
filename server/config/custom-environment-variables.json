@@ -1,4 +1,5 @@
 {
+  "network": "COMMUNITY_NETWORK",
   "api": {
     "secret": "COMMUNITY_API_SECRET",
     "port": "PORT"

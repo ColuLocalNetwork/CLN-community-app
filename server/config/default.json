@@ -1,4 +1,5 @@
 {
+  "network": "ropsten",
   "api": {
     "secret": "secret",
     "port": 3000
