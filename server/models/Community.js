@@ -61,6 +61,11 @@ module.exports = (mongoose) => {
     })
   }
 
+  community.upsertByccAddress = (data) => {
+    const {ccAddress} = data
+    return community.getModel().update({ccAddress}, data, {upsert: true})
+  }
+
   community.getById = (id) => {
     return new Promise((resolve, reject) => {
       Community.findById(id, (err, doc) => {

@@ -55,8 +55,7 @@ utils.addNewCommunity = async (data) => {
 }
 
 utils.upsertCommunity = async (data) => {
-  const {ccAddress} = data
-  return community.getModel().update({ccAddress}, data, {upsert: true})
+  return community.upsertByccAddress(data)
 }
 
 utils.getLastBlockNumber = async () => {
