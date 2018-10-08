@@ -63,7 +63,7 @@ module.exports = (mongoose) => {
 
   community.upsertByccAddress = (data) => {
     const {ccAddress} = data
-    return community.getModel().update({ccAddress}, data, {upsert: true})
+    return community.getModel().updateOne({ccAddress}, data, {upsert: true})
   }
 
   community.getById = (id) => {

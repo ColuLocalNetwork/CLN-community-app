@@ -9,15 +9,7 @@ const processTokenCreatedEvent = async (event) => {
   const factoryAddress = event.address
   const communityData = await utils.getCommunityData(factoryAddress, ccAddress)
 
-  try {
-    const community = await utils.upsertCommunity({ccAddress, owner, blockNumber, ...communityData})
-    return community
-  } catch (error) {
-    if (error.name === 'MongoError' && error.code === 11000) {
-      return null
-    }
-    throw error
-  }
+  return utils.upsertCommunity({ccAddress, owner, blockNumber, ...communityData})
 }
 
 module.exports = {

@@ -32,11 +32,14 @@ CurrencyFactoryContract.events.TokenCreated(eventCallback)
 
 const getPastEvents = async () => {
   const lastBlockNumber = await communityUtils.getLastBlockNumber()
-  const latestBlock = await web3.eth.getBlock('latest')
-  const pageSize = config.get('web3.pageSize')
-  for (let i = lastBlockNumber; i < latestBlock.number; i += pageSize) {
-    console.log(i, i + pageSize)
-    CurrencyFactoryContract.getPastEvents('TokenCreated', {fromBlock: i, toBlock: i + pageSize}, eventsCallback)
+  try {
+    CurrencyFactoryContract.getPastEvents('TokenCreated', {fromBlock: lastBlockNumber, toBlock: 'latest'}, eventsCallback)
+  } catch (error) {
+    const latestBlock = await web3.eth.getBlock('latest')
+    const pageSize = config.get('web3.pageSize')
+    for (let i = lastBlockNumber; i < latestBlock.number; i += pageSize) {
+      CurrencyFactoryContract.getPastEvents('TokenCreated', {fromBlock: i, toBlock: i + pageSize}, eventsCallback)
+    }
   }
 }
 
