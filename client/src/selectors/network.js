@@ -37,3 +37,8 @@ export const getColuWallet = createSelector(
   getAddresses,
   (addresses) => addresses && addresses.ColuWallet
 )
+
+export const getApiRoot = createSelector(
+  getNetworkType,
+  networkType => CONFIG.api.url2[networkType]
+)
