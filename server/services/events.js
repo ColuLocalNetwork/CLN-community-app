@@ -32,7 +32,6 @@ CurrencyFactoryContract.events.TokenCreated(eventCallback)
 
 const getPastEvents = async () => {
   const lastBlockNumber = await communityUtils.getLastBlockNumber()
-  console.log(lastBlockNumber)
   CurrencyFactoryContract.getPastEvents('TokenCreated', {fromBlock: lastBlockNumber, toBlock: 'latest'}, eventsCallback)
 }
 
