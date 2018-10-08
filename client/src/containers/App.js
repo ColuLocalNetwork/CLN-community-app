@@ -83,6 +83,7 @@ class App extends Component {
       'center': true,
       'fullscreen': !isMobile,
       'mobile-screen': isMobile,
+      'issuance-screen': currentRoute === '/view/issuance',
       'open-mobile-nav': this.state.toggleMenu
     })
 

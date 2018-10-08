@@ -208,20 +208,17 @@ h5 {
 	justify-content: center;
 	align-items: center;
 }
-
+.hide-nav-links {
+	@media (max-width: $breakpoint-tablet) {
+		display: none;
+	}
+}
 .fullscreen {
 	height: 100vh;
-	@media (max-width: $breakpoint-mobile) {
-		height: auto;
-		height: 327px;
-		z-index: 0;
-		min-height: 310px;
-		justify-content: start;
-	}
 	&.open-mobile-nav {
 		z-index: 2;
 		@media (max-width: $breakpoint-tablet) {
-			.top-nav-links {
+			.top-nav-links.hide-nav-links {
 				display: block;
 			}
 		}
@@ -232,6 +229,13 @@ h5 {
 	//height: calc(200% - 100vh);
 	height: 100%;
 	-webkit-overflow-scrolling: touch;
+}
+
+.issuance-screen {
+	height: 327px;
+	z-index: 0;
+	min-height: 310px;
+	justify-content: start;
 }
 
 .tablet {
@@ -911,8 +915,10 @@ button:disabled, button[disabled] {
 		align-items: center;
 		cursor: pointer;
 		height: 100%;
-		@media (max-width: $breakpoint-tablet) {
-			display: none;
+		&.hide-nav-links {
+			@media (max-width: $breakpoint-tablet) {
+				display: none;
+			}
 		}
 		.separator {
 			display: none;
@@ -1019,6 +1025,13 @@ button:disabled, button[disabled] {
 				}
 			}
 			.top-nav-balance {
+				display: none;
+			}
+		}
+	}
+	&.hide-nav-links {
+		.top-nav-links {
+			@media (max-width: $breakpoint-tablet) {
 				display: none;
 			}
 		}
@@ -1905,7 +1918,7 @@ input[type="checkbox" i] {
 		@media (max-width: $breakpoint-mobile) {
 			min-height: calc(100vh - 269px);
 			padding-top: 35px;
-			padding-bottom: 20px;
+			padding-bottom: 30px;
 		}
 		&-community {
 			width: 300px;
@@ -1961,6 +1974,9 @@ input[type="checkbox" i] {
 					margin-right: auto;
 					font-size: 80px;
 					margin-bottom: 25px;
+					input {
+						font-size: 80px;
+					}
 				}
 			}
 			@media (max-width: $breakpoint-mobile) {
@@ -2254,6 +2270,30 @@ input[type="checkbox" i] {
 			margin-bottom: 5px;
 		}
 	}
+	&-community-symbol {
+		input {
+			background-color: transparent;
+			font-size: 106px;
+			font-weight: bold;
+			color: #5fddbb;
+			text-transform: uppercase;
+			box-shadow: none;
+			outline: none;
+			border: none;
+			width: 100%;
+			text-align: center;
+			height: 125px;
+			&:focus {
+				box-shadow: none;
+				outline: none;
+				border: none;
+			}
+			@media (max-width: $breakpoint-mobile) {
+				font-size: 80px;
+				height: 92px;
+			}
+		}
+	}
 	&-community-name {
 		input {
 			box-shadow: 0 0 6px 0 $color-step-field;
@@ -2348,6 +2388,10 @@ input[type="checkbox" i] {
 		color: $color-step-field;
 		margin-right: 5px;
 		font-size: 18px;
+		&.fa-times-circle {
+			position: relative;
+			top: 2px;
+		}
 	}
 	&:focus,
 	&:active,

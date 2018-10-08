@@ -64,7 +64,7 @@ export default class DetailsStep extends Component {
     return totalContent
   }
 
-  renderLogo (communityLogo, setCommunityLogo, renderCurrencySymbol) {
+  renderLogo (communityLogo, setCommunityLogo, communitySymbol) {
     let logoArr = []
     const communityLogos = {
       CoinIcon1: CoinIcon1,
@@ -79,7 +79,7 @@ export default class DetailsStep extends Component {
       logoArr.push(
         <div className={totalSupplyClass} key={key} onClick={() => setCommunityLogo({ name: key + '.svg', icon: communityLogos[key] })}>
           <img src={communityLogos[key]} className='logo-img' />
-          <span className='symbol-text'>{renderCurrencySymbol}</span>
+          <span className='symbol-text'>{communitySymbol}</span>
         </div>
       )
     })
@@ -102,7 +102,7 @@ export default class DetailsStep extends Component {
             Community Logo
           </h3>
           <div className='step-content-details-container'>
-            {this.renderLogo(this.props.communityLogo, this.props.setCommunityLogo, this.props.renderCurrencySymbol)}
+            {this.renderLogo(this.props.communityLogo, this.props.setCommunityLogo, this.props.communitySymbol)}
           </div>
         </div>
         <div className='step-content-details-block total-block'>
@@ -150,10 +150,12 @@ export default class DetailsStep extends Component {
 
 DetailsStep.propTypes = {
   communityType: PropTypes.object,
+  setCommunityType: PropTypes.func.isRequired,
   communityName: PropTypes.string,
   totalSupply: PropTypes.any,
   setTotalSupply: PropTypes.func.isRequired,
-  renderCurrencySymbol: PropTypes.string,
   communityLogo: PropTypes.object,
+  communitySymbol: PropTypes.string,
+  setCommunityLogo: PropTypes.func.isRequired,
   setNextStep: PropTypes.func.isRequired
 }

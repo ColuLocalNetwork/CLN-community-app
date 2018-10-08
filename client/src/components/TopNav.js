@@ -83,12 +83,13 @@ class TopNav extends Component {
     const navLinksClass = classNames({
       'hide': !this.state.openMenu && isMobile,
       'top-nav-links': true,
-      'show-top-nav-links': true
+      'show-top-nav-links': true,
+      'hide-nav-links': !isMobile
     })
 
     return <div className={topNavClass}>
       <a href='https://cln.network/' target='_blank'><img src={ClnIcon} /></a>
-      <FontAwesome name='align-justify' className='burger-menu' onClick={this.props.setToggleMenu} />
+      {!isMobile && <FontAwesome name='align-justify' className='burger-menu' onClick={this.props.setToggleMenu} />}
       <div className={navLinksClass}>
         <div onClick={this.showIssuance} >
           <div className='top-nav-text'>Issuance</div>

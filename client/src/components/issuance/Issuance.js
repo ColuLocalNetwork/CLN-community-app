@@ -18,7 +18,6 @@ class Issuance extends Component {
       activeStep: 0,
       doneStep: null,
       communityName: '',
-      showCustomSymbol: false,
       communitySymbol: '',
       customSupply: '',
       communityType: {},
@@ -97,10 +96,6 @@ class Issuance extends Component {
     this.setState({communitySymbol: event.target.value})
   }
 
-  toggleCustomSymbol = () => {
-    this.setState({showCustomSymbol: !this.state.showCustomSymbol})
-  }
-
   setCommunityType = type =>
     this.setState({communityType: type})
 
@@ -127,8 +122,6 @@ class Issuance extends Component {
             setNextStep={() => this.setNextStep()}
             handleChangeCommunitySymbol={this.handleChangeCommunitySymbol}
             communitySymbol={this.state.communitySymbol}
-            showCustomSymbol={this.state.showCustomSymbol}
-            toggleCustomSymbol={() => this.toggleCustomSymbol()}
           />
         )
       case 2:
@@ -138,10 +131,9 @@ class Issuance extends Component {
             setCommunityType={this.setCommunityType}
             totalSupply={this.state.totalSupply}
             setTotalSupply={this.setTotalSupply}
-            renderCurrencySymbol={this.state.communitySymbol}
+            communitySymbol={this.state.communitySymbol}
             communityLogo={this.state.communityLogo}
             setCommunityLogo={this.setCommunityLogo}
-            showOtherSupply={this.state.showOtherSupply}
             setNextStep={() => this.setNextStep()}
           />
         )
@@ -151,7 +143,7 @@ class Issuance extends Component {
             communityName={name}
             communityLogo={this.state.communityLogo.icon}
             totalSupply={this.state.totalSupply}
-            renderCurrencySymbol={this.state.communitySymbol}
+            communitySymbol={this.state.communitySymbol}
             setIssuanceTransaction={() => this.setIssuanceTransaction(name, nameToSymbol(name), communityType, communityLogo, this.state.totalSupply)}
           />
         )
@@ -163,11 +155,11 @@ class Issuance extends Component {
     const stepIndicatorInset = 35
     const stepsIndicatorClassStyle = classNames({
       'steps-indicator': true,
-      'step-sticky': this.state.scrollPosition > this.state.stepPosition - stepIndicatorInset
+      'step-sticky': (this.state.scrollPosition > this.state.stepPosition - stepIndicatorInset)
     })
     const stepsContainerClassStyle = classNames({
       'steps-container': true,
-      'step-with-sticky': this.state.scrollPosition > this.state.stepPosition - stepIndicatorInset
+      'step-with-sticky': (this.state.scrollPosition > this.state.stepPosition - stepIndicatorInset)
     })
     return (
       <div className='issuance-form-wrapper' ref={wrapper => (this.wrapper = wrapper)}>
