@@ -40,5 +40,5 @@ export const getColuWallet = createSelector(
 
 export const getApiRoot = createSelector(
   getNetworkType,
-  networkType => CONFIG.api.url2[networkType]
+  networkType => CONFIG.api.url[networkType] || CONFIG.api.url.default
 )

@@ -1,13 +1,13 @@
 import request from 'superagent'
 
-export const API_ROOT = CONFIG.api.url
+export const API_ROOT = CONFIG.api.url.default
 
-export const fetchMetadata = (protocol, hash) =>
-  request.get(`${API_ROOT}/metadata/${protocol}/${hash}`)
+export const fetchMetadata = (protocol, hash, apiRoot) =>
+  request.get(`${apiRoot}/metadata/${protocol}/${hash}`)
     .then(response => response.body)
 
-export const createMetadata = (metadata) =>
-  request.post(`${API_ROOT}/metadata`)
+export const createMetadata = (metadata, apiRoot) =>
+  request.post(`${apiRoot}/metadata`)
     .send({metadata})
     .then(response => response.body)
 

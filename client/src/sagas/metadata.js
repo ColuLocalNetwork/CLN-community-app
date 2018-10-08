@@ -22,7 +22,7 @@ function * fetchMetadata ({protocol, hash, tokenAddress}) {
 }
 
 export function * createMetadata ({metadata}) {
-  const {data} = yield api.createMetadata(metadata)
+  const {data} = yield apiCall(api.createMetadata, metadata)
   yield put({
     type: actions.CREATE_METADATA.SUCCESS,
     response: {

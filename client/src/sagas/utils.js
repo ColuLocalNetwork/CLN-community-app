@@ -45,6 +45,5 @@ export const tryTakeLatestWithDebounce = (action, saga, timeout = CONFIG.ui.debo
 
 export function * apiCall (...args) {
   const apiRoot = yield select(getApiRoot)
-  debugger
   return yield call(...args, apiRoot)
 }

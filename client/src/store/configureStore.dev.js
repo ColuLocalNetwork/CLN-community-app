@@ -3,7 +3,6 @@ import { createLogger } from 'redux-logger'
 import createSagaMiddleware, { END } from 'redux-saga'
 import createHistory from 'history/createBrowserHistory'
 import { routerMiddleware } from 'react-router-redux'
-import { apiMiddleware } from 'middlewares'
 import rootReducer from '../reducers'
 
 const history = createHistory()
@@ -18,7 +17,6 @@ export default function configureStore (initialState) {
     composeEnhancers(
       applyMiddleware(
         routerMd,
-        apiMiddleware,
         sagaMiddleware,
         createLogger({
           collapsed: (getState, action, logEntry) => !action.error,
