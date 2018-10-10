@@ -120,5 +120,4 @@ const mapStateToProps = (state, props) => ({
   ...props
 })
 
-
 export default connect(mapStateToProps)(Summary)
