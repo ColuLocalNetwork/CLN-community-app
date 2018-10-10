@@ -57,7 +57,9 @@ class BuySellAmounts extends Component {
     const { minimum, priceLimit, pricePercentage, inputField } = this.state
     const { isBuy } = this.props
 
-    this.props.next({
+    this.props.next()
+
+    this.props.uiActions.updateModalProps({
       cln: this.cln(),
       cc: this.cc(),
       inputField,
