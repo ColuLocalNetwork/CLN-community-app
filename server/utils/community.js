@@ -16,12 +16,12 @@ const provider = new Web3.providers.HttpProvider(web3Config.provider)
 const community = mongoose.community
 
 const createContract = (abi) => {
-  let cntrct = Contract({abi: abi})
+  let cntrct = Contract({ abi: abi })
   cntrct.setProvider(provider)
   return cntrct
 }
 
-const contracts = Object.assign(...Object.entries(abis).map(([name, abi]) => ({[name]: createContract(abi)})))
+const contracts = Object.assign(...Object.entries(abis).map(([name, abi]) => ({ [name]: createContract(abi) })))
 
 const utils = {}
 
@@ -59,7 +59,7 @@ utils.upsertCommunity = async (data) => {
 }
 
 utils.getLastBlockNumber = async () => {
-  const communityObj = await community.getModel().find().sort({blockNumber: -1}).limit(1)
+  const communityObj = await community.getModel().find().sort({ blockNumber: -1 }).limit(1)
   return communityObj.length ? communityObj[0].blockNumber : 0
 }
 

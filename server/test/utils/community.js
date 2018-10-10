@@ -46,8 +46,11 @@ contract('Community', async (accounts) => {
     let tokenURI = 'ipfs://' + metadataHash
     const result = await currencyFactory.createCurrency('TestLocalCurrency', 'TLC', 18, CC_MAX_TOKENS, tokenURI, {from: accounts[0]})
     ccAddress = result.logs[0].args.token
+    const owner = result.logs[0].args.owner
     let mmAddress = await currencyFactory.getMarketMakerAddressFromToken(ccAddress)
     communityData = await utils.getCommunityData(currencyFactory.address, ccAddress)
+    communityData = {...communityData, owner}
+    console.log(communityData)
     assertCommunityData(communityData, {
       ccAddress: ccAddress,
       factoryAddress: currencyFactory.address,
