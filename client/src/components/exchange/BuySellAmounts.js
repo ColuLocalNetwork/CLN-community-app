@@ -53,6 +53,10 @@ class BuySellAmounts extends Component {
     }
   }
 
+  static getDerivedStateFromProps (props, state) {
+    return null
+  }
+
   next = () => {
     const { minimum, priceLimit, pricePercentage, inputField } = this.state
     const { isBuy } = this.props
