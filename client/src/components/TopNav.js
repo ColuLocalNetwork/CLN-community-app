@@ -99,7 +99,7 @@ class TopNav extends Component {
             name='FAQ'
             onClick={this.handleLinkClick}>FAQ</a>
           <a className='top-nav-text'
-            href='https://cln.network/pdf/cln_whitepaper.pdf'
+            href='https://cln.network/wp-content/uploads/pdf/cln_whitepaper.pdf'
             target='_blank'
             name='whitepaper'
             onClick={this.handleLinkClick}>

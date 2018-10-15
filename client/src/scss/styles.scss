@@ -27,6 +27,7 @@ $font-family-lucida: 'Lucida Grande';
 $font-family-lato: 'Lato', sans-serif;
 $color-hover-details: #7effdc;
 $color-shadow-btn: rgba(22, 14, 58, 0.34);
+$color-top-nav-bg: #2a2057;
 
 $breakpoint-mobile: 576px;
 $breakpoint-tablet: 1024px;
@@ -890,13 +891,13 @@ button:disabled, button[disabled] {
 	padding: 10px 30px;
 	position: absolute;
 	z-index: 200;
-	background-image: linear-gradient(to top, #1c1442, #2a2057);
+	background-image: linear-gradient(to top, #1c1442, $color-top-nav-bg);
   box-shadow: 0 0 21px 0 rgba(135, 118, 255, 0.29);
 	@media (max-width: $breakpoint-tablet) {
 		height: $nav-height-mobile;
 		padding: 10px 28px;
 		position: fixed;
-		background: #2a2057;
+		background: $color-top-nav-bg;
 	}
 	.top-nav-logo {
 		display: flex;
@@ -1087,7 +1088,7 @@ button:disabled, button[disabled] {
 		@media (max-width: $breakpoint-tablet) {
 			@include flex-direction(column);
 			position: absolute;
-			background: #2a2057;
+			background: $color-top-nav-bg;
 			top: $nav-height-mobile;
 			right: 0;
 			width:100%;
