@@ -14,7 +14,6 @@ import * as actions from 'actions/communities'
 class Issuance extends Component {
   state = {
     activeStep: 0,
-    doneStep: null,
     communityName: '',
     communitySymbol: '',
     customSupply: '',
@@ -81,7 +80,6 @@ class Issuance extends Component {
 
   setNextStep () {
     this.setState({
-      doneStep: this.state.activeStep,
       activeStep: this.state.activeStep + 1
     })
   }
@@ -179,7 +177,6 @@ class Issuance extends Component {
               <StepsIndicator
                 steps={steps}
                 activeStep={this.state.activeStep}
-                doneStep={this.state.doneStep}
               />
             </div>
           </div>
