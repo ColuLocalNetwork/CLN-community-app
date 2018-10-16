@@ -31,11 +31,9 @@ function * fetchCommunity ({tokenAddress}) {
 function * fetchCommunities ({page = 0}) {
   const communities = yield call(fetchCommunitiesApi, page)
   console.log(communities)
+
+  yield put({type: actions.FETCH_COMMUNITIES.SUCCESS, communities})
   return communities
-  // const tokenResponse = yield call(fetchCommunityToken, {tokenAddress})
-  // yield fork(fetchMarketMakerData, {tokenAddress, mmAddress: tokenResponse.mmAddress})
-  // yield entityPut({type: actions.FETCH_COMMUNITY.SUCCESS, tokenAddress})
-  // return tokenResponse
 }
 
 function * fetchCommunityToken ({tokenAddress}) {
