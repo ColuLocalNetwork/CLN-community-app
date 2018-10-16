@@ -8,6 +8,7 @@ const ipfsConfig = config.get('ipfs')
 
 const Metadata = mongoose.model('Metadata')
 
+console.log(`starting IPFS with the following config: ${JSON.stringify(ipfsConfig)}`)
 const ipfs = new IpfsAPI(ipfsConfig)
 
 router.get('/:protocol/:hash', async (req, res, next) => {
@@ -19,6 +20,7 @@ router.get('/:protocol/:hash', async (req, res, next) => {
       (callback) => setTimeout(() => callback(new Error('timeout'), null), ipfsConfig.timeout)
     ], async (err, data) => {
       if (err) {
+        console.log(`no data found in IPFS for hash ${hash}`)
         console.error(err)
         const metadataObj = await Metadata.findOne({protocol, hash})
         return res.json({source: 'mongo', data: metadataObj.toJSON()})

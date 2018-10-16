@@ -30,7 +30,10 @@ app.get('/view/*', function (request, response) {
 })
 
 // cloning options object cause mongoose is filling it with unneeded data about the connection
-mongoose.connect(config.get('mongo.uri'), config.get('mongo.options'))
+mongoose.connect(config.get('mongo.uri'), config.get('mongo.options')).catch((error) => {
+  console.error(error)
+  process.exit(1)
+})
 
 if (!isProduction) {
   mongoose.set('debug', true)
