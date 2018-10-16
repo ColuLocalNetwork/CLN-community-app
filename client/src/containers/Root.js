@@ -13,6 +13,8 @@ import Issuance from 'components/issuance/Issuance'
 import ContactForm from 'components/ContactForm'
 import withTracker from 'containers/withTracker'
 
+import Oven from 'components/Oven'
+
 const history = createHistory()
 
 const sidebarTransition = {
@@ -81,8 +83,8 @@ export default class Root extends Component {
       <Provider store={store}>
         <ConnectedRouter history={history}>
           <div>
+            <Route path='/' component={withTracker(App)} />
             <div style={{height: '100%'}}>
-              <Route path='/' component={withTracker(App)} />
               <div className='sidebar'>
                 <Route
                   path='/view/community/:name'
@@ -102,6 +104,12 @@ export default class Root extends Component {
               <Route
                 path='/view/issuance'
                 component={withTracker(Issuance)}
+                mapStyles={mapStylesContact}
+                {...contactFormTransition}
+              />
+              <Route
+                path='/view/oven'
+                component={withTracker(Oven)}
                 mapStyles={mapStylesContact}
                 {...contactFormTransition}
               />

@@ -281,11 +281,20 @@ function * estimateGasSellCc ({amount, tokenAddress, minReturn}) {
     }})
 }
 
+function * getCurrentPrice (contract, blockNumber) {
+  try {
+    return yield contract.methods.getCurrentPrice().call(null, blockNumber) // eslint-disable-line no-useless-call
+  } catch (e) {
+    console.log(e)
+    return 0
+  }
+}
+
 export function * fetchMarketMakerData ({tokenAddress, mmAddress, blockNumber}) {
   const EllipseMarketMakerContract = contract.getContract({abiName: 'EllipseMarketMaker', address: mmAddress})
 
   const calls = {
-    currentPrice: call(EllipseMarketMakerContract.methods.getCurrentPrice().call, null, blockNumber),
+    currentPrice: call(getCurrentPrice, EllipseMarketMakerContract, blockNumber),
     clnReserve: call(EllipseMarketMakerContract.methods.R1().call, null, blockNumber),
     ccReserve: call(EllipseMarketMakerContract.methods.R2().call, null, blockNumber),
     isOpenForPublic: call(EllipseMarketMakerContract.methods.openForPublic().call, null, blockNumber)

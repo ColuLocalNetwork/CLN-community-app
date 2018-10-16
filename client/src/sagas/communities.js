@@ -12,6 +12,7 @@ import {fetchTokenQuote} from 'actions/fiat'
 import { contract } from 'osseus-wallet'
 import {getAddresses} from 'selectors/network'
 import { delay } from 'redux-saga'
+import keyBy from 'lodash/keyBy'
 
 const entityPut = createEntityPut(actions.entityName)
 
@@ -28,11 +29,34 @@ function * fetchCommunity ({tokenAddress}) {
   return tokenResponse
 }
 
-function * fetchCommunities ({page = 0}) {
-  const communities = yield call(fetchCommunitiesApi, page)
-  console.log(communities)
+const manipulateCommunity = (community) => ({
+  address: community.ccAddress,
+  owner: community.owner,
+  mmAddress: community.mmAddress
+})
 
-  yield put({type: actions.FETCH_COMMUNITIES.SUCCESS, communities})
+function * fetchCommunities ({page = 0}) {
+  const response = yield call(fetchCommunitiesApi, page)
+  const {data, ...metadata} = response
+
+  const communities = data.map(manipulateCommunity)
+  const entities = keyBy(communities, 'address')
+  const result = communities.map(community => community.address)
+
+  yield entityPut({type: actions.FETCH_COMMUNITIES.SUCCESS,
+    response: {
+      entities,
+      result,
+      metadata
+    }})
+
+  for (let community of communities) {
+    yield put({
+      type: actions.FETCH_COMMUNITY.REQUEST,
+      tokenAddress: community.address
+    })
+  }
+
   return communities
 }
 

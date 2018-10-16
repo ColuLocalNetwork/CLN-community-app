@@ -8,7 +8,7 @@ import ModalContainer from 'containers/ModalContainer'
 import SignUp from 'components/SignUp'
 import classNames from 'classnames'
 import { WRONG_NETWORK_MODAL } from 'constants/uiConstants'
-import {fetchClnContract, initializeCommunity, fetchCommunities} from 'actions/communities'
+import {fetchClnContract, initializeCommunity} from 'actions/communities'
 import {getNetworkType, checkAccountChanged} from 'actions/network'
 import {onWeb3Ready} from 'services/web3'
 import {loadModal} from 'actions/ui'
@@ -38,7 +38,6 @@ class App extends Component {
   componentDidMount () {
     this.props.getNetworkType()
     onWeb3Ready.then(({web3}) => {
-      this.props.fetchCommunities()
       if (web3.currentProvider.isMetaMask) {
         web3.currentProvider.publicConfigStore.on('update', this.props.checkAccountChanged)
       }
@@ -64,7 +63,6 @@ class App extends Component {
       label: 'Explore'
     })
   }
-
   render () {
     let currentRoute = this.props && this.props && this.props.location && this.props.location.pathname
     let mainContainerClass = classNames({
@@ -121,13 +119,12 @@ const mapStateToProps = state => ({
   ui: state.ui
 })
 
-export default connect(
-  mapStateToProps, {
-    fetchClnContract,
-    initializeCommunity,
-    getNetworkType,
-    checkAccountChanged,
-    loadModal,
-    fetchCommunities
-  }
-)(App)
+const mapDispatchToProps = {
+  fetchClnContract,
+  initializeCommunity,
+  getNetworkType,
+  checkAccountChanged,
+  loadModal
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
