@@ -16,6 +16,7 @@
   },
   "mongo": {
     "uri": "COMMUNITY_MONGO_URI",
+    "debug": "COMMUNITY_MONGO_DEBUG",
     "options": {
       "user": "COMMUNITY_MONGO_USER",
       "pass": "COMMUNITY_MONGO_PASS",

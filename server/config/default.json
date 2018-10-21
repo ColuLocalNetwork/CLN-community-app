@@ -17,6 +17,7 @@
   },
   "mongo": {
     "uri": "mongodb://localhost/CLN-community-app",
+    "debug": true,
     "options": {}
   },
   "mandrill": {
