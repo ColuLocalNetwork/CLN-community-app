@@ -10,6 +10,9 @@ const paginate = require('express-paginate')
 const process = require('process')
 require('express-async-errors')
 
+console.log('The server configurations are:')
+console.log(config)
+
 var isProduction = process.env.NODE_ENV === 'production'
 
 var app = express()
