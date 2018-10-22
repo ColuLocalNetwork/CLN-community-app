@@ -4,7 +4,6 @@ const cors = require('cors')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
 const path = require('path')
-const compression = require('compression')
 const config = require('config')
 const paginate = require('express-paginate')
 const process = require('process')
@@ -25,10 +24,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.use(paginate.middleware(10, 50))
-
-if (isProduction) {
-  app.use(compression())
-}
 
 app.use(express.static(path.join(__dirname, 'public')))
 
