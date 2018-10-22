@@ -2771,7 +2771,7 @@ input[type="checkbox" i] {
 	position: absolute;
 	top: 0;
 	right: 0;
-	background-color: #6e6d9f;
+	background-color: $color-step;
 	border-radius: 4px;
 	width: 25px;
 	height: 25px;
@@ -2999,7 +2999,7 @@ input[type="checkbox" i] {
 				font-size: 10px;
 				font-weight: bold;
 				text-transform: uppercase;
-				color: #6e6d9f;
+				color: $color-step;
 				display: flex;
 				padding-bottom: 15px;
 				border-bottom: 1px solid rgba(255, 255, 255, 0.19);
@@ -3048,9 +3048,6 @@ input[type="checkbox" i] {
 					margin-top: 0;
 					padding: 15px;
 				}
-				&.coin-show-footer {
-
-				}
 			}
 
 			&.open {
@@ -3072,7 +3069,7 @@ input[type="checkbox" i] {
 					font-size: 10px;
 			    font-weight: bold;
 			    text-transform: uppercase;
-			    color: #6e6d9f;
+			    color: $color-step;
 			    padding-bottom: 10px;
 				}
 
@@ -3080,7 +3077,7 @@ input[type="checkbox" i] {
 					font-size: 19px;
 			    font-weight: 500;
 			    text-align: center;
-			    color: #5fddbb;
+			    color: $color-step-field;
 				}
 
 				.coin-content {
@@ -3090,8 +3087,14 @@ input[type="checkbox" i] {
 					align-items: flex-start;
 				}
 
+				.coin-reverse {
+					font-weight: 500;
+					font-size: 30px;
+					color: $color-step-field;
+				}
+
 				.coin-currency-type {
-					color: #6e6d9f;
+					color: $color-step;
 					font-size: 10px;
 					font-weight: bold;
 					text-transform: uppercase;
@@ -3172,95 +3175,6 @@ input[type="checkbox" i] {
 		padding-top: 20px;
 		align-items: normal;
 	}
-	/*@media (max-width: $breakpoint-tablet) {
-		bottom: 0;
-		top: auto;
-		overflow: auto;
-		height: calc(100% - 70px);
-		width: 100%;
-		align-items: center;
-		justify-content: flex-start;
-		-webkit-transition: all 0.4s ;
-    	transition: all 0.4s ;
-    	-webkit-transition-timing-function: cubic-bezier(0.7,0,0.3,1);
-    	transition-timing-function: cubic-bezier(0.7,0,0.3,1);
-		.list-item {
-			//height: 82px;
-			-webkit-transition: all 0.3s ease-in-out;
-    		transition: all 0.3s ease-in-out;
-			.coin-wrapper {
-				margin-left: 9px;
-				margin-right: 4px;
-				-webkit-transition: opacity 0.3s 0.5s, width 0.2s 0.1s, height 0.2s 0.1s, transform 0.1s 0.1s, left 0.2s 0.1s, margin 0.2s 0.1s;
-    			transition: opacity 0.3s 0.5s, width 0.2s 0.1s, height 0.2s 0.1s, transform 0.1s 0.1s, left 0.2s 0.1s, margin 0.2s 0.1s;
-    			-webkit-transition-timing-function: cubic-bezier(0.7,0,0.3,1);
-    			transition-timing-function: cubic-bezier(0.7,0,0.3,1);
-				height: 82px;
-				width: 270px;
-				.coin-header {
-					margin-top:0px;
-					padding: 20px 6px;
-					.logo {
-						width: 45px;
-						min-width: 45px;
-						height: 45px;
-					}
-					.coin-details {
-						margin-left:9px;
-						h1 {
-							font-size: 12px;
-						}
-
-						.price-wrapper {
-							h2, p {
-								font-size: 10px;
-							}
-						}
-					}
-				}
-				&.open-mobile {
-					height: 100%;
-					width: 101vw;
-					border-left: none;
-					margin: 0 0 -30px 0px;
-					&.ios-chrome {
-						top: calc(100vh - 50px) !important;
-					}
-					&.tablet {
-						top: calc(100vh - 100px) !important;
-					}
-					.coin-header {
-						padding: 20px;
-						.logo {
-							width: 55px;
-							min-width: 55px;
-							height: 55px;
-						}
-						.coin-details {
-							margin-left:15px;
-							h1 {
-								font-size: 16px;
-							}
-
-							.price-wrapper {
-								h2, p {
-									font-size: 14px;
-									margin: 0;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		&.open-mobile {
-			height: calc(100% - 50px);
-			bottom: 0px;
-			.list-item {
-				height: 100%;
-			}
-		}
-	}*/
 }
 
 .loader {

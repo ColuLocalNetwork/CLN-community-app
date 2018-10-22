@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import {BigNumber} from 'bignumber.js'
 import {formatEther} from 'utils/format'
 import classNames from 'classnames'
 import FontAwesome from 'react-fontawesome'
@@ -7,7 +8,7 @@ import CoinImage from 'images/Coin2.svg'
 import Calculator from 'images/Calculator.svg'
 import {PRICE_EXPLANATION_MODAL} from 'constants/uiConstants'
 
-export default class Coin extends Component {
+export default class Community extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -20,9 +21,16 @@ export default class Coin extends Component {
   }
   render () {
     const fiatCurrencyPrice = this.props.fiat.USD && this.props.fiat.USD.price
+    const currentPrice = parseFloat(new BigNumber(this.props.marketMaker.currentPrice).multipliedBy(100).toString()).toFixed(3)
+    const clnReverse = parseFloat(formatEther(this.props.marketMaker.clnReserve)).toFixed(3).replace(/[,.]/g, ',')
     const coinHeaderClassStyle = classNames({
       'coin-header': true,
       'coin-show-footer': this.state.toggleFooter
+    })
+    const coinStatusClassStyle = classNames({
+      'coin-status': true,
+      'coin-status-active': this.props.marketMaker.isOpenForPublic,
+      'coin-status-close': !this.props.marketMaker.isOpenForPublic
     })
     return [
       <div className={coinHeaderClassStyle} >
@@ -32,35 +40,35 @@ export default class Coin extends Component {
         </div>
         <div className='coin-details'>
           <h3 className='coin-name'>{this.props.token.name}</h3>
-          <p className='coin-total'>Total CC supply <span className='total-text'>
-            {new Intl.NumberFormat('en-US', {
-              style: 'decimal',
-              minimumFractionDigits: 0
-            }).format(this.props.token.totalSupply)}
-          </span></p>
+          <p className='coin-total'>Total CC supply <span className='total-text'>{formatEther(this.props.token.totalSupply)}</span></p>
           <button className='btn-calculator'>
             <img src={Calculator} />
           </button>
-          <div className='coin-status coin-status-active'>
-            <span className='coin-status-indicator' /> <span className='coin-status-text'>open</span>
+          <div className={coinStatusClassStyle}>
+            <span className='coin-status-indicator' /> <span className='coin-status-text'>{this.props.marketMaker.isOpenForPublic ? 'open' : 'close'}</span>
           </div>
         </div>
       </div>,
       <div className='coin-footer'>
         <div className='coin-content'>
           <div className='total-content'>CLN Reserved</div>
-          <button className='btn-adding'>
-            <FontAwesome name='plus' className='top-nav-issuance-plus' /> Add CLN
-          </button>
+          {this.props.marketMaker.clnReserve
+            ? <div className='coin-reverse'>
+              {clnReverse}
+            </div>
+            : <button className='btn-adding'>
+              <FontAwesome name='plus' className='top-nav-issuance-plus' /> Add CLN
+            </button>
+          }
         </div>
         <div className='coin-content'>
           <div>
             <span className='coin-currency-type'>USD</span>
-            <span className='coin-currency'>{formatEther(fiatCurrencyPrice)}</span>
+            <span className='coin-currency'>{(formatEther(fiatCurrencyPrice) * currentPrice).toFixed(3)}</span>
           </div>
           <div>
             <span className='coin-currency-type'>CLN</span>
-            <span className='coin-currency'>0,00</span>
+            <span className='coin-currency'>{currentPrice}</span>
           </div>
         </div>
       </div>
@@ -68,12 +76,13 @@ export default class Coin extends Component {
   }
 }
 
-Coin.defaultProps = {
+Community.defaultProps = {
   token: {}
 }
 
-Coin.propTypes = {
+Community.propTypes = {
   token: PropTypes.object,
   fiat: PropTypes.object,
+  marketMaker: PropTypes.object,
   loadModal: PropTypes.func.isRequired
 }
