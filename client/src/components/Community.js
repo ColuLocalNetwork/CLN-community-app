@@ -6,6 +6,7 @@ import FontAwesome from 'react-fontawesome'
 import CoinImage from 'images/Coin2.svg'
 import Calculator from 'images/Calculator.svg'
 import {PRICE_EXPLANATION_MODAL} from 'constants/uiConstants'
+import { BigNumber } from 'bignumber.js'
 
 export default class Community extends Component {
   constructor (props) {
@@ -76,7 +77,12 @@ export default class Community extends Component {
 }
 
 Community.defaultProps = {
-  token: {}
+  token: {
+    symbol: 'ha'
+  },
+  marketMaker: {
+    currentPrice: new BigNumber(0)
+  }
 }
 
 Community.propTypes = {

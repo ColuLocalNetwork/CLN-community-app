@@ -83,8 +83,8 @@ export default class Root extends Component {
       <Provider store={store}>
         <ConnectedRouter history={history}>
           <div>
-            <Route path='/' component={withTracker(App)} />
             <div style={{height: '100%'}}>
+              <Route path='/' component={withTracker(App)} />
               <div className='sidebar'>
                 <Route
                   path='/view/community/:name'

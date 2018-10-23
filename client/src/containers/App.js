@@ -7,7 +7,7 @@ import CommunitiesList from 'components/CommunitiesList'
 import ModalContainer from 'containers/ModalContainer'
 import classNames from 'classnames'
 import { WRONG_NETWORK_MODAL } from 'constants/uiConstants'
-import {fetchClnContract, initializeCommunity} from 'actions/communities'
+import {fetchClnContract, initializeCommunity, fetchCommunities} from 'actions/communities'
 import {getNetworkType, checkAccountChanged} from 'actions/network'
 import {onWeb3Ready} from 'services/web3'
 import {loadModal} from 'actions/ui'
@@ -28,6 +28,7 @@ class App extends Component {
         isNetworkSupported(nextProps.networkType)) {
       this.props.fetchClnContract(nextProps.addresses.ColuLocalNetwork)
       nextProps.communityAddresses.forEach(this.props.initializeCommunity)
+      this.props.fetchCommunities(1)
     }
     if (nextProps.networkType !== this.props.networkType && !isNetworkDesired(nextProps.networkType)) {
       this.props.loadModal(WRONG_NETWORK_MODAL)
@@ -120,7 +121,8 @@ const mapDispatchToProps = {
   initializeCommunity,
   getNetworkType,
   checkAccountChanged,
-  loadModal
+  loadModal,
+  fetchCommunities
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
