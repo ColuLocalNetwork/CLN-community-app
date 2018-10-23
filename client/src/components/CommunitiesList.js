@@ -26,22 +26,19 @@ class CommunitiesList extends Component {
     })
   }
 
-  handleClose = () => this.setState({selectedCommunityAddress: null})
-
   render () {
     const {addresses} = this.props
     return <div className='communities-list'>
       <h2 className='communities-list-title'>Communities</h2>
       <div className='communities-list-container'>
-        {addresses.map((address, i) => {
-          return <Community
-            handleCommunityClick={this.handleCommunityClick}
-            token={this.props.tokens[address]}
-            fiat={this.props.fiat}
-            marketMaker={this.props.marketMaker[address]}
-            selectedCommunityAddress={this.state.selectedCommunityAddress}
-          />
-        })}
+        {addresses.map((address, i) => <Community
+          handleCommunityClick={this.handleCommunityClick}
+          token={this.props.tokens[address]}
+          fiat={this.props.fiat}
+          marketMaker={this.props.marketMaker[address]}
+          selectedCommunityAddress={this.state.selectedCommunityAddress}
+        />
+        )}
       </div>
       <button onClick={this.loadMore}>More</button>
     </div>

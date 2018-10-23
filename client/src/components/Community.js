@@ -10,6 +10,8 @@ import { BigNumber } from 'bignumber.js'
 export default class Community extends Component {
   handleClick = () => this.props.handleCommunityClick(this.props.token.address)
 
+  handleClose = () => this.props.handleCommunityClick(null)
+
   render () {
     const fiatCurrencyPrice = this.props.fiat.USD && this.props.fiat.USD.price
     const {currentPrice} = this.props.marketMaker
