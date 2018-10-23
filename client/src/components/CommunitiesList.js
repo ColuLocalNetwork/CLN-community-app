@@ -34,23 +34,13 @@ class CommunitiesList extends Component {
       <h2 className='communities-list-title'>Communities</h2>
       <div className='communities-list-container'>
         {addresses.map((address, i) => {
-          const coinWrapperStyle = classNames({
-            'coin-wrapper': true,
-            'coin-show-footer': this.state.selectedCommunityAddress === address
-          })
-          return <div className='list-item' key={i} >
-            <div className={coinWrapperStyle}>
-              <Community
-                handleCommunityClick={this.handleCommunityClick}
-                token={this.props.tokens[address]}
-                fiat={this.props.fiat}
-                marketMaker={this.props.marketMaker[address]}
-              />
-            </div>
-            <div className='coin-footer-close' onClick={this.handleClose}>
-              <FontAwesome name='times-circle' /> Close
-            </div>
-          </div>
+          return <Community
+            handleCommunityClick={this.handleCommunityClick}
+            token={this.props.tokens[address]}
+            fiat={this.props.fiat}
+            marketMaker={this.props.marketMaker[address]}
+            selectedCommunityAddress={this.state.selectedCommunityAddress}
+          />
         })}
       </div>
       <button onClick={this.loadMore}>More</button>
