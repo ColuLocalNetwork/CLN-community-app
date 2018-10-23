@@ -10,6 +10,7 @@ import DetailsStep from './DetailsStep'
 import SummaryStep from './SummaryStep'
 import { nameToSymbol } from 'utils/format'
 import * as actions from 'actions/communities'
+import { METAMASK_ACCOUNT_MODAL } from 'constants/uiConstants'
 
 class Issuance extends Component {
   state = {
@@ -153,6 +154,7 @@ class Issuance extends Component {
       'steps-container': true,
       'step-with-sticky': (this.state.scrollPosition > this.state.stepPosition - stepIndicatorInset)
     })
+    //console.log(this.props.loadModal())
     return (
       <div className='issuance-form-wrapper' ref={wrapper => (this.wrapper = wrapper)}>
         <div className='issuance-container'>
