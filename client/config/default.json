@@ -7,9 +7,9 @@
   },
   "api": {
     "url": {
-      "main": "http://localhost:3000/api/v1",
-      "ropsten": "http://localhost:3001/api/v1",
-      "default": "http://localhost:3000/api/v1"
+      "main": "/api/v1",
+      "ropsten": "/api/v1",
+      "default": "/api/v1"
     },
     "timeout": 3000,
     "marketsPolling": 30000,
