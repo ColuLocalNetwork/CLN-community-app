@@ -3,10 +3,7 @@ import classNames from 'classnames'
 import {loadModal} from 'actions/ui'
 import { connect } from 'react-redux'
 import Community from './Community'
-import {getCommunities, getMarketMaker} from 'selectors/communities'
 import {fetchCommunities} from 'actions/communities'
-import find from 'lodash/find'
-import sortBy from 'lodash/sortBy'
 import FontAwesome from 'react-fontawesome'
 
 class CommunitiesList extends Component {
@@ -16,52 +13,47 @@ class CommunitiesList extends Component {
     selectedCommunityAddress: null
   }
 
-  // componentDidMount () {
-  //   onWeb3Ready.then(({web3}) => {
-  //     debugger
-  //     if (web3.currentProvider.isMetaMask) {
-  //       this.props.fetchCommunities(this.state.currentPage)
-  //     }
-  //   })
-  // }
-
   handleCommunityClick = (address) => {
     this.setState({
       selectedCommunityAddress: address
     })
   }
 
+  loadMore = () => {
+    this.props.fetchCommunities(this.state.currentPage + 1)
+    this.setState({
+      currentPage: this.state.currentPage + 1
+    })
+  }
+
+  handleClose = () => this.setState({selectedCommunityAddress: null})
+
   render () {
     const {addresses} = this.props
-
-    const communitiesListStyle = classNames({
-      'communities-list': true,
-      'open-mobile': !!this.props.selectedCommunityAddress
-    })
-    return <div className={communitiesListStyle} ref='CommunitiesList'>
+    return <div className='communities-list'>
       <h2 className='communities-list-title'>Communities</h2>
       <div className='communities-list-container'>
         {addresses.map((address, i) => {
           const coinWrapperStyle = classNames({
             'coin-wrapper': true,
-            'coin-show-footer': this.state.toggleFooter && this.state.activeCoin === i
+            'coin-show-footer': this.state.selectedCommunityAddress === address
           })
           return <div className='list-item' key={i} >
-            <div className={coinWrapperStyle} onClick={() => this.setState({toggleFooter: true, activeCoin: i})}>
+            <div className={coinWrapperStyle}>
               <Community
                 handleCommunityClick={this.handleCommunityClick}
                 token={this.props.tokens[address]}
                 fiat={this.props.fiat}
-                loadModal={this.props.loadModal}
                 marketMaker={this.props.marketMaker[address]}
               />
             </div>
-            <div className='coin-footer-close' onClick={() => this.setState({toggleFooter: false, activeCoin: ''})}>
+            <div className='coin-footer-close' onClick={this.handleClose}>
               <FontAwesome name='times-circle' /> Close
             </div>
           </div>
         })}
       </div>
+      <button onClick={this.loadMore}>More</button>
     </div>
   }
 };
@@ -76,7 +68,6 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-  loadModal,
   fetchCommunities
 }
 

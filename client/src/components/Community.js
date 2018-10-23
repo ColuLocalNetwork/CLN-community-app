@@ -8,7 +8,7 @@ import Calculator from 'images/Calculator.svg'
 import { BigNumber } from 'bignumber.js'
 
 export default class Community extends Component {
-  handleClick = () => this.props.handleCommunityClick(this.token.address)
+  handleClick = () => this.props.handleCommunityClick(this.props.token.address)
 
   render () {
     const fiatCurrencyPrice = this.props.fiat.USD && this.props.fiat.USD.price

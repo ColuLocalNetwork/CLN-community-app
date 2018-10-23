@@ -8,7 +8,7 @@ import {getClnToken, getCommunity} from 'selectors/communities'
 import {tryTakeEvery, tryTakeLatestWithDebounce} from './utils'
 import {getAccountAddress} from 'selectors/accounts'
 
-const reversePrice = (price) => price !== 0 ? new BigNumber(1e18).div(price) : new BigNumber(0)
+const reversePrice = (price) => new BigNumber(1e18).div(price)
 
 const getReservesAndSupplies = (clnToken, ccToken, isBuy) => isBuy
   ? {
@@ -283,10 +283,11 @@ function * estimateGasSellCc ({amount, tokenAddress, minReturn}) {
 
 function * getCurrentPrice (contract, blockNumber) {
   try {
-    return yield contract.methods.getCurrentPrice().call(null, blockNumber) // eslint-disable-line no-useless-call
+    const currentPrice = yield contract.methods.getCurrentPrice().call(null, blockNumber) // eslint-disable-line no-useless-call
+    return reversePrice(currentPrice)
   } catch (e) {
     console.log(e)
-    return 0
+    return new BigNumber(0)
   }
 }
 
@@ -302,7 +303,6 @@ export function * fetchMarketMakerData ({tokenAddress, mmAddress, blockNumber}) 
 
   const response = yield all(calls)
 
-  response.currentPrice = reversePrice(response.currentPrice)
   response.isMarketMakerLoaded = true
   yield put({type: actions.FETCH_MARKET_MAKER_DATA.SUCCESS,
     tokenAddress,
