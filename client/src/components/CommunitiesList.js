@@ -12,7 +12,8 @@ import FontAwesome from 'react-fontawesome'
 class CommunitiesList extends Component {
   state = {
     toggleFooter: false,
-    currentPage: 1
+    currentPage: 1,
+    selectedCommunityAddress: null
   }
 
   // componentDidMount () {
@@ -24,15 +25,18 @@ class CommunitiesList extends Component {
   //   })
   // }
 
+  handleCommunityClick = (address) => {
+    this.setState({
+      selectedCommunityAddress: address
+    })
+  }
+
   render () {
-    const currentCoin = find(this.props.tokens, {address: this.state.item}) && this.props.ui.activeMarker
     const {addresses} = this.props
-    if (this.props.tokens.length === 0) {
-      return null
-    }
+
     const communitiesListStyle = classNames({
       'communities-list': true,
-      'open-mobile': currentCoin
+      'open-mobile': !!this.props.selectedCommunityAddress
     })
     return <div className={communitiesListStyle} ref='CommunitiesList'>
       <h2 className='communities-list-title'>Communities</h2>
@@ -45,6 +49,7 @@ class CommunitiesList extends Component {
           return <div className='list-item' key={i} >
             <div className={coinWrapperStyle} onClick={() => this.setState({toggleFooter: true, activeCoin: i})}>
               <Community
+                handleCommunityClick={this.handleCommunityClick}
                 token={this.props.tokens[address]}
                 fiat={this.props.fiat}
                 loadModal={this.props.loadModal}

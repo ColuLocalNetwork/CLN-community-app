@@ -5,35 +5,28 @@ import classNames from 'classnames'
 import FontAwesome from 'react-fontawesome'
 import CoinImage from 'images/Coin2.svg'
 import Calculator from 'images/Calculator.svg'
-import {PRICE_EXPLANATION_MODAL} from 'constants/uiConstants'
 import { BigNumber } from 'bignumber.js'
 
 export default class Community extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      toggleFooter: false
-    }
-  }
-  loadModal = (e) => {
-    this.props.loadModal(PRICE_EXPLANATION_MODAL, {token: this.props.token})
-    e.stopPropagation()
-  }
+  handleClick = () => this.props.handleCommunityClick(this.token.address)
+
   render () {
     const fiatCurrencyPrice = this.props.fiat.USD && this.props.fiat.USD.price
     const {currentPrice} = this.props.marketMaker
     const clnReverse = (parseFloat(formatEther(this.props.marketMaker.clnReserve).replace(/[,.]/g, '.'))).toFixed(3).replace(/[,.]/g, ',')
+
     const coinHeaderClassStyle = classNames({
       'coin-header': true,
-      'coin-show-footer': this.state.toggleFooter
+      'coin-show-footer': false
     })
     const coinStatusClassStyle = classNames({
       'coin-status': true,
       'coin-status-active': this.props.marketMaker.isOpenForPublic,
       'coin-status-close': !this.props.marketMaker.isOpenForPublic
     })
+
     return [
-      <div className={coinHeaderClassStyle} >
+      <div className={coinHeaderClassStyle} onClick={this.handleClick}>
         <div className='coin-logo'>
           <img src={CoinImage} className='logo-img' />
           <span className='symbol-text'>{this.props.token.symbol}</span>
@@ -78,16 +71,15 @@ export default class Community extends Component {
 
 Community.defaultProps = {
   token: {
-    symbol: 'ha'
   },
   marketMaker: {
-    currentPrice: new BigNumber(0)
+    currentPrice: new BigNumber(0),
+    clnReserve: new BigNumber(0)
   }
 }
 
 Community.propTypes = {
   token: PropTypes.object,
   fiat: PropTypes.object,
-  marketMaker: PropTypes.object,
-  loadModal: PropTypes.func.isRequired
+  marketMaker: PropTypes.object
 }

@@ -8,7 +8,7 @@ import {getClnToken, getCommunity} from 'selectors/communities'
 import {tryTakeEvery, tryTakeLatestWithDebounce} from './utils'
 import {getAccountAddress} from 'selectors/accounts'
 
-const reversePrice = (price) => new BigNumber(1e18).div(price)
+const reversePrice = (price) => price !== 0 ? new BigNumber(1e18).div(price) : new BigNumber(0)
 
 const getReservesAndSupplies = (clnToken, ccToken, isBuy) => isBuy
   ? {
