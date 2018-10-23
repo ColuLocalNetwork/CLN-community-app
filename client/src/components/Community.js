@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {BigNumber} from 'bignumber.js'
 import {formatEther} from 'utils/format'
 import classNames from 'classnames'
 import FontAwesome from 'react-fontawesome'
@@ -21,8 +20,8 @@ export default class Community extends Component {
   }
   render () {
     const fiatCurrencyPrice = this.props.fiat.USD && this.props.fiat.USD.price
-    const currentPrice = parseFloat(new BigNumber(this.props.marketMaker.currentPrice).multipliedBy(100).toString()).toFixed(3)
-    const clnReverse = parseFloat(formatEther(this.props.marketMaker.clnReserve)).toFixed(3).replace(/[,.]/g, ',')
+    const {currentPrice} = this.props.marketMaker
+    const clnReverse = (parseFloat(formatEther(this.props.marketMaker.clnReserve).replace(/[,.]/g, '.'))).toFixed(3).replace(/[,.]/g, ',')
     const coinHeaderClassStyle = classNames({
       'coin-header': true,
       'coin-show-footer': this.state.toggleFooter
@@ -64,11 +63,11 @@ export default class Community extends Component {
         <div className='coin-content'>
           <div>
             <span className='coin-currency-type'>USD</span>
-            <span className='coin-currency'>{(formatEther(fiatCurrencyPrice) * currentPrice).toFixed(3)}</span>
+            <span className='coin-currency'>{formatEther(currentPrice.multipliedBy(fiatCurrencyPrice))}</span>
           </div>
           <div>
             <span className='coin-currency-type'>CLN</span>
-            <span className='coin-currency'>{currentPrice}</span>
+            <span className='coin-currency'>{formatEther(currentPrice)}</span>
           </div>
         </div>
       </div>
