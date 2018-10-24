@@ -27,7 +27,6 @@ class App extends Component {
     if (nextProps.addresses !== this.props.addresses &&
         isNetworkSupported(nextProps.networkType)) {
       this.props.fetchClnContract(nextProps.addresses.ColuLocalNetwork)
-      nextProps.communityAddresses.forEach(this.props.initializeCommunity)
       this.props.fetchCommunities(1)
     }
     if (nextProps.networkType !== this.props.networkType && !isNetworkDesired(nextProps.networkType)) {
@@ -64,6 +63,10 @@ class App extends Component {
     })
   }
   render () {
+    if (!isNetworkSupported(this.props.networkType)) {
+      return null
+    }
+
     let currentRoute = this.props && this.props && this.props.location && this.props.location.pathname
     let mainContainerClass = classNames({
       'main-container': true,

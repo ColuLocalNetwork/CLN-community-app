@@ -1,15 +1,12 @@
 import React, { Component } from 'react'
-import classNames from 'classnames'
-import {loadModal} from 'actions/ui'
 import { connect } from 'react-redux'
 import Community from './Community'
 import {fetchCommunities} from 'actions/communities'
-import FontAwesome from 'react-fontawesome'
+import InfiniteScroll from 'react-infinite-scroller'
 
 class CommunitiesList extends Component {
   state = {
     toggleFooter: false,
-    currentPage: 1,
     selectedCommunityAddress: null
   }
 
@@ -19,29 +16,32 @@ class CommunitiesList extends Component {
     })
   }
 
-  loadMore = () => {
-    this.props.fetchCommunities(this.state.currentPage + 1)
-    this.setState({
-      currentPage: this.state.currentPage + 1
-    })
+  loadMore = (currentPage) => {
+    this.props.fetchCommunities(currentPage + 1)
   }
 
   render () {
     const {addresses} = this.props
-    return <div className='communities-list'>
-      <h2 className='communities-list-title'>Communities</h2>
-      <div className='communities-list-container'>
-        {addresses.map((address, i) => <Community
-          handleCommunityClick={this.handleCommunityClick}
-          token={this.props.tokens[address]}
-          fiat={this.props.fiat}
-          marketMaker={this.props.marketMaker[address]}
-          selectedCommunityAddress={this.state.selectedCommunityAddress}
-        />
-        )}
+    return <InfiniteScroll
+      initialLoad={false}
+      pageStart={0}
+      loadMore={this.loadMore}
+      hasMore={this.props.loadMore}
+    >
+      <div className='communities-list'>
+        <h2 className='communities-list-title'>Communities</h2>
+        <div className='communities-list-container'>
+          {addresses.map((address, i) => <Community
+            handleCommunityClick={this.handleCommunityClick}
+            token={this.props.tokens[address]}
+            fiat={this.props.fiat}
+            marketMaker={this.props.marketMaker[address]}
+            selectedCommunityAddress={this.state.selectedCommunityAddress}
+          />
+          )}
+        </div>
       </div>
-      <button onClick={this.loadMore}>More</button>
-    </div>
+    </InfiniteScroll>
   }
 };
 
