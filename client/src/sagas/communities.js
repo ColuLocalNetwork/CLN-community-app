@@ -24,8 +24,10 @@ function * initializeCommunity ({tokenAddress}) {
 function * fetchCommunity ({tokenAddress}) {
   const tokenResponse = yield call(fetchCommunityToken, {tokenAddress})
 
-  const [protocol, hash] = tokenResponse.tokenURI.split('://')
-  yield put(fetchMetadata(protocol, hash, tokenAddress))
+  if (tokenResponse.tokenURI) {
+    const [protocol, hash] = tokenResponse.tokenURI.split('://')
+    yield put(fetchMetadata(protocol, hash, tokenAddress))
+  }
 
   yield fork(fetchMarketMakerData, {tokenAddress, mmAddress: tokenResponse.mmAddress})
 
@@ -83,6 +85,7 @@ function * fetchCommunityToken ({tokenAddress}) {
     const {name, totalSupply, owner, mmAddress} = response.currencyMap
 
     const community = {
+      address: tokenAddress,
       symbol: response.symbol,
       tokenURI: response.tokenURI,
       totalSupply,
