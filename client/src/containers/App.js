@@ -11,7 +11,7 @@ import {fetchClnContract} from 'actions/communities'
 import {getNetworkType, checkAccountChanged} from 'actions/network'
 import {onWeb3Ready} from 'services/web3'
 import {loadModal} from 'actions/ui'
-import {getAddresses, getCommunityAddresses} from 'selectors/network'
+import {getAddresses} from 'selectors/network'
 import {isNetworkSupported, isNetworkDesired} from 'utils/network'
 import ReactGA from 'services/ga'
 import 'scss/styles.scss'
@@ -19,7 +19,6 @@ import 'scss/styles.scss'
 class App extends Component {
   state = {
     isWelcome: true,
-    out: false,
     welcomeDone: false
   }
 
@@ -73,8 +72,7 @@ class App extends Component {
     })
     let welcomeClass = classNames({
       'welcome-wrapper': true,
-      'hide': !this.state.isWelcome,
-      'out': this.state.out
+      'hide': !this.state.isWelcome
     })
     const mainWrapperClass = classNames({
       'flex': true,
@@ -112,7 +110,6 @@ class App extends Component {
 
 const mapStateToProps = state => ({
   addresses: getAddresses(state),
-  communityAddresses: getCommunityAddresses(state),
   networkType: state.network.networkType,
   ui: state.ui
 })
