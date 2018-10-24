@@ -4,6 +4,9 @@ import Community from './Community'
 import {fetchCommunities} from 'actions/communities'
 import InfiniteScroll from 'react-infinite-scroller'
 
+const PAGE_START = 1
+const PAGE_SIZE = 10
+
 class CommunitiesList extends Component {
   state = {
     selectedCommunityAddress: null
@@ -20,8 +23,16 @@ class CommunitiesList extends Component {
     })
   }
 
-  loadMore = (currentPage) => {
-    this.props.fetchCommunities(currentPage + 1)
+  loadMore = (nextPage) => {
+    if (this.props.addresses.length < nextPage * PAGE_SIZE) {
+      this.props.fetchCommunities(nextPage)
+    }
+  }
+
+  componentDidMount () {
+    if (this.props.addresses.length < PAGE_SIZE) {
+      this.props.fetchCommunities(PAGE_START)
+    }
   }
 
   getScrollParent = () => this.myRef.current
@@ -33,13 +44,14 @@ class CommunitiesList extends Component {
       <div className='communities-list-container'>
         <InfiniteScroll
           initialLoad={false}
-          pageStart={0}
+          pageStart={PAGE_START}
           loadMore={this.loadMore}
-          hasMore={this.props.loadMore}
+          hasMore={this.props.hasMore}
           useWindow={false}
           getScrollParent={this.getScrollParent}
         >
-          {addresses.map((address, i) => <Community
+          {addresses.map(address => <Community
+            key={address}
             handleCommunityClick={this.handleCommunityClick}
             token={this.props.tokens[address]}
             fiat={this.props.fiat}

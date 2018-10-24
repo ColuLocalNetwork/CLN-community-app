@@ -9,7 +9,7 @@ export default (state = initialState, action) => {
     case FETCH_COMMUNITIES.SUCCESS:
       return {...state,
         addresses: [...state.addresses, ...action.response.result],
-        loadMore: action.response.metadata.has_more
+        hasMore: action.response.metadata.has_more
       }
     default:
       return state

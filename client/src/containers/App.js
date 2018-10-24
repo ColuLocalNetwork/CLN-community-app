@@ -7,7 +7,7 @@ import CommunitiesList from 'components/CommunitiesList'
 import ModalContainer from 'containers/ModalContainer'
 import classNames from 'classnames'
 import { WRONG_NETWORK_MODAL } from 'constants/uiConstants'
-import {fetchClnContract, initializeCommunity, fetchCommunities} from 'actions/communities'
+import {fetchClnContract} from 'actions/communities'
 import {getNetworkType, checkAccountChanged} from 'actions/network'
 import {onWeb3Ready} from 'services/web3'
 import {loadModal} from 'actions/ui'
@@ -27,7 +27,6 @@ class App extends Component {
     if (nextProps.addresses !== this.props.addresses &&
         isNetworkSupported(nextProps.networkType)) {
       this.props.fetchClnContract(nextProps.addresses.ColuLocalNetwork)
-      this.props.fetchCommunities(1)
     }
     if (nextProps.networkType !== this.props.networkType && !isNetworkDesired(nextProps.networkType)) {
       this.props.loadModal(WRONG_NETWORK_MODAL)
@@ -50,7 +49,6 @@ class App extends Component {
   onClickExplore = () => {
     this.setState({
       isWelcome: !this.state.isWelcome,
-      panBy: { x: -100, y: 0 },
       welcomeDone: true
     })
 
@@ -121,11 +119,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   fetchClnContract,
-  initializeCommunity,
   getNetworkType,
   checkAccountChanged,
-  loadModal,
-  fetchCommunities
+  loadModal
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

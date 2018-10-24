@@ -19,10 +19,8 @@ const history = createHistory()
 
 const sidebarTransition = {
   atEnter: {
-  //  offset: 100
   },
   atLeave: {
-  //  offset: 100
   },
   atActive: {
     offset: 0
