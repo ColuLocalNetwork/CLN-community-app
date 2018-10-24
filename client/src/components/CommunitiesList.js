@@ -6,8 +6,12 @@ import InfiniteScroll from 'react-infinite-scroller'
 
 class CommunitiesList extends Component {
   state = {
-    toggleFooter: false,
     selectedCommunityAddress: null
+  }
+
+  constructor (props) {
+    super(props)
+    this.myRef = React.createRef()
   }
 
   handleCommunityClick = (address) => {
@@ -20,17 +24,21 @@ class CommunitiesList extends Component {
     this.props.fetchCommunities(currentPage + 1)
   }
 
+  getScrollParent = () => this.myRef.current
+
   render () {
     const {addresses} = this.props
-    return <InfiniteScroll
-      initialLoad={false}
-      pageStart={0}
-      loadMore={this.loadMore}
-      hasMore={this.props.loadMore}
-    >
-      <div className='communities-list'>
-        <h2 className='communities-list-title'>Communities</h2>
-        <div className='communities-list-container'>
+    return <div className='communities-list' ref={this.myRef}>
+      <h2 className='communities-list-title'>Communities</h2>
+      <div className='communities-list-container'>
+        <InfiniteScroll
+          initialLoad={false}
+          pageStart={0}
+          loadMore={this.loadMore}
+          hasMore={this.props.loadMore}
+          useWindow={false}
+          getScrollParent={this.getScrollParent}
+        >
           {addresses.map((address, i) => <Community
             handleCommunityClick={this.handleCommunityClick}
             token={this.props.tokens[address]}
@@ -39,9 +47,9 @@ class CommunitiesList extends Component {
             selectedCommunityAddress={this.state.selectedCommunityAddress}
           />
           )}
-        </div>
+        </InfiniteScroll>
       </div>
-    </InfiniteScroll>
+    </div>
   }
 };
 
