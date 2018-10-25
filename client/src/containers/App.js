@@ -15,6 +15,7 @@ import {getAddresses, getCommunityAddresses} from 'selectors/network'
 import {isNetworkSupported, isNetworkDesired} from 'utils/network'
 import ReactGA from 'services/ga'
 import 'scss/styles.scss'
+import EconomicCalculator from 'components/EconomicCalculator'
 
 class App extends Component {
   state = {
@@ -101,6 +102,7 @@ class App extends Component {
           active={!this.state.isWelcome}
           history={this.props.history}
         /> : null }
+        <EconomicCalculator />
         <Map key='map' active={this.state.welcomeDone} currentRoute={currentRoute} history={this.props.history} />
         {communityNav}
         <ModalContainer />

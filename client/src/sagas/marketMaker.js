@@ -7,6 +7,7 @@ import {fetchGasPrices} from 'actions/network'
 import {getClnToken, getCommunity} from 'selectors/communities'
 import {tryTakeEvery, tryTakeLatestWithDebounce} from './utils'
 import {getAccountAddress} from 'selectors/accounts'
+import {predictClnReserves} from 'utils/calculator'
 
 const reversePrice = (price) => new BigNumber(1e18).div(price)
 
@@ -301,6 +302,20 @@ export function * fetchMarketMakerData ({tokenAddress, mmAddress, blockNumber}) 
   })
 }
 
+export function * predictClnPrices ({tokenAddress, initialClnReserve,
+  amountOfTransactions, averageTransactionInUsd, gainRatio}) {
+  const ClnToUsdPrice = yield select(state => state.fiat.USD.price)
+  const usdToClnPrice = 1 / ClnToUsdPrice
+
+  const clnReserves = predictClnReserves({initialClnReserve,
+    amountOfTransactions,
+    averageTransactionInUsd,
+    clnPrice: usdToClnPrice,
+    gainRatio,
+    iterations: 12})
+  console.log(clnReserves)
+}
+
 export default function * marketMakerSaga () {
   yield all([
     tryTakeEvery(actions.QUOTE, quote),
@@ -313,6 +328,7 @@ export default function * marketMakerSaga () {
     tryTakeEvery(actions.SELL_CC, sellCc, 1),
     tryTakeEvery(actions.ESTIMATE_GAS_BUY_CC, estimateGasBuyCc),
     tryTakeEvery(actions.ESTIMATE_GAS_SELL_CC, estimateGasSellCc),
-    tryTakeEvery(actions.FETCH_MARKET_MAKER_DATA, fetchMarketMakerData)
+    tryTakeEvery(actions.FETCH_MARKET_MAKER_DATA, fetchMarketMakerData),
+    tryTakeEvery(actions.PREDICT_CLN_PRICES, predictClnPrices, 1)
   ])
 }
