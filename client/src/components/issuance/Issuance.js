@@ -24,7 +24,8 @@ class Issuance extends Component {
     totalSupply: '',
     communityLogo: {},
     stepPosition: {},
-    scrollPosition: 0
+    scrollPosition: 0,
+    disabledSubmitBtn: false
   }
 
   componentDidMount () {
@@ -53,13 +54,15 @@ class Issuance extends Component {
 
   setIssuanceTransaction = (communityName, symbol, communityType, communityLogo, totalSupply) => {
     const currencyData = {
-      name: communityName,
-      symbol: symbol,
+      name: this.state.communityName,
+      symbol: this.state.communitySymbol,
       decimals: 18,
-      totalSupply: new BigNumber(totalSupply).multipliedBy(1e18)
+      totalSupply: new BigNumber(this.state.totalSupply).multipliedBy(1e18)
     }
-    const communityMetadata = {'communityType': communityType.text, 'communityLogo': communityLogo.name}
+    const communityMetadata = {'communityType': this.state.communityType.text, 'communityLogo': this.state.communityLogo.name}
+    this.setState({disabledSubmitBtn: true})
     this.props.communities.issueCommunity(communityMetadata, currencyData)
+    this.props.hideModal()
   }
 
   handleScroll = () => {
@@ -140,13 +143,15 @@ class Issuance extends Component {
             totalSupply={this.state.totalSupply}
             communitySymbol={this.state.communitySymbol}
             showPopup={() => this.showMetamaskPopup()}
-            setIssuanceTransaction={() => this.setIssuanceTransaction(name, nameToSymbol(name), communityType, communityLogo, this.state.totalSupply)}
+            disabledDoneBtn={this.state.disabledSubmitBtn}
           />
         )
     }
   }
 
-  showMetamaskPopup = () => this.props.loadModal(METAMASK_ACCOUNT_MODAL, this.setIssuanceTransaction(this.state.communityName, nameToSymbol(this.state.communityName), this.state.communityType, this.state.communityLogo, this.state.totalSupply))
+  showMetamaskPopup = () => this.props.loadModal(METAMASK_ACCOUNT_MODAL, {
+    setIssuanceTransaction: this.setIssuanceTransaction
+  })
 
   render () {
     const steps = ['Name', 'Symbol', 'Details', 'Summary']
@@ -159,7 +164,6 @@ class Issuance extends Component {
       'steps-container': true,
       'step-with-sticky': (this.state.scrollPosition > this.state.stepPosition - stepIndicatorInset)
     })
-    console.log(this.props);
     return (
       <div className='issuance-form-wrapper' ref={wrapper => (this.wrapper = wrapper)}>
         <div className='issuance-container'>

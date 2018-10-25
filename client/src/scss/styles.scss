@@ -2858,6 +2858,14 @@ input[type="checkbox" i] {
 			}
 		}
 
+		&-link {
+			color: $color-hover-details;
+			margin-left: 5px;
+			&:hover {
+				text-decoration: underline !important;
+			}
+		}
+
 		&-btn {
 			border-radius: 3px;
 		  box-shadow: 0 0 6px 0 rgba(254, 129, 0, 0.56);

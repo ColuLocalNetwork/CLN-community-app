@@ -41,7 +41,6 @@ const ModalContainer = (props) => {
   }
 
   const SpecificModal = MODAL_COMPONENTS[props.modalType]
-  console.log(props)
   return SpecificModal({...props.modalProps, hideModal: props.hideModal})
 }
 

@@ -4,7 +4,6 @@ import FontAwesome from 'react-fontawesome'
 import Bg from 'images/popup-metamask.svg'
 
 const MetamaskModal = (props) => {
-  console.log(props)
   return (
     <Modal className='metamask-popup' onClose={props.hideModal}>
       <div className='metamask-popup-header'>
@@ -16,7 +15,7 @@ const MetamaskModal = (props) => {
         <p className='metamask-popup-text'>
           To finish the issuance of your currency you will now continue to MetaMask website do add a wallet chrome extension.
         </p>
-        <button className='metamask-popup-btn'>Metamask <FontAwesome name='angle-right' /></button>
+        <button className='metamask-popup-btn' onClick={props.setIssuanceTransaction}>Metamask <FontAwesome name='angle-right' /></button>
       </div>
       <div className='metamask-popup-container'>
         <p className='metamask-popup-text'>
@@ -26,7 +25,11 @@ const MetamaskModal = (props) => {
           1. Main Ethereum Network (live network)- Add ETH to your wallet, pay for your currency issuance  and spread your word to the world (*amount to be paid -gas- will be presented on MetaMask)
         </p>
         <p className='metamask-popup-text'>
-          2. Ropsten Test Network- Add ETH Test to your wallet, pay for your currency and spread your word to the test world (*you can visit this Faucet website to get ETH Test coins &quot;link to faucet website&quot;)
+          2. Ropsten Test Network- Add ETH Test to your wallet, pay for your currency and spread your word to the test world (*you can visit this Faucet website to get ETH Test coins
+          <a href='https://faucet.metamask.io/' className='metamask-popup-link'>
+            https://faucet.metamask.io/
+          </a>
+        )
         </p>
       </div>
     </Modal>
