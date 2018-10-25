@@ -17,6 +17,8 @@ export const setActiveMarker = (coinAddress) => action(ACTIVE_MARKER, {coinAddre
 export const zoomToMarker = (zoom) => action(ZOOM, { zoom })
 
 export const loadModal = (modalType, modalProps) => {
+  console.log(modalType)
+  console.log(modalProps)
   return {
     type: SHOW_MODAL,
     modalType,

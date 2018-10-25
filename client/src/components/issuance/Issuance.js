@@ -2,14 +2,16 @@ import React, {Component} from 'react'
 import FontAwesome from 'react-fontawesome'
 import classNames from 'classnames'
 import {connect} from 'react-redux'
+import { bindActionCreators } from 'redux'
 import {BigNumber} from 'bignumber.js'
+import {loadModal, hideModal} from 'actions/ui'
+import { nameToSymbol } from 'utils/format'
 import StepsIndicator from './StepsIndicator'
 import NameStep from './NameStep'
 import SymbolStep from './SymbolStep'
 import DetailsStep from './DetailsStep'
 import SummaryStep from './SummaryStep'
-import { nameToSymbol } from 'utils/format'
-import * as actions from 'actions/communities'
+import * as communities from 'actions/communities'
 import { METAMASK_ACCOUNT_MODAL } from 'constants/uiConstants'
 
 class Issuance extends Component {
@@ -57,7 +59,7 @@ class Issuance extends Component {
       totalSupply: new BigNumber(totalSupply).multipliedBy(1e18)
     }
     const communityMetadata = {'communityType': communityType.text, 'communityLogo': communityLogo.name}
-    this.props.issueCommunity(communityMetadata, currencyData)
+    this.props.communities.issueCommunity(communityMetadata, currencyData)
   }
 
   handleScroll = () => {
@@ -137,11 +139,14 @@ class Issuance extends Component {
             communityLogo={this.state.communityLogo.icon}
             totalSupply={this.state.totalSupply}
             communitySymbol={this.state.communitySymbol}
+            showPopup={() => this.showMetamaskPopup()}
             setIssuanceTransaction={() => this.setIssuanceTransaction(name, nameToSymbol(name), communityType, communityLogo, this.state.totalSupply)}
           />
         )
     }
   }
+
+  showMetamaskPopup = () => this.props.loadModal(METAMASK_ACCOUNT_MODAL, this.setIssuanceTransaction(this.state.communityName, nameToSymbol(this.state.communityName), this.state.communityType, this.state.communityLogo, this.state.totalSupply))
 
   render () {
     const steps = ['Name', 'Symbol', 'Details', 'Summary']
@@ -154,7 +159,7 @@ class Issuance extends Component {
       'steps-container': true,
       'step-with-sticky': (this.state.scrollPosition > this.state.stepPosition - stepIndicatorInset)
     })
-    //console.log(this.props.loadModal())
+    console.log(this.props);
     return (
       <div className='issuance-form-wrapper' ref={wrapper => (this.wrapper = wrapper)}>
         <div className='issuance-container'>
@@ -191,4 +196,10 @@ class Issuance extends Component {
   }
 }
 
-export default connect(null, actions)(Issuance)
+const mapDispatchToProps = dispatch => ({
+  communities: bindActionCreators(communities, dispatch),
+  loadModal: bindActionCreators(loadModal, dispatch),
+  hideModal: bindActionCreators(hideModal, dispatch)
+})
+
+export default connect(null, mapDispatchToProps)(Issuance)
