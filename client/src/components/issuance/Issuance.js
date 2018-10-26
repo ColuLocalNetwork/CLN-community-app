@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import FontAwesome from 'react-fontawesome'
 import classNames from 'classnames'
 import {connect} from 'react-redux'
-import { bindActionCreators } from 'redux'
 import {BigNumber} from 'bignumber.js'
 import {loadModal, hideModal} from 'actions/ui'
 import { nameToSymbol } from 'utils/format'
@@ -11,7 +10,7 @@ import NameStep from './NameStep'
 import SymbolStep from './SymbolStep'
 import DetailsStep from './DetailsStep'
 import SummaryStep from './SummaryStep'
-import * as communities from 'actions/communities'
+import {issueCommunity} from 'actions/communities'
 import { METAMASK_ACCOUNT_MODAL } from 'constants/uiConstants'
 
 class Issuance extends Component {
@@ -52,7 +51,7 @@ class Issuance extends Component {
     }
   }
 
-  setIssuanceTransaction = (communityName, symbol, communityType, communityLogo, totalSupply) => {
+  setIssuanceTransaction = () => {
     const currencyData = {
       name: this.state.communityName,
       symbol: this.state.communitySymbol,
@@ -61,7 +60,7 @@ class Issuance extends Component {
     }
     const communityMetadata = {'communityType': this.state.communityType.text, 'communityLogo': this.state.communityLogo.name}
     this.setState({disabledSubmitBtn: true})
-    this.props.communities.issueCommunity(communityMetadata, currencyData)
+    this.props.issueCommunity(communityMetadata, currencyData)
     this.props.hideModal()
   }
 
@@ -200,10 +199,10 @@ class Issuance extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  communities: bindActionCreators(communities, dispatch),
-  loadModal: bindActionCreators(loadModal, dispatch),
-  hideModal: bindActionCreators(hideModal, dispatch)
-})
+const mapDispatchToProps = {
+  issueCommunity,
+  loadModal,
+  hideModal
+}
 
 export default connect(null, mapDispatchToProps)(Issuance)
