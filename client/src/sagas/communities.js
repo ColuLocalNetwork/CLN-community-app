@@ -41,8 +41,8 @@ const manipulateCommunity = (community) => ({
   mmAddress: community.mmAddress
 })
 
-function * fetchCommunities ({page = 0}) {
-  const response = yield call(fetchCommunitiesApi, page)
+function * fetchCommunities ({page = 1}) {
+  const response = yield apiCall(fetchCommunitiesApi, page)
   const {data, ...metadata} = response
 
   const communities = data.map(manipulateCommunity)

@@ -13,8 +13,6 @@ import IssuanceWizard from 'components/issuance/IssuanceWizard'
 import ContactForm from 'components/ContactForm'
 import withTracker from 'containers/withTracker'
 
-import Oven from 'components/Oven'
-
 const history = createHistory()
 
 const sidebarTransition = {
@@ -102,12 +100,6 @@ export default class Root extends Component {
               <Route
                 path='/view/issuance'
                 component={withTracker(IssuanceWizard)}
-                mapStyles={mapStylesContact}
-                {...contactFormTransition}
-              />
-              <Route
-                path='/view/oven'
-                component={withTracker(Oven)}
                 mapStyles={mapStylesContact}
                 {...contactFormTransition}
               />

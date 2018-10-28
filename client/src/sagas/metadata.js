@@ -5,7 +5,7 @@ import * as api from 'services/api'
 import * as actions from 'actions/metadata'
 
 function * fetchMetadata ({protocol, hash, tokenAddress}) {
-  const {data} = yield api.fetchMetadata(protocol, hash)
+  const {data} = yield apiCall(api.fetchMetadata, protocol, hash)
 
   if (data.metadata.image) {
     data.metadata.imageLink = api.API_ROOT + '/images/' + data.metadata.image.split('//')[1]
