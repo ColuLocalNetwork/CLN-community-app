@@ -12,6 +12,6 @@ export const predictClnReserves = ({initialClnReserve,
 }
 
 export const calcClnGain = ({averageTransactionInUsd, clnPrice, amountOfTransactions, gainRatio}) => {
-  const averageTransactionInCln = averageTransactionInUsd * clnPrice
+  const averageTransactionInCln = averageTransactionInUsd / clnPrice
   return averageTransactionInCln * amountOfTransactions * gainRatio
 }

@@ -73,6 +73,41 @@ export function * quote ({tokenAddress, amount, isBuy}) {
   return quotePair
 }
 
+// function calculateNewReserve =
+
+export function * predictClnPrices ({tokenAddress, initialClnReserve,
+  amountOfTransactions, averageTransactionInUsd, gainRatio}) {
+  const clnPrice = yield select(state => state.fiat.USD.price)
+
+  const clnReserves = predictClnReserves({initialClnReserve,
+    amountOfTransactions,
+    averageTransactionInUsd,
+    clnPrice,
+    gainRatio,
+    iterations: 12})
+
+  debugger
+  console.log(clnReserves)
+
+  const clnToken = yield select(getClnToken)
+  const token = yield select(getCommunity, tokenAddress)
+
+  const s1 = clnToken.totalSupply
+  const s2 = token.totalSupply
+  // const r1 = clnReserves[0]
+  const prices = []
+  for (let r1 of clnReserves) {
+    // const {r1, r2, s1, s2} = getReservesAndSupplies(clnToken, tokenAddress, isBuy)
+    const EllipseMarketMakerContract = contract.getContract({abiName: 'EllipseMarketMaker', address: token.mmAddress})
+    const r2 = yield call(EllipseMarketMakerContract.methods.calcReserve(
+      r1, s1, s2).call)
+
+    const price = yield call(EllipseMarketMakerContract.getPrice(r1, r2, s1, s2).call)
+    prices.push(price)
+  }
+
+}
+
 export function * invertQuote ({tokenAddress, amount, isBuy}) {
   const clnToken = yield select(getClnToken)
   const token = yield select(getCommunity, tokenAddress)
@@ -300,20 +335,6 @@ export function * fetchMarketMakerData ({tokenAddress, mmAddress, blockNumber}) 
     tokenAddress,
     response
   })
-}
-
-export function * predictClnPrices ({tokenAddress, initialClnReserve,
-  amountOfTransactions, averageTransactionInUsd, gainRatio}) {
-  const ClnToUsdPrice = yield select(state => state.fiat.USD.price)
-  const usdToClnPrice = 1 / ClnToUsdPrice
-
-  const clnReserves = predictClnReserves({initialClnReserve,
-    amountOfTransactions,
-    averageTransactionInUsd,
-    clnPrice: usdToClnPrice,
-    gainRatio,
-    iterations: 12})
-  console.log(clnReserves)
 }
 
 export default function * marketMakerSaga () {
