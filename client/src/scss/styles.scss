@@ -2277,6 +2277,7 @@ input[type="checkbox" i] {
 			margin-top: 30px;
 			@media (max-width: $breakpoint-mobile) {
 				width: 90%;
+				margin-bottom: 40px;
 			}
 			&-header {
 				padding: 18px 20px;
