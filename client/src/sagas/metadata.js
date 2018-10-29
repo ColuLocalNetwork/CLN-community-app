@@ -1,12 +1,15 @@
 import { all, put } from 'redux-saga/effects'
 
-import {tryTakeEvery} from './utils'
+import {tryTakeEvery, apiCall} from './utils'
 import * as api from 'services/api'
 import * as actions from 'actions/metadata'
 
 function * fetchMetadata ({protocol, hash, tokenAddress}) {
-  const {data} = yield api.fetchMetadata(protocol, hash)
-  data.metadata.imageLink = api.API_ROOT + '/images/' + data.metadata.image.split('//')[1]
+  const {data} = yield apiCall(api.fetchMetadata, protocol, hash)
+
+  if (data.metadata.image) {
+    data.metadata.imageLink = api.API_ROOT + '/images/' + data.metadata.image.split('//')[1]
+  }
 
   yield put({
     type: actions.FETCH_METADATA.SUCCESS,
@@ -19,7 +22,7 @@ function * fetchMetadata ({protocol, hash, tokenAddress}) {
 }
 
 export function * createMetadata ({metadata}) {
-  const {data} = yield api.createMetadata(metadata)
+  const {data} = yield apiCall(api.createMetadata, metadata)
   yield put({
     type: actions.CREATE_METADATA.SUCCESS,
     response: {
@@ -31,7 +34,7 @@ export function * createMetadata ({metadata}) {
 
 export default function * apiSaga () {
   yield all([
-    tryTakeEvery(actions.FETCH_METADATA, fetchMetadata),
+    tryTakeEvery(actions.FETCH_METADATA, fetchMetadata, 1),
     tryTakeEvery(actions.CREATE_METADATA, createMetadata, 1)
   ])
 }
