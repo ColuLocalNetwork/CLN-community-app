@@ -9,7 +9,7 @@ import { isMobile } from 'react-device-detect'
 
 import App from 'containers/App'
 import CommunitySidebar from 'components/CommunitySidebar'
-import Issuance from 'components/issuance/Issuance'
+import IssuanceWizard from 'components/issuance/IssuanceWizard'
 import ContactForm from 'components/ContactForm'
 import withTracker from 'containers/withTracker'
 
@@ -17,10 +17,8 @@ const history = createHistory()
 
 const sidebarTransition = {
   atEnter: {
-  //  offset: 100
   },
   atLeave: {
-  //  offset: 100
   },
   atActive: {
     offset: 0
@@ -101,7 +99,7 @@ export default class Root extends Component {
               </div>
               <Route
                 path='/view/issuance'
-                component={withTracker(Issuance)}
+                component={withTracker(IssuanceWizard)}
                 mapStyles={mapStylesContact}
                 {...contactFormTransition}
               />
