@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import {formatEther} from 'utils/format'
 import classNames from 'classnames'
 import FontAwesome from 'react-fontawesome'
-import CoinImage from 'images/Coin2.svg'
 import Calculator from 'images/Calculator.svg'
 import { BigNumber } from 'bignumber.js'
+import Loader from 'components/Loader'
 
 export default class Community extends Component {
   handleClick = () => this.props.handleCommunityClick(this.props.token.address)
@@ -27,18 +27,25 @@ export default class Community extends Component {
       'coin-wrapper': true,
       'coin-show-footer': this.props.selectedCommunityAddress === this.props.token.address
     })
-
+    const symbolTextStyle = classNames({
+      'symbol-text': true,
+      'symbol-text-loading': !this.props.token.metadata
+    })
     return <div className='list-item' >
       <div className={coinWrapperStyle}>
         <div className='coin-header' onClick={this.handleClick}>
           <div className='coin-logo'>
-            <img src={CoinImage} className='logo-img' />
-            <span className='symbol-text'>{this.props.token.symbol}</span>
+            {this.props.token.metadata &&
+              this.props.token.metadata.communityLogo
+              ? <img src={this.props.renderCommunityLogo} className='logo-img' />
+              : <Loader color='#fff' className='logo-img' />
+            }
+            <span className={symbolTextStyle}>{this.props.token.symbol}</span>
           </div>
           <div className='coin-details'>
             <h3 className='coin-name'>{this.props.token.name}</h3>
             <p className='coin-total'>Total CC supply <span className='total-text'>{formatEther(this.props.token.totalSupply)}</span></p>
-            <button className='btn-calculator'>
+            <button className='btn-calculator' onClick={() => this.props.loadCalculator()}>
               <img src={Calculator} />
             </button>
             <div className={coinStatusClassStyle}>

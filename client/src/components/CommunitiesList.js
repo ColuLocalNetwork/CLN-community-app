@@ -3,6 +3,11 @@ import { connect } from 'react-redux'
 import Community from './Community'
 import {fetchCommunities} from 'actions/communities'
 import InfiniteScroll from 'react-infinite-scroller'
+import {loadModal, hideModal} from 'actions/ui'
+import CoinIcon1 from 'images/Coin1.svg'
+import CoinIcon2 from 'images/Coin2.svg'
+import CoinIcon3 from 'images/Coin3.svg'
+import { CALCULATOR_MODAL } from 'constants/uiConstants'
 
 const PAGE_START = 1
 const PAGE_SIZE = 10
@@ -37,6 +42,27 @@ class CommunitiesList extends Component {
 
   getScrollParent = () => this.myRef.current
 
+  loadCalculator = (token, marketMaker) => this.props.loadModal(
+    CALCULATOR_MODAL,
+    {token: token, marketMaker: marketMaker, logo: this.renderCommunityLogo(token)}
+  )
+
+  renderCommunityLogo (token) {
+    const communityLogos = {
+      CoinIcon1: CoinIcon1,
+      CoinIcon2: CoinIcon2,
+      CoinIcon3: CoinIcon3
+    }
+    const logoImg = token.metadata && token.metadata.communityLogo ? token.metadata.communityLogo.replace('.svg', '') : 'noImage'
+    let logoStr = ''
+    Object.keys(communityLogos).forEach((key) => {
+      if (key === logoImg) {
+        logoStr = communityLogos[key]
+      }
+    })
+    return logoStr
+  }
+
   render () {
     const {addresses} = this.props
     return <div className='communities-list' ref={this.myRef}>
@@ -56,6 +82,8 @@ class CommunitiesList extends Component {
             token={this.props.tokens[address]}
             fiat={this.props.fiat}
             marketMaker={this.props.marketMaker[address]}
+            renderCommunityLogo={this.renderCommunityLogo(this.props.tokens[address])}
+            loadCalculator={() => this.loadCalculator(this.props.tokens[address], this.props.marketMaker[address])}
             selectedCommunityAddress={this.state.selectedCommunityAddress}
           />
           )}
@@ -75,7 +103,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-  fetchCommunities
+  fetchCommunities,
+  loadModal,
+  hideModal
 }
 
 export default connect(

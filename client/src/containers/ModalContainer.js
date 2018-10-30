@@ -10,6 +10,7 @@ import PriceExplanationModal from 'components/PriceExplanationModal'
 import ExchangeModal from 'components/exchange/ExchangeModal'
 import ErrorBoundary from 'components/ErrorBoundary'
 import MetamaskModal from 'components/issuance/MetamaskModal'
+import CalculatorModal from 'components/CalculatorModal'
 import {
   LOGIN_MODAL,
   SOON_MODAL,
@@ -17,7 +18,8 @@ import {
   EXCHANGE_MODAL,
   LOADING_MODAL,
   PRICE_EXPLANATION_MODAL,
-  METAMASK_ACCOUNT_MODAL
+  METAMASK_ACCOUNT_MODAL,
+  CALCULATOR_MODAL
 } from 'constants/uiConstants'
 
 const renderModal = (modalComponent, props) =>
@@ -32,7 +34,8 @@ const MODAL_COMPONENTS = {
   [WRONG_NETWORK_MODAL]: (props) => renderModal(WrongNetworkModal, props),
   [LOADING_MODAL]: (props) => renderModal(LoadingModal, props),
   [PRICE_EXPLANATION_MODAL]: (props) => renderModal(PriceExplanationModal, props),
-  [METAMASK_ACCOUNT_MODAL]: (props) => renderModal(MetamaskModal, props)
+  [METAMASK_ACCOUNT_MODAL]: (props) => renderModal(MetamaskModal, props),
+  [CALCULATOR_MODAL]: (props) => renderModal(CalculatorModal, props)
 }
 
 const ModalContainer = (props) => {
