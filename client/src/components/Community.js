@@ -42,14 +42,14 @@ export default class Community extends Component {
               <img src={Calculator} />
             </button>
             <div className={coinStatusClassStyle}>
-              <span className='coin-status-indicator' /> <span className='coin-status-text'>{this.props.marketMaker.isOpenForPublic ? 'open' : 'close'}</span>
+              <span className='coin-status-indicator' /> <span className='coin-status-text'>{this.props.marketMaker.isOpenForPublic ? 'open to public' : 'close to public'}</span>
             </div>
           </div>
         </div>
         <div className='coin-footer'>
           <div className='coin-content'>
             <div className='total-content'>CLN Reserved</div>
-            {this.props.marketMaker.clnReserve
+            {this.props.marketMaker.clnReserve && clnReverse !== '0,000'
               ? <div className='coin-reverse'>
                 {clnReverse}
               </div>
