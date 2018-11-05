@@ -7,7 +7,6 @@ import {addCommunity, fetchCommunities as fetchCommunitiesApi,
 import {fetchMarketMakerData} from 'sagas/marketMaker'
 import {fetchMetadata} from 'actions/metadata'
 import {createMetadata} from 'sagas/metadata'
-import {subscribeToChange} from 'actions/subscriptions'
 import {createCurrency} from 'sagas/issuance'
 import {fetchTokenQuote} from 'actions/fiat'
 import { contract } from 'osseus-wallet'
@@ -16,15 +15,10 @@ import keyBy from 'lodash/keyBy'
 
 const entityPut = createEntityPut(actions.entityName)
 
-function * initializeCommunity ({tokenAddress}) {
-  const tokenResponse = yield call(fetchCommunity, {tokenAddress})
-  yield put(subscribeToChange(tokenResponse.address, tokenResponse.mmAddress))
-  yield entityPut({type: actions.INITIALIZE_COMMUNITY.SUCCESS, tokenAddress})
-}
-
 function * fetchCommunity ({tokenAddress}) {
-  const tokenResponse = yield call(fetchCommunityToken, {tokenAddress})
+  // const tokenResponse = yield call(fetchCommunityToken, {tokenAddress})
 
+  const tokenResponse = yield select(state => state.token[tokenAddress])
   if (tokenResponse.tokenURI) {
     const [protocol, hash] = tokenResponse.tokenURI.split('://')
     yield put(fetchMetadata(protocol, hash, tokenAddress))
@@ -179,7 +173,6 @@ export default function * communitiesSaga () {
     tryTakeEvery(actions.FETCH_COMMUNITY, fetchCommunity),
     tryTakeEvery(actions.FETCH_COMMUNITIES, fetchCommunities),
     tryTakeEvery(actions.FETCH_COMMUNITIES_BY_OWNER, fetchCommunitiesByOwner),
-    tryTakeEvery(actions.INITIALIZE_COMMUNITY, initializeCommunity),
     tryTakeEvery(actions.ISSUE_COMMUNITY, issueCommunity, 1)
   ])
 }
