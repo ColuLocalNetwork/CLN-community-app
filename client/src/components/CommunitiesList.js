@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import Community from './Community'
+import ExpandableCommunity from 'components/ExpandableCommunity'
 import {fetchCommunities} from 'actions/communities'
 import InfiniteScroll from 'react-infinite-scroller'
 
@@ -50,11 +50,11 @@ class CommunitiesList extends Component {
           useWindow={false}
           getScrollParent={this.getScrollParent}
         >
-          {addresses.map(address => <Community
+          {addresses.map(address => <ExpandableCommunity
             key={address}
             handleCommunityClick={this.handleCommunityClick}
             token={this.props.tokens[address]}
-            fiat={this.props.fiat}
+            usdPrice={this.props.fiat.USD && this.props.fiat.USD.price}
             marketMaker={this.props.marketMaker[address]}
             selectedCommunityAddress={this.state.selectedCommunityAddress}
           />
