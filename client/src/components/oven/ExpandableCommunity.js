@@ -4,12 +4,12 @@ import FontAwesome from 'react-fontawesome'
 import Community from 'components/Community'
 
 class ExpandableCommunity extends Component {
-  handleClick = () => this.props.handleCommunityClick(this.props.token.address)
+  handleOpen = () => this.props.handleCommunityClick(this.props.token.address)
 
   handleClose = () => this.props.handleCommunityClick(null)
 
   render = () => <div className='list-item'>
-    <Community {...this.props} />
+    <Community {...this.props} handleOpen={this.handleOpen} />
     <div className='coin-footer-close' onClick={this.handleClose}>
       <FontAwesome name='times-circle' /> Close
     </div>

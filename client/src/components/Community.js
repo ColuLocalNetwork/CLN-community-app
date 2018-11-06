@@ -1,21 +1,18 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {formatEther} from 'utils/format'
+import {formatEther, formatWei} from 'utils/format'
 import classNames from 'classnames'
 import FontAwesome from 'react-fontawesome'
 import CoinImage from 'images/Coin2.svg'
 import Calculator from 'images/Calculator.svg'
 import { BigNumber } from 'bignumber.js'
+import identity from 'lodash/identity'
 
 export default class Community extends Component {
-  handleClick = () => this.props.handleCommunityClick(this.props.token.address)
-
-  handleClose = () => this.props.handleCommunityClick(null)
-
   render () {
     const {currentPrice} = this.props.marketMaker
-    const clnReverse = (parseFloat(formatEther(this.props.marketMaker.clnReserve).replace(/[,.]/g, '.'))).toFixed(3).replace(/[,.]/g, ',')
 
+    const clnReverse = formatWei(this.props.marketMaker.clnReserve, 0)
     const coinStatusClassStyle = classNames({
       'coin-status': true,
       'coin-status-active': this.props.marketMaker.isOpenForPublic,
@@ -28,7 +25,7 @@ export default class Community extends Component {
     })
 
     return <div className={coinWrapperStyle}>
-      <div className='coin-header' onClick={this.handleClick}>
+      <div className='coin-header' onClick={this.props.handleOpen}>
         <div className='coin-logo'>
           <img src={CoinImage} className='logo-img' />
           <span className='symbol-text'>{this.props.token.symbol}</span>
@@ -47,7 +44,7 @@ export default class Community extends Component {
       <div className='coin-footer'>
         <div className='coin-content'>
           <div className='total-content'>CLN Reserved</div>
-          {this.props.marketMaker.clnReserve && clnReverse !== '0,000'
+          {this.props.marketMaker.clnReserve && !this.props.marketMaker.clnReserve.isZero()
             ? <div className='coin-reverse'>
               {clnReverse}
             </div>
@@ -78,10 +75,12 @@ Community.defaultProps = {
     isOpenForPublic: false,
     currentPrice: new BigNumber(0),
     clnReserve: new BigNumber(0)
-  }
+  },
+  handleOpen: identity
 }
 
 Community.propTypes = {
+  handleOpen: PropTypes.func,
   token: PropTypes.object,
   usdPrice: PropTypes.number,
   marketMaker: PropTypes.object
