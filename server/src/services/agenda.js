@@ -14,7 +14,7 @@ async function start () {
   agenda.on('start', job => console.info(`Job ${job.attrs.name} starting`))
   agenda.on('complete', job => console.info(`Job ${job.attrs.name} finished`))
   agenda.on('success', job => console.info(`Job ${job.attrs.name} succeeded`))
-  agenda.on('fail', job => console.warn(`Job ${job}`))
+  agenda.on('fail', job => console.warn(`Job ${job} failed`))
 
   await agenda.start()
 
