@@ -1,6 +1,6 @@
 const config = require('config')
 const Agenda = require('agenda')
-const getPastEvents = require('../utils/events/web3').getPastEvents
+const getPastEvents = require('@utils/events/web3').getPastEvents
 const agenda = new Agenda({db: {address: config.get('mongo.uri')}})
 
 agenda.define('getPastEvents', async (job, done) => {

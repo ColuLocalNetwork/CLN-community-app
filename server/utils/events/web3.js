@@ -3,7 +3,7 @@ const CurrencyFactoryAbi = require('../../constants/abi/CurrencyFactory')
 const processTokenCreatedEvent = require('../events/db').processTokenCreatedEvent
 const communityUtils = require('../community')
 
-const web3 = require('../../services/web3')
+const web3 = require('@services/web3')
 const getAddresses = require('../network').getAddresses
 
 const addresses = getAddresses()

@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const mongoose = require('mongoose')
 const Community = mongoose.model('Community')
-const processTokenCreatedEvent = require('../../utils/events/db').processTokenCreatedEvent
+const processTokenCreatedEvent = require('@utils/events/db').processTokenCreatedEvent
 const paginate = require('express-paginate')
 
 router.get('/', async (req, res, next) => {
