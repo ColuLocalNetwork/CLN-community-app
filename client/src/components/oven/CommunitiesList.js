@@ -53,6 +53,7 @@ class CommunitiesList extends Component {
             usdPrice={this.props.fiat.USD && this.props.fiat.USD.price}
             marketMaker={this.props.marketMaker[address]}
             selectedCommunityAddress={this.state.selectedCommunityAddress}
+            account={this.props.account}
           />
           )}
         </InfiniteScroll>

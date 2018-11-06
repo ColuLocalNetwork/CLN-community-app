@@ -9,6 +9,9 @@ import { BigNumber } from 'bignumber.js'
 import identity from 'lodash/identity'
 
 export default class Community extends Component {
+  canInsertCLN = () =>
+    this.props.marketMaker.isOpenForPublic || this.props.account === this.props.token.owner
+
   render () {
     const {currentPrice} = this.props.marketMaker
 
@@ -19,12 +22,7 @@ export default class Community extends Component {
       'coin-status-close': !this.props.marketMaker.isOpenForPublic
     })
 
-    const coinWrapperStyle = classNames({
-      'coin-wrapper': true,
-      'coin-show-footer': this.props.selectedCommunityAddress === this.props.token.address
-    })
-
-    return <div className={coinWrapperStyle}>
+    return <div className={this.props.coinWrapperClassName}>
       <div className='coin-header' onClick={this.props.handleOpen}>
         <div className='coin-logo'>
           <img src={CoinImage} className='logo-img' />
@@ -48,7 +46,7 @@ export default class Community extends Component {
             ? <div className='coin-reverse'>
               {clnReserve}
             </div>
-            : <button className='btn-adding'>
+            : <button disabled={!this.canInsertCLN()} className='btn-adding'>
               <FontAwesome name='plus' className='top-nav-issuance-plus' /> Add CLN
             </button>
           }
@@ -69,6 +67,7 @@ export default class Community extends Component {
 }
 
 Community.defaultProps = {
+  coinWrapperClassName: 'coin-wrapper',
   token: {
   },
   marketMaker: {
@@ -80,6 +79,7 @@ Community.defaultProps = {
 }
 
 Community.propTypes = {
+  coinWrapperClassName: PropTypes.string,
   handleOpen: PropTypes.func,
   token: PropTypes.object,
   usdPrice: PropTypes.number,
