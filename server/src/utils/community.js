@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-// const config = require('config')
 const Contract = require('truffle-contract')
 const web3 = require('../services/web3')
 

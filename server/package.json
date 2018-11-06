@@ -4,8 +4,8 @@
   "description": "backend for the CLN community DApp",
   "main": "app.js",
   "scripts": {
-    "start": "node ./app.js",
-    "dev": "nodemon ./app.js",
+    "start": "node ./src/app.js",
+    "dev": "nodemon ./src/app.js",
     "test": "node ./node_modules/truffle/build/cli.bundled.js test",
     "lint": "./node_modules/.bin/standard"
   },
@@ -28,9 +28,11 @@
     ]
   },
   "_moduleAliases": {
-    "@constants": "./constants",
-    "@utils": "./utils",
-    "@services": "./services"
+    "@constants": "./src/constants",
+    "@models": "./src/models",
+    "@routes": "./src/routes",
+    "@utils": "./src/utils",
+    "@services": "./src/services"
   },
   "license": "MIT",
   "dependencies": {
