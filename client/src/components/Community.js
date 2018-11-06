@@ -83,6 +83,6 @@ Community.defaultProps = {
 
 Community.propTypes = {
   token: PropTypes.object,
-  usdPrice: PropTypes.object,
+  usdPrice: PropTypes.number,
   marketMaker: PropTypes.object
 }

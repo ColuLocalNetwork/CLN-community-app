@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import FontAwesome from 'react-fontawesome'
-import Community from 'components/community'
+import Community from 'components/Community'
 
 export default class SummaryStep extends Component {
   render () {

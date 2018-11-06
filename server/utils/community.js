@@ -49,15 +49,15 @@ utils.getCommunityData = async (factory, tokenAddress) => {
   }
   const factoryContractInstance = await contracts[communityData.factoryType].at(communityData.factoryAddress)
   const tokenContractInstance = await contracts[COLU_LOCAL_CURRENCY].at(tokenAddress)
-  // communityData.mmAddress = await factoryContractInstance.getMarketMakerAddressFromToken(tokenAddress)
+
   const [currencyMap, symbol, tokenURI] = await Promise.all([
     factoryContractInstance.currencyMap(tokenAddress),
     tokenContractInstance.symbol(),
     tokenContractInstance.tokenURI()
   ])
-  const [name, decimals, totalSupply, owner, mmAddress] = currencyMap
+  const [name, decimals, totalSupply, , mmAddress] = currencyMap
 
-  return {...communityData, name, totalSupply, decimals, owner, mmAddress, symbol, tokenURI}
+  return {...communityData, name, totalSupply, decimals, mmAddress, symbol, tokenURI}
 }
 
 utils.addNewCommunity = async (data) => {

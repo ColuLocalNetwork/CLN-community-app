@@ -10,30 +10,31 @@ import {createMetadata} from 'sagas/metadata'
 import {createCurrency} from 'sagas/issuance'
 import {fetchTokenQuote} from 'actions/fiat'
 import { contract } from 'osseus-wallet'
-import {getAddresses} from 'selectors/network'
 import keyBy from 'lodash/keyBy'
 
 const entityPut = createEntityPut(actions.entityName)
 
 function * fetchCommunity ({tokenAddress}) {
-  // const tokenResponse = yield call(fetchCommunityToken, {tokenAddress})
-
-  const tokenResponse = yield select(state => state.token[tokenAddress])
-  if (tokenResponse.tokenURI) {
-    const [protocol, hash] = tokenResponse.tokenURI.split('://')
+  const token = yield select(state => state.tokens[tokenAddress])
+  if (token.tokenURI) {
+    const [protocol, hash] = token.tokenURI.split('://')
     yield put(fetchMetadata(protocol, hash, tokenAddress))
   }
 
-  yield fork(fetchMarketMakerData, {tokenAddress, mmAddress: tokenResponse.mmAddress})
+  yield fork(fetchMarketMakerData, {tokenAddress, mmAddress: token.mmAddress})
 
   yield entityPut({type: actions.FETCH_COMMUNITY.SUCCESS, tokenAddress})
-  return tokenResponse
+  return token
 }
 
 const manipulateCommunity = (community) => ({
   address: community.ccAddress,
+  name: community.name,
+  symbol: community.symbol,
+  tokenURI: community.tokenURI,
   owner: community.owner,
-  mmAddress: community.mmAddress
+  mmAddress: community.mmAddress,
+  totalSupply: community.totalSupply
 })
 
 function * fetchCommunities ({page = 1}) {
@@ -84,48 +85,6 @@ function * fetchCommunitiesByOwner ({owner}) {
   }
 
   return communities
-}
-
-function * fetchCommunityToken ({tokenAddress}) {
-  try {
-    const addresses = yield select(getAddresses)
-    const ColuLocalNetworkContract = contract.getContract({abiName: 'ColuLocalCurrency', address: tokenAddress})
-    const CurrencyFactoryContract = contract.getContract({abiName: 'CurrencyFactory',
-      address: addresses.CurrencyFactory
-    })
-
-    const calls = {
-      symbol: call(ColuLocalNetworkContract.methods.symbol().call),
-      tokenURI: call(ColuLocalNetworkContract.methods.tokenURI().call),
-      currencyMap: call(CurrencyFactoryContract.methods.currencyMap(tokenAddress).call)
-    }
-
-    const response = yield all(calls)
-
-    const {name, totalSupply, owner, mmAddress} = response.currencyMap
-
-    const community = {
-      address: tokenAddress,
-      symbol: response.symbol,
-      tokenURI: response.tokenURI,
-      totalSupply,
-      name,
-      mmAddress,
-      owner,
-      isLocalCurrency: true,
-      path: '/view/community/' + name.toLowerCase().replace(/ /g, '')
-    }
-
-    yield entityPut({type: actions.FETCH_COMMUNITY_TOKEN.SUCCESS,
-      tokenAddress,
-      response: community
-    })
-
-    return community
-  } catch (error) {
-    console.error(error)
-    yield entityPut({type: actions.FETCH_COMMUNITY_TOKEN.FAILURE, tokenAddress, error})
-  }
 }
 
 function * fetchClnContract ({tokenAddress}) {
