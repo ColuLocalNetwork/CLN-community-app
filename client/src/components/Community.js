@@ -12,7 +12,7 @@ export default class Community extends Component {
   render () {
     const {currentPrice} = this.props.marketMaker
 
-    const clnReverse = formatWei(this.props.marketMaker.clnReserve, 0)
+    const clnReserve = formatWei(this.props.marketMaker.clnReserve, 0)
     const coinStatusClassStyle = classNames({
       'coin-status': true,
       'coin-status-active': this.props.marketMaker.isOpenForPublic,
@@ -46,7 +46,7 @@ export default class Community extends Component {
           <div className='total-content'>CLN Reserved</div>
           {this.props.marketMaker.clnReserve && !this.props.marketMaker.clnReserve.isZero()
             ? <div className='coin-reverse'>
-              {clnReverse}
+              {clnReserve}
             </div>
             : <button className='btn-adding'>
               <FontAwesome name='plus' className='top-nav-issuance-plus' /> Add CLN
