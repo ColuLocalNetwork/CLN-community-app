@@ -5,8 +5,8 @@ import Community from 'components/Community'
 export default class SummaryStep extends Component {
   render () {
     return <div>
-      <h2 key={0} className='step-content-title text-center'>Your community currency is ready to be born!</h2>,
-      <div key={1} className='step-content-summary'>
+      <h2 className='step-content-title text-center'>Your community currency is ready to be born!</h2>,
+      <div className='step-content-summary'>
         <div className='list-item'>
           <Community token={{
             symbol: this.props.communitySymbol,
@@ -15,14 +15,14 @@ export default class SummaryStep extends Component {
           }} usdPrice={0} />
         </div>
       </div>,
-      <div key={3} className='text-center wallet-container'>
+      <div className='text-center wallet-container'>
         <a href='https://metamask.io/' target='_blank' className='btn-download'>
           <FontAwesome name='download' /> Metamask wallet
         </a>
       </div>,
-      <div key={4} className='text-center'>
+      <div className='text-center'>
         <button onClick={this.props.showPopup} className='symbol-btn' disabled={this.props.disabledDoneBtn}>
-          Done
+          Issue
         </button>
       </div>
     </div>

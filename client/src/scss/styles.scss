@@ -2028,6 +2028,7 @@ input[type="checkbox" i] {
   	box-shadow: 0 0 10px 0 rgba(135, 118, 255, 0.49);
 		min-height: calc(100vh - 310px);
 		padding-top: 50px;
+    padding-bottom: 50px;
 		@media (max-width: $breakpoint-mobile) {
 			min-height: calc(100vh - 269px);
 			padding-top: 35px;
@@ -2111,7 +2112,6 @@ input[type="checkbox" i] {
 		&-details {
 			width: 935px;
 			margin: 0 auto;
-			padding-bottom: 100px;
 			@media (max-width: $breakpoint-tablet) {
 				width: 100%;
 				padding-left: 20px;
