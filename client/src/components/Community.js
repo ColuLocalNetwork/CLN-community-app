@@ -39,7 +39,7 @@ export default class Community extends Component {
         </div>
         <div className='coin-details'>
           <h3 className='coin-name'>{this.props.token.name}</h3>
-          <p className='coin-total'>Total CC supply <span className='total-text'>{formatEther(this.props.token.totalSupply)}</span></p>
+          <p className='coin-total'>Total CC supply <span className='total-text'>{formatWei(this.props.token.totalSupply, 0)}</span></p>
           <button className='btn-calculator'>
             <img src={Calculator} />
           </button>
