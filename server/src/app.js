@@ -27,11 +27,11 @@ app.use(bodyParser.json())
 
 app.use(paginate.middleware(10, 50))
 
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, '../public')))
 
 // react-router routing
 app.get('/view/*', function (request, response) {
-  response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+  response.sendFile(path.resolve(__dirname, '../public', 'index.html'))
 })
 
 mongoose.set('debug', config.get('mongo.debug'))
