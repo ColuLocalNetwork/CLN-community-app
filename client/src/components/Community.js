@@ -12,6 +12,15 @@ export default class Community extends Component {
   canInsertCLN = () =>
     this.props.marketMaker.isOpenForPublic || this.props.account === this.props.token.owner
 
+  canOpenMarket = () => !this.props.marketMaker.isOpenForPublic && this.props.account === this.props.token.owner
+
+  openMarket = () => {
+    if (this.canOpenMarket()) {
+      console.log('open marketMaker')
+      this.props.openMarket(this.props.token.address)
+    }
+  }
+
   render () {
     const {currentPrice} = this.props.marketMaker
 
@@ -35,7 +44,10 @@ export default class Community extends Component {
             <img src={Calculator} />
           </button>
           <div className={coinStatusClassStyle}>
-            <span className='coin-status-indicator' /> <span className='coin-status-text'>{this.props.marketMaker.isOpenForPublic ? 'open to public' : 'close to public'}</span>
+            <span className='coin-status-indicator' />
+            <span className='coin-status-text' onClick={this.openMarket}>
+              {this.props.marketMaker.isOpenForPublic ? 'open to public' : 'close to public'}
+            </span>
           </div>
         </div>
       </div>
@@ -81,6 +93,7 @@ Community.defaultProps = {
 Community.propTypes = {
   coinWrapperClassName: PropTypes.string,
   handleOpen: PropTypes.func,
+  openMarket: PropTypes.func.isRequired,
   token: PropTypes.object,
   usdPrice: PropTypes.number,
   marketMaker: PropTypes.object

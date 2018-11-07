@@ -54,6 +54,7 @@ class CommunitiesList extends Component {
             marketMaker={this.props.marketMaker[address]}
             selectedCommunityAddress={this.state.selectedCommunityAddress}
             account={this.props.account}
+            openMarket={this.props.openMarket}
           />
           )}
         </InfiniteScroll>
