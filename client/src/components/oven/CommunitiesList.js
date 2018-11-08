@@ -22,8 +22,8 @@ class CommunitiesList extends Component {
     })
   }
 
-  handleAddCln = (token) => {
-    this.props.loadModal(SIMPLE_EXCHANGE_MODAL, {token})
+  handleAddCln = (token, marketMaker) => {
+    this.props.loadModal(SIMPLE_EXCHANGE_MODAL, {token, marketMaker})
   }
 
   loadMore = (nextPage) => {
