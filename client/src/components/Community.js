@@ -58,7 +58,7 @@ export default class Community extends Component {
             ? <div className='coin-reverse'>
               {clnReserve}
             </div>
-            : <button disabled={!this.canInsertCLN()} className='btn-adding'>
+            : <button disabled={!this.canInsertCLN()} onClick={this.props.handleAddCln} className='btn-adding'>
               <FontAwesome name='plus' className='top-nav-issuance-plus' /> Add CLN
             </button>
           }
@@ -94,6 +94,7 @@ Community.propTypes = {
   coinWrapperClassName: PropTypes.string,
   handleOpen: PropTypes.func,
   openMarket: PropTypes.func.isRequired,
+  handleAddCln: PropTypes.func.isRequired,
   token: PropTypes.object,
   usdPrice: PropTypes.number,
   marketMaker: PropTypes.object
