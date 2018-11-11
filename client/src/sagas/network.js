@@ -15,10 +15,12 @@ function * getNetworkType () {
         networkType,
         isMetaMask: web3.currentProvider.isMetaMask || false
       }})
-    if (web3.eth.defaultAccount) {
-      const isChanged = yield call(checkAccountChanged, {selectedAddress: web3.eth.defaultAccount})
+    const [account] = yield window.ethereum.enable()
+
+    if (account) {
+      const isChanged = yield call(checkAccountChanged, {selectedAddress: account})
       if (!isChanged) {
-        yield put(updateBalances(web3.eth.defaultAccount))
+        yield put(updateBalances(account))
       }
     }
 
