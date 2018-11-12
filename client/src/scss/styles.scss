@@ -108,6 +108,7 @@ $breakpoint-tablet: 1024px;
 @import 'elements';
 @import 'common';
 @import 'components/App';
+@import 'components/oven/SimpleExchangeModal';
 
 .hide-nav-links {
 	@media (max-width: $breakpoint-tablet) {
@@ -2785,58 +2786,6 @@ input[type="checkbox" i] {
 		position: absolute;
     	margin-top: -45px;
     	left: 30px;
-	}
-}
-
-.modal-dialog-div.exchange-modal {
-	width: 440px !important;
-	padding: 0;
-  margin: 0 auto;
-  border-radius: 5px;
-  .sidebar-close {
-    display: none;
-  }
-}
-
-.modal-dialog-div {
-
-  .exchange-modal {
-    background-color: #eceff6;
-
-
-    &-up {
-      height: 150px;
-      box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
-      background-image: linear-gradient(338deg, #262451, #343166);
-    }
-
-    &-middle {
-      border-radius: 3px;
-      box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
-      background-color: #f6f7fb;
-      height: 180px;
-      margin: 20px;
-      position: relative;
-      bottom: 80px;
-    }
-    &-down {
-      height: 130px;
-      background-color: #eceff6;
-    }
-  }
-}
-
-.btn-exchange {
-	text-transform: uppercase;
-	color: $color-step-text;
-	font-size: 12px;
-	border-radius: 3px;
-	padding: 6px 12px;
-	background: #5fddbb;
-	border: none;
-	&:hover {
-		cursor: pointer;
-		background-image: linear-gradient(to bottom, #5c5895, #39366e);
 	}
 }
 
