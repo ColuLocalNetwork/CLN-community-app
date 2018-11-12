@@ -26,6 +26,7 @@ class SimpleExchangeModal extends Component {
     if (this.props.quotePair) {
       return formatWei(this.props.quotePair.outAmount)
     }
+    return ''
   }
 
   handleExchange = () => {
@@ -41,28 +42,37 @@ class SimpleExchangeModal extends Component {
   render = () => (
     <Modal className='exchange-modal' onClose={this.props.hideModal}>
       <div className='exchange-modal-up'>
-        <div className='coin-wrapper'>
+        <div>
           <CommunityLogo token={this.props.token} />
         </div>
-        <div>Total Supply: {formatWei(this.props.token.totalSupply, 0)}</div>
-        <div>CLN reserve: {formatWei(this.props.marketMaker.clnReserve, 0)}</div>
+        <div className='token-info'>
+          <div>
+            <span className='label'>Total Supply:</span>
+            <span className='positive-number'>{formatWei(this.props.token.totalSupply, 0)}</span></div>
+          <div>
+            <span className='label'>CLN reserve:</span>
+            <span className='positive-number'>{formatWei(this.props.marketMaker.clnReserve, 0)}</span></div>
+        </div>
       </div>
       <div className='exchange-modal-down'>
         <div className='exchange-modal-middle'>
-          <TextInput id='price-change'
-            type='string'
-            label='CLN'
-            placeholder='CLN amount'
-            onChange={this.handleClnChange}
-          />
-          <div className='price-change-percent'>%</div>
-          <TextInput id='price-limit'
-            type='string'
-            label={this.props.token.symbol}
-            placeholder={`${this.props.token.symbol} amount`}
-            value={this.getTokenAmount()}
-            disabled
-          />
+          <div className='exchange-modal-amounts'>
+            <TextInput id='cln'
+              className='exchange-modal-cln'
+              type='string'
+              label='CLN'
+              placeholder='CLN amount'
+              onChange={this.handleClnChange}
+            />
+            <TextInput id='token'
+              className='exchange-modal-token'
+              type='string'
+              label={this.props.token.symbol}
+              placeholder={`${this.props.token.symbol} amount`}
+              value={this.getTokenAmount()}
+              disabled
+            />
+          </div>
           <button className='btn-exchange' onClick={this.handleExchange} disabled={this.isExchangeDisabled()}>
             {this.getStatus()}
           </button>

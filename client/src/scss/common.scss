@@ -37,3 +37,9 @@
 .tablet {
 	height: calc(100vh - 90px);
 }
+
+.positive-number {
+  color: $color-step-field;
+  font-size: 11px;
+  font-weight: bold;
+}

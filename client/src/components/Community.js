@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import {formatEther, formatWei} from 'utils/format'
 import classNames from 'classnames'
 import FontAwesome from 'react-fontawesome'
-import CoinImage from 'images/Coin2.svg'
 import CommunityLogo from 'components/elements/CommunityLogo'
 import Calculator from 'images/Calculator.svg'
 import { BigNumber } from 'bignumber.js'
@@ -38,7 +37,12 @@ export default class Community extends Component {
         <CommunityLogo token={this.props.token} />
         <div className='coin-details'>
           <h3 className='coin-name'>{this.props.token.name}</h3>
-          <p className='coin-total'>Total CC supply <span className='total-text'>{formatWei(this.props.token.totalSupply, 0)}</span></p>
+          <p className='coin-total'>
+            Total CC supply
+            <span className={classNames('total-text', 'positive-number')}>
+              {formatWei(this.props.token.totalSupply, 0)}
+            </span>
+          </p>
           <button className='btn-calculator'>
             <img src={Calculator} />
           </button>
@@ -87,13 +91,14 @@ Community.defaultProps = {
     clnReserve: new BigNumber(0)
   },
   handleOpen: identity,
-  handleAddCln: identity
+  handleAddCln: identity,
+  openMarket: identity
 }
 
 Community.propTypes = {
   coinWrapperClassName: PropTypes.string,
   handleOpen: PropTypes.func,
-  openMarket: PropTypes.func.isRequired,
+  openMarket: PropTypes.func,
   handleAddCln: PropTypes.func,
   token: PropTypes.object,
   usdPrice: PropTypes.number,

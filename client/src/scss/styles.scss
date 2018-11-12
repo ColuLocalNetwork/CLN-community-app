@@ -724,7 +724,7 @@ $breakpoint-tablet: 1024px;
 			}
 			.balance-number {
 				font-size: 12px;
-				color: #5fddbb;
+				color: $color-step-field;
 				margin-left: 10px;
 				font-weight: bold;
 			}
@@ -2006,7 +2006,7 @@ input[type="checkbox" i] {
 			background-color: transparent;
 			font-size: 106px;
 			font-weight: bold;
-			color: #5fddbb;
+			color: $color-step-field;
 			text-transform: uppercase;
 			box-shadow: none;
 			outline: none;
@@ -2303,7 +2303,7 @@ input[type="checkbox" i] {
 	font-size: 12px;
 	border-radius: 3px;
 	padding: 6px 12px;
-	background: #5fddbb;
+	background: $color-step-field;
 	border: none;
 	&:hover {
 		cursor: pointer;
@@ -2448,7 +2448,7 @@ input[type="checkbox" i] {
 			}
 			&:hover {
 				cursor: pointer;
-				color: #5fddbb;
+				color: $color-step-field;
 			}
 		}
 	}
@@ -2554,8 +2554,6 @@ input[type="checkbox" i] {
 			padding-bottom: 15px;
 			border-bottom: 1px solid rgba(255, 255, 255, 0.19);
 			.total-text {
-				font-size: 10px;
-				color: #5fddbb;
 				margin-left: 10px;
 				font-weight: bold;
 				width: 80px;
