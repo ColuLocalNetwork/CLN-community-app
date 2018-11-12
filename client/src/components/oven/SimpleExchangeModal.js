@@ -47,10 +47,10 @@ class SimpleExchangeModal extends Component {
         </div>
         <div className='token-info'>
           <div>
-            <span className='label'>Total Supply:</span>
+            <span className='label'>Total Supply</span>
             <span className='positive-number'>{formatWei(this.props.token.totalSupply, 0)}</span></div>
           <div>
-            <span className='label'>CLN reserve:</span>
+            <span className='label'>CLN reserve</span>
             <span className='positive-number'>{formatWei(this.props.marketMaker.clnReserve, 0)}</span></div>
         </div>
       </div>
