@@ -28,6 +28,36 @@
 			@media (max-width: $breakpoint-tablet) {
 				display: flex;
 			}
+
+      .coin-logo {
+        width: 53px;
+        height: 53px;
+        border-radius: 50%;
+        position: relative;
+        margin: 0 auto;
+        box-shadow: 0 0px 12px 0 rgba(0, 131, 255, 0.46);
+        .logo-img {
+          width: 100% !important;
+          height: 100% !important;
+          min-width: auto !important;
+        }
+        @media (max-width: $breakpoint-tablet) {
+          margin-left: 0;
+          margin-right: 15px;
+        }
+
+        .symbol-text {
+          font-size: 9px;
+          font-weight: bold;
+          text-align: center;
+          color: #3a3269;
+          position: absolute;
+          top: 50%;
+          margin-top: -5px;
+          left: 0;
+          right: 0;
+        }
+      }
 		}
 	}
  	&-sidebar {
@@ -85,34 +115,8 @@
 			width: 100%;
 		}
 	}
-	&-logo {
-		width: 53px;
-  	height: 53px;
-		border-radius: 50%;
-		position: relative;
-		margin: 0 auto;
-    box-shadow: 0 0px 12px 0 rgba(0, 131, 255, 0.46);
-		&-img {
-			width: 100% !important;
-			height: 100% !important;
-			min-width: auto !important;
-		}
-		@media (max-width: $breakpoint-tablet) {
-			margin-left: 0;
-			margin-right: 15px;
-		}
-	}
-	&-symbol {
-		font-size: 9px;
-    font-weight: bold;
-    text-align: center;
-    color: #3a3269;
-    position: absolute;
-    top: 50%;
-    margin-top: -5px;
-    left: 0;
-    right: 0;
-	}
+
+
 	&-title {
 	  font-size: 15px;
 	  font-weight: normal;

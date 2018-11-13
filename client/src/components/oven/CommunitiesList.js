@@ -40,24 +40,8 @@ class CommunitiesList extends Component {
 
   loadCalculator = (token, marketMaker) => this.props.loadModal(
     CALCULATOR_MODAL,
-    {token: token, marketMaker: marketMaker, logo: this.renderCommunityLogo(token)}
+    {token: token, marketMaker: marketMaker}
   )
-
-  // renderCommunityLogo (token) {
-  //   const communityLogos = {
-  //     CoinIcon1: CoinIcon1,
-  //     CoinIcon2: CoinIcon2,
-  //     CoinIcon3: CoinIcon3
-  //   }
-  //   const logoImg = token.metadata && token.metadata.communityLogo ? token.metadata.communityLogo.replace('.svg', '') : 'noImage'
-  //   let logoStr = ''
-  //   Object.keys(communityLogos).forEach((key) => {
-  //     if (key === logoImg) {
-  //       logoStr = communityLogos[key]
-  //     }
-  //   })
-  //   return logoStr
-  // }
 
   render () {
     const {addresses} = this.props
@@ -78,11 +62,11 @@ class CommunitiesList extends Component {
             token={this.props.tokens[address]}
             usdPrice={this.props.fiat.USD && this.props.fiat.USD.price}
             marketMaker={this.props.marketMaker[address]}
-            loadCalculator={() => this.loadCalculator(this.props.tokens[address], this.props.marketMaker[address])}
             selectedCommunityAddress={this.state.selectedCommunityAddress}
             account={this.props.account}
             openMarket={this.props.openMarket}
             handleAddCln={this.handleAddCln}
+            loadCalculator={this.loadCalculator}
           />
           )}
         </InfiniteScroll>

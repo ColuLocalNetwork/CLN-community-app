@@ -108,6 +108,7 @@ $breakpoint-tablet: 1024px;
 @import 'elements';
 @import 'common';
 @import 'components/App';
+@import 'components/CalculatorModal';
 @import 'components/oven/SimpleExchangeModal';
 
 .hide-nav-links {

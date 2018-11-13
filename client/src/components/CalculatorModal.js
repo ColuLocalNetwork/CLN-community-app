@@ -7,6 +7,7 @@ import { Chart } from 'react-google-charts'
 import Loader from 'components/Loader'
 import {predictClnPrices} from 'actions/marketMaker'
 import TextInput from 'components/elements/TextInput'
+import CommunityLogo from 'components/elements/CommunityLogo'
 
 class CalculatorModal extends Component {
   constructor (props) {
@@ -92,6 +93,7 @@ class CalculatorModal extends Component {
         }
       }
     }
+
     return (
       <Modal className='calculator' onClose={this.props.hideModal}>
         <div className='metamask-popup-close' onClick={this.props.hideModal}>
@@ -100,15 +102,7 @@ class CalculatorModal extends Component {
         <div className='calculator-sidebar'>
           <div className='calculator-header'>
             <div className='calculator-header-content'>
-              <div className='calculator-logo'>
-                {this.props.token.metadata &&
-                  this.props.token.metadata.communityLogo
-                  ? <img src={this.props.logo} className='calculator-logo-img' />
-                  : <Loader color='#3a3269' className='calculator-logo-img' />
-                }
-                {this.props.token.metadata &&
-                  this.props.token.metadata.communityLogo && <span className='calculator-symbol'>{this.props.token.symbol}</span>}
-              </div>
+              <CommunityLogo token={this.props.token} />
               <div className='calculator-logo-content'>
                 <h3 className='calculator-title'>{this.props.token.name}</h3>
                 <div className={coinStatusClassStyle}>
