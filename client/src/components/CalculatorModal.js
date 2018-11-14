@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
 import FontAwesome from 'react-fontawesome'
 import classNames from 'classnames'
-import Modal from 'components/Modal'
 import {connect} from 'react-redux'
 import { Chart } from 'react-google-charts'
+import Modal from 'components/Modal'
 import Loader from 'components/Loader'
 import {predictClnPrices} from 'actions/marketMaker'
 import TextInput from 'components/elements/TextInput'
@@ -70,16 +70,10 @@ class CalculatorModal extends Component {
       width: 550,
       height: 350,
       series: {
-        0: {axis: 'Temps'},
-        1: {axis: 'Daylight'}
+        0: {axis: 'CLN'},
+        1: {axis: 'USD'}
       },
-      legend: {position: 'none'},
-      axes: {
-        y: {
-          Temps: {label: ''},
-          Daylight: {label: ''}
-        }
-      }
+      legend: {position: 'none'}
     }
 
     return (
@@ -151,7 +145,7 @@ class CalculatorModal extends Component {
             <button
               className='calculator-sidebar-btn'
               disabled={
-                !this.state.initialClnReserve || !this.state.initialClnReserve || !this.state.amountOfTransactions ||
+                !this.state.initialClnReserve || !this.state.amountOfTransactions ||
                 !this.state.averageTransactionInUsd || !this.state.gainPercentage
               }
               onClick={this.predictClnPrices}
@@ -161,7 +155,7 @@ class CalculatorModal extends Component {
         <div className='calculator-chart'>
           <div className='calculator-chart-legend'>
             <div className='calculator-chart-legend-point point-cc'>
-              CC Value
+              CLN Value
             </div>
             <div className='calculator-chart-legend-point point-usd'>
               USD Value
@@ -173,7 +167,7 @@ class CalculatorModal extends Component {
                 USD
               </div>,
               <div className='calculator-chart-point point-cc'>
-                CC
+                CLN
               </div>,
               <Chart
                 className='calculator-graph'
