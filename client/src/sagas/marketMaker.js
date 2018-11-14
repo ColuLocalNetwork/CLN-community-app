@@ -75,14 +75,14 @@ export function * quote ({tokenAddress, amount, isBuy}) {
 }
 
 export function * predictClnPrices ({tokenAddress, initialClnReserve,
-  amountOfTransactions, averageTransactionInUsd, gainRatio}) {
+  amountOfTransactions, averageTransactionInUsd, gainRatio, iterations}) {
   const clnPrice = yield select(state => state.fiat.USD.price)
   const clnReserves = predictClnReserves({initialClnReserve,
     amountOfTransactions,
     averageTransactionInUsd,
     clnPrice,
     gainRatio,
-    iterations: 11})
+    iterations})
   const clnReservesInWei = clnReserves.map(reserve => new BigNumber(reserve.toString()).multipliedBy(1e18))
   const clnToken = yield select(getClnToken)
   const token = yield select(getCommunity, tokenAddress)
@@ -95,9 +95,16 @@ export function * predictClnPrices ({tokenAddress, initialClnReserve,
     const EllipseMarketMakerContract = contract.getContract({abiName: 'EllipseMarketMaker', address: token.mmAddress})
     const r2 = yield call(EllipseMarketMakerContract.methods.calcReserve(
       r1, s1, s2).call)
-    const price = yield call(EllipseMarketMakerContract.methods.getPrice(r1, r2, s1, s2).call)
+    const priceClnInCc = yield call(EllipseMarketMakerContract.methods.getPrice(r1, r2, s1, s2).call)
+    const priceCcInCln = reversePrice(priceClnInCc)
+    const priceCcInUSD = priceCcInCln.multipliedBy(clnPrice)
+    const price = {
+      cln: priceCcInCln.toString(),
+      usd: priceCcInUSD.toString()
+    }
     prices.push(price)
   }
+
   yield put({type: actions.PREDICT_CLN_PRICES.SUCCESS,
     tokenAddress,
     response: {

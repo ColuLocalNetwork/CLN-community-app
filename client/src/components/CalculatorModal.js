@@ -9,48 +9,36 @@ import {predictClnPrices} from 'actions/marketMaker'
 import TextInput from 'components/elements/TextInput'
 import CommunityLogo from 'components/elements/CommunityLogo'
 
+const MONTHS_IN_YEAR = 12
+
 class CalculatorModal extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      initialClnReserve: 100,
-      amountOfTransactions: 100,
-      averageTransactionInUsd: 10,
-      gainRatio: 0.1,
-      iterations: 12
-    }
+  state = {
+    initialClnReserve: 100,
+    amountOfTransactions: 100,
+    averageTransactionInUsd: 10,
+    gainPercentage: 15
   }
+
   componentDidMount () {
-    setTimeout(() => {
-      this.props.predictClnPrices(this.props.token.address, {
-        initialClnReserve: this.state.initialClnReserve,
-        amountOfTransactions: this.state.amountOfTransactions,
-        averageTransactionInUsd: this.state.averageTransactionInUsd,
-        gainRatio: this.state.gainRatio,
-        iterations: this.state.iterations
-      })
-    }, 500)
+    this.predictClnPrices()
   }
+
   renderChartData (prices) {
-    let data = [['', 'CLN', 'USD']]
-    const fiatCurrencyPrice = this.props.fiat.USD && this.props.fiat.USD.price
-    const hAxis = ['Time', '', '3 Months', '', '', '6 Months', '', '', '9 Months', '', '', '1 Year']
-    let priceArr = prices.sort((a, b) => a - b)
-    priceArr.forEach((price, key) => {
-      data.push([hAxis[key], parseInt(price), price / fiatCurrencyPrice])
-    })
+    const hAxis = ['Time', '', '', '3 Months', '', '', '6 Months', '', '', '9 Months', '', '', '1 Year']
+    const data = prices.map((price, key) => ([
+      hAxis[key], parseFloat(price.cln), parseFloat(price.usd)
+    ]))
+    data.unshift(['', 'CLN', 'USD'])
     return data
   }
 
-  reRenderChart = () => {
-    this.props.predictClnPrices(this.props.token.address, {
-      initialClnReserve: parseInt(this.state.initialClnReserve),
-      amountOfTransactions: parseInt(this.state.amountOfTransactions),
-      averageTransactionInUsd: parseInt(this.state.averageTransactionInUsd),
-      gainRatio: this.state.gainRatio,
-      iterations: this.state.iterations
-    })
-  }
+  predictClnPrices = () => this.props.predictClnPrices(this.props.token.address, {
+    initialClnReserve: parseInt(this.state.initialClnReserve),
+    amountOfTransactions: parseInt(this.state.amountOfTransactions),
+    averageTransactionInUsd: parseInt(this.state.averageTransactionInUsd),
+    gainRatio: parseInt(this.state.gainPercentage) / 100,
+    iterations: MONTHS_IN_YEAR
+  })
 
   handleChangeInitialClnReserve = (event) => {
     this.setState({initialClnReserve: event.target.value})
@@ -65,7 +53,7 @@ class CalculatorModal extends Component {
   }
 
   handleChangeGainRatio = (event) => {
-    this.setState({gainRatio: event.target.value / 100})
+    this.setState({gainPercentage: event.target.value})
   }
 
   render () {
@@ -154,9 +142,9 @@ class CalculatorModal extends Component {
               </p>
               <TextInput
                 className='calculator-sidebar-input'
-                id='gainRatio'
+                id='gainPercentage'
                 type='number'
-                value={this.state.gainRatio * 100}
+                value={this.state.gainPercentage}
                 onChange={this.handleChangeGainRatio}
               />
             </div>
@@ -164,23 +152,23 @@ class CalculatorModal extends Component {
               className='calculator-sidebar-btn'
               disabled={
                 !this.state.initialClnReserve || !this.state.initialClnReserve || !this.state.amountOfTransactions ||
-                !this.state.averageTransactionInUsd || !this.state.gainRatio
+                !this.state.averageTransactionInUsd || !this.state.gainPercentage
               }
-              onClick={() => this.reRenderChart()}
+              onClick={this.predictClnPrices}
             >Calculate</button>
           </div>
         </div>
         <div className='calculator-chart'>
           <div className='calculator-chart-legend'>
-            <div className='calculator-chart-legend-point point-usd'>
-              USD Value
-            </div>
             <div className='calculator-chart-legend-point point-cc'>
               CC Value
             </div>
+            <div className='calculator-chart-legend-point point-usd'>
+              USD Value
+            </div>
           </div>
           <div className='calculator-chart-content'>
-            {this.props.calculatorPrices.length ? [
+            {this.props.predictedPrices.length ? [
               <div className='calculator-chart-point point-usd'>
                 USD
               </div>,
@@ -190,7 +178,7 @@ class CalculatorModal extends Component {
               <Chart
                 className='calculator-graph'
                 chartType='Line'
-                data={this.renderChartData(this.props.calculatorPrices)}
+                data={this.renderChartData(this.props.predictedPrices)}
                 options={options}
               />]
               : <Loader color='#3a3269' className='calculator-logo-img calculator-chart-loader' />
@@ -210,13 +198,12 @@ class CalculatorModal extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    fiat: state.fiat,
-    calculatorPrices: state.screens.calculator.prices
-  }
-}
+const mapStateToProps = state => ({
+  predictedPrices: state.screens.calculator.prices
+})
+
 const mapDispatchToProps = {
   predictClnPrices
 }
+
 export default connect(mapStateToProps, mapDispatchToProps)(CalculatorModal)

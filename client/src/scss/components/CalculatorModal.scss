@@ -124,6 +124,7 @@
 	  text-align: center;
 	  color: #6e6d9f;
 		margin-top: 10px;
+    text-transform: capitalize;
 		@media (max-width: $breakpoint-tablet) {
 			text-align: left;
 		}
