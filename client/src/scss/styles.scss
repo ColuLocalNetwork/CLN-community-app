@@ -23,7 +23,7 @@ $color-symbol-field-brdr: #b6b5d8;
 $color-shadow: rgba(0, 0, 0, 0.3);
 $color-step-field: #5fddbb;
 $color-step-container-logo: #343166;
-$font-family-lucida: 'Lucida Grande';
+$font-family: 'Gotham SSm A', 'Gotham SSm B', 'icomoon';
 $font-family-lato: 'Lato', sans-serif;
 $color-hover-details: #7effdc;
 $color-shadow-btn: rgba(22, 14, 58, 0.34);
@@ -100,11 +100,6 @@ $breakpoint-tablet: 1024px;
 	}
 }
 
-@font-face {
-  font-family: "Lucida Grande";
-  src: url("/assets/fonts/lucidagrande.ttf") format("opentype")
-}
-
 @import 'elements';
 @import 'common';
 
@@ -179,11 +174,11 @@ $breakpoint-tablet: 1024px;
 
 		.coin-name {
 			font-size: 15px;
-			color: #BCB9C8;
+			color: #ffffff;
 			text-align: center;
-			font-family: "Lucida Grande";
+      font-weight: 400;
 			text-transform: capitalize;
-			margin-bottom: 10px;
+			margin-bottom: 7px;
 			text-align: left;
 		}
 
@@ -193,10 +188,10 @@ $breakpoint-tablet: 1024px;
 			text-transform: uppercase;
 			color: $color-step;
 			display: flex;
-			padding-bottom: 15px;
+			padding-bottom: 13px;
 			border-bottom: 1px solid rgba(255, 255, 255, 0.19);
 			.total-text {
-				margin-left: 10px;
+				margin-left: 5px;
 				font-weight: bold;
 				width: 80px;
 				white-space: nowrap;
@@ -212,10 +207,9 @@ $breakpoint-tablet: 1024px;
 
 		.coin-header {
 			margin-top:20px;
-			padding: 20px 24px;
-			background-image: linear-gradient(to bottom, #262451, #343166);
+			background-image: linear-gradient(340deg, #262451 , #343165);
 			display: flex;
-			padding: 30px 20px;
+			padding: 30px 27px;
 			h1 {
 				font-size: 18px;
 				margin-bottom: 2px;

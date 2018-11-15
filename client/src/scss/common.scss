@@ -40,7 +40,7 @@
 
 .positive-number {
   color: $color-step-field;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: bold;
 }
 
@@ -71,13 +71,14 @@
 
 .coin-header {
 	@include flex-box();
-	//padding: 20px 24px;
 	padding:32px;
+
 	.logo {
 		width: 70px;
 		height: 70px;
 		min-width: 70px;
 	}
+
 	.coin-details {
 		margin-left: 23px;
 		width:100%;
@@ -141,199 +142,6 @@
 		}
 		.separator {
 			margin: 5px 0 8px;
-		}
-	}
-}
-
-.sidebar {
-	position: absolute;
-	top: $nav-height;
-	bottom: 0;
-	right: 0;
-	z-index: 100;
-
-	@media (max-width: $breakpoint-tablet) {
-		top: 50px;
-		-webkit-overflow-scrolling: touch;
-	}
-
-	.community-sidebar {
-		border-left: 10px $colu-green solid;
-		//overflow: scroll;
-		height: calc(100vh - 60px);
-		width: 450px;
-		box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.37);
-		@media (max-width: $breakpoint-tablet) {
-			border-left: none;
-			 -webkit-overflow-scrolling: touch;
-		}
-		a {
-			text-decoration: underline !important;
-			font-size: 14px;
-			color: #7b7b7b;
-		}
-		.header {
-			background-color: $light-grey;
-			border-bottom: solid 1px #e1dedc;
-			@media (max-width: $breakpoint-tablet) {
-				padding: 0 20px 20px;
-				border-bottom: 1px solid #e1dedc;
-				box-shadow: none;
-			}
-			.sidebar-drag {
-				width: 100%;
-				height: 25px;
-				@include flex-box();
-				justify-content: center;
-				align-items: center;
-				.drag-line {
-					width: 20px;
-					height: 2px;
-					background-color: #cdcdcd;
-				}
-			}
-
-			.header-buttons {
-				@include flex-box();
-				justify-content: space-between;
-				padding: 0 32px 32px;
-				.header-button {
-					width: 207px;
-					@include button($colu-green);
-					color: white;
-					height: 36px;
-					&:nth-child(2) {
-						margin-left: 12px;
-					}
-				}
-			}
-		}
-		.community-data-wrapper {
-			padding: 32px;
-			overflow-y: scroll;
-			-webkit-overflow-scrolling: touch;
-			background: white;
-			height: calc(100% - 200px);
-			.box {
-				background-color: #ffffff76;
-				border-radius: 4px;
-				box-shadow:  0 15px 30px 0 rgba(0, 0, 0, 0.05);
-				overflow: hidden;
-				animation: load-box 200ms ease-in;
-				.box-header {
-					background-color: #ebf0f2;
-					padding: 14px 22px;
-					font-size: 14px;
-					font-weight: 500;
-					line-height: 1.43;
-					letter-spacing: 0;
-					text-align: left;
-					color: #382b73;
-				}
-				.box-info {
-					@include flex-box();
-					padding: 10px 22px;
-					.box-title {
-						min-width: 150px;
-						color: #a4a9b2;
-						font-size: 14px;
-						p {
-							margin: 20px 0;
-						}
-
-					}
-					.box-data {
-						overflow: hidden;
-						p {
-							white-space: nowrap;
-							font-size: 14px;
-							overflow:hidden !important;
-							text-overflow: ellipsis;
-							margin: 20px 0;
-							img {
-								height: 14px;
-								width: 9px;
-								padding-right: 4px;
-    							margin-bottom: -2px;
-							}
-						}
-						.description {
-							white-space: normal;
-							line-height: 1.7;
-						}
-						.social {
-							a {
-								margin-top: -4px;
-								&:nth-child(2) {
-									margin-left: 8px;
-								}
-							}
-							img {
-								height: 25px;
-								width: 25px;
-							}
-						}
-					}
-				}
-
-				&:nth-child(2) {
-					margin-top: 22px;
-					animation: load-box 300ms ease-in;
-				}
-			}
-			@media (max-width:$breakpoint-tablet) {
-				padding:20px;
-				height: calc(100% - 156px)
-			}
-		}
-		@media (max-width:$breakpoint-tablet) {
-			width: 100vw;
-			right: 0px;
-			height: 100%;
-			position: absolute;
-			z-index: 10;
-			bottom: 0;
-			&.tablet {
-				top: calc(50px) !important;
-			}
-			&.ios-chrome {
-				top: calc(50px) !important;
-			}
-			.header {
-
-				.header-buttons {
-					@include flex-box();
-					justify-content: space-between;
-					padding: 0;
-					.header-button {
-            @include button($colu-green);
-						width: 100%;
-						height: 40px;
-					}
-				}
-			}
-			.coin-header {
-				padding: 20px 0px;
-				.logo {
-					width: 55px;
-					min-width: 55px;
-					height: 55px;
-				}
-				.coin-details {
-					margin-left:15px;
-					h1 {
-						font-size: 16px;
-					}
-
-					.price-wrapper {
-            padding: 3px 0px;
-						h2, p {
-							font-size: 14px;
-							margin: 0;
-						}
-					}
-				}
-			}
 		}
 	}
 }
@@ -576,10 +384,10 @@
 
 .coin-logo {
   position: relative;
-  height: 80px;
+  height: 70px;
   .logo-img {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     box-shadow: 0 0px 12px 0 rgba(0, 131, 255, 0.46);
     @media (max-width: $breakpoint-mobile) {
@@ -588,7 +396,7 @@
     }
   }
   .symbol-text {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
     text-align: center;
     color: $color-step-text;

@@ -520,7 +520,6 @@
 				font-size: 15px;
 				color: $color-step-text;
 				text-align: center;
-				font-family: $font-family-lucida;
 				text-transform: capitalize;
 				margin-bottom: 10px;
 			}
@@ -591,7 +590,6 @@
 	&-symbol-title {
 		font-size: 25px;
 		color: $color-active-step;
-		font-family: $font-family-lucida;
 		text-transform: capitalize;
 		margin-bottom: 20px;
 		@media (max-width: $breakpoint-mobile) {

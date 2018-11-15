@@ -6,11 +6,13 @@
 	right: 0;
 	background-color: $color-step;
 	border-radius: 4px;
-	width: 25px;
-	height: 25px;
+	width: 23px;
+	height: 22px;
 	text-align: center;
 	border: none;
 	line-height: 25px;
+  padding: 1px 7px 2px 5px;
+
 	img {
 		width: 13px;
 		height: 12px;
@@ -19,7 +21,7 @@
 		outline: none;
 	}
 	&:hover {
-		background-color: #b6b5d8;
+		background-color: rgba(182, 181, 216, 0.7);
 		cursor: poiner;
 	}
 	@media (max-width: $breakpoint-mobile) {
