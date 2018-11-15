@@ -24,6 +24,7 @@ class CalculatorModal extends Component {
   }
 
   renderChartData (prices) {
+    debugger
     const hAxis = ['Time', '', '', '3 Months', '', '', '6 Months', '', '', '9 Months', '', '', '1 Year']
     const data = prices.map((price, key) => ([
       hAxis[key], parseFloat(price.cln), parseFloat(price.usd)

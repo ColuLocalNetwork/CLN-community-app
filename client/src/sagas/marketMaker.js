@@ -88,14 +88,22 @@ export function * predictClnPrices ({tokenAddress, initialClnReserve,
   const token = yield select(getCommunity, tokenAddress)
   const s1 = clnToken.totalSupply
   const s2 = token.totalSupply
-  // const r1 = clnReserves[0]
   const prices = []
-  for (let r1 of clnReservesInWei) {
-    // const {r1, r2, s1, s2} = getReservesAndSupplies(clnToken, tokenAddress, isBuy)
-    const EllipseMarketMakerContract = contract.getContract({abiName: 'EllipseMarketMaker', address: token.mmAddress})
-    const r2 = yield call(EllipseMarketMakerContract.methods.calcReserve(
-      r1, s1, s2).call)
-    const priceClnInCc = yield call(EllipseMarketMakerContract.methods.getPrice(r1, r2, s1, s2).call)
+  const EllipseMarketMakerContract = contract.getContract({abiName: 'EllipseMarketMaker', address: token.mmAddress})
+
+  const tokenReserveRequests = clnReservesInWei.map(r1 => call(EllipseMarketMakerContract.methods.calcReserve(
+    r1, s1, s2).call))
+
+  console.log(tokenReserveRequests)
+  const tokenReserves = yield all(tokenReserveRequests)
+
+  const pricesClnInCcRequests = tokenReserves.map((r2, key) => {
+    const r1 = clnReservesInWei[key]
+    return call(EllipseMarketMakerContract.methods.getPrice(r1, r2, s1, s2).call)
+  })
+  const pricesClnInCc = yield all(pricesClnInCcRequests)
+
+  for (let priceClnInCc of pricesClnInCc) {
     const priceCcInCln = reversePrice(priceClnInCc)
     const priceCcInUSD = priceCcInCln.multipliedBy(clnPrice)
     const price = {

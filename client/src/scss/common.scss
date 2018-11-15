@@ -546,6 +546,8 @@
 	padding: 6px 12px;
 	background: $color-step-field;
 	border: none;
+  border-image: none;
+  border-image-width: 0px;
 	&:hover {
 		cursor: pointer;
 		background-image: linear-gradient(to bottom, #5c5895, #39366e);
