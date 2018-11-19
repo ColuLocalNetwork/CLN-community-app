@@ -31,15 +31,15 @@ const renderModal = (modalComponent, props) =>
   </ErrorBoundary>
 
 const MODAL_COMPONENTS = {
-  [LOGIN_MODAL]: (props) => renderModal(LoginModal, props),
-  [SOON_MODAL]: (props) => renderModal(ComingSoonModal, props),
-  [EXCHANGE_MODAL]: (props) => renderModal(ExchangeModal, props),
-  [WRONG_NETWORK_MODAL]: (props) => renderModal(WrongNetworkModal, props),
-  [LOADING_MODAL]: (props) => renderModal(LoadingModal, props),
-  [PRICE_EXPLANATION_MODAL]: (props) => renderModal(PriceExplanationModal, props),
-  [METAMASK_ACCOUNT_MODAL]: (props) => renderModal(MetamaskModal, props),
-  [SIMPLE_EXCHANGE_MODAL]: (props) => renderModal(SimpleExchangeModal, props),
-  [ECONOMIC_CALCULATOR_MODAL]: (props) => renderModal(EconomicCalculatorModal, props)
+  [LOGIN_MODAL]: LoginModal,
+  [SOON_MODAL]: ComingSoonModal,
+  [EXCHANGE_MODAL]: ExchangeModal,
+  [WRONG_NETWORK_MODAL]: WrongNetworkModal,
+  [LOADING_MODAL]: LoadingModal,
+  [PRICE_EXPLANATION_MODAL]: PriceExplanationModal,
+  [METAMASK_ACCOUNT_MODAL]: MetamaskModal,
+  [SIMPLE_EXCHANGE_MODAL]: SimpleExchangeModal,
+  [ECONOMIC_CALCULATOR_MODAL]: EconomicCalculatorModal
 }
 
 const ModalContainer = (props) => {
@@ -47,8 +47,8 @@ const ModalContainer = (props) => {
     return null
   }
 
-  const SpecificModal = MODAL_COMPONENTS[props.modalType]
-  return SpecificModal({...props.modalProps, hideModal: props.hideModal})
+  const ModalType = MODAL_COMPONENTS[props.modalType]
+  return renderModal(ModalType, {...props.modalProps, hideModal: props.hideModal})
 }
 
 const mapStateToProps = state => {
