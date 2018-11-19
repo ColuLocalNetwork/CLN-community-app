@@ -2,6 +2,9 @@ import React, {Component} from 'react'
 import FontAwesome from 'react-fontawesome'
 import Community from 'components/Community'
 import BigNumber from 'bignumber.js'
+
+const canInsertCLN = () => false
+
 export default class SummaryStep extends Component {
   render () {
     return <div>
@@ -11,8 +14,11 @@ export default class SummaryStep extends Component {
           <Community token={{
             symbol: this.props.communitySymbol,
             name: this.props.communityName,
-            totalSupply: new BigNumber(this.props.totalSupply.toString()).multipliedBy(1e18)
-          }} usdPrice={0} />
+            totalSupply: new BigNumber(this.props.totalSupply.toString()).multipliedBy(1e18),
+            metadata: {
+              communityLogo: this.props.communityLogo
+            }
+          }} canInsertCLN={canInsertCLN} usdPrice={0} />
         </div>
       </div>,
       <div className='text-center wallet-container'>

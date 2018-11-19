@@ -138,7 +138,7 @@ class IssuanceWizard extends Component {
         return (
           <SummaryStep
             communityName={name}
-            communityLogo={this.state.communityLogo.icon}
+            communityLogo={this.state.communityLogo.name}
             totalSupply={this.state.totalSupply}
             communitySymbol={this.state.communitySymbol}
             showPopup={() => this.showMetamaskPopup()}
