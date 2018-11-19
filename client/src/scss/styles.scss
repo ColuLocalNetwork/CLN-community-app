@@ -2309,6 +2309,11 @@ input[type="checkbox" i] {
 		cursor: pointer;
 		background-image: linear-gradient(to bottom, #5c5895, #39366e);
 	}
+	&[disabled] {
+		&:hover {
+			background: #979797 !important;
+		}
+	}
 }
 
 .modal-dialog-div.metamask-popup {
@@ -2793,6 +2798,7 @@ input[type="checkbox" i] {
   .logo-img {
     width: 80px;
     height: 80px;
+		min-width: auto;
     border-radius: 50%;
     box-shadow: 0 0px 12px 0 rgba(0, 131, 255, 0.46);
     @media (max-width: $breakpoint-mobile) {
