@@ -5,7 +5,13 @@ import * as api from 'services/api'
 import * as actions from 'actions/metadata'
 import {DEFAULT_COMMUNITY_METADATA_LOGO} from 'constants/uiConstants'
 
-function * fetchMetadata ({protocol, hash, tokenAddress}) {
+function * fetchMetadata ({tokenURI, tokenAddress}) {
+  if (!tokenURI) {
+    throw new Error(`No tokenURI for token ${tokenAddress}`)
+  }
+
+  const [protocol, hash] = tokenURI.split('://')
+
   const {data} = yield apiCall(api.fetchMetadata, protocol, hash)
 
   if (data.metadata.image) {

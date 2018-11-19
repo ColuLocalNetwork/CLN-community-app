@@ -15,10 +15,7 @@ const entityPut = createEntityPut(actions.entityName)
 
 function * fetchCommunity ({tokenAddress}) {
   const token = yield select(state => state.tokens[tokenAddress])
-  if (token.tokenURI) {
-    const [protocol, hash] = token.tokenURI.split('://')
-    yield put(fetchMetadata(protocol, hash, tokenAddress))
-  }
+  yield put(fetchMetadata(token.tokenURI, tokenAddress))
 
   yield fork(fetchMarketMakerData, {tokenAddress, mmAddress: token.mmAddress})
 
