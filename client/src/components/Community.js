@@ -11,9 +11,6 @@ import identity from 'lodash/identity'
 const canInsertCLN = (props) => props.marketMaker.isOpenForPublic || props.account === props.token.owner
 
 export default class Community extends Component {
-  // canInsertCLN = () =>
-  //   this.props.marketMaker.isOpenForPublic || this.props.account === this.props.token.owner
-
   canInsertCLN = () => this.props.canInsertCLN(this.props)
 
   canOpenMarket = () => !this.props.marketMaker.isOpenForPublic && this.props.account === this.props.token.owner

@@ -25,3 +25,5 @@ export const mapSettings = {
   CENTER_ZOOM_MOBILE: 5.4,
   MAX_ZOOM_MOBILE: 12.2
 }
+
+export const DEFAULT_COMMUNITY_METADATA_LOGO = 'CoinIcon1.svg'
