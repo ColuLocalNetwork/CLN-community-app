@@ -1,6 +1,7 @@
 import {CREATE_CURRENCY} from 'actions/issuance'
 import {ISSUE_COMMUNITY} from 'actions/communities'
 import {REQUEST, PENDING, SUCCESS, FAILURE} from 'actions/constants'
+import { LOCATION_CHANGE } from 'react-router-redux'
 
 const initialState = {
   receipt: null,
@@ -20,6 +21,12 @@ export default (state = initialState, action) => {
       return {...state, ...action.response, transactionStatus: SUCCESS}
     case CREATE_CURRENCY.FAILURE:
       return {...state, ...action.response, transactionStatus: FAILURE}
+    case LOCATION_CHANGE:
+      if (action.payload.pathname === '/') {
+        return {...initialState}
+      } else {
+        return state
+      }
     default:
       return state
   }
