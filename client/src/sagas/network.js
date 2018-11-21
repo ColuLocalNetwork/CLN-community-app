@@ -9,9 +9,9 @@ import { WRONG_NETWORK_MODAL } from 'constants/uiConstants'
 
 function * getAccountAddress () {
   if (window.ethereum && window.ethereum.enable) {
-    return (yield window.ethereum.enable())[0]
+    return web3.utils.toChecksumAddress((yield window.ethereum.enable())[0])
   } else {
-    return web3.eth.defaultAccount
+    return web3.utils.toChecksumAddress(web3.eth.defaultAccount)
   }
 }
 
@@ -24,7 +24,6 @@ function * getNetworkType () {
         isMetaMask: web3.currentProvider.isMetaMask || false
       }})
     const accountAddress = yield getAccountAddress()
-
     if (accountAddress) {
       const isChanged = yield call(checkAccountChanged, {selectedAddress: accountAddress})
       if (!isChanged) {
@@ -59,6 +58,7 @@ function * fetchGasPrices () {
 function * checkAccountChanged ({selectedAddress}) {
   const accountAddress = yield select(state => state.network.accountAddress)
   const checksummedAddress = selectedAddress && web3.utils.toChecksumAddress(selectedAddress)
+
   if (accountAddress !== checksummedAddress) {
     yield put({
       type: checksummedAddress ? actions.CHECK_ACCOUNT_CHANGED.SUCCESS : actions.ACCOUNT_LOGGED_OUT,

@@ -7,7 +7,7 @@ import {tryTakeEvery} from './utils'
 import * as actions from 'actions/subscriptions'
 import {CHECK_ACCOUNT_CHANGED} from 'actions/network'
 import {BALANCE_OF} from 'actions/accounts'
-import {fetchMarketMakerData} from 'actions/marketMaker'
+import {fetchMarketMakerData, CHANGE} from 'actions/marketMaker'
 import {web3Socket, websocketProvider} from 'services/web3'
 import {getTokenAddresses} from 'selectors/network'
 import {TRANSFER_EVENT, CHANGE_EVENT} from 'constants/events'
@@ -17,11 +17,15 @@ let accountChannels = []
 
 function createSubscriptionChannel (subscription) {
   return eventChannel(emit => {
-    const dataHandler = emit
+    debugger
+    const dataHandler = () => {
+      debugger
+    }
 
     subscription.on('data', dataHandler)
 
     subscription.on('error', (error) => {
+      debugger
       ReactGA.event({
         category: 'Websocket',
         action: 'Error',
@@ -41,15 +45,20 @@ function createSubscriptionChannel (subscription) {
 }
 
 export function * subscribeToTransfer ({tokenAddress, accountAddress}) {
+  debugger
   const receiveTokenSubscription = web3Socket.eth.subscribe('logs', {
     address: tokenAddress,
-    topics: [TRANSFER_EVENT, web3Utils.padLeft(accountAddress.toLowerCase(), 64)]
-  }, identity)
+    topics: [TRANSFER_EVENT]
+  }, () => {
+    debugger
+  })
 
   const sendTokenSubscription = web3Socket.eth.subscribe('logs', {
     address: tokenAddress,
-    topics: [TRANSFER_EVENT, null, web3Utils.padLeft(accountAddress.toLowerCase(), 64)]
-  }, identity)
+    topics: [TRANSFER_EVENT]
+  }, () => {
+    debugger
+  })
 
   const receiveTokenChannel = yield call(createSubscriptionChannel, receiveTokenSubscription)
   const sendTokenChannel = yield call(createSubscriptionChannel, sendTokenSubscription)
@@ -79,7 +88,7 @@ export function * subscribeToChange ({tokenAddress, marketMakerAddress}) {
   const subscription = web3Socket.eth.subscribe('logs', {
     address: marketMakerAddress,
     topics: [CHANGE_EVENT]
-  }, identity)
+  }, console.log)
 
   const subscriptionChannel = yield call(createSubscriptionChannel, subscription)
 
@@ -89,6 +98,7 @@ export function * subscribeToChange ({tokenAddress, marketMakerAddress}) {
 
   while (true) {
     const payload = yield take(subscriptionChannel)
+    debugger
     yield put(fetchMarketMakerData(tokenAddress, marketMakerAddress, payload.blockNumber))
   }
 }
@@ -105,6 +115,7 @@ export function * watchAccountChanged ({response}) {
   clearAccountChannels()
 
   const addresses = yield select(getTokenAddresses)
+
   for (let tokenAddress of addresses) {
     yield put(actions.subscribeToTransfer(tokenAddress, accountAddress))
   }
