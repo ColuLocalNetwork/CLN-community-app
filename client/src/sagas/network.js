@@ -3,7 +3,7 @@ import request from 'superagent'
 import web3 from 'services/web3'
 import {isNetworkSupported} from 'utils/network'
 import * as actions from 'actions/network'
-import {updateBalances} from 'actions/accounts'
+import {balanceOfCln} from 'actions/accounts'
 import {loadModal} from 'actions/ui'
 import { WRONG_NETWORK_MODAL } from 'constants/uiConstants'
 
@@ -27,7 +27,7 @@ function * getNetworkType () {
     if (accountAddress) {
       const isChanged = yield call(checkAccountChanged, {selectedAddress: accountAddress})
       if (!isChanged) {
-        yield put(updateBalances(accountAddress))
+        yield put(balanceOfCln(accountAddress))
       }
     }
 

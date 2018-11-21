@@ -25,7 +25,6 @@ class SimpleExchangeModal extends Component {
 
   getTokenAmount = () => {
     if (this.props.quotePair) {
-      debugger
       return formatWei(this.props.quotePair.outAmount)
     }
     return ''

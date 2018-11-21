@@ -4,6 +4,7 @@ import { contract } from 'osseus-wallet'
 
 import * as actions from 'actions/marketMaker'
 import {fetchGasPrices} from 'actions/network'
+import {balanceOfCln} from 'actions/accounts'
 import {getClnToken, getCommunity} from 'selectors/communities'
 import {tryTakeEvery, tryTakeLatestWithDebounce} from './utils'
 import {getAccountAddress} from 'selectors/accounts'
@@ -418,7 +419,8 @@ function * openMarket ({tokenAddress}) {
 
 function * handleSuccessfulChange ({tokenAddress, accountAddress}) {
   const token = yield select(getCommunity, tokenAddress)
-  yield put({type: actions.FETCH_MARKET_MAKER_DATA.REQUEST, tokenAddress, mmAddress: token.mmAddress})
+  yield put(actions.fetchMarketMakerData(tokenAddress, token.mmAddress))
+  yield put(balanceOfCln(accountAddress))
 }
 
 export default function * marketMakerSaga () {
