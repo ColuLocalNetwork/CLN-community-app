@@ -9,7 +9,7 @@ import { BigNumber } from 'bignumber.js'
 import identity from 'lodash/identity'
 
 const canInsertCLN = (props) => props.account &&
-  (props.marketMaker.isOpenForPublic && props.account === props.token.owner)
+  (props.marketMaker.isOpenForPublic || props.account === props.token.owner)
 
 export default class Community extends Component {
   canInsertCLN = () => this.props.canInsertCLN(this.props)
