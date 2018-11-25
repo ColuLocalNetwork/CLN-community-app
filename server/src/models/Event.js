@@ -9,6 +9,9 @@ module.exports = (mongoose) => {
     logIndex: {type: Number, required: [true, "can't be blank"]}
   }, {timestamps: true})
 
+  EventSchema.index({transactionHash: 1, logIndex: 1}, { unique: true })
+  EventSchema.index({eventName: 1, blockNumber: 1})
+
   EventSchema.set('toJSON', {
     versionKey: false
   })
@@ -51,8 +54,8 @@ module.exports = (mongoose) => {
   event.getLastEvent = (eventName) => {
     return new Promise((resolve, reject) => {
       Event.findOne({eventName}).sort({blockNumber: -1}).exec((err, doc) => {
-        console.log(err)
         if (err) {
+          console.log(err)
           return reject(err)
         }
         resolve(doc)

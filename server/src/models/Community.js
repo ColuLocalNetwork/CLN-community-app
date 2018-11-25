@@ -23,6 +23,7 @@ module.exports = (mongoose) => {
   CommunitySchema.index({ccAddress: 1}, {unique: true})
   CommunitySchema.index({owner: 1})
   CommunitySchema.index({blockNumber: -1})
+  CommunitySchema.index({openMarket: -1})
 
   CommunitySchema.set('toJSON', {
     versionKey: false
@@ -53,9 +54,9 @@ module.exports = (mongoose) => {
     return community.getModel().updateOne({ccAddress}, data, {upsert: true})
   }
 
-  community.upsertBymmAddress = (data) => {
+  community.updateBymmAddress = (data) => {
     const {mmAddress} = data
-    return community.getModel().updateOne({mmAddress}, data, {upsert: true})
+    return community.getModel().updateOne({mmAddress}, data)
   }
 
   community.getById = (id) => {

@@ -29,11 +29,12 @@ const eventsHandlers = {
 
 const handleEvent = function (eventName, event) {
   if (eventsHandlers.hasOwnProperty(eventName)) {
-    eventUtils.addNewEvent({
-      eventName,
-      ...event
+    return eventsHandlers[eventName](event).then(() => {
+      eventUtils.addNewEvent({
+        eventName,
+        ...event
+      })
     })
-    return eventsHandlers[eventName](event)
   }
 }
 
