@@ -1,9 +1,9 @@
 const router = require('express').Router()
-const processReceipt = require('@utils/events/process').processReceipt
+const handleReceipt = require('@utils/events/handlers').handleReceipt
 
 router.post('/', async (req, res, next) => {
   const { receipt } = req.body
-  await processReceipt(receipt)
+  await handleReceipt(receipt)
   return res.json({})
 })
 

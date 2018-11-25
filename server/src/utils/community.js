@@ -65,6 +65,7 @@ utils.upsertCommunity = async (data) => {
 }
 
 utils.openMarket = async (mmAddress) => {
+  console.log(mmAddress)
   return community.upsertBymmAddress({mmAddress, openMarket: true})
 }
 

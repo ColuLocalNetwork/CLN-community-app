@@ -1,7 +1,7 @@
 const communityUtils = require('../community')
 const eventUtils = require('../event')
 
-const processTokenCreatedEvent = async (event) => {
+const handleTokenCreatedEvent = async (event) => {
   const blockNumber = event.blockNumber
   console.log(`recieved TokenCreated event at ${blockNumber} blockNumber`)
   const eventArgs = event.returnValues
@@ -13,7 +13,7 @@ const processTokenCreatedEvent = async (event) => {
   return communityUtils.upsertCommunity({ccAddress, owner, blockNumber, ...communityData})
 }
 
-const processMarketOpenEvent = async (event) => {
+const handleMarketOpenEvent = async (event) => {
   const blockNumber = event.blockNumber
   console.log(`recieved MarketOpen event at ${blockNumber} blockNumber`)
   const eventArgs = event.returnValues
@@ -23,31 +23,30 @@ const processMarketOpenEvent = async (event) => {
 }
 
 const eventsHandlers = {
-  TokenCreated: processTokenCreatedEvent,
-  MarketOpen: processMarketOpenEvent
+  TokenCreated: handleTokenCreatedEvent,
+  MarketOpen: handleMarketOpenEvent
 }
 
-const processEvent = function (eventName, event) {
+const handleEvent = function (eventName, event) {
   if (eventsHandlers.hasOwnProperty(eventName)) {
     eventUtils.addNewEvent({
       eventName,
-      blockNumber: event.blockNumber,
-      address: event.address
+      ...event
     })
     return eventsHandlers[eventName](event)
   }
 }
 
-const processReceipt = async (receipt) => {
+const handleReceipt = async (receipt) => {
   const events = Object.entries(receipt.events)
   let promisses = []
   for (let [eventName, event] of events) {
     if (eventsHandlers.hasOwnProperty(eventName)) {
       if (Array.isArray(event)) {
-        const eventPromisses = event.map((singleEvent) => processEvent(eventName, singleEvent))
+        const eventPromisses = event.map((singleEvent) => handleEvent(eventName, singleEvent))
         promisses = [...promisses, ...eventPromisses]
       } else {
-        promisses.push(processEvent(eventName, event))
+        promisses.push(handleEvent(eventName, event))
       }
     }
   }
@@ -55,8 +54,6 @@ const processReceipt = async (receipt) => {
 }
 
 module.exports = {
-  processTokenCreatedEvent,
-  processMarketOpenEvent,
-  processEvent,
-  processReceipt
+  handleEvent,
+  handleReceipt
 }

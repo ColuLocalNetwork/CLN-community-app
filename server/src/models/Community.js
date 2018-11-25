@@ -1,4 +1,3 @@
-const timestamps = require('mongoose-time')
 
 module.exports = (mongoose) => {
   mongoose = mongoose || require('mongoose')
@@ -19,7 +18,7 @@ module.exports = (mongoose) => {
     verified: {type: Boolean, default: false},
     blockNumber: {type: Number},
     openMarket: {type: Boolean, default: false}
-  }).plugin(timestamps())
+  }, {timestamps: true})
 
   CommunitySchema.index({ccAddress: 1}, {unique: true})
   CommunitySchema.index({owner: 1})

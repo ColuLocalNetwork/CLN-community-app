@@ -1,15 +1,23 @@
 const config = require('config')
 const Agenda = require('agenda')
-const processPastTokenCreatedEvents = require('@utils/events/web3').processPastTokenCreatedEvents
-// const getPastMarketOpenEvents = require('@utils/events/web3').getPastMarketOpenEvents
+const processPastTokenCreatedEvents = require('@utils/events/tasks').processPastTokenCreatedEvents
+const processPastMarketOpenEvents = require('@utils/events/tasks').processPastMarketOpenEvents
 
 const agenda = new Agenda({db: {address: config.get('mongo.uri')}})
 
-agenda.define('processPastTokenCreatedEvents', async (job, done) => {
+agenda.define('processPastEvents', async (job, done) => {
+  console.log('leonhi')
   await processPastTokenCreatedEvents()
+  await processPastMarketOpenEvents()
+  console.log('leonbye')
+
   done()
 })
-
+//
+// agenda.define('processPastMarketOpenEvents', async (job, done) => {
+//   await processPastMarketOpenEvents()
+//   done()
+// })
 // agenda.define('getPastMarketOpenEvents', async (job, done) => {
 //   await getPastMarketOpenEvents()
 //   done()
@@ -25,8 +33,11 @@ async function start () {
 
   await agenda.start()
 
-  await agenda.now('processPastTokenCreatedEvents')
-  await agenda.every('10 minutes', 'processPastTokenCreatedEvents')
+  await agenda.now('processPastEvents')
+  await agenda.every('10 minutes', 'processPastEvents')
+
+  // await agenda.now('processPastMarketOpenEvents')
+  // await agenda.every('10 minutes', 'processPastMarketOpenEvents')
 
   console.log('Agenda job scheduling is successfully defined')
 }
