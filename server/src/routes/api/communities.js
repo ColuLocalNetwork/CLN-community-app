@@ -1,7 +1,8 @@
 const router = require('express').Router()
 const mongoose = require('mongoose')
 const Community = mongoose.model('Community')
-const processTokenCreatedEvent = require('@utils/events/db').processTokenCreatedEvent
+const processTokenCreatedEvent = require('@utils/events/process').processTokenCreatedEvent
+const processOpenMarketEvent = require('@utils/events/process').processOpenMarketEvent
 const paginate = require('express-paginate')
 
 router.get('/', async (req, res, next) => {
@@ -36,8 +37,14 @@ router.get('/:address', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  const { receipt } = req.body.community
+  const { receipt } = req.body
   await processTokenCreatedEvent(receipt.events.TokenCreated)
+  return res.json({})
+})
+
+router.post('/openMarket', async (req, res, next) => {
+  const { receipt } = req.body
+  await processOpenMarketEvent(receipt.events.OpenMarket)
   return res.json({})
 })
 
