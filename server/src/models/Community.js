@@ -17,7 +17,8 @@ module.exports = (mongoose) => {
     factoryType: {type: String, enum: ['CurrencyFactory', 'IssuanceFactory'], default: 'CurrencyFactory'},
     factoryVersion: {type: Number, default: 0},
     verified: {type: Boolean, default: false},
-    blockNumber: {type: Number}
+    blockNumber: {type: Number},
+    openMarket: {type: Boolean, default: false}
   }).plugin(timestamps())
 
   CommunitySchema.index({ccAddress: 1}, {unique: true})
@@ -51,6 +52,11 @@ module.exports = (mongoose) => {
   community.upsertByccAddress = (data) => {
     const {ccAddress} = data
     return community.getModel().updateOne({ccAddress}, data, {upsert: true})
+  }
+
+  community.upsertBymmAddress = (data) => {
+    const {mmAddress} = data
+    return community.getModel().updateOne({mmAddress}, data, {upsert: true})
   }
 
   community.getById = (id) => {
