@@ -4,7 +4,9 @@ module.exports = (mongoose) => {
   const EventSchema = new mongoose.Schema({
     eventName: {type: String, required: [true, "can't be blank"]},
     blockNumber: {type: Number, required: [true, "can't be blank"]},
-    address: {type: String}
+    address: {type: String, required: [true, "can't be blank"]},
+    transactionHash: {type: String, required: [true, "can't be blank"]},
+    logIndex: {type: Number, required: [true, "can't be blank"]}
   }, {timestamps: true})
 
   EventSchema.set('toJSON', {
@@ -49,11 +51,8 @@ module.exports = (mongoose) => {
   event.getLastEvent = (eventName) => {
     return new Promise((resolve, reject) => {
       Event.findOne({eventName}).sort({blockNumber: -1}).exec((err, doc) => {
+        console.log(err)
         if (err) {
-          return reject(err)
-        }
-        if (!doc) {
-          err = `Event with not found for event name ${eventName}`
           return reject(err)
         }
         resolve(doc)
