@@ -65,12 +65,10 @@ utils.upsertCommunity = async (data) => {
 }
 
 utils.openMarket = async (mmAddress) => {
-  console.log(mmAddress)
-  return community.upsertBymmAddress({mmAddress, openMarket: true})
+  return community.updateBymmAddress({mmAddress, openMarket: true})
 }
 
 utils.getLastBlockNumber = async () => {
-  console.log('getLastBlockNumber')
   const communityObj = await community.getModel().find().sort({ blockNumber: -1 }).limit(1)
   return communityObj.length ? communityObj[0].blockNumber + 1 : 0
 }
