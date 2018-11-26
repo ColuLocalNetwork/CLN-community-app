@@ -23,7 +23,7 @@ module.exports = (mongoose) => {
   CommunitySchema.index({ccAddress: 1}, {unique: true})
   CommunitySchema.index({owner: 1})
   CommunitySchema.index({blockNumber: -1})
-  CommunitySchema.index({openMarket: -1})
+  CommunitySchema.index({openMarket: -1, blockNumber: -1})
 
   CommunitySchema.set('toJSON', {
     versionKey: false
