@@ -5,7 +5,7 @@ const paginate = require('express-paginate')
 
 router.get('/', async (req, res, next) => {
   const [ results, itemCount ] = await Promise.all([
-    Community.find({}).sort({openMarket: -1}).limit(req.query.limit).skip(req.skip),
+    Community.find({}).sort({openMarket: -1, blockNumber: -1}).limit(req.query.limit).skip(req.skip),
     Community.count({})
   ])
 
