@@ -38,7 +38,7 @@ class SimpleExchangeModal extends Component {
   isExchangeDisabled = () => !this.state.clnAmount || this.props.transactionHash
 
   getStatus = () => this.props.receipt ? 'SUCCESS'
-    : (this.props.transactionHash ? 'PENDING' : 'EXCHANGE')
+    : (this.props.transactionHash ? 'PENDING' : 'ADD CLN')
 
   render = () => (
     <Modal className='exchange-modal' onClose={this.props.hideModal}>
