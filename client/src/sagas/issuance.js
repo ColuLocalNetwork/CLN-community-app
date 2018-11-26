@@ -3,7 +3,7 @@ import { contract } from 'osseus-wallet'
 import {getAddresses} from 'selectors/network'
 
 import * as actions from 'actions/issuance'
-import {transactionPending, transactionFailed, transactionSucceed} from 'actions/utils'
+import {transactionPending, transactionFailed, transactionSucceeded} from 'actions/utils'
 import {tryTakeEvery} from './utils'
 import {getAccountAddress} from 'selectors/accounts'
 
@@ -42,7 +42,7 @@ export function * createCurrency ({name, symbol, decimals, totalSupply, tokenURI
     return receipt
   }
 
-  yield put(transactionSucceed(actions.CREATE_CURRENCY, receipt))
+  yield put(transactionSucceeded(actions.CREATE_CURRENCY, receipt))
 
   return receipt
 }
