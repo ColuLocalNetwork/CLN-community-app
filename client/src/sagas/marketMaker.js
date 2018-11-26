@@ -231,7 +231,7 @@ function * change ({tokenAddress, amount, minReturn, isBuy, options}) {
     return receipt
   }
 
-  yield put(transactionSucceeded(actions.CHANGE, receipt, {tokenAddress, accountAddress}))
+  yield put({...transactionSucceeded(actions.CHANGE, receipt), tokenAddress, accountAddress})
 
   return receipt
 }
@@ -387,12 +387,12 @@ function * openMarket ({tokenAddress}) {
     return receipt
   }
 
-  yield put(transactionSucceeded(actions.OPEN_MARKET, receipt, {tokenAddress, accountAddress}))
+  yield put({...transactionSucceeded(actions.OPEN_MARKET, receipt), tokenAddress})
 
   return receipt
 }
 
-function * handleSuccessfulChange ({response: {tokenAddress, accountAddress}}) {
+function * handleSuccessfulChange ({tokenAddress, accountAddress}) {
   const token = yield select(getCommunity, tokenAddress)
   yield put(actions.fetchMarketMakerData(tokenAddress, token.mmAddress))
   yield put(balanceOfCln(accountAddress))

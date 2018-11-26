@@ -42,7 +42,6 @@ export const transactionFailed = (action, receipt, response = {}) => ({
 
 export const transactionSucceeded = (action, receipt, response = {}) => ({
   type: action.SUCCESS,
-  tokenAddress: receipt.address,
   response: {
     ...response,
     transactionStatus: SUCCESS,
