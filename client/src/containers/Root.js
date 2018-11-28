@@ -9,6 +9,7 @@ import { AnimatedRoute } from 'react-router-transition'
 import App from 'containers/App'
 import IssuanceWizard from 'components/issuance/IssuanceWizard'
 import ContactForm from 'components/ContactForm'
+import Dashboard from 'components/Dashboard'
 import withTracker from 'containers/withTracker'
 
 const history = createHistory()
@@ -38,6 +39,7 @@ function mapStylesContact (styles) {
 export default class Root extends Component {
   render () {
     const { store } = this.props
+    console.log(this.props)
     return (
       <Provider store={store}>
         <ConnectedRouter history={history}>
@@ -55,6 +57,12 @@ export default class Root extends Component {
               <Route
                 path='/view/issuance'
                 component={withTracker(IssuanceWizard)}
+                mapStyles={mapStylesContact}
+                {...contactFormTransition}
+              />
+              <Route
+                path='/view/dashboard/:address'
+                component={withTracker(Dashboard)}
                 mapStyles={mapStylesContact}
                 {...contactFormTransition}
               />

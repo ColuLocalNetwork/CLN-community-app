@@ -2,7 +2,7 @@ import { all, put, call, select, fork } from 'redux-saga/effects'
 
 import {createEntityPut, tryTakeEvery, apiCall} from './utils'
 import * as actions from 'actions/communities'
-import {addCommunity, fetchCommunities as fetchCommunitiesApi,
+import {addCommunity, fetchCommunityDashboard, fetchCommunities as fetchCommunitiesApi,
   fetchCommunitiesByOwner as fetchCommunitiesByOwnerApi} from 'services/api'
 import {fetchMarketMakerData} from 'sagas/marketMaker'
 import {fetchMetadata} from 'actions/metadata'
@@ -15,6 +15,20 @@ import keyBy from 'lodash/keyBy'
 const entityPut = createEntityPut(actions.entityName)
 
 function * fetchCommunity ({tokenAddress}) {
+  const response = yield apiCall(fetchCommunityDashboard, tokenAddress)
+  const community = response.data
+
+  yield put(fetchMetadata(community.tokenURI, tokenAddress))
+
+  yield fork(fetchMarketMakerData, {tokenAddress, mmAddress: community.mmAddress})
+
+  yield put({
+    type: actions.FETCH_COMMUNITY_DASHBOARD.SUCCESS,
+    response: {community}
+  })
+}
+
+function * fetchCommunityAdditionalData ({tokenAddress}) {
   const token = yield select(state => state.tokens[tokenAddress])
   yield put(fetchMetadata(token.tokenURI, tokenAddress))
 
@@ -130,7 +144,8 @@ function * issueCommunity ({communityMetadata, currencyData}) {
 export default function * communitiesSaga () {
   yield all([
     tryTakeEvery(actions.FETCH_CLN_CONTRACT, fetchClnContract),
-    tryTakeEvery(actions.FETCH_COMMUNITY, fetchCommunity),
+    tryTakeEvery(actions.FETCH_COMMUNITY_DASHBOARD, fetchCommunity),
+    tryTakeEvery(actions.FETCH_COMMUNITY, fetchCommunityAdditionalData),
     tryTakeEvery(actions.FETCH_COMMUNITIES, fetchCommunities),
     tryTakeEvery(actions.FETCH_COMMUNITIES_BY_OWNER, fetchCommunitiesByOwner),
     tryTakeEvery(actions.ISSUE_COMMUNITY, issueCommunity, 1)

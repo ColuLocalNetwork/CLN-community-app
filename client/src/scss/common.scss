@@ -548,8 +548,12 @@
 	border: none;
   border-image: none;
   border-image-width: 0px;
+	outline: none;
 	&:hover {
 		cursor: pointer;
 		background-image: linear-gradient(to bottom, #5c5895, #39366e);
+	}
+	&.big-adding-btn {
+		padding: 15px 25px;
 	}
 }

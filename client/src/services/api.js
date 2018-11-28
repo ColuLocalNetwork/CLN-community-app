@@ -14,6 +14,9 @@ export const createMetadata = (metadata, apiRoot) =>
 export const addCommunity = (community, apiRoot) =>
   request.post(`${apiRoot}/communities`).send({community}).then(response => response.body)
 
+export const fetchCommunityDashboard = (address, apiRoot) =>
+  request.get(`${apiRoot}/communities/${address}`).then(response => response.body)
+
 export const fetchCommunities = (page, apiRoot) =>
   request.get(`${apiRoot}/communities?page=${page}`).then(response => response.body)
 
