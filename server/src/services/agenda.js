@@ -29,13 +29,14 @@ async function start () {
 
   await agenda.start()
 
-  await agenda.now('processPastTransferEvents')
+  // run the task every day in 09:00 UTC (11:00 Israel)
+  await agenda.every('00 9 * * *', 'processPastTransferEvents')
 
-  // await agenda.now('processPastTokenCreatedEvents')
-  // await agenda.every('10 minutes', 'processPastTokenCreatedEvents')
-  //
-  // await agenda.schedule('in 1 minute', 'processPastMarketOpenEvents')
-  // await agenda.every('10 minutes', 'processPastMarketOpenEvents', null, {skipImmediate: true})
+  await agenda.now('processPastTokenCreatedEvents')
+  await agenda.every('10 minutes', 'processPastTokenCreatedEvents')
+
+  await agenda.schedule('in 1 minute', 'processPastMarketOpenEvents')
+  await agenda.every('10 minutes', 'processPastMarketOpenEvents', null, {skipImmediate: true})
 
   console.log('Agenda job scheduling is successfully defined')
 }
