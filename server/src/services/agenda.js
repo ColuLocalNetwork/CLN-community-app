@@ -1,17 +1,21 @@
 const config = require('config')
 const Agenda = require('agenda')
-const processPastTokenCreatedEvents = require('@utils/events/tasks').processPastTokenCreatedEvents
-const processPastMarketOpenEvents = require('@utils/events/tasks').processPastMarketOpenEvents
+const tasks = require('@utils/events/tasks')
 
 const agenda = new Agenda({db: {address: config.get('mongo.uri')}})
 
 agenda.define('processPastTokenCreatedEvents', async (job, done) => {
-  await processPastTokenCreatedEvents()
+  await tasks.processPastTokenCreatedEvents()
   done()
 })
 
 agenda.define('processPastMarketOpenEvents', async (job, done) => {
-  await processPastMarketOpenEvents()
+  await tasks.processPastMarketOpenEvents()
+  done()
+})
+
+agenda.define('processPastTransferEvents', async (job, done) => {
+  await tasks.processPastTransferEvents()
   done()
 })
 
@@ -25,11 +29,13 @@ async function start () {
 
   await agenda.start()
 
-  await agenda.now('processPastTokenCreatedEvents')
-  await agenda.every('10 minutes', 'processPastTokenCreatedEvents')
+  await agenda.now('processPastTransferEvents')
 
-  await agenda.schedule('in 1 minute', 'processPastMarketOpenEvents')
-  await agenda.every('10 minutes', 'processPastMarketOpenEvents', null, {skipImmediate: true})
+  // await agenda.now('processPastTokenCreatedEvents')
+  // await agenda.every('10 minutes', 'processPastTokenCreatedEvents')
+  //
+  // await agenda.schedule('in 1 minute', 'processPastMarketOpenEvents')
+  // await agenda.every('10 minutes', 'processPastMarketOpenEvents', null, {skipImmediate: true})
 
   console.log('Agenda job scheduling is successfully defined')
 }
