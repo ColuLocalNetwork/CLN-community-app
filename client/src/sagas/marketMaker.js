@@ -10,6 +10,7 @@ import {tryTakeEvery, tryTakeLatestWithDebounce, apiCall} from './utils'
 import {getAccountAddress} from 'selectors/accounts'
 import {predictClnReserves} from 'utils/calculator'
 import {getCurrencyFactoryAddress} from 'selectors/network'
+import {transactionPending, transactionFailed, transactionSucceeded} from 'actions/utils'
 import {processReceipt} from 'services/api'
 
 const reversePrice = (price) => new BigNumber(1e18).div(price)
@@ -387,15 +388,10 @@ function * openMarket ({tokenAddress}) {
     return receipt
   }
 
+  yield put({...transactionSucceeded(actions.OPEN_MARKET, receipt), tokenAddress})
+
   yield apiCall(processReceipt, receipt)
 
-  yield put({type: actions.OPEN_MARKET.SUCCESS,
-    tokenAddress: receipt.address,
-    accountAddress,
-    response: {
-      receipt
-    }
-  })
   return receipt
 }
 

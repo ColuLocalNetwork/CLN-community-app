@@ -2,10 +2,8 @@ const pickBy = require('lodash').pickBy
 const mongoose = require('mongoose')
 
 const manipulate = (data) => {
+  // delete double entries in returnValues
   const returnValues = pickBy(data.returnValues, (value, key) => isNaN(key))
-  // if (returnValues.value) {
-  //   returnValues.value = new mongoose.SchemaTypes.Decimal128(returnValues.value)
-  // }
   return {...data, returnValues}
 }
 
