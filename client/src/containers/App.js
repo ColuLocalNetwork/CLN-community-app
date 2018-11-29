@@ -13,7 +13,7 @@ import {fetchTokenQuote} from 'actions/fiat'
 import {onWeb3Ready} from 'services/web3'
 import {loadModal} from 'actions/ui'
 import {getAddresses} from 'selectors/network'
-import {isNetworkSupported, isNetworkDesired} from 'utils/network'
+import {isNetworkSupported} from 'utils/network'
 import ReactGA from 'services/ga'
 import 'scss/styles.scss'
 
@@ -28,7 +28,7 @@ class App extends Component {
         isNetworkSupported(nextProps.networkType)) {
       this.props.fetchClnContract(nextProps.addresses.ColuLocalNetwork)
     }
-    if (nextProps.networkType !== this.props.networkType && !isNetworkDesired(nextProps.networkType)) {
+    if (nextProps.networkType !== this.props.networkType && !isNetworkSupported(nextProps.networkType)) {
       this.props.loadModal(WRONG_NETWORK_MODAL)
     }
   }
@@ -61,10 +61,6 @@ class App extends Component {
     })
   }
   render () {
-    if (!isNetworkSupported(this.props.networkType)) {
-      return null
-    }
-
     let currentRoute = this.props && this.props && this.props.location && this.props.location.pathname
     let mainContainerClass = classNames({
       'main-container': true,
