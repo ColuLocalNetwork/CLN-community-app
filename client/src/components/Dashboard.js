@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ClnIcon from 'images/cln.png'
 import Calculator from 'images/calculator-Icon.svg'
 import { connect } from 'react-redux'
-import {fetchCommunity} from 'actions/communities'
+import {fetchDashboardStatistics} from 'actions/communities'
 import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
 import FontAwesome from 'react-fontawesome'
@@ -13,17 +13,19 @@ import {SIMPLE_EXCHANGE_MODAL} from 'constants/uiConstants'
 
 class Dashboard extends Component {
   componentDidMount () {
-    this.props.fetchCommunity(this.props.match.params.address)
+    this.props.fetchDashboardStatistics(this.props.match.params.address)
   }
 
   handleAddCln = (token, marketMaker) => {
-    this.props.loadModal(SIMPLE_EXCHANGE_MODAL, {token, marketMaker})
+    console.log('----handleAddCln------')
+    console.log(token)
+    this.props.loadModal(SIMPLE_EXCHANGE_MODAL, {tokenAddress: this.props.match.params.address})
   }
 
   render () {
     console.log('----dashboard------')
     console.log(this.props)
-    const token = {...this.props.dashboard, ...this.props.tokens[this.props.match.params.address]}
+    const token = {...this.props.dashboard, ...this.props.tokens[this.props.match.params.address], address: this.props.match.params.address}
     const marketMaker = {
       isOpenForPublic: this.props.marketMaker && this.props.marketMaker[this.props.match.params.address] && this.props.marketMaker[this.props.match.params.address].isOpenForPublic ? this.props.marketMaker[this.props.match.params.address].isOpenForPublic : false,
       currentPrice: this.props.marketMaker && this.props.marketMaker[this.props.match.params.address] && this.props.marketMaker[this.props.match.params.address].currentPrice ? this.props.marketMaker[this.props.match.params.address].currentPrice : new BigNumber(0),
@@ -34,6 +36,8 @@ class Dashboard extends Component {
       'coin-status-active': marketMaker.isOpenForPublic,
       'coin-status-close': !marketMaker.isOpenForPublic
     })
+    console.log('----token------')
+    console.log(token)
     return (
       <div className='dashboard-content'>
         <div className='dashboard-header'>
@@ -157,7 +161,7 @@ class Dashboard extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   tokens: state.tokens,
   fiat: state.fiat,
   marketMaker: state.marketMaker,
@@ -165,7 +169,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-  fetchCommunity,
+  fetchDashboardStatistics,
   loadModal
 }
 

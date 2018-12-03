@@ -9,10 +9,27 @@ import CommunityLogo from 'components/elements/CommunityLogo'
 import TextInput from 'components/elements/TextInput'
 import {connect} from 'react-redux'
 import {buyQuote, buyCc} from 'actions/marketMaker'
+import {PENDING, SUCCESS} from 'actions/constants'
+import Loader from 'components/Loader'
 
 class SimpleExchangeModal extends Component {
   state = {
     clnAmount: 0
+  }
+
+  renderTransactionStatus = (transactionStatus) => {
+    switch (transactionStatus) {
+      case PENDING:
+        return <Loader color='#3a3269' className='loader' />
+      case SUCCESS:
+        return (<button className='btn-exchange' disabled>
+          SUCCESS
+        </button>)
+      default:
+        return (<button className='btn-exchange' onClick={this.handleExchange} disabled={this.isExchangeDisabled()}>
+          ADD CLN
+        </button>)
+    }
   }
 
   handleClnChange = (event) => {
@@ -38,50 +55,51 @@ class SimpleExchangeModal extends Component {
   isExchangeDisabled = () => !this.state.clnAmount || this.props.transactionHash
 
   getStatus = () => this.props.receipt ? 'SUCCESS'
-    : (this.props.transactionHash ? 'PENDING' : 'EXCHANGE')
+    : (this.props.transactionHash ? 'PENDING' : 'ADD CLN')
 
-  render = () => (
-    <Modal className='exchange-modal' onClose={this.props.hideModal}>
-      <div className='exchange-modal-up'>
-        <div>
-          <CommunityLogo token={this.props.token} />
-        </div>
-        <div className='token-info'>
+  render () {
+    console.log(this.props)
+    return (
+      <Modal className='exchange-modal' onClose={this.props.hideModal}>
+        <div className='exchange-modal-up'>
           <div>
-            <span className='label'>Total Supply</span>
-            <span className='positive-number'>{formatWei(this.props.token.totalSupply, 0)}</span></div>
-          <div>
-            <span className='label'>CLN reserve</span>
-            <span className='positive-number'>{formatWei(this.props.marketMaker.clnReserve, 0)}</span></div>
-        </div>
-      </div>
-      <div className='exchange-modal-down'>
-        <div className='exchange-modal-middle'>
-          <div className='exchange-modal-amounts'>
-            <TextInput id='cln'
-              className='exchange-modal-cln'
-              type='number'
-              label='CLN'
-              placeholder='CLN amount'
-              onChange={this.handleClnChange}
-            />
-            <FontAwesome name='exchange-alt' className='exchange-modal-icon' />
-            <TextInput id='token'
-              className='exchange-modal-token'
-              type='number'
-              label={this.props.token.symbol}
-              placeholder={`${this.props.token.symbol} amount`}
-              value={this.state.clnAmount.length ? this.getTokenAmount() : ''}
-              disabled
-            />
+            <CommunityLogo token={this.props.token} />
           </div>
-          <button className='btn-exchange' onClick={this.handleExchange} disabled={this.isExchangeDisabled()}>
-            {this.getStatus()}
-          </button>
+          <div className='token-info'>
+            <div>
+              <span className='label'>Total Supply</span>
+              <span className='positive-number'>{formatWei(this.props.token.totalSupply, 0)}</span></div>
+            <div>
+              <span className='label'>CLN reserve</span>
+              <span className='positive-number'>{formatWei(this.props.marketMaker.clnReserve, 0)}</span></div>
+          </div>
         </div>
-      </div>
-    </Modal>
-  )
+        <div className='exchange-modal-down'>
+          <div className='exchange-modal-middle'>
+            <div className='exchange-modal-amounts'>
+              <TextInput id='cln'
+                className='exchange-modal-cln'
+                type='number'
+                label='CLN'
+                placeholder='CLN amount'
+                onChange={this.handleClnChange}
+              />
+              <FontAwesome name='exchange-alt' className='exchange-modal-icon' />
+              <TextInput id='token'
+                className='exchange-modal-token'
+                type='string'
+                label={this.props.token.symbol}
+                placeholder={`${this.props.token.symbol} amount`}
+                value={this.state.clnAmount.length ? this.getTokenAmount() : ''}
+                disabled
+              />
+            </div>
+            {this.renderTransactionStatus(this.props.transactionStatus)}
+          </div>
+        </div>
+      </Modal>
+    )
+  }
 }
 
 SimpleExchangeModal.propTypes = {
@@ -89,9 +107,14 @@ SimpleExchangeModal.propTypes = {
   marketMaker: PropTypes.object.isRequired
 }
 
+const mapStateToProps = (state, {tokenAddress}) => ({
+  token: state.tokens[tokenAddress],
+  marketMaker: state.marketMaker[tokenAddress]
+})
+
 const mapDispatchToProps = {
   buyQuote,
   buyCc
 }
 
-export default connect(null, mapDispatchToProps)(SimpleExchangeModal)
+export default connect(mapStateToProps, mapDispatchToProps)(SimpleExchangeModal)

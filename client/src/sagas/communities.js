@@ -1,10 +1,10 @@
-import { all, put, call, select, fork } from 'redux-saga/effects'
+import { all, put, call, select } from 'redux-saga/effects'
 
 import {createEntityPut, tryTakeEvery, apiCall} from './utils'
 import * as actions from 'actions/communities'
-import {addCommunity, fetchCommunityDashboard, fetchCommunities as fetchCommunitiesApi,
+import {processReceipt, fetchCommunityDashboard, fetchCommunities as fetchCommunitiesApi,
   fetchCommunitiesByOwner as fetchCommunitiesByOwnerApi} from 'services/api'
-import {fetchMarketMakerData} from 'sagas/marketMaker'
+import {fetchMarketMakerData} from 'actions/marketMaker'
 import {fetchMetadata} from 'actions/metadata'
 import {createMetadata} from 'sagas/metadata'
 import {createCurrency} from 'sagas/issuance'
@@ -14,13 +14,12 @@ import keyBy from 'lodash/keyBy'
 
 const entityPut = createEntityPut(actions.entityName)
 
-function * fetchCommunity ({tokenAddress}) {
+function * fetchCommunityWithAdditionalData ({tokenAddress}) {
   const response = yield apiCall(fetchCommunityDashboard, tokenAddress)
   const community = response.data
 
   yield put(fetchMetadata(community.tokenURI, tokenAddress))
-
-  yield fork(fetchMarketMakerData, {tokenAddress, mmAddress: community.mmAddress})
+  yield put(fetchMarketMakerData(tokenAddress, community.mmAddress))
 
   yield put({
     type: actions.FETCH_COMMUNITY_DASHBOARD.SUCCESS,
@@ -28,11 +27,15 @@ function * fetchCommunity ({tokenAddress}) {
   })
 }
 
+function * fetchDashboardStatistics ({tokenAddress}) {
+
+}
+
 function * fetchCommunityAdditionalData ({tokenAddress}) {
   const token = yield select(state => state.tokens[tokenAddress])
-  yield put(fetchMetadata(token.tokenURI, tokenAddress))
 
-  yield fork(fetchMarketMakerData, {tokenAddress, mmAddress: token.mmAddress})
+  yield put(fetchMetadata(token.tokenURI, tokenAddress))
+  yield put(fetchMarketMakerData(tokenAddress, token.mmAddress))
 
   yield entityPut({type: actions.FETCH_COMMUNITY.SUCCESS, tokenAddress})
   return token
@@ -123,9 +126,7 @@ function * issueCommunity ({communityMetadata, currencyData}) {
   const tokenURI = `${protocol}://${hash}`
   const receipt = yield call(createCurrency, {...currencyData, tokenURI})
 
-  yield apiCall(addCommunity, {
-    receipt
-  })
+  yield apiCall(processReceipt, receipt)
 
   const owner = yield select(getAccountAddress)
   yield put({
@@ -144,7 +145,7 @@ function * issueCommunity ({communityMetadata, currencyData}) {
 export default function * communitiesSaga () {
   yield all([
     tryTakeEvery(actions.FETCH_CLN_CONTRACT, fetchClnContract),
-    tryTakeEvery(actions.FETCH_COMMUNITY_DASHBOARD, fetchCommunity),
+    tryTakeEvery(actions.FETCH_COMMUNITY_DASHBOARD, fetchCommunityWithAdditionalData),
     tryTakeEvery(actions.FETCH_COMMUNITY, fetchCommunityAdditionalData),
     tryTakeEvery(actions.FETCH_COMMUNITIES, fetchCommunities),
     tryTakeEvery(actions.FETCH_COMMUNITIES_BY_OWNER, fetchCommunitiesByOwner),

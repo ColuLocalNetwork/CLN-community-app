@@ -8,7 +8,8 @@ import Calculator from 'images/Calculator.svg'
 import { BigNumber } from 'bignumber.js'
 import identity from 'lodash/identity'
 
-const canInsertCLN = (props) => props.marketMaker.isOpenForPublic || props.account === props.token.owner
+const canInsertCLN = (props) => props.account &&
+  (props.marketMaker.isOpenForPublic || props.account === props.token.owner)
 
 export default class Community extends Component {
   canInsertCLN = () => this.props.canInsertCLN(this.props)
@@ -21,7 +22,7 @@ export default class Community extends Component {
     }
   }
 
-  handleAddCln = () => this.props.handleAddCln(this.props.token, this.props.marketMaker)
+  handleAddCln = () => this.canInsertCLN(this.props) && this.props.handleAddCln(this.props.token, this.props.marketMaker)
 
   handleLoadCalculator = () => this.props.loadCalculator(this.props.token, this.props.marketMaker)
 
@@ -57,7 +58,7 @@ export default class Community extends Component {
           <div className={coinStatusClassStyle}>
             <span className='coin-status-indicator' />
             <span className='coin-status-text' onClick={this.openMarket}>
-              {this.props.marketMaker.isOpenForPublic ? 'open to public' : 'close to public'}
+              {this.props.marketMaker.isOpenForPublic ? 'open to public' : 'closed to public'}
             </span>
           </div>
         </div>
@@ -66,7 +67,7 @@ export default class Community extends Component {
         <div className='coin-content'>
           <div className='total-content'>CLN Reserved</div>
           {this.props.marketMaker.clnReserve && !this.props.marketMaker.clnReserve.isZero()
-            ? <div disabled={!this.canInsertCLN()} onClick={this.handleAddCln} className='coin-reverse'>
+            ? <div onClick={this.handleAddCln} className='coin-reverse'>
               {clnReserve}
             </div>
             : <button disabled={!this.canInsertCLN()} onClick={this.handleAddCln} className='btn-adding'>

@@ -16,7 +16,7 @@ export const FETCH_CLN_CONTRACT = createRequestTypes('FETCH_CLN_CONTRACT')
 
 export const ISSUE_COMMUNITY = createRequestTypes('ISSUE_COMMUNITY')
 
-export const fetchCommunity = (tokenAddress) => communityAction(FETCH_COMMUNITY_DASHBOARD.REQUEST, {tokenAddress})
+export const fetchDashboardStatistics = (tokenAddress) => communityAction(FETCH_COMMUNITY_DASHBOARD.REQUEST, {tokenAddress})
 
 export const fetchCommunityAdditionalData = (tokenAddress) => communityAction(FETCH_COMMUNITY.REQUEST, {tokenAddress})
 
