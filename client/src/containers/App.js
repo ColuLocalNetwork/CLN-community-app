@@ -20,13 +20,8 @@ class App extends Component {
     welcomeDone: false
   }
 
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.addresses !== this.props.addresses) {
-      this.props.fetchClnContract(nextProps.addresses.ColuLocalNetwork)
-    }
-  }
-
   componentDidMount () {
+    this.props.fetchClnContract(this.props.addresses.ColuLocalNetwork)
     this.props.fetchTokenQuote('CLN', 'USD')
     this.setState({
       welcomeDone: window.localStorage.getItem('welcome')
