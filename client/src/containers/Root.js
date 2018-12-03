@@ -9,20 +9,9 @@ import App from 'containers/App'
 import IssuanceWizard from 'components/issuance/IssuanceWizard'
 import ContactForm from 'components/ContactForm'
 import withTracker from 'containers/withTracker'
-import {withMaybe} from 'utils/components'
-import Web3 from 'containers/Web3'
+import Web3, {withNetwork} from 'containers/Web3'
 
 const history = createHistory()
-
-const withNetwork = (Component) => {
-
-  // const 
-  // return connect(mapStateToProps, mapDispatchToProps)(Web3)
-  return (props) =>
-    state.networkType
-      ? <Component {...props} />
-      : null
-}
 
 const contactFormTransition = {
   atEnter: {
@@ -49,15 +38,13 @@ function mapStylesContact (styles) {
 export default class Root extends Component {
   render () {
     const { store } = this.props
-    debugger
-    const state = store.getState()
     return (
       <Provider store={store}>
         <ConnectedRouter history={history}>
           <div>
             <Web3 />
             <div style={{height: '100%'}}>
-              <Route path='/' component={withTracker(withNetwork(App, state))} />
+              <Route path='/' component={withTracker(withNetwork(App))} />
               <div className='contact-form-wrapper'>
                 <AnimatedRoute
                   path='/view/contact-us'
@@ -68,7 +55,7 @@ export default class Root extends Component {
               </div>
               <Route
                 path='/view/issuance'
-                component={withTracker(IssuanceWizard)}
+                component={withTracker(withNetwork(IssuanceWizard))}
                 mapStyles={mapStylesContact}
                 {...contactFormTransition}
               />

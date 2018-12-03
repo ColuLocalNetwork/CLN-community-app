@@ -4,6 +4,7 @@ import {getNetworkType, checkAccountChanged} from 'actions/network'
 import {onWeb3Ready} from 'services/web3'
 import {isNetworkSupported} from 'utils/network'
 import { WRONG_NETWORK_MODAL } from 'constants/uiConstants'
+import {withMaybe} from 'utils/components'
 
 class Web3 extends Component {
   componentDidMount () {
@@ -36,3 +37,14 @@ const mapDispatchToProps = {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Web3)
+
+const withNetwork = (Component) => {
+  const mapStateToProps = (state) => ({
+    networkType: state.network.networkType
+  })
+
+  const ConnectedComponent = connect(mapStateToProps)(withMaybe(props => props.networkType)(Component))
+  return ConnectedComponent
+}
+
+export {withNetwork}
