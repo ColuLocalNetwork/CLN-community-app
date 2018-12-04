@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ClnIcon from 'images/cln.png'
 import Calculator from 'images/calculator-Icon.svg'
 import { connect } from 'react-redux'
-import {fetchDashboardStatistics} from 'actions/communities'
+import {fetchCommunityWithAdditionalData, fetchDashboardStatistics} from 'actions/communities'
 import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
 import FontAwesome from 'react-fontawesome'
@@ -12,20 +12,112 @@ import {loadModal} from 'actions/ui'
 import {SIMPLE_EXCHANGE_MODAL} from 'constants/uiConstants'
 
 class Dashboard extends Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      dropdownOpen: '',
+      dropdown: {}
+    }
+
+    this.handleClickOutside = this.handleClickOutside.bind(this)
+  }
   componentDidMount () {
+    this.props.fetchCommunityWithAdditionalData(this.props.match.params.address)
     this.props.fetchDashboardStatistics(this.props.match.params.address)
+    document.addEventListener('mousedown', this.handleClickOutside)
   }
 
   handleAddCln = (token, marketMaker) => {
-    console.log('----handleAddCln------')
-    console.log(token)
     this.props.loadModal(SIMPLE_EXCHANGE_MODAL, {tokenAddress: this.props.match.params.address})
   }
 
+  handleClickOutside (event) {
+    if (this.content && !this.content.contains(event.target)) {
+      this.setState({dropdownOpen: ''})
+    }
+  }
+
+  setOpenDropdown (type) {
+    if (type !== this.state.dropdownOpen) {
+      this.setState({dropdownOpen: type})
+    } else {
+      this.setState({dropdownOpen: ''})
+    }
+  }
+
+  setActivePointDropdown (type, text) {
+    this.setState(prevState => ({
+      dropdown: {
+        ...prevState.dropdown,
+        [type]: {text: text}
+      }
+    }))
+    this.setState({dropdownOpen: ''})
+  }
+
+  activityDropdown (type) {
+    const dropdownContent = ['Monthly', 'Weekly', 'Daily']
+    return (
+      <div className='dashboard-information-period' ref={type => (this.type = type)}>
+        <span className='dashboard-information-period-text' onClick={() => this.setOpenDropdown(type)}>
+          {this.state.dropdown && this.state.dropdown[type] && this.state.dropdown[type].text
+            ? this.state.dropdown[type].text : dropdownContent[0]} <FontAwesome name='caret-down' />
+        </span>
+        {(type === this.state.dropdownOpen) &&
+          <div className='dashboard-information-period-additional'>
+            {dropdownContent.map((item, index) =>
+              <div
+                className={classNames(
+                  'dashboard-information-period-point',
+                  this.state.dropdown[type] && this.state.dropdown[type].text && this.state.dropdown[type].text === item ? 'active-point' : null
+                )}
+                key={index}
+                onClick={() => this.setActivePointDropdown(type, item)}
+              >
+                {item}
+              </div>
+            )}
+          </div>
+        }
+      </div>
+    )
+  }
+
+  renderActivityContent = (type, data) => [
+    <div className='dashboard-information-content-activity' key='0'>
+      <p className='dashboard-information-small-text'>
+        <span>{type}</span> Activity
+      </p>
+      {this.activityDropdown(type)}
+    </div>,
+    <div className='dashboard-information-content-number' key='1'>
+      <p className='dashboard-information-small-text'>
+        Number of transactions
+      </p>
+      <p className='dashboard-information-number'>
+        {data && data.length ? data[0].totalCount : '0'}
+      </p>
+    </div>,
+    <div className='dashboard-information-content-number' key='2'>
+      <p className='dashboard-information-small-text'>
+        Transactions volume
+      </p>
+      <p className='dashboard-information-number'>
+        {data && data.length ? formatWei(data[0].volume, 0) : '0'}
+      </p>
+    </div>
+  ]
+
+  copyToClipboard = (e) => {
+    this.textArea.select()
+    document.execCommand('copy')
+    e.target.focus()
+    this.setState({copyStatus: 'Copied!'})
+  };
+
   render () {
-    console.log('----dashboard------')
-    console.log(this.props)
-    const token = {...this.props.dashboard, ...this.props.tokens[this.props.match.params.address], address: this.props.match.params.address}
+    const token = {...this.props.tokens[this.props.match.params.address], address: this.props.match.params.address}
     const marketMaker = {
       isOpenForPublic: this.props.marketMaker && this.props.marketMaker[this.props.match.params.address] && this.props.marketMaker[this.props.match.params.address].isOpenForPublic ? this.props.marketMaker[this.props.match.params.address].isOpenForPublic : false,
       currentPrice: this.props.marketMaker && this.props.marketMaker[this.props.match.params.address] && this.props.marketMaker[this.props.match.params.address].currentPrice ? this.props.marketMaker[this.props.match.params.address].currentPrice : new BigNumber(0),
@@ -36,8 +128,7 @@ class Dashboard extends Component {
       'coin-status-active': marketMaker.isOpenForPublic,
       'coin-status-close': !marketMaker.isOpenForPublic
     })
-    console.log('----token------')
-    console.log(token)
+    const { admin, user } = this.props.dashboard
     return (
       <div className='dashboard-content'>
         <div className='dashboard-header'>
@@ -48,8 +139,8 @@ class Dashboard extends Component {
         <div className='dashboard-container'>
           <div className='dashboard-sidebar'>
             <CommunityLogo token={token} />
-            {this.props.dashboard && this.props.dashboard.name
-              ? <h3 className='dashboard-title'>{this.props.dashboard.name}</h3>
+            {this.props.dashboard.community && this.props.dashboard.community.name
+              ? <h3 className='dashboard-title'>{this.props.dashboard.community.name}</h3>
               : null}
             <div className={coinStatusClassStyle}>
               <span className='coin-status-indicator' />
@@ -79,7 +170,7 @@ class Dashboard extends Component {
                   <span className='dashboard-information-text'>Total supply</span>
                 </p>
                 <p className='dashboard-information-big-count'>
-                  {this.props.dashboard && this.props.dashboard.totalSupply ? formatWei(this.props.dashboard.totalSupply, 0) : null}
+                  {formatWei(token.totalSupply, 0)}
                   <span>{token.symbol}</span>
                 </p>
               </div>
@@ -94,65 +185,30 @@ class Dashboard extends Component {
                 </p>
               </div>
             </div>
-            <div className='dashboard-information-content'>
-              <div className='dashboard-information-content-activity'>
-                <p className='dashboard-information-small-text'>
-                  <span>User</span> Activity
-                </p>
-                <p className='dashboard-information-period'>
-                  Monthly <FontAwesome name='caret-down' />
-                </p>
+            <div className='dashboard-info' ref={content => (this.content = content)}>
+              <div className='dashboard-information-content' >
+                {this.renderActivityContent('user', user)}
               </div>
-              <div className='dashboard-information-content-number'>
-                <p className='dashboard-information-small-text'>
-                  Number of transactions
-                </p>
-                <p className='dashboard-information-number'>
-                  300
-                </p>
-              </div>
-              <div className='dashboard-information-content-number'>
-                <p className='dashboard-information-small-text'>
-                  Transactions volume
-                </p>
-                <p className='dashboard-information-number'>
-                  300
-                </p>
-              </div>
-            </div>
-            <div className='dashboard-information-content'>
-              <div className='dashboard-information-content-activity'>
-                <p className='dashboard-information-small-text'>
-                  <span>Admin</span> Activity
-                </p>
-                <p className='dashboard-information-period'>
-                  Monthly <FontAwesome name='caret-down' />
-                </p>
-              </div>
-              <div className='dashboard-information-content-number'>
-                <p className='dashboard-information-small-text'>
-                  Number of transactions
-                </p>
-                <p className='dashboard-information-number'>
-                  300
-                </p>
-              </div>
-              <div className='dashboard-information-content-number'>
-                <p className='dashboard-information-small-text'>
-                  Transactions volume
-                </p>
-                <p className='dashboard-information-number'>
-                  300
-                </p>
+              <div className='dashboard-information-content'>
+                {this.renderActivityContent('admin', admin)}
               </div>
             </div>
             <div className='dashboard-information-footer'>
-              <p className='dashboard-information-small-text'>
-                <span>Asset ID</span> {this.props.match.params.address}
-              </p>
-              <p className='dashboard-information-period'>
-                copy
-              </p>
+              <div className='dashboard-information-small-text'>
+                <span>Asset ID</span>
+                <form>
+                  <textarea
+                    ref={textarea => (this.textArea = textarea)}
+                    value={this.props.match.params.address}
+                    readOnly
+                  />
+                </form>
+              </div>
+              {document.queryCommandSupported('copy') &&
+                <p className='dashboard-information-period' onClick={this.copyToClipboard}>
+                  copy
+                </p>
+              }
             </div>
           </div>
         </div>
@@ -165,11 +221,12 @@ const mapStateToProps = (state) => ({
   tokens: state.tokens,
   fiat: state.fiat,
   marketMaker: state.marketMaker,
-  dashboard: state.screens.dashboard.community
+  dashboard: state.screens.dashboard
 })
 
 const mapDispatchToProps = {
   fetchDashboardStatistics,
+  fetchCommunityWithAdditionalData,
   loadModal
 }
 

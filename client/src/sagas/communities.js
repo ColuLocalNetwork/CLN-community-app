@@ -2,8 +2,14 @@ import { all, put, call, select } from 'redux-saga/effects'
 
 import {createEntityPut, tryTakeEvery, apiCall} from './utils'
 import * as actions from 'actions/communities'
-import {processReceipt, fetchCommunityDashboard, fetchCommunities as fetchCommunitiesApi,
-  fetchCommunitiesByOwner as fetchCommunitiesByOwnerApi} from 'services/api'
+import {
+  processReceipt,
+  fetchCommunity,
+  fetchCommunities as fetchCommunitiesApi,
+  fetchCommunitiesByOwner as fetchCommunitiesByOwnerApi,
+  fetchDashboardStatisticsUser,
+  fetchDashboardStatisticsAdmin
+} from 'services/api'
 import {fetchMarketMakerData} from 'actions/marketMaker'
 import {fetchMetadata} from 'actions/metadata'
 import {createMetadata} from 'sagas/metadata'
@@ -14,8 +20,23 @@ import keyBy from 'lodash/keyBy'
 
 const entityPut = createEntityPut(actions.entityName)
 
+function * fetchDashboardStatistics ({tokenAddress}) {
+  const userResponse = yield apiCall(fetchDashboardStatisticsUser, tokenAddress)
+  const adminResponse = yield apiCall(fetchDashboardStatisticsAdmin, tokenAddress)
+  const user = userResponse.data
+  const admin = adminResponse.data
+
+  yield put({
+    type: actions.FETCH_COMMUNITY_DASHBOARD_STATISTICS.SUCCESS,
+    response: {
+      user,
+      admin
+    }
+  })
+}
+
 function * fetchCommunityWithAdditionalData ({tokenAddress}) {
-  const response = yield apiCall(fetchCommunityDashboard, tokenAddress)
+  const response = yield apiCall(fetchCommunity, tokenAddress)
   const community = response.data
 
   yield put(fetchMetadata(community.tokenURI, tokenAddress))
@@ -23,12 +44,11 @@ function * fetchCommunityWithAdditionalData ({tokenAddress}) {
 
   yield put({
     type: actions.FETCH_COMMUNITY_DASHBOARD.SUCCESS,
-    response: {community}
+    response: {
+      tokenAddress: tokenAddress,
+      community
+    }
   })
-}
-
-function * fetchDashboardStatistics ({tokenAddress}) {
-
 }
 
 function * fetchCommunityAdditionalData ({tokenAddress}) {
@@ -146,6 +166,7 @@ export default function * communitiesSaga () {
   yield all([
     tryTakeEvery(actions.FETCH_CLN_CONTRACT, fetchClnContract),
     tryTakeEvery(actions.FETCH_COMMUNITY_DASHBOARD, fetchCommunityWithAdditionalData),
+    tryTakeEvery(actions.FETCH_COMMUNITY_DASHBOARD_STATISTICS, fetchDashboardStatistics),
     tryTakeEvery(actions.FETCH_COMMUNITY, fetchCommunityAdditionalData),
     tryTakeEvery(actions.FETCH_COMMUNITIES, fetchCommunities),
     tryTakeEvery(actions.FETCH_COMMUNITIES_BY_OWNER, fetchCommunitiesByOwner),

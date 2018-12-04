@@ -555,5 +555,8 @@
 	}
 	&.big-adding-btn {
 		padding: 15px 25px;
+		@media (max-width: $breakpoint-mobile) {
+			padding: 6px 12px;
+		}
 	}
 }
