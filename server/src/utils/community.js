@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Contract = require('truffle-contract')
-const web3 = require('../services/web3')
+const web3 = require('@services/web3')
 
 const DEFAULT_FACTORY_TYPE = 'CurrencyFactory'
 const DEFAULT_FACTORY_VERSION = 0
@@ -65,7 +65,10 @@ utils.upsertCommunity = async (data) => {
 }
 
 utils.openMarket = async (mmAddress) => {
-  return community.updateBymmAddress({mmAddress, openMarket: true})
+  const result = await community.updateBymmAddress({mmAddress, openMarket: true})
+  if (result.n === 0) {
+    throw new Error('The community is not exist yet')
+  }
 }
 
 utils.getLastBlockNumber = async () => {
