@@ -18,10 +18,10 @@ export const fetchCommunity = (address, apiRoot) =>
   request.get(`${apiRoot}/communities/${address}`).then(response => response.body)
 
 export const fetchDashboardStatisticsUser = (address, apiRoot) =>
-  request.get(`https://ropsten-qa.cln.network/api/v1/stats/user/${address}`).then(response => response.body)
+  request.get(`${apiRoot}/stats/user/${address}`).then(response => response.body)
 
 export const fetchDashboardStatisticsAdmin = (address, apiRoot) =>
-  request.get(`https://ropsten-qa.cln.network/api/v1/stats/admin/${address}`).then(response => response.body)
+  request.get(`${apiRoot}/stats/admin/${address}`).then(response => response.body)
 
 export const fetchCommunities = (page, apiRoot) =>
   request.get(`${apiRoot}/communities?page=${page}`).then(response => response.body)

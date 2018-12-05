@@ -284,4 +284,26 @@
       justify-content: space-between;
     }
   }
+  &-notification {
+    position: absolute;
+    width: 150px;
+    height: 60px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 4px;
+    color: $color-step-text;
+    margin-left: -75px;
+    text-align: center;
+    left: 50%;
+    animation: ani1 1s alternate infinite;
+  }
+
+  @keyframes ani1{
+    from{
+      bottom: 0;
+    }
+    to {
+      bottom: 50px;
+    }
+  }
 }

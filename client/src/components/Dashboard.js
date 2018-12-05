@@ -114,6 +114,9 @@ class Dashboard extends Component {
     document.execCommand('copy')
     e.target.focus()
     this.setState({copyStatus: 'Copied!'})
+    setTimeout(() => {
+      this.setState({copyStatus: ''})
+    }, 2000)
   };
 
   render () {
@@ -210,6 +213,10 @@ class Dashboard extends Component {
                 </p>
               }
             </div>
+            {this.state.copyStatus && <div className='dashboard-notification'>
+              {this.state.copyStatus}
+            </div>
+            }
           </div>
         </div>
       </div>
