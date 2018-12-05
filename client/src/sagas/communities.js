@@ -7,8 +7,7 @@ import {
   fetchCommunity,
   fetchCommunities as fetchCommunitiesApi,
   fetchCommunitiesByOwner as fetchCommunitiesByOwnerApi,
-  fetchDashboardStatisticsUser,
-  fetchDashboardStatisticsAdmin
+  fetchDashboardStatistics as fetchDashboardStatisticsApi
 } from 'services/api'
 import {fetchMarketMakerData} from 'actions/marketMaker'
 import {fetchMetadata} from 'actions/metadata'
@@ -21,8 +20,11 @@ import keyBy from 'lodash/keyBy'
 const entityPut = createEntityPut(actions.entityName)
 
 function * fetchDashboardStatistics ({tokenAddress}) {
-  const userResponse = yield apiCall(fetchDashboardStatisticsUser, tokenAddress)
-  const adminResponse = yield apiCall(fetchDashboardStatisticsAdmin, tokenAddress)
+  const [userResponse, adminResponse] = yield all([
+    apiCall(fetchDashboardStatisticsApi, tokenAddress, 'user'),
+    apiCall(fetchDashboardStatisticsApi, tokenAddress, 'admin')
+  ])
+
   const user = userResponse.data
   const admin = adminResponse.data
 
@@ -35,29 +37,27 @@ function * fetchDashboardStatistics ({tokenAddress}) {
   })
 }
 
-function * fetchCommunityWithAdditionalData ({tokenAddress}) {
+function * fetchCommunityWithData ({tokenAddress}) {
   const response = yield apiCall(fetchCommunity, tokenAddress)
   const community = response.data
 
   yield put(fetchMetadata(community.tokenURI, tokenAddress))
   yield put(fetchMarketMakerData(tokenAddress, community.mmAddress))
 
-  yield put({
-    type: actions.FETCH_COMMUNITY_DASHBOARD.SUCCESS,
-    response: {
-      tokenAddress: tokenAddress,
-      community
-    }
+  yield entityPut({
+    type: actions.FETCH_COMMUNITY_WITH_DATA.SUCCESS,
+    tokenAddress,
+    response: community
   })
 }
 
-function * fetchCommunityAdditionalData ({tokenAddress}) {
+function * fetchCommunityData ({tokenAddress}) {
   const token = yield select(state => state.tokens[tokenAddress])
 
   yield put(fetchMetadata(token.tokenURI, tokenAddress))
   yield put(fetchMarketMakerData(tokenAddress, token.mmAddress))
 
-  yield entityPut({type: actions.FETCH_COMMUNITY.SUCCESS, tokenAddress})
+  yield put({type: actions.FETCH_COMMUNITY_DATA.SUCCESS, tokenAddress})
   return token
 }
 
@@ -87,10 +87,7 @@ function * fetchCommunities ({page = 1}) {
     }})
 
   for (let community of communities) {
-    yield put({
-      type: actions.FETCH_COMMUNITY.REQUEST,
-      tokenAddress: community.address
-    })
+    yield put(actions.fetchCommunityData(community.address))
   }
 
   return communities
@@ -112,10 +109,7 @@ function * fetchCommunitiesByOwner ({owner}) {
     }})
 
   for (let community of communities) {
-    yield put({
-      type: actions.FETCH_COMMUNITY.REQUEST,
-      tokenAddress: community.address
-    })
+    yield put(actions.fetchCommunityData(community.address))
   }
 
   return communities
@@ -165,9 +159,9 @@ function * issueCommunity ({communityMetadata, currencyData}) {
 export default function * communitiesSaga () {
   yield all([
     tryTakeEvery(actions.FETCH_CLN_CONTRACT, fetchClnContract),
-    tryTakeEvery(actions.FETCH_COMMUNITY_DASHBOARD, fetchCommunityWithAdditionalData),
+    tryTakeEvery(actions.FETCH_COMMUNITY_WITH_DATA, fetchCommunityWithData),
     tryTakeEvery(actions.FETCH_COMMUNITY_DASHBOARD_STATISTICS, fetchDashboardStatistics),
-    tryTakeEvery(actions.FETCH_COMMUNITY, fetchCommunityAdditionalData),
+    tryTakeEvery(actions.FETCH_COMMUNITY_DATA, fetchCommunityData),
     tryTakeEvery(actions.FETCH_COMMUNITIES, fetchCommunities),
     tryTakeEvery(actions.FETCH_COMMUNITIES_BY_OWNER, fetchCommunitiesByOwner),
     tryTakeEvery(actions.ISSUE_COMMUNITY, issueCommunity, 1)
