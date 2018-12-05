@@ -9,6 +9,7 @@ import {fetchMetadata} from 'actions/metadata'
 import {createMetadata} from 'sagas/metadata'
 import {createCurrency} from 'sagas/issuance'
 import {getAccountAddress} from 'selectors/accounts'
+import {getClnAddress} from 'selectors/network'
 import { contract } from 'osseus-wallet'
 import keyBy from 'lodash/keyBy'
 
@@ -84,7 +85,8 @@ function * fetchCommunitiesByOwner ({owner}) {
   return communities
 }
 
-function * fetchClnContract ({tokenAddress}) {
+function * fetchClnContract () {
+  const tokenAddress = yield select(getClnAddress)
   const ColuLocalNetworkContract = contract.getContract({abiName: 'ColuLocalNetwork', address: tokenAddress})
 
   const calls = {

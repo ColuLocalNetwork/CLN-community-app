@@ -19,7 +19,7 @@ class App extends Component {
   }
 
   componentDidMount () {
-    this.props.fetchClnContract(this.props.addresses.ColuLocalNetwork)
+    this.props.fetchClnContract()
     this.props.fetchTokenQuote('CLN', 'USD')
     this.setState({
       welcomeDone: window.localStorage.getItem('welcome')
@@ -85,13 +85,9 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  addresses: getAddresses(state)
-})
-
 const mapDispatchToProps = {
   fetchTokenQuote,
   fetchClnContract
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(null, mapDispatchToProps)(App)

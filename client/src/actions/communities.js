@@ -23,7 +23,7 @@ export const fetchCommunities = (page) => communityAction(FETCH_COMMUNITIES.REQU
 
 export const fetchCommunitiesByOwner = (owner) => communityAction(FETCH_COMMUNITIES_BY_OWNER.REQUEST, {owner})
 
-export const fetchClnContract = (tokenAddress) => communityAction(FETCH_CLN_CONTRACT.REQUEST, {tokenAddress})
+export const fetchClnContract = () => communityAction(FETCH_CLN_CONTRACT.REQUEST)
 
 export const issueCommunity = (communityMetadata, currencyData) => communityAction(ISSUE_COMMUNITY.REQUEST, {
   communityMetadata,
