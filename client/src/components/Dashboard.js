@@ -76,7 +76,7 @@ class Dashboard extends Component {
       },
       {
         text: 'Daily',
-        value: 'day'
+        value: 'dayOfMonth'
       }]
     return (
       <div className='dashboard-information-period' ref={type => (this.type = type)}>

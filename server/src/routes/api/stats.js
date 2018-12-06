@@ -8,8 +8,8 @@ router.get('/:activityType/:address', async (req, res, next) => {
   const tokenAddress = req.params.address
 
   const interval = req.query.interval || 'month'
-  if (interval !== 'month' && interval !== 'week') {
-    throw Error('Bad interval parameter, correct values for interval is "month" or "week"')
+  if (interval !== 'month' && interval !== 'week' && interval !== 'dayOfMonth') {
+    throw Error('Bad interval parameter, correct values for interval is "month", "week" or "dayOfMonth"')
   }
 
   if (activityType !== 'user' && activityType !== 'admin') {

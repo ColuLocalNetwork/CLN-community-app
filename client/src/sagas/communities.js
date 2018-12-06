@@ -154,11 +154,11 @@ function * issueCommunity ({communityMetadata, currencyData}) {
 export default function * communitiesSaga () {
   yield all([
     tryTakeEvery(actions.FETCH_CLN_CONTRACT, fetchClnContract),
-    tryTakeEvery(actions.FETCH_COMMUNITY_WITH_DATA, fetchCommunityWithData),
-    tryTakeEvery(actions.FETCH_COMMUNITY_STATISTICS, fetchCommunityStatistics),
+    tryTakeEvery(actions.FETCH_COMMUNITY_WITH_DATA, fetchCommunityWithData, 1),
+    tryTakeEvery(actions.FETCH_COMMUNITY_STATISTICS, fetchCommunityStatistics, 1),
     tryTakeEvery(actions.FETCH_COMMUNITY_DATA, fetchCommunityData),
-    tryTakeEvery(actions.FETCH_COMMUNITIES, fetchCommunities),
-    tryTakeEvery(actions.FETCH_COMMUNITIES_BY_OWNER, fetchCommunitiesByOwner),
+    tryTakeEvery(actions.FETCH_COMMUNITIES, fetchCommunities, 1),
+    tryTakeEvery(actions.FETCH_COMMUNITIES_BY_OWNER, fetchCommunitiesByOwner, 1),
     tryTakeEvery(actions.ISSUE_COMMUNITY, issueCommunity, 1)
   ])
 }
