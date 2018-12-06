@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ClnIcon from 'images/cln.png'
 import Calculator from 'images/calculator-Icon.svg'
 import { connect } from 'react-redux'
-import {fetchCommunityWithData, fetchDashboardStatistics} from 'actions/communities'
+import {fetchCommunityWithData, fetchCommunityStatistics} from 'actions/communities'
 import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
 import FontAwesome from 'react-fontawesome'
@@ -21,7 +21,9 @@ class Dashboard extends Component {
     if (!this.props.token) {
       this.props.fetchCommunityWithData(this.props.match.params.address)
     }
-    this.props.fetchDashboardStatistics(this.props.match.params.address)
+    this.props.fetchCommunityStatistics(this.props.match.params.address, 'user', 'month')
+    this.props.fetchCommunityStatistics(this.props.match.params.address, 'admin', 'month')
+
     document.addEventListener('mousedown', this.handleClickOutside)
   }
 
@@ -51,32 +53,49 @@ class Dashboard extends Component {
     this.setState(prevState => ({
       dropdown: {
         ...prevState.dropdown,
-        [type]: {text: text}
+        [type]: {text}
       }
     }))
     this.setState({dropdownOpen: ''})
   }
 
+  handleDropdownClick = (activityType, item) => {
+    this.setActivePointDropdown(activityType, item.text)
+    this.props.fetchCommunityStatistics(this.props.match.params.address, activityType, item.value)
+  }
+
   activityDropdown (type) {
-    const dropdownContent = ['Monthly', 'Weekly', 'Daily']
+    const dropdownOptions = [
+      {
+        text: 'Monthly',
+        value: 'month'
+      },
+      {
+        text: 'Weekly',
+        value: 'week'
+      },
+      {
+        text: 'Daily',
+        value: 'day'
+      }]
     return (
       <div className='dashboard-information-period' ref={type => (this.type = type)}>
         <span className='dashboard-information-period-text' onClick={() => this.setOpenDropdown(type)}>
           {this.state.dropdown && this.state.dropdown[type] && this.state.dropdown[type].text
-            ? this.state.dropdown[type].text : dropdownContent[0]} <FontAwesome name='caret-down' />
+            ? this.state.dropdown[type].text : dropdownOptions[0].text} <FontAwesome name='caret-down' />
         </span>
         {(type === this.state.dropdownOpen) &&
           <div className='dashboard-information-period-additional'>
-            {dropdownContent.map((item, index) =>
+            {dropdownOptions.map((item, index) =>
               <div
                 className={classNames(
                   'dashboard-information-period-point',
-                  this.state.dropdown[type] && this.state.dropdown[type].text && this.state.dropdown[type].text === item ? 'active-point' : null
+                  this.state.dropdown[type] && this.state.dropdown[type].text && this.state.dropdown[type].text === item.text ? 'active-point' : null
                 )}
                 key={index}
-                onClick={() => this.setActivePointDropdown(type, item)}
+                onClick={() => this.handleDropdownClick(type, item)}
               >
-                {item}
+                {item.text}
               </div>
             )}
           </div>
@@ -132,6 +151,8 @@ class Dashboard extends Component {
       'coin-status-active': marketMaker.isOpenForPublic,
       'coin-status-close': !marketMaker.isOpenForPublic
     })
+
+    const circulatingSupply = new BigNumber(token.totalSupply).minus(marketMaker.ccReserve)
     return (
       <div className='dashboard-content'>
         <div className='dashboard-header'>
@@ -183,7 +204,7 @@ class Dashboard extends Component {
                   <span className='dashboard-information-text'>Circulation</span>
                 </p>
                 <p className='dashboard-information-big-count'>
-                  315,00
+                  {formatWei(circulatingSupply, 0)}
                   <span>{token.symbol}</span>
                 </p>
               </div>
@@ -240,7 +261,7 @@ const mapStateToProps = (state, {match}) => ({
 })
 
 const mapDispatchToProps = {
-  fetchDashboardStatistics,
+  fetchCommunityStatistics,
   fetchCommunityWithData,
   loadModal
 }

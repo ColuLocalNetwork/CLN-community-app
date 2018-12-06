@@ -7,7 +7,7 @@ import {
   fetchCommunity,
   fetchCommunities as fetchCommunitiesApi,
   fetchCommunitiesByOwner as fetchCommunitiesByOwnerApi,
-  fetchDashboardStatistics as fetchDashboardStatisticsApi
+  fetchCommunityStatistics as fetchCommunityStatisticsApi
 } from 'services/api'
 import {fetchMarketMakerData} from 'actions/marketMaker'
 import {fetchMetadata} from 'actions/metadata'
@@ -19,20 +19,15 @@ import keyBy from 'lodash/keyBy'
 
 const entityPut = createEntityPut(actions.entityName)
 
-function * fetchDashboardStatistics ({tokenAddress}) {
-  const [userResponse, adminResponse] = yield all([
-    apiCall(fetchDashboardStatisticsApi, tokenAddress, 'user'),
-    apiCall(fetchDashboardStatisticsApi, tokenAddress, 'admin')
-  ])
+function * fetchCommunityStatistics ({tokenAddress, activityType, interval}) {
+  const response = yield apiCall(fetchCommunityStatisticsApi, tokenAddress, activityType, interval)
 
-  const user = userResponse.data
-  const admin = adminResponse.data
+  const {data} = response
 
   yield put({
-    type: actions.FETCH_COMMUNITY_DASHBOARD_STATISTICS.SUCCESS,
+    type: actions.FETCH_COMMUNITY_STATISTICS.SUCCESS,
     response: {
-      user,
-      admin
+      [activityType]: data
     }
   })
 }
@@ -160,7 +155,7 @@ export default function * communitiesSaga () {
   yield all([
     tryTakeEvery(actions.FETCH_CLN_CONTRACT, fetchClnContract),
     tryTakeEvery(actions.FETCH_COMMUNITY_WITH_DATA, fetchCommunityWithData),
-    tryTakeEvery(actions.FETCH_COMMUNITY_DASHBOARD_STATISTICS, fetchDashboardStatistics),
+    tryTakeEvery(actions.FETCH_COMMUNITY_STATISTICS, fetchCommunityStatistics),
     tryTakeEvery(actions.FETCH_COMMUNITY_DATA, fetchCommunityData),
     tryTakeEvery(actions.FETCH_COMMUNITIES, fetchCommunities),
     tryTakeEvery(actions.FETCH_COMMUNITIES_BY_OWNER, fetchCommunitiesByOwner),
