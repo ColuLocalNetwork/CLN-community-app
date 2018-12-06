@@ -29,7 +29,14 @@ function * balanceOfCln ({accountAddress}) {
 // }
 
 function * fetchTokens ({accountAddress}) {
-  yield apiCall(fetchTokensApi, accountAddress)
+  const response = yield apiCall(fetchTokensApi, accountAddress)
+  yield put({
+    type: actions.FETCH_TOKENS.SUCCESS,
+    accountAddress,
+    response: {
+      tokens: response.data
+    }
+  })
 }
 
 function * watchAccountChanged ({response}) {

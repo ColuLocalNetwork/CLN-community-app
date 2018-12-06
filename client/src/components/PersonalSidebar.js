@@ -3,9 +3,8 @@ import {connect} from 'react-redux'
 import {fetchTokens} from 'actions/accounts'
 
 class PersonalSidebar extends Component {
-  componentDidMount () {
-    this.props.fetchTokens()
-  }
+  componentWillReceiveProps = ({accountAddress}) =>
+    accountAddress && !this.props.accountAddress && this.props.fetchTokens(accountAddress)
 
   render = () => <div>PersonalSidebar</div>
 }
