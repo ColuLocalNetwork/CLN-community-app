@@ -13,7 +13,7 @@ export const INITIALIZE_COMMUNITY = createRequestTypes('INITIALIZE_COMMUNITY')
 export const FETCH_COMMUNITIES = createRequestTypes('FETCH_COMMUNITIES')
 export const FETCH_COMMUNITIES_BY_OWNER = createRequestTypes('FETCH_COMMUNITIES_BY_OWNER')
 
-export const FETCH_CLN_CONTRACT = createRequestTypes('FETCH_CLN_CONTRACT')
+export const FETCH_CLN_TOKEN = createRequestTypes('FETCH_CLN_TOKEN')
 
 export const ISSUE_COMMUNITY = createRequestTypes('ISSUE_COMMUNITY')
 
@@ -30,7 +30,7 @@ export const fetchCommunities = (page) => communityAction(FETCH_COMMUNITIES.REQU
 
 export const fetchCommunitiesByOwner = (owner) => communityAction(FETCH_COMMUNITIES_BY_OWNER.REQUEST, {owner})
 
-export const fetchClnContract = () => communityAction(FETCH_CLN_CONTRACT.REQUEST)
+export const fetchClnToken = () => communityAction(FETCH_CLN_TOKEN.REQUEST)
 
 export const issueCommunity = (communityMetadata, currencyData) => communityAction(ISSUE_COMMUNITY.REQUEST, {
   communityMetadata,

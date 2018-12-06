@@ -28,7 +28,7 @@ function * balanceOfCln ({accountAddress}) {
 //
 // }
 
-function * fetchMyTokens ({accountAddress}) {
+function * fetchTokens ({accountAddress}) {
   yield apiCall(fetchTokensApi, accountAddress)
 }
 
@@ -40,7 +40,7 @@ export default function * accountsSaga () {
   yield all([
     tryTakeEvery(actions.BALANCE_OF, balanceOf),
     tryTakeEvery(actions.BALANCE_OF_CLN, balanceOfCln),
-    takeEvery(actions.FETCH_MY_TOKENS.REQUEST, fetchMyTokens),
+    takeEvery(actions.FETCH_TOKENS.REQUEST, fetchTokens),
     takeEvery(CHECK_ACCOUNT_CHANGED.SUCCESS, watchAccountChanged)
   ])
 }

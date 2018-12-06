@@ -122,7 +122,7 @@ function * fetchCommunitiesByOwner ({owner}) {
   return communities
 }
 
-function * fetchClnContract () {
+function * fetchClnToken () {
   const tokenAddress = yield select(getClnAddress)
   const ColuLocalNetworkContract = contract.getContract({abiName: 'ColuLocalNetwork', address: tokenAddress})
 
@@ -137,7 +137,7 @@ function * fetchClnContract () {
   response.isLocalCurrency = false
   response.address = tokenAddress
 
-  yield entityPut({type: actions.FETCH_CLN_CONTRACT.SUCCESS,
+  yield entityPut({type: actions.FETCH_CLN_TOKEN.SUCCESS,
     tokenAddress,
     response
   })
@@ -166,7 +166,7 @@ function * issueCommunity ({communityMetadata, currencyData}) {
 
 export default function * communitiesSaga () {
   yield all([
-    tryTakeEvery(actions.FETCH_CLN_CONTRACT, fetchClnContract),
+    tryTakeEvery(actions.FETCH_CLN_TOKEN, fetchClnToken),
     tryTakeEvery(actions.FETCH_COMMUNITY_DASHBOARD, fetchCommunityWithAdditionalData),
     tryTakeEvery(actions.FETCH_COMMUNITY_DASHBOARD_STATISTICS, fetchDashboardStatistics),
     tryTakeEvery(actions.FETCH_COMMUNITY, fetchCommunityAdditionalData),
