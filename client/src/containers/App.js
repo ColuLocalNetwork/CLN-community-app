@@ -6,10 +6,10 @@ import TopNav from 'components/TopNav'
 import Oven from 'components/oven/Oven'
 import ModalContainer from 'containers/ModalContainer'
 import classNames from 'classnames'
-import {fetchClnContract} from 'actions/communities'
+import {fetchClnToken} from 'actions/communities'
 import {fetchTokenQuote} from 'actions/fiat'
-import {getAddresses} from 'selectors/network'
 import ReactGA from 'services/ga'
+import PersonalSidebar from 'components/PersonalSidebar'
 import 'scss/styles.scss'
 
 class App extends Component {
@@ -19,7 +19,7 @@ class App extends Component {
   }
 
   componentDidMount () {
-    this.props.fetchClnContract(this.props.addresses.ColuLocalNetwork)
+    this.props.fetchClnToken()
     this.props.fetchTokenQuote('CLN', 'USD')
     this.setState({
       welcomeDone: window.localStorage.getItem('welcome')
@@ -73,6 +73,7 @@ class App extends Component {
 
     return <div className={mainWrapperClass}>
       {welcome}
+      <PersonalSidebar />
       <div className={mainContainerClass}>
         {currentRoute !== '/view/issuance' && !currentRoute.includes('dashboard') ? <TopNav
           active={!this.state.isWelcome}
@@ -86,13 +87,9 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  addresses: getAddresses(state)
-})
-
 const mapDispatchToProps = {
   fetchTokenQuote,
-  fetchClnContract
+  fetchClnToken
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(null, mapDispatchToProps)(App)
