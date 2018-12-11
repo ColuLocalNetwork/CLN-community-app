@@ -9,7 +9,6 @@ import classNames from 'classnames'
 import {fetchClnToken} from 'actions/communities'
 import {fetchTokenQuote} from 'actions/fiat'
 import ReactGA from 'services/ga'
-import PersonalSidebar from 'components/PersonalSidebar'
 import 'scss/styles.scss'
 
 class App extends Component {
@@ -73,7 +72,6 @@ class App extends Component {
 
     return <div className={mainWrapperClass}>
       {welcome}
-      <PersonalSidebar />
       <div className={mainContainerClass}>
         {currentRoute !== '/view/issuance' && !currentRoute.includes('dashboard') ? <TopNav
           active={!this.state.isWelcome}
