@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import classNames from 'classnames'
 import { isMobile } from 'react-device-detect'
-import {BigNumber} from 'bignumber.js'
 import FontAwesome from 'react-fontawesome'
 
 import * as actions from 'actions/ui'
@@ -12,18 +11,26 @@ import { LOGIN_MODAL } from 'constants/uiConstants'
 import ClnIcon from 'images/cln.png'
 import ProfileIcon from 'images/user.svg'
 import ReactGA from 'services/ga'
-import Profile from './Profile'
+import PersonalSidebar from './PersonalSidebar'
 
 class TopNav extends Component {
-  state = {
-    openMenu: false,
-    profile: false
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      openMenu: false,
+      profile: false
+    }
   }
+
   onClickMenu = () => {
     this.setState({
       openMenu: !this.state.openMenu
     })
   }
+
+  closeProfile = () =>
+    this.setState({profile: false})
 
   showConnectMetamask = () => {
     if (!this.props.network.isMetaMask || !this.props.network.accountAddress) {
@@ -86,8 +93,6 @@ class TopNav extends Component {
       'show-top-nav-links': true
     })
 
-    console.log(this.state);
-
     return (
       <div className={topNavClass}>
         <div className='top-nav-logo'>
@@ -118,19 +123,17 @@ class TopNav extends Component {
             <span className='profile-icon' onClick={() => this.setState({profile: !this.state.profile})}>
               <img src={ProfileIcon} />
             </span>
-            <span className='profile-balance'>
-              <span className='balance-address'>{this.props.network.accountAddress || 'Connect Metamask'}</span>
-              {(this.props.clnBalance)
-                ? <div className='top-nav-balance'>
-                  <span className='balance-text'>Balance:</span>
-                  <span className='balance-number'>{new BigNumber(this.props.clnBalance).div(1e18).toFormat(2, 1)}</span>
-                </div>
-                : null}
-            </span>
           </div>
         </div>
         <FontAwesome name={this.state.openMenu ? 'times' : 'align-justify'} className='burger-menu' onClick={this.onClickMenu} />
-        {this.state.profile && <Profile />}
+        {this.state.profile &&
+          <PersonalSidebar
+            closeProfile={this.closeProfile}
+            clnBalance={this.props.clnBalance}
+            network={this.props.network}
+            history={this.props.history}
+          />
+        }
       </div>
     )
   }
