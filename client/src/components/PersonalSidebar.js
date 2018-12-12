@@ -12,6 +12,12 @@ class PersonalSidebar extends Component {
   componentWillReceiveProps = ({accountAddress}) =>
     accountAddress && !this.props.accountAddress && this.props.fetchTokens(accountAddress)
 
+  componentDidMount () {
+    if (this.props.accountAddress) {
+      this.props.fetchTokens(this.props.accountAddress)
+    }
+  }
+
   showDashboard = (address) => {
     if (this.props.history.location.pathname === `/view/dashboard/${address}`) {
       this.props.history.replace(`/view/dashboard/${address}`)
