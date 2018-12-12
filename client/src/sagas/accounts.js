@@ -24,19 +24,28 @@ function * balanceOfCln ({accountAddress}) {
   yield call(balanceOf, {tokenAddress, accountAddress})
 }
 
-// const fetchMyBalances ({accountAddress}) {
-//
-// }
-
 function * fetchTokens ({accountAddress}) {
   const response = yield apiCall(fetchTokensApi, accountAddress)
+  const tokens = response.data
   yield put({
     type: actions.FETCH_TOKENS.SUCCESS,
     accountAddress,
     response: {
-      tokens: response.data
+      tokens
     }
   })
+  return tokens
+}
+
+function * fetchBalances ({accountAddress, tokens}) {
+  for (let token of tokens) {
+    yield put(actions.balanceOf(token.address, accountAddress))
+  }
+}
+
+function * fetchTokensWithBalances ({accountAddress}) {
+  const tokens = yield call(fetchTokens, {accountAddress})
+  yield call(fetchBalances, {accountAddress, tokens})
 }
 
 function * watchAccountChanged ({response}) {
@@ -48,6 +57,8 @@ export default function * accountsSaga () {
     tryTakeEvery(actions.BALANCE_OF, balanceOf),
     tryTakeEvery(actions.BALANCE_OF_CLN, balanceOfCln),
     takeEvery(actions.FETCH_TOKENS.REQUEST, fetchTokens),
-    takeEvery(CHECK_ACCOUNT_CHANGED.SUCCESS, watchAccountChanged)
+    takeEvery(CHECK_ACCOUNT_CHANGED.SUCCESS, watchAccountChanged),
+    tryTakeEvery(actions.FETCH_BALANCES, fetchBalances, 1),
+    tryTakeEvery(actions.FETCH_TOKENS_WITH_BALANCES, fetchTokensWithBalances, 1)
   ])
 }

@@ -1,20 +1,48 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchTokens} from 'actions/accounts'
+import {fetchTokens, fetchBalances, fetchTokensWithBalances} from 'actions/accounts'
 import ProfileIcon from 'images/user.svg'
 import {BigNumber} from 'bignumber.js'
 import FontAwesome from 'react-fontawesome'
 import ReactGA from 'services/ga'
 import {formatEther, formatWei} from 'utils/format'
+import {getAccount} from 'selectors/accounts'
 import CommunityLogo from 'components/elements/CommunityLogo'
 
+const PersonalSidebarCoin = ({accountAddress, token, marketMaker, balance, fiat}) => [
+  <CommunityLogo token={token} />,
+  <div className='personal-community-content'>
+    <div className='personal-community-content-balance'>
+      CC Balance <span>{balance ? formatWei(balance, 0) : 0}</span>
+      <div className='coin-content'>
+        <div className='coin-content-type'>
+          <span className='coin-currency-type'>CLN</span>
+          <span className='coin-currency'>{marketMaker ? formatEther(marketMaker.currentPrice) : null}</span>
+        </div>
+        <div className='coin-content-type'>
+          <span className='coin-currency-type'>USD</span>
+          <span className='coin-currency'>
+            {
+              marketMaker
+                ? formatEther(marketMaker.currentPrice.multipliedBy(fiat.USD && fiat.USD.price))
+                : null
+            }</span>
+        </div>
+      </div>
+    </div>
+  </div>
+]
+
 class PersonalSidebar extends Component {
-  componentWillReceiveProps = ({accountAddress}) =>
-    accountAddress && !this.props.accountAddress && this.props.fetchTokens(accountAddress)
+  componentWillReceiveProps = ({accountAddress, account}) => {
+    if (accountAddress && !this.props.accountAddress) {
+      this.props.fetchTokensWithBalances(accountAddress)
+    }
+  }
 
   componentDidMount () {
     if (this.props.accountAddress) {
-      this.props.fetchTokens(this.props.accountAddress)
+      this.props.fetchTokensWithBalances(this.props.accountAddress)
     }
   }
 
@@ -31,11 +59,11 @@ class PersonalSidebar extends Component {
     })
   }
 
-  renderCoin = (accountAddress, token, marketMaker) => [
+  renderCoin = (accountAddress, token, marketMaker, balance) => [
     <CommunityLogo token={token} />,
     <div className='personal-community-content'>
       <div className='personal-community-content-balance'>
-        CC Balance <span>{formatWei(token.totalSupply, 0)}</span>
+        CC Balance <span>{balance && formatWei(balance, 0)}</span>
         <div className='coin-content'>
           <div className='coin-content-type'>
             <span className='coin-currency-type'>CLN</span>
@@ -60,7 +88,12 @@ class PersonalSidebar extends Component {
       if (tokens[key].owner === accountAddress) {
         return (
           <div className='personal-community'>
-            {this.renderCoin(accountAddress, tokens[key], marketMaker[key])}
+            <PersonalSidebarCoin
+              fiat={this.props.fiat}
+              accountAddress={accountAddress}
+              token={tokens[key]}
+              marketMaker={marketMaker[key]}
+              balance={this.props.account.balances[key]} />
             <button onClick={() => this.showDashboard(tokens[key].address)} className='btn-dashboard'>
               <FontAwesome name='signal' />
             </button>
@@ -75,7 +108,12 @@ class PersonalSidebar extends Component {
       if (tokens[key.address] && marketMaker[key.address]) {
         return (
           <div className='personal-community'>
-            {this.renderCoin(accountAddress, tokens[key.address], marketMaker[key.address])}
+            <PersonalSidebarCoin
+              fiat={this.props.fiat}
+              accountAddress={accountAddress}
+              token={tokens[key.address]}
+              marketMaker={marketMaker[key.address]}
+              balance={this.props.account.balances[key.address]} />
           </div>
         )
       }
@@ -83,7 +121,7 @@ class PersonalSidebar extends Component {
   }
 
   render () {
-    const portfolioTokens = this.props.account[this.props.accountAddress] && this.props.account[this.props.accountAddress].tokens ? this.props.account[this.props.accountAddress].tokens : null
+    const portfolioTokens = (this.props.account && this.props.account.tokens) ? this.props.account.tokens : null
     return (
       <div className='personal-sidebar'>
         <div className='personal-sidebar-top'>
@@ -123,14 +161,16 @@ class PersonalSidebar extends Component {
 
 const mapStateToProps = (state) => ({
   accountAddress: state.network.accountAddress,
-  account: state.accounts,
+  account: getAccount(state),
   tokens: state.tokens,
   marketMaker: state.marketMaker,
   fiat: state.fiat
 })
 
 const mapDispatchToProps = {
-  fetchTokens
+  fetchTokens,
+  fetchBalances,
+  fetchTokensWithBalances
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PersonalSidebar)

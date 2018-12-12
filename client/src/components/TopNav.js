@@ -29,8 +29,9 @@ class TopNav extends Component {
     })
   }
 
-  closeProfile = () =>
-    this.setState({profile: false})
+  closeProfile = () => this.setState({profile: false})
+
+  showProfile = () => this.setState({profile: true})
 
   showConnectMetamask = () => {
     if (!this.props.network.isMetaMask || !this.props.network.accountAddress) {
@@ -120,7 +121,7 @@ class TopNav extends Component {
             <div className='separator-vertical' />
           </div>
           <div className='top-nav-text profile' onClick={this.showConnectMetamask}>
-            <span className='profile-icon' onClick={() => this.setState({profile: !this.state.profile})}>
+            <span className='profile-icon' onClick={this.showProfile}>
               <img src={ProfileIcon} />
             </span>
           </div>

@@ -1,10 +1,11 @@
 import {CHANGE} from 'actions/marketMaker'
 import * as actions from 'actions/accounts'
 
-const initialAccount = {
+export const initialAccount = {
   balances: {},
   transactions: {
-  }
+  },
+  tokens: {}
 }
 
 const handlers = {
