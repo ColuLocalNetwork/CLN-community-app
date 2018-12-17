@@ -9,7 +9,10 @@ import FontAwesome from 'react-fontawesome'
 import CommunityLogo from 'components/elements/CommunityLogo'
 import {formatEther, formatWei} from 'utils/format'
 import {loadModal} from 'actions/ui'
+import Moment from 'react-moment'
 import {SIMPLE_EXCHANGE_MODAL} from 'constants/uiConstants'
+
+COMMUNITY_WEB3_PROVIDER=https://ropsten.infura.io/v3/feaf18d8518d437eadb44a96dec6491a npm start
 
 class Dashboard extends Component {
   state = {
@@ -137,6 +140,8 @@ class Dashboard extends Component {
     setTimeout(() => {
       this.setState({copyStatus: ''})
     }, 2000)
+    this.textArea.value = ''
+    this.textArea.value = this.props.match.params.address
   };
 
   render () {
@@ -153,6 +158,7 @@ class Dashboard extends Component {
     })
 
     const circulatingSupply = new BigNumber(token.totalSupply).minus(marketMaker.ccReserve)
+    const date = new Date()
     return (
       <div className='dashboard-content'>
         <div className='dashboard-header'>
@@ -162,10 +168,10 @@ class Dashboard extends Component {
         </div>
         <div className='dashboard-container'>
           <div className='dashboard-sidebar'>
+            <Moment>{date}</Moment>
+            <Moment unit="days">{date}</Moment>
             <CommunityLogo token={token} />
-            {this.props.dashboard.community && this.props.dashboard.community.name
-              ? <h3 className='dashboard-title'>{this.props.dashboard.community.name}</h3>
-              : null}
+            <h3 className='dashboard-title'>{token.name}</h3>
             <div className={coinStatusClassStyle}>
               <span className='coin-status-indicator' />
               <span className='coin-status-text' onClick={this.openMarket}>
@@ -188,7 +194,7 @@ class Dashboard extends Component {
           </div>
           <div className='dashboard-information'>
             <div className='dashboard-information-header'>
-              <div>
+              <div className='dashboard-information-header-content'>
                 <p className='dashboard-information-top'>
                   <span className='dashboard-information-logo'><img src={ClnIcon} /></span>
                   <span className='dashboard-information-text'>Total supply</span>
@@ -198,7 +204,7 @@ class Dashboard extends Component {
                   <span>{token.symbol}</span>
                 </p>
               </div>
-              <div>
+              <div className='dashboard-information-header-content'>
                 <p className='dashboard-information-top'>
                   <span className='dashboard-information-logo logo-inverse'><img src={Calculator} /></span>
                   <span className='dashboard-information-text'>Circulation</span>
