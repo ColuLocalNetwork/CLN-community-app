@@ -9,15 +9,17 @@ import FontAwesome from 'react-fontawesome'
 import CommunityLogo from 'components/elements/CommunityLogo'
 import {formatEther, formatWei} from 'utils/format'
 import {loadModal} from 'actions/ui'
-import Moment from 'react-moment'
+import Moment from 'moment'
 import {SIMPLE_EXCHANGE_MODAL} from 'constants/uiConstants'
-
-COMMUNITY_WEB3_PROVIDER=https://ropsten.infura.io/v3/feaf18d8518d437eadb44a96dec6491a npm start
 
 class Dashboard extends Component {
   state = {
     dropdownOpen: '',
-    dropdown: {}
+    dropdown: {},
+    activityType: {
+      admin: 'month',
+      user: 'week'
+    }
   }
 
   componentDidMount () {
@@ -63,6 +65,12 @@ class Dashboard extends Component {
   }
 
   handleDropdownClick = (activityType, item) => {
+    this.setState(prevState => ({
+      activityType: {
+        ...prevState.activityType,
+        [activityType]: item.value
+      }
+    }))
     this.setActivePointDropdown(activityType, item.text)
     this.props.fetchCommunityStatistics(this.props.match.params.address, activityType, item.value)
   }
@@ -107,30 +115,60 @@ class Dashboard extends Component {
     )
   }
 
-  renderActivityContent = (type, data) => [
-    <div className='dashboard-information-content-activity' key='0'>
-      <p className='dashboard-information-small-text'>
-        <span>{type}</span> Activity
-      </p>
-      {this.activityDropdown(type)}
-    </div>,
-    <div className='dashboard-information-content-number' key='1'>
-      <p className='dashboard-information-small-text'>
-        Number of transactions
-      </p>
-      <p className='dashboard-information-number'>
-        {data && data.length ? data[0].totalCount : '0'}
-      </p>
-    </div>,
-    <div className='dashboard-information-content-number' key='2'>
-      <p className='dashboard-information-small-text'>
-        Transactions volume
-      </p>
-      <p className='dashboard-information-number'>
-        {data && data.length ? formatWei(data[0].volume, 0) : '0'}
-      </p>
-    </div>
-  ]
+  renderPeriod (type, data, count) {
+    const date = new Date()
+    const existingDay = Moment(date).date()
+    const existingWeek = Moment(date).week()
+    const existingMonth = Moment(date).month()
+
+    const dataPeriod = data && data.length ? data[0]._id[this.state.activityType[type]] : null
+    let numberTitle
+
+    switch (this.state.activityType[type]) {
+      case 'dayOfMonth':
+        (dataPeriod === existingDay && dataPeriod === existingMonth)
+          ? numberTitle = data
+          : numberTitle = 0; break
+      case 'week':
+        (dataPeriod === existingWeek)
+          ? numberTitle = data
+          : numberTitle = 0; break
+      case 'month':
+        (dataPeriod === existingMonth)
+          ? numberTitle = data
+          : numberTitle = 0; break
+      default: numberTitle = 0
+    }
+
+    return numberTitle
+  }
+
+  renderActivityContent = (type, data) => {
+    return [
+      <div className='dashboard-information-content-activity' key='0'>
+        <p className='dashboard-information-small-text'>
+          <span>{type}</span> Activity
+        </p>
+        {this.activityDropdown(type)}
+      </div>,
+      <div className='dashboard-information-content-number' key='1'>
+        <p className='dashboard-information-small-text'>
+          Number of transactions
+        </p>
+        <p className='dashboard-information-number'>
+          {data && data.length && this.renderPeriod(type, data).length ? this.renderPeriod(type, data)[0].totalCount : '0'}
+        </p>
+      </div>,
+      <div className='dashboard-information-content-number' key='2'>
+        <p className='dashboard-information-small-text'>
+          Transactions volume
+        </p>
+        <p className='dashboard-information-number'>
+          {data && data.length && this.renderPeriod(type, data).length ? formatWei(this.renderPeriod(type, data)[0].volume, 0) : '0'}
+        </p>
+      </div>
+    ]
+  }
 
   copyToClipboard = (e) => {
     this.textArea.select()
@@ -157,8 +195,9 @@ class Dashboard extends Component {
       'coin-status-close': !marketMaker.isOpenForPublic
     })
 
+    console.log(this.state)
+
     const circulatingSupply = new BigNumber(token.totalSupply).minus(marketMaker.ccReserve)
-    const date = new Date()
     return (
       <div className='dashboard-content'>
         <div className='dashboard-header'>
@@ -167,9 +206,7 @@ class Dashboard extends Component {
           </div>
         </div>
         <div className='dashboard-container'>
-          <div className='dashboard-sidebar'>
-            <Moment>{date}</Moment>
-            <Moment unit="days">{date}</Moment>
+          <div className='dashboard-sidebar' style={{'color': 'white'}}>
             <CommunityLogo token={token} />
             <h3 className='dashboard-title'>{token.name}</h3>
             <div className={coinStatusClassStyle}>

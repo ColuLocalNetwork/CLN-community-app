@@ -35,7 +35,7 @@ async function start () {
   await agenda.schedule('in 1 minute', 'processPastMarketOpenEvents')
   await agenda.every('10 minutes', 'processPastMarketOpenEvents', null, {skipImmediate: true})
 
-  // // run every hour
+  // run the task every hour
   await agenda.every('00 * * * *', 'processPastTransferEvents')
   await agenda.schedule('in 3 minute', 'processPastTransferEvents')
 

@@ -22,7 +22,7 @@ module.exports = {
     pageSize: 1000
   },
   mongo: {
-    uri: 'mongodb://localhost/CLN-community-app',
+    uri: 'mongodb://127.0.0.1:27017/CLN-community-app',
     debug: true,
     options: {}
   },
