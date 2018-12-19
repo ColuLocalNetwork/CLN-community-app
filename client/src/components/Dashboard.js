@@ -18,7 +18,7 @@ class Dashboard extends Component {
     dropdown: {},
     activityType: {
       admin: 'month',
-      user: 'week'
+      user: 'month'
     }
   }
 
@@ -115,39 +115,30 @@ class Dashboard extends Component {
     )
   }
 
-  renderPeriod (type, data, count) {
+  renderPeriod (type, data) {
     const date = new Date()
     const existingDay = Moment(date).date()
     const existingWeek = Moment(date).week()
     const existingMonth = Moment(date).month()
 
     const dataPeriod = data && data.length ? data[0]._id[this.state.activityType[type]] : null
-    let numberTitle
 
     switch (this.state.activityType[type]) {
       case 'dayOfMonth':
-        (dataPeriod === existingDay && dataPeriod === existingMonth)
-          ? numberTitle = data
-          : numberTitle = 0; break
+        return (dataPeriod === existingDay && dataPeriod === existingMonth) ? data : 0
       case 'week':
-        (dataPeriod === existingWeek)
-          ? numberTitle = data
-          : numberTitle = 0; break
+        return (dataPeriod === existingWeek) ? data : 0
       case 'month':
-        (dataPeriod === existingMonth)
-          ? numberTitle = data
-          : numberTitle = 0; break
-      default: numberTitle = 0
+        return (dataPeriod === existingMonth) ? data : 0
+      default: return 0
     }
-
-    return numberTitle
   }
 
   renderActivityContent = (type, data) => {
     return [
       <div className='dashboard-information-content-activity' key='0'>
         <p className='dashboard-information-small-text'>
-          <span>{type}</span> Activity
+          <span>{type === 'user' ? 'users' : type}</span> Activity
         </p>
         {this.activityDropdown(type)}
       </div>,
@@ -195,8 +186,6 @@ class Dashboard extends Component {
       'coin-status-close': !marketMaker.isOpenForPublic
     })
 
-    console.log(this.state)
-
     const circulatingSupply = new BigNumber(token.totalSupply).minus(marketMaker.ccReserve)
     return (
       <div className='dashboard-content'>
@@ -206,7 +195,7 @@ class Dashboard extends Component {
           </div>
         </div>
         <div className='dashboard-container'>
-          <div className='dashboard-sidebar' style={{'color': 'white'}}>
+          <div className='dashboard-sidebar'>
             <CommunityLogo token={token} />
             <h3 className='dashboard-title'>{token.name}</h3>
             <div className={coinStatusClassStyle}>

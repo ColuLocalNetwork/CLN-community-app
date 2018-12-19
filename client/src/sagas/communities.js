@@ -24,7 +24,6 @@ function * fetchCommunityStatistics ({tokenAddress, activityType, interval}) {
   const response = yield apiCall(fetchCommunityStatisticsApi, tokenAddress, activityType, interval)
 
   const {data} = response
-  console.log(data)
 
   yield put({
     type: actions.FETCH_COMMUNITY_STATISTICS.SUCCESS,

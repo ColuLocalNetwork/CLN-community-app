@@ -75,7 +75,7 @@ export default class SymbolStep extends Component {
         </div>
         <button
           className='symbol-btn'
-          disabled={this.props.communitySymbol.length < 3}
+          disabled={this.props.communitySymbol.length < 3 || this.state.customSymbol.length < 3}
           onClick={this.setNextStep}
         >
           Approve symbol <FontAwesome name='angle-right' className='symbol-icon' />
