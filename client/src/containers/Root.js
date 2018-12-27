@@ -6,12 +6,15 @@ import { ConnectedRouter } from 'connected-react-router'
 import createHistory from 'history/createBrowserHistory'
 import { AnimatedRoute } from 'react-router-transition'
 import App from 'containers/App'
+import Oven from 'components/oven/Oven'
 import IssuanceWizard from 'components/issuance/IssuanceWizard'
 import ContactForm from 'components/ContactForm'
 import Dashboard from 'components/Dashboard'
 import withTracker from 'containers/withTracker'
 import Web3, {withNetwork} from 'containers/Web3'
 import Layout from 'components/Layout'
+import 'scss/styles.scss'
+
 const history = createHistory()
 
 const contactFormTransition = {
@@ -46,7 +49,8 @@ export default class Root extends Component {
             <Web3 />
             <div style={{height: '100%'}}>
               <Layout>
-                <Route exact path='/' component={withTracker(withNetwork(App))} />
+                <Route path='/' component={withNetwork(App)} />
+                <Route exact path='/' component={withTracker(withNetwork(Oven))} />
                 <div className='contact-form-wrapper'>
                   <AnimatedRoute
                     atLeave={0}
