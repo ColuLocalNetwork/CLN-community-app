@@ -4,7 +4,6 @@ import TopNav from 'components/TopNav'
 import Oven from 'components/oven/Oven'
 import {fetchClnToken} from 'actions/communities'
 import {fetchTokenQuote} from 'actions/fiat'
-import ReactGA from 'services/ga'
 import 'scss/styles.scss'
 
 class App extends Component {
@@ -15,18 +14,6 @@ class App extends Component {
   componentDidMount () {
     this.props.fetchClnToken()
     this.props.fetchTokenQuote('CLN', 'USD')
-  }
-
-  onClickExplore = () => {
-    this.setState({
-      welcomeDone: true
-    })
-
-    ReactGA.event({
-      category: 'Map',
-      action: 'Click',
-      label: 'Explore'
-    })
   }
 
   render = () => (<div>
