@@ -49,6 +49,7 @@ export default class Root extends Component {
                 <Route exact path='/' component={withTracker(withNetwork(App))} />
                 <div className='contact-form-wrapper'>
                   <AnimatedRoute
+                    atLeave={0}
                     path='/view/contact-us'
                     component={withTracker(ContactForm)}
                     mapStyles={mapStylesContact}
@@ -61,13 +62,13 @@ export default class Root extends Component {
                   mapStyles={mapStylesContact}
                   {...contactFormTransition}
                 />
-                <Route
-                  path='/view/dashboard/:address'
-                  component={withTracker(withNetwork(Dashboard))}
-                  mapStyles={mapStylesContact}
-                  {...contactFormTransition}
-                />
               </Layout>
+              <Route
+                path='/view/dashboard/:address'
+                component={withTracker(withNetwork(Dashboard))}
+                mapStyles={mapStylesContact}
+                {...contactFormTransition}
+              />
             </div>
           </div>
         </ConnectedRouter>
