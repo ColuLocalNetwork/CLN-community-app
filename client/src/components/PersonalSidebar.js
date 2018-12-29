@@ -14,6 +14,7 @@ const PersonalSidebarCoin = ({accountAddress, token, marketMaker, balance, fiat}
   <div className='personal-community-content'>
     <div className='personal-community-content-balance'>
       CC Balance <span>{balance ? formatWei(balance, 0) : 0}</span>
+      <p className='coin-name'>{token.name}</p>
       <div className='coin-content'>
         <div className='coin-content-type'>
           <span className='coin-currency-type'>CLN</span>
@@ -34,6 +35,12 @@ const PersonalSidebarCoin = ({accountAddress, token, marketMaker, balance, fiat}
 ]
 
 class PersonalSidebar extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      search: ''
+    }
+  }
   componentWillReceiveProps = ({accountAddress, account}) => {
     if (accountAddress && !this.props.accountAddress) {
       this.props.fetchTokensWithBalances(accountAddress)
@@ -59,33 +66,16 @@ class PersonalSidebar extends Component {
     })
   }
 
-  renderCoin = (accountAddress, token, marketMaker, balance) => [
-    <CommunityLogo token={token} />,
-    <div className='personal-community-content'>
-      <div className='personal-community-content-balance'>
-        CC Balance <span>{balance && formatWei(balance, 0)}</span>
-        <div className='coin-content'>
-          <div className='coin-content-type'>
-            <span className='coin-currency-type'>CLN</span>
-            <span className='coin-currency'>{marketMaker ? formatEther(marketMaker.currentPrice) : null}</span>
-          </div>
-          <div className='coin-content-type'>
-            <span className='coin-currency-type'>USD</span>
-            <span className='coin-currency'>
-              {
-                marketMaker
-                  ? formatEther(marketMaker.currentPrice.multipliedBy(this.props.fiat.USD && this.props.fiat.USD.price))
-                  : null
-              }</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  ]
-
   renderIssuedCoins (accountAddress, tokens, marketMaker) {
-    return Object.keys(tokens).length ? Object.keys(tokens).map((key) => {
-      if (tokens[key].owner === accountAddress) {
+    let filterTokens = Object.keys(tokens).length ? tokens : null
+    let searchTokens = {}
+    filterTokens = Object.keys(tokens).length ? Object.keys(tokens).filter((token) =>
+      tokens[token].name.toLowerCase().search(
+        this.state.search.toLowerCase()) !== -1
+    ) : null
+    filterTokens.map(item => (searchTokens[item] = tokens[item]))
+    return Object.keys(tokens).length && Object.keys(searchTokens).length ? Object.keys(tokens).map((key) => {
+      if ((tokens[key].owner === accountAddress) && searchTokens[key]) {
         return (
           <div className='personal-community'>
             <PersonalSidebarCoin
@@ -100,12 +90,19 @@ class PersonalSidebar extends Component {
           </div>
         )
       }
-    }) : null
+    }) : <p className='no-items'>There is no issued coins</p>
   }
 
   renderPortfolioCoins (accountAddress, tokens, marketMaker, portfolioTokens) {
-    return portfolioTokens && portfolioTokens.length ? portfolioTokens.map((key) => {
-      if (tokens[key.address] && marketMaker[key.address]) {
+    let filterTokens = Object.keys(tokens).length ? tokens : null
+    let searchTokens = {}
+    filterTokens = Object.keys(tokens).length ? Object.keys(tokens).filter((token) =>
+      tokens[token].name.toLowerCase().search(
+        this.state.search.toLowerCase()) !== -1
+    ) : null
+    filterTokens.map(item => (searchTokens[item] = tokens[item]))
+    return portfolioTokens && portfolioTokens.length && Object.keys(searchTokens).length ? portfolioTokens.map((key) => {
+      if (tokens[key.address] && marketMaker[key.address] && searchTokens[key.address]) {
         return (
           <div className='personal-community'>
             <PersonalSidebarCoin
@@ -117,7 +114,11 @@ class PersonalSidebar extends Component {
           </div>
         )
       }
-    }) : null
+    }) : <p className='no-items'>There is no portfolio coins</p>
+  }
+
+  handleSearch = (event) => {
+    this.setState({search: event.target.value})
   }
 
   render () {
@@ -140,7 +141,7 @@ class PersonalSidebar extends Component {
           </span>
         </div>
         <div className='personal-sidebar-search'>
-          <input placeholder='Communities' />
+          <input placeholder='What Currency are you looking for?' onChange={(e) => this.handleSearch(e)} />
           <button className='search-btn'><FontAwesome name='search' /></button>
         </div>
         <div className='personal-sidebar-content'>
