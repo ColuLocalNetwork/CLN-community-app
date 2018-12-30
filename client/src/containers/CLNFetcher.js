@@ -1,15 +1,15 @@
-import React, {Component} from 'react'
+import {Component} from 'react'
 import { connect } from 'react-redux'
 import {fetchClnToken} from 'actions/communities'
 import {fetchTokenQuote} from 'actions/fiat'
 
-class App extends Component {
+class CLNFethcher extends Component {
   componentDidMount () {
     this.props.fetchClnToken()
     this.props.fetchTokenQuote('CLN', 'USD')
   }
 
-  render = () => <div />
+  render = () => null
 }
 
 const mapDispatchToProps = {
@@ -17,4 +17,4 @@ const mapDispatchToProps = {
   fetchClnToken
 }
 
-export default connect(null, mapDispatchToProps)(App)
+export default connect(null, mapDispatchToProps)(CLNFethcher)

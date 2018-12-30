@@ -5,7 +5,7 @@ import { Route } from 'react-router'
 import { ConnectedRouter } from 'connected-react-router'
 import createHistory from 'history/createBrowserHistory'
 import { AnimatedRoute } from 'react-router-transition'
-import App from 'containers/App'
+import CLNFetcher from 'containers/CLNFetcher'
 import Oven from 'components/oven/Oven'
 import IssuanceWizard from 'components/issuance/IssuanceWizard'
 import ContactForm from 'components/ContactForm'
@@ -49,7 +49,7 @@ export default class Root extends Component {
             <Web3 />
             <div style={{height: '100%'}}>
               <Layout>
-                <Route path='/' component={withNetwork(App)} />
+                <Route path='/' component={withNetwork(CLNFetcher)} />
                 <Route exact path='/' component={withTracker(withNetwork(Oven))} />
                 <div className='contact-form-wrapper'>
                   <AnimatedRoute
