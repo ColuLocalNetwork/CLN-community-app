@@ -11,16 +11,12 @@ import { LOGIN_MODAL } from 'constants/uiConstants'
 import ClnIcon from 'images/cln.png'
 import ProfileIcon from 'images/user.svg'
 import ReactGA from 'services/ga'
-import PersonalSidebar from './PersonalSidebar'
+import PersonalSidebar from 'components/PersonalSidebar'
 
 class TopNav extends Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      openMenu: false,
-      profile: false
-    }
+  state = {
+    openMenu: false,
+    profile: false
   }
 
   onClickMenu = () => {
@@ -85,7 +81,6 @@ class TopNav extends Component {
       'top-nav-links': true,
       'show-top-nav-links': true
     })
-
     return (
       <div className={topNavClass}>
         <div className='top-nav-logo'>
