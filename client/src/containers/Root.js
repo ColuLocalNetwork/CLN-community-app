@@ -32,13 +32,6 @@ const contactFormTransition = {
   }
 }
 
-function mapStylesContact (styles) {
-  return {
-    transform: `translateY(${styles.offset}%)`,
-    opacity: `${styles.opacity}`
-  }
-}
-
 export default class Root extends Component {
   render () {
     const { store } = this.props
@@ -56,21 +49,18 @@ export default class Root extends Component {
                     atLeave={0}
                     path='/view/contact-us'
                     component={withTracker(ContactForm)}
-                    mapStyles={mapStylesContact}
                     {...contactFormTransition}
                   />
                 </div>
                 <Route
                   path='/view/issuance'
                   component={withTracker(withNetwork(IssuanceWizard))}
-                  mapStyles={mapStylesContact}
                   {...contactFormTransition}
                 />
               </Layout>
               <Route
                 path='/view/dashboard/:address'
                 component={withTracker(withNetwork(Dashboard))}
-                mapStyles={mapStylesContact}
                 {...contactFormTransition}
               />
             </div>
