@@ -10,7 +10,7 @@ class Web3 extends Component {
   componentDidMount () {
     this.props.getNetworkType()
     // TODO: Move this to getNetworkType saga after redux-saga 1.0.0 upgrade
-    if (window.ethereum) {
+    if (window.ethereum && window.ethereum.on) {
       window.ethereum.on('accountsChanged', (accounts) => {
         if (accounts[0]) {
           this.props.checkAccountChanged(accounts[0])

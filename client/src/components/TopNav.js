@@ -30,7 +30,7 @@ class TopNav extends Component {
   showProfile = () => this.setState({profile: true})
 
   showConnectMetamask = () => {
-    if (!this.props.network.isMetaMask || !this.props.network.accountAddress) {
+    if (!this.props.network.accountAddress) {
       this.props.loadModal(LOGIN_MODAL)
       ReactGA.event({
         category: 'Top Bar',
