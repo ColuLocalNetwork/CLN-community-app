@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import pickBy from 'lodash/pickBy'
 import {connect} from 'react-redux'
 import {fetchTokens, fetchBalances, fetchTokensWithBalances} from 'actions/accounts'
 import ProfileIcon from 'images/user.svg'
@@ -63,16 +64,15 @@ class PersonalSidebar extends Component {
     })
   }
 
-  renderIssuedCoins (accountAddress, tokens, marketMaker) {
-    let filterTokens = tokens
-    let searchTokens = {}
-    filterTokens = Object.keys(tokens).filter((token) =>
-      tokens[token].name.toLowerCase().search(
+  filterBySearch = (search, tokens) =>
+    search ? pickBy(tokens, (token) =>
+      token.name.toLowerCase().search(
         this.state.search.toLowerCase()) !== -1
-    )
-    filterTokens.map(item => (searchTokens[item] = tokens[item]))
-    return Object.keys(searchTokens).length ? Object.keys(tokens).map((key) => {
-      if ((tokens[key].owner === accountAddress) && searchTokens[key]) {
+    ) : tokens
+
+  renderIssuedCoins (accountAddress, tokens, marketMaker) {
+    return tokens && Object.keys(tokens).length ? Object.keys(tokens).map((key) => {
+      if ((tokens[key].owner === accountAddress)) {
         return (
           <div className='personal-community'>
             <PersonalSidebarCoin
@@ -90,24 +90,17 @@ class PersonalSidebar extends Component {
     }) : <p className='no-items'>There is no issued coins</p>
   }
 
-  renderPortfolioCoins (accountAddress, tokens, marketMaker, portfolioTokens) {
-    let filterTokens = tokens
-    let searchTokens = {}
-    filterTokens = Object.keys(tokens).filter((token) =>
-      tokens[token].name.toLowerCase().search(
-        this.state.search.toLowerCase()) !== -1
-    )
-    filterTokens.map(item => (searchTokens[item] = tokens[item]))
-    return portfolioTokens && portfolioTokens.length && Object.keys(searchTokens).length ? portfolioTokens.map((key) => {
-      if (tokens[key.address] && marketMaker[key.address] && searchTokens[key.address]) {
+  renderPortfolioCoins (accountAddress, tokens, marketMaker) {
+    return tokens && Object.keys(tokens).length ? Object.keys(tokens).map((key) => {
+      if (marketMaker[key]) {
         return (
           <div className='personal-community'>
             <PersonalSidebarCoin
               fiat={this.props.fiat}
               accountAddress={accountAddress}
-              token={tokens[key.address]}
-              marketMaker={marketMaker[key.address]}
-              balance={this.props.account.balances[key.address]} />
+              token={tokens[key]}
+              marketMaker={marketMaker[key]}
+              balance={this.props.account.balances[key]} />
           </div>
         )
       }
@@ -119,8 +112,8 @@ class PersonalSidebar extends Component {
   }
 
   render () {
-    const { tokens, marketMaker, account } = this.props
-    const portfolioTokens = (account && account.tokens) ? account.tokens : null
+    const { tokens, marketMaker } = this.props
+    const filteredTokens = this.filterBySearch(this.state.search, tokens)
     return (
       <div className='personal-sidebar'>
         <div className='personal-sidebar-top'>
@@ -145,11 +138,11 @@ class PersonalSidebar extends Component {
         <div className='personal-sidebar-content'>
           <h3 className='personal-sidebar-title'>Issued Coins</h3>
           <div className='personal-sidebar-content-community'>
-            {this.renderIssuedCoins(this.props.accountAddress, tokens, marketMaker)}
+            {this.renderIssuedCoins(this.props.accountAddress, filteredTokens, marketMaker)}
           </div>
           <h3 className='personal-sidebar-title'>Portfolio Coins</h3>
           <div className='personal-sidebar-content-community'>
-            {this.renderPortfolioCoins(this.props.accountAddress, tokens, marketMaker, portfolioTokens)}
+            {this.renderPortfolioCoins(this.props.accountAddress, filteredTokens, marketMaker)}
           </div>
         </div>
         <div className='personal-sidebar-shadow' onClick={() => this.props.closeProfile()} />
