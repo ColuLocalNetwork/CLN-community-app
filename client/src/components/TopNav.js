@@ -6,7 +6,7 @@ import FontAwesome from 'react-fontawesome'
 
 import * as actions from 'actions/ui'
 import {getClnBalance} from 'selectors/accounts'
-import { LOGIN_MODAL } from 'constants/uiConstants'
+import { LOGIN_MODAL, CONTACT_FORM } from 'constants/uiConstants'
 
 import ClnIcon from 'images/cln.png'
 import ProfileIcon from 'images/user.svg'
@@ -15,14 +15,7 @@ import PersonalSidebar from 'components/PersonalSidebar'
 
 class TopNav extends Component {
   state = {
-    openMenu: false,
     profile: false
-  }
-
-  onClickMenu = () => {
-    this.setState({
-      openMenu: !this.state.openMenu
-    })
   }
 
   closeProfile = () => this.setState({profile: false})
@@ -41,10 +34,7 @@ class TopNav extends Component {
   }
 
   showContactUs = () => {
-    this.props.history.push('/view/contact-us')
-    this.setState({
-      openMenu: !this.state.openMenu
-    })
+    this.props.loadModal(CONTACT_FORM)
     ReactGA.event({
       category: 'Top Bar',
       action: 'Click',
@@ -54,9 +44,6 @@ class TopNav extends Component {
 
   showIssuance = () => {
     this.props.history.push('/view/issuance')
-    this.setState({
-      openMenu: !this.state.openMenu
-    })
     ReactGA.event({
       category: 'Top Bar',
       action: 'Click',
@@ -77,7 +64,6 @@ class TopNav extends Component {
       'top-navigator': true
     })
     const navLinksClass = classNames({
-      'hide': !this.state.openMenu,
       'top-nav-links': true,
       'show-top-nav-links': true
     })
@@ -113,7 +99,6 @@ class TopNav extends Component {
             </span>
           </div>
         </div>
-        <FontAwesome name={this.state.openMenu ? 'times' : 'align-justify'} className='burger-menu' onClick={this.onClickMenu} />
         {this.state.profile &&
           <PersonalSidebar
             closeProfile={this.closeProfile}

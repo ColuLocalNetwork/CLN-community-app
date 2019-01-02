@@ -4,11 +4,9 @@ import { Provider } from 'react-redux'
 import { Route } from 'react-router'
 import { ConnectedRouter } from 'connected-react-router'
 import createHistory from 'history/createBrowserHistory'
-import { AnimatedRoute } from 'react-router-transition'
 import CLNFetcher from 'containers/CLNFetcher'
 import Oven from 'components/oven/Oven'
 import IssuanceWizard from 'components/issuance/IssuanceWizard'
-import ContactForm from 'components/ContactForm'
 import Dashboard from 'components/Dashboard'
 import withTracker from 'containers/withTracker'
 import Web3, {withNetwork} from 'containers/Web3'
@@ -44,14 +42,7 @@ export default class Root extends Component {
               <Layout>
                 <Route path='/' component={withNetwork(CLNFetcher)} />
                 <Route exact path='/' component={withTracker(withNetwork(Oven))} />
-                <div className='contact-form-wrapper'>
-                  <AnimatedRoute
-                    atLeave={0}
-                    path='/view/contact-us'
-                    component={withTracker(ContactForm)}
-                    {...contactFormTransition}
-                  />
-                </div>
+
                 <Route
                   path='/view/issuance'
                   component={withTracker(withNetwork(IssuanceWizard))}

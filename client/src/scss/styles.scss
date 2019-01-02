@@ -65,6 +65,7 @@ $breakpoint-desktop: 1200px;
 	border: none;
 	border-bottom: solid 1px $disabled;
 	margin-top: 12px;
+  background-color: transparent;
 	@media (max-width: $breakpoint-tablet) {
 		font-size: 16px;
 	}
