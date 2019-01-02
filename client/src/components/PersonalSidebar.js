@@ -35,11 +35,8 @@ const PersonalSidebarCoin = ({accountAddress, token, marketMaker, balance, fiat}
 ]
 
 class PersonalSidebar extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      search: ''
-    }
+  state = {
+    search: ''
   }
   componentWillReceiveProps = ({accountAddress, account}) => {
     if (accountAddress && !this.props.accountAddress) {
@@ -67,14 +64,14 @@ class PersonalSidebar extends Component {
   }
 
   renderIssuedCoins (accountAddress, tokens, marketMaker) {
-    let filterTokens = Object.keys(tokens).length ? tokens : null
+    let filterTokens = tokens
     let searchTokens = {}
-    filterTokens = Object.keys(tokens).length ? Object.keys(tokens).filter((token) =>
+    filterTokens = Object.keys(tokens).filter((token) =>
       tokens[token].name.toLowerCase().search(
         this.state.search.toLowerCase()) !== -1
-    ) : null
+    )
     filterTokens.map(item => (searchTokens[item] = tokens[item]))
-    return Object.keys(tokens).length && Object.keys(searchTokens).length ? Object.keys(tokens).map((key) => {
+    return Object.keys(searchTokens).length ? Object.keys(tokens).map((key) => {
       if ((tokens[key].owner === accountAddress) && searchTokens[key]) {
         return (
           <div className='personal-community'>
@@ -94,12 +91,12 @@ class PersonalSidebar extends Component {
   }
 
   renderPortfolioCoins (accountAddress, tokens, marketMaker, portfolioTokens) {
-    let filterTokens = Object.keys(tokens).length ? tokens : null
+    let filterTokens = tokens
     let searchTokens = {}
-    filterTokens = Object.keys(tokens).length ? Object.keys(tokens).filter((token) =>
+    filterTokens = Object.keys(tokens).filter((token) =>
       tokens[token].name.toLowerCase().search(
         this.state.search.toLowerCase()) !== -1
-    ) : null
+    )
     filterTokens.map(item => (searchTokens[item] = tokens[item]))
     return portfolioTokens && portfolioTokens.length && Object.keys(searchTokens).length ? portfolioTokens.map((key) => {
       if (tokens[key.address] && marketMaker[key.address] && searchTokens[key.address]) {
@@ -122,7 +119,8 @@ class PersonalSidebar extends Component {
   }
 
   render () {
-    const portfolioTokens = (this.props.account && this.props.account.tokens) ? this.props.account.tokens : null
+    const { tokens, marketMaker, account } = this.props
+    const portfolioTokens = (account && account.tokens) ? account.tokens : null
     return (
       <div className='personal-sidebar'>
         <div className='personal-sidebar-top'>
@@ -147,11 +145,11 @@ class PersonalSidebar extends Component {
         <div className='personal-sidebar-content'>
           <h3 className='personal-sidebar-title'>Issued Coins</h3>
           <div className='personal-sidebar-content-community'>
-            {this.renderIssuedCoins(this.props.accountAddress, this.props.tokens, this.props.marketMaker)}
+            {this.renderIssuedCoins(this.props.accountAddress, tokens, marketMaker)}
           </div>
           <h3 className='personal-sidebar-title'>Portfolio Coins</h3>
           <div className='personal-sidebar-content-community'>
-            {this.renderPortfolioCoins(this.props.accountAddress, this.props.tokens, this.props.marketMaker, portfolioTokens)}
+            {this.renderPortfolioCoins(this.props.accountAddress, tokens, marketMaker, portfolioTokens)}
           </div>
         </div>
         <div className='personal-sidebar-shadow' onClick={() => this.props.closeProfile()} />
