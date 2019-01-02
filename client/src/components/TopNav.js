@@ -15,7 +15,14 @@ import PersonalSidebar from 'components/PersonalSidebar'
 
 class TopNav extends Component {
   state = {
+    openMenu: false,
     profile: false
+  }
+
+  onClickMenu = () => {
+    this.setState({
+      openMenu: !this.state.openMenu
+    })
   }
 
   closeProfile = () => this.setState({profile: false})
@@ -35,6 +42,9 @@ class TopNav extends Component {
 
   showContactUs = () => {
     this.props.loadModal(CONTACT_FORM)
+    this.setState({
+      openMenu: !this.state.openMenu
+    })
     ReactGA.event({
       category: 'Top Bar',
       action: 'Click',
@@ -44,6 +54,9 @@ class TopNav extends Component {
 
   showIssuance = () => {
     this.props.history.push('/view/issuance')
+    this.setState({
+      openMenu: !this.state.openMenu
+    })
     ReactGA.event({
       category: 'Top Bar',
       action: 'Click',
@@ -64,6 +77,7 @@ class TopNav extends Component {
       'top-navigator': true
     })
     const navLinksClass = classNames({
+      'hide': !this.state.openMenu,
       'top-nav-links': true,
       'show-top-nav-links': true
     })
@@ -89,7 +103,7 @@ class TopNav extends Component {
               onClick={this.handleLinkClick}>
               Whitepaper</a>
             <div style={{width: isMobile ? '100%' : 'auto'}} onClick={this.showContactUs} >
-              <div className='top-nav-text'>Contact us</div>
+              <a className='top-nav-text'>Contact us</a>
             </div>
             <div className='separator-vertical' />
           </div>
@@ -99,6 +113,7 @@ class TopNav extends Component {
             </span>
           </div>
         </div>
+        <FontAwesome name={this.state.openMenu ? 'times' : 'align-justify'} className='burger-menu' onClick={this.onClickMenu} />
         {this.state.profile &&
           <PersonalSidebar
             closeProfile={this.closeProfile}
