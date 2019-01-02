@@ -110,6 +110,7 @@ class PersonalSidebar extends Component {
   render () {
     const { tokens, marketMaker } = this.props
     const filteredTokens = this.filterBySearch(this.state.search, tokens)
+
     return (
       <div className='personal-sidebar'>
         <div className='personal-sidebar-top'>
