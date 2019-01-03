@@ -80,8 +80,6 @@ class EconomicCalculatorModal extends Component {
       legend: {position: 'none'}
     }
 
-    console.log(this.props)
-
     return (
       <Modal className='calculator' onClose={this.props.hideModal}>
         <div className='metamask-popup-close' onClick={this.props.hideModal}>
@@ -186,14 +184,18 @@ class EconomicCalculatorModal extends Component {
             }
           </div>
           <div className='calculator-chart-footer'>
-            <button className='btn-adding'>
+            {this.props.wrapper !== 'summary' && <button className='btn-adding'>
               <FontAwesome name='plus' className='top-nav-issuance-plus' /> Add CLN
-            </button>
+            </button>}
           </div>
         </div>
       </Modal>
     )
   }
+}
+
+EconomicCalculatorModal.defaultProps = {
+  wrapper: 'wrapper'
 }
 
 EconomicCalculatorModal.propTypes = {

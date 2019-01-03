@@ -24,7 +24,7 @@ export default class Community extends Component {
 
   handleAddCln = () => this.canInsertCLN(this.props) && this.props.handleAddCln(this.props.token, this.props.marketMaker)
 
-  handleLoadCalculator = () => this.props.loadCalculator(this.props.token, this.props.marketMaker, this.props.wrapper)
+  handleLoadCalculator = () => this.props.loadCalculator(this.props.token, this.props.marketMaker)
 
   render () {
     const {currentPrice} = this.props.marketMaker
