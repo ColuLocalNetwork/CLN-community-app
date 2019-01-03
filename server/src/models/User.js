@@ -7,12 +7,13 @@ module.exports = (mongoose) => {
   const UserSchema = new Schema({
     fullName: {type: String, required: [true, "can't be blank"]},
     email: {type: String, required: [true, "can't be blank"], validate: [ validator.isEmail, 'invalid email' ]},
-    location: {type: String, required: [true, "can't be blank"]},
+    ccAddress: {type: String, required: [true, "can't be blank"]},
+    country: {type: String, required: [true, "can't be blank"]},
     receiveMail: {type: Boolean, default: false}
   }, {timestamps: true})
 
   UserSchema.index({fullName: 1})
-  UserSchema.index({email: 1}, {unique: true})
+  UserSchema.index({email: 1, ccAddress: 1}, {unique: true})
 
   UserSchema.set('toJSON', {
     versionKey: false
