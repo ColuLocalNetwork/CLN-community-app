@@ -12,8 +12,7 @@ module.exports = (mongoose) => {
     receiveMail: {type: Boolean, default: false}
   }, {timestamps: true})
 
-  UserSchema.index({fullName: 1})
-  UserSchema.index({email: 1, ccAddress: 1}, {unique: true})
+  UserSchema.index({ccAddress: 1}, {unique: true})
 
   UserSchema.set('toJSON', {
     versionKey: false
