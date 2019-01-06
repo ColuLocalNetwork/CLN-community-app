@@ -3,5 +3,6 @@ module.exports = {
   CurrencyFactory: require('./CurrencyFactory'),
   ColuLocalCurrency: require('./ColuLocalCurrency'),
   EllipseMarketMaker: require('./EllipseMarketMaker'),
-  SimpleList: require('./SimpleList')
+  SimpleList: require('./SimpleList'),
+  SimpleListFactory: require('./SimpleListFactory')
 }

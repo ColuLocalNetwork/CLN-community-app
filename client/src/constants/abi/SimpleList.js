@@ -70,7 +70,12 @@ module.exports = [
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "name": "admin",
+        "type": "address"
+      }
+    ],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "constructor"
