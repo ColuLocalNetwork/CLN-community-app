@@ -26,7 +26,6 @@ class EntityDirectory extends Component {
   }
 
   render () {
-    console.log(this.props.entities)
     return (
       <div className='dashboard-content'>
         <div className='dashboard-header'>
@@ -46,10 +45,10 @@ class EntityDirectory extends Component {
             !this.props.listAddress && <button onClick={this.handleCreateList}>Create List</button>
           }
           <EntityForm addEntity={this.handleAddEntity} />
+          {
+            this.props.entities.map((entity, index) => <Entity key={index} entity={entity} />)
+          }
         </div>
-        {
-          this.props.entities.map((entity, index) => <Entity key={index} entity={entity} />)
-        }
       </div>
     )
   }
