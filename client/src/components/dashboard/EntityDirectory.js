@@ -1,21 +1,26 @@
 import React, { Component } from 'react'
 import FontAwesome from 'react-fontawesome'
 import { connect } from 'react-redux'
-import {createList, addEntity, fetchEntities} from 'actions/list'
+
+import {createList, getList, addEntity, fetchEntities} from 'actions/list'
 import ClnIcon from 'images/cln.png'
+import EntityForm from 'components/dashboard/EntityForm'
 
 class EntityDirectory extends Component {
   setQuitDashboard = () => this.props.history.goBack()
 
-  handleAddEntity = () => this.props.addEntity({
-    name: 'my business',
-    address: 'Tel Aviv'
-  })
+  handleAddEntity = (data) => this.props.addEntity(this.props.listAddress, data)
 
   handleCreateList = () => this.props.createList(this.props.tokenAddress)
 
   componentDidMount () {
-    this.props.fetchEntities(1)
+    this.props.getList(this.props.tokenAddress)
+  }
+
+  componentDidUpdate (prevProps) {
+    if (this.props.listAddress !== prevProps.listAddress) {
+      this.props.fetchEntities(this.props.listAddress, 1)
+    }
   }
 
   render () {
@@ -32,10 +37,12 @@ class EntityDirectory extends Component {
             <FontAwesome className='ctrl-icon' name='times' />
           </button>
         </div>
-        <div className='dashboard-container'>
+        <div className='dashboard-entity-container'>
           EntityDirectory
-          <button onClick={this.handleCreateList}>Create List</button>
-          <button onClick={this.handleAddEntity}>Add Entity</button>
+          {
+            !this.props.listAddress && <button onClick={this.handleCreateList}>Create List</button>
+          }
+          <EntityForm addEntity={this.handleAddEntity} />
         </div>
       </div>
     )
@@ -43,11 +50,13 @@ class EntityDirectory extends Component {
 }
 
 const mapStateToProps = (state, {match}) => ({
-  tokenAddress: match.params.address
+  tokenAddress: match.params.address,
+  ...state.screens.directory
 })
 
 const mapDispatchToProps = {
   createList,
+  getList,
   addEntity,
   fetchEntities
 }
