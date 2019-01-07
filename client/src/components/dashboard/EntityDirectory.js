@@ -2,9 +2,11 @@ import React, { Component } from 'react'
 import FontAwesome from 'react-fontawesome'
 import { connect } from 'react-redux'
 
-import {createList, getList, addEntity, fetchEntities} from 'actions/list'
+import {getEntities} from 'selectors/directory'
+import {createList, getList, addEntity, fetchEntities} from 'actions/directory'
 import ClnIcon from 'images/cln.png'
-import EntityForm from 'components/dashboard/EntityForm'
+import EntityForm from './EntityForm'
+import Entity from './Entity'
 
 class EntityDirectory extends Component {
   setQuitDashboard = () => this.props.history.goBack()
@@ -24,6 +26,7 @@ class EntityDirectory extends Component {
   }
 
   render () {
+    console.log(this.props.entities)
     return (
       <div className='dashboard-content'>
         <div className='dashboard-header'>
@@ -44,6 +47,9 @@ class EntityDirectory extends Component {
           }
           <EntityForm addEntity={this.handleAddEntity} />
         </div>
+        {
+          this.props.entities.map((entity, index) => <Entity key={index} entity={entity} />)
+        }
       </div>
     )
   }
@@ -51,6 +57,7 @@ class EntityDirectory extends Component {
 
 const mapStateToProps = (state, {match}) => ({
   tokenAddress: match.params.address,
+  entities: getEntities(state),
   ...state.screens.directory
 })
 

@@ -1,6 +1,10 @@
-import {GET_LIST, FETCH_ENTITIES} from 'actions/list'
+import {GET_LIST, FETCH_ENTITIES} from 'actions/directory'
 
-export default (state = {}, action) => {
+const initialState = {
+  listHashes: []
+}
+
+export default (state = initialState, action) => {
   switch (action.type) {
     case GET_LIST.SUCCESS:
       return {...state, ...action.response}

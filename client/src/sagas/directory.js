@@ -1,15 +1,12 @@
 import { all, call, put, select } from 'redux-saga/effects'
 import { contract } from 'osseus-wallet'
 
-import * as actions from 'actions/list'
-import {createEntityPut, tryTakeEvery} from './utils'
+import * as actions from 'actions/directory'
+import {tryTakeEvery} from './utils'
 import {getAccountAddress} from 'selectors/accounts'
 import {getAddresses} from 'selectors/network'
 import {createMetadata} from 'sagas/metadata'
 import {fetchMetadata} from 'actions/metadata'
-import keyBy from 'lodash/keyBy'
-
-const entityPut = createEntityPut(actions.entityName)
 
 export function * createList ({tokenAddress}) {
   const accountAddress = yield select(getAccountAddress)
@@ -72,17 +69,15 @@ export function * fetchEntities ({listAddress, page = 1}) {
     promises.push(SimpleListContract.methods.getEntity(i).call())
   }
 
-  const directoryEntities = yield all(promises)
-  const entities = keyBy(directoryEntities)
-  yield entityPut({type: actions.FETCH_ENTITIES.SUCCESS,
+  const listHashes = yield all(promises)
+  yield put({type: actions.FETCH_ENTITIES.SUCCESS,
     response: {
-      entities,
-      directoryEntities
+      listHashes
     }
   })
 
-  for (let directoryEntiry of directoryEntities) {
-    const tokenURI = `ipfs://${directoryEntiry}`
+  for (let hash of listHashes) {
+    const tokenURI = `ipfs://${hash}`
     yield put(fetchMetadata(tokenURI))
   }
 }
