@@ -4,8 +4,20 @@ import { contract } from 'osseus-wallet'
 import * as actions from 'actions/accounts'
 import {tryTakeEvery, apiCall} from './utils'
 import {getClnAddress} from 'selectors/network'
-import {fetchTokens as fetchTokensApi} from 'services/api'
+import {fetchTokens as fetchTokensApi, addUserInformation} from 'services/api'
 import {CHECK_ACCOUNT_CHANGED} from 'actions/network'
+
+function * setUserInformation ({information}) {
+  const response = yield apiCall(addUserInformation, information)
+  const data = response.data
+  yield put({
+    type: actions.SET_USER_INFORMATION.SUCCESS,
+    information,
+    response: {
+      data
+    }
+  })
+}
 
 function * balanceOf ({tokenAddress, accountAddress, blockNumber}) {
   const ColuLocalNetworkContract = contract.getContract({abiName: 'ColuLocalCurrency', address: tokenAddress})
@@ -59,6 +71,7 @@ export default function * accountsSaga () {
     takeEvery(actions.FETCH_TOKENS.REQUEST, fetchTokens),
     takeEvery(CHECK_ACCOUNT_CHANGED.SUCCESS, watchAccountChanged),
     tryTakeEvery(actions.FETCH_BALANCES, fetchBalances, 1),
+    tryTakeEvery(actions.SET_USER_INFORMATION, setUserInformation),
     tryTakeEvery(actions.FETCH_TOKENS_WITH_BALANCES, fetchTokensWithBalances, 1)
   ])
 }

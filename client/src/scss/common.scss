@@ -305,6 +305,9 @@
 		&::placeholder {
 			color: #5f677e;
 		}
+		&.form-control-error {
+			//border-color: red;
+		}
 	}
 }
 

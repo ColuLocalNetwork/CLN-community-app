@@ -13,6 +13,7 @@ import DetailsStep from './DetailsStep'
 import SummaryStep from './SummaryStep'
 import {issueCommunity} from 'actions/communities'
 import {getAddresses} from 'selectors/network'
+import {setUserInformation} from 'actions/accounts'
 import { METAMASK_ACCOUNT_MODAL, ECONOMIC_CALCULATOR_MODAL } from 'constants/uiConstants'
 
 class IssuanceWizard extends Component {
@@ -25,7 +26,17 @@ class IssuanceWizard extends Component {
     totalSupply: '',
     communityLogo: {},
     stepPosition: {},
-    scrollPosition: 0
+    scrollPosition: 0,
+    selectedCountry: '',
+    userName: '',
+    userEmail: '',
+    gettingEmail: true
+  }
+
+  constructor (props) {
+    super(props)
+
+    this.setGettingEmail = this.setGettingEmail.bind(this)
   }
 
   componentDidMount () {
@@ -145,8 +156,37 @@ class IssuanceWizard extends Component {
     }
   }
 
+  setUserName = e => this.setState({userName: e.target.value})
+  setUserEmail = e => this.setState({userEmail: e.target.value})
+  setCountry = e => this.setState({selectedCountry: e.target.value})
+  setGettingEmail = e => this.setState({gettingEmail: e.target.checked})
+
+  validateEmail = () => {
+    const re = /[a-z0-9!#$%&'*+\\/=?^_{|}~-]+(?:\.[a-z0-9!#$%&'*+\\/=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9][a-z0-9-]*[a-z0-9]/
+    return re.test(this.state.userEmail)
+  }
+
+  setDisabledBtn = () => {
+    return this.state.selectedCountry !== 'Select Country' || (this.state.userEmail === '') || !this.validateEmail() ||
+        !this.state.setGettingEmail
+  }
+
+  setUserInform = () => {
+    this.props.setUserInformation({
+      country: this.state.selectedCountry,
+      userName: this.state.userName,
+      userEmail: this.state.userEmail
+    })
+  }
+
   showMetamaskPopup = () => this.props.loadModal(METAMASK_ACCOUNT_MODAL, {
-    setIssuanceTransaction: this.setIssuanceTransaction
+    setUserInform: this.setUserInform,
+    setUserName: this.setUserName,
+    setUserEmail: this.setUserEmail,
+    setCountry: this.setCountry,
+    setDisabledBtn: this.setDisabledBtn,
+    validateEmail: this.validateEmail,
+    setGettingEmail: this.setGettingEmail
   })
 
   render () {
@@ -214,7 +254,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   issueCommunity,
   loadModal,
-  hideModal
+  hideModal,
+  setUserInformation
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(IssuanceWizard)
