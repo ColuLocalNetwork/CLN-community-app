@@ -7,6 +7,7 @@ import {getAccountAddress} from 'selectors/accounts'
 import {getAddresses} from 'selectors/network'
 import {createMetadata} from 'sagas/metadata'
 import {fetchMetadata} from 'actions/metadata'
+import {isZeroAddress} from 'utils/web3'
 
 export function * createList ({tokenAddress}) {
   const accountAddress = yield select(getAccountAddress)
@@ -32,7 +33,7 @@ export function * getList ({tokenAddress}) {
 
   yield put({type: actions.GET_LIST.SUCCESS,
     response: {
-      listAddress
+      listAddress: isZeroAddress(listAddress) ? null : listAddress
     }})
   return listAddress
 }
