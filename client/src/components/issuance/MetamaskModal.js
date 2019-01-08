@@ -1,39 +1,90 @@
-import React from 'react'
+import React, { Component } from 'react'
 import Modal from 'components/Modal'
-import FontAwesome from 'react-fontawesome'
-import Bg from 'images/popup-metamask.svg'
+import Media from 'images/issue-popup.svg'
+import CountriesList from './CountriesList'
 
-const MetamaskModal = (props) => {
-  return (
-    <Modal className='metamask-popup' onClose={props.hideModal}>
-      <div className='metamask-popup-header'>
-        <div className='metamask-popup-close' onClick={props.hideModal}>
-          <FontAwesome name='times' />
+class MetamaskModal extends Component {
+  state = {
+    selectedCountry: 'Select Country',
+    userName: '',
+    userEmail: '',
+    gettingEmail: true
+  }
+  setUserName = (e) => this.setState({userName: e.target.value})
+  setUserEmail = (e) => this.setState({userEmail: e.target.value})
+  setCountry = (e) => this.setState({selectedCountry: e.target.value})
+  setGettingEmail = (e) => this.setState({gettingEmail: e.target.checked})
+
+  validateEmail (email) {
+    const re = /[a-z0-9!#$%&'*+\/=?^_{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9][a-z0-9-]*[a-z0-9]/
+    return re.test(email)
+  }
+
+  render () {
+    console.log(this.state)
+    return (
+      <Modal className='issued-popup' onClose={this.props.hideModal}>
+        <div className='issued-popup-media'>
+          <h3 className='issued-popup-media-title'>Congratulation, a new crypto was born</h3>
+          <img className='issued-popup-media-img' src={Media} />
         </div>
-        <img src={Bg} />
-        <h3 className='metamask-popup-title'>Your brand new community currency is one step away from changing the world!</h3>
-        <p className='metamask-popup-text'>
-          To finish the issuance of your currency you will now continue to MetaMask website do add a wallet chrome extension.
-        </p>
-        <button className='metamask-popup-btn' onClick={props.setIssuanceTransaction}>Metamask <FontAwesome name='angle-right' /></button>
-      </div>
-      <div className='metamask-popup-container'>
-        <p className='metamask-popup-text'>
-          <strong>After adding MetaMask wallet, you have the power to choose:</strong>
-        </p>
-        <p className='metamask-popup-text'>
-          1. Main Ethereum Network (live network)- Add ETH to your wallet, pay for your currency issuance  and spread your word to the world (*amount to be paid -gas- will be presented on MetaMask)
-        </p>
-        <p className='metamask-popup-text'>
-          2. Ropsten Test Network- Add ETH Test to your wallet, pay for your currency and spread your word to the test world (*you can visit this Faucet website to get ETH Test coins
-          <a href='https://faucet.metamask.io/' className='metamask-popup-link' target='_blank'>
-            <FontAwesome name='arrow-right' />
-          </a>
-        )
-        </p>
-      </div>
-    </Modal>
-  )
+        <div className='issued-popup-container'>
+          <p className='issued-popup-text'>Lets continue this wonderful relationship</p>
+          <div className={((this.state.userEmail === '') || this.validateEmail(this.state.userEmail)) ? 'form-control' : 'form-control form-control-error'}>
+            <label>Full Name</label>
+            <input
+              id='userName'
+              type='text'
+              placeholder='Type your name'
+              value={this.state.userName}
+              onChange={this.setUserName}
+            />
+          </div>
+          <div className='form-control'>
+            <label>Email Address</label>
+            <input
+              id='userEmail'
+              type='email'
+              placeholder='Type your email'
+              value={this.state.userEmail}
+              onChange={this.setUserEmail}
+            />
+          </div>
+          <div className='form-control'>
+            <label>Country</label>
+            <select
+              onChange={this.setCountry}
+              defaultValue='Select Country'
+            >
+              <option selected='selected' disabled>{this.state.selectedCountry}</option>
+              {CountriesList.map((country, key) =>
+                <option key={key}>{country}</option>
+              )}
+            </select>
+          </div>
+          <div className='form-control'>
+            <input
+              className='checkbox-input'
+              type='checkbox'
+              id='email'
+              name='email'
+              onChange={this.setGettingEmail}
+              checked={this.state.gettingEmail}
+            />
+            <label className='checkbox-label' htmlFor='email'>
+              I agree to receive fuse emails
+            </label>
+          </div>
+          <button
+            disabled={!this.setGettingEmail || this.state.selectedCountry === '' || this.state.userName === '' || this.state.userEmail === ''}
+            className='issued-popup-btn'
+          >
+            Done
+          </button>
+        </div>
+      </Modal>
+    )
+  }
 }
 
 export default MetamaskModal
