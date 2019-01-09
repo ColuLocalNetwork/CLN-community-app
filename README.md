@@ -91,13 +91,15 @@ Take a look into [server/config](server/config) directory.
 
 ## Fast frontend track
 
-If you plan to work only on the frontend you can use our QA servers as a backend infrastucture. Fo this setup just do. No need to run a server or any other components. Though you still need a web3 provider like [MetaMask](https://metamask.io/).
+If you plan to work only on the frontend you can use our QA servers as a backend infrastucture. For this setup just run:
 
 ```
 cd client
 npm install
 NODE_ENV=QA npm start
 ```
+
+Though you still need a web3 provider like [MetaMask](https://metamask.io/).
 
 # Contributing
 
