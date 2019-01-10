@@ -20,7 +20,7 @@ class EntityDirectory extends Component {
   }
 
   componentDidUpdate (prevProps) {
-    if (this.props.listAddress !== prevProps.listAddress) {
+    if (this.props.listAddress && this.props.listAddress !== prevProps.listAddress) {
       this.props.fetchEntities(this.props.listAddress, 1)
     }
   }
@@ -42,11 +42,12 @@ class EntityDirectory extends Component {
         <div className='dashboard-entity-container'>
           EntityDirectory
           {
-            !this.props.listAddress && <button onClick={this.handleCreateList}>Create List</button>
-          }
-          <EntityForm addEntity={this.handleAddEntity} />
-          {
-            this.props.entities.map((entity, index) => <Entity key={index} entity={entity} />)
+            !this.props.listAddress
+              ? <button onClick={this.handleCreateList}>Create List</button>
+              : (<div>
+                <EntityForm addEntity={this.handleAddEntity} />
+                {this.props.entities.map((entity, index) => <Entity key={index} entity={entity} />)}
+              </div>)
           }
         </div>
       </div>

@@ -20,6 +20,11 @@ export function * createList ({tokenAddress}) {
     from: accountAddress
   })
 
+  yield put({type: actions.CREATE_LIST.SUCCESS,
+    response: {
+      listAddress: receipt.events.SimpleListCreated.address
+    }})
+
   return receipt
 }
 
