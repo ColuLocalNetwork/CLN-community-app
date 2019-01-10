@@ -295,6 +295,8 @@
 		&.checkbox-label {
 			width: auto;
 			flex: 1;
+			font-weight: 400;
+			font-size: 14px;
 		}
 	}
 	input {
@@ -306,8 +308,13 @@
 			color: #5f677e;
 		}
 		&.form-control-error {
-			//border-color: red;
+			border-color: red;
 		}
+	}
+	select {
+		box-shadow: 0 0 1px 0 rgba(10, 117, 134, 0.44);
+		border-radius: 5px;
+		background-color: $color-step-text;
 	}
 }
 
@@ -315,15 +322,34 @@
 	display: flex;
 	padding: 0;
 	flex-direction: row;
+	overflow: hidden;
+	@media (max-width: $breakpoint-tablet) {
+		flex-direction: column;
+	}
 	&-media {
 		position: relative;
 		padding: 40px 30px;
 		background-color: $color-bg-gray;
+		@media (max-width: $breakpoint-tablet) {
+			padding: 20px;
+		}
 		&-img {
 			position: absolute;
-			bottom: 0;
-			left: 0;
-			width: 470px !important;
+			bottom: -51px;
+	    left: -74px;
+	    width: 546px !important;
+			min-width: auto;
+			height: auto !important;
+			@media (max-width: $breakpoint-tablet) {
+				width: 300px !important;
+				right: 50%;
+				margin-bottom: -66px;
+				bottom: -38px;
+				margin-top: 20px;
+			}
+			@media (max-width: $breakpoint-mobile) {
+
+			}
 		}
 		&-title {
 			background: linear-gradient(to bottom, #ffea14, #ffea14 31%, #85ffbc);
@@ -340,9 +366,6 @@
 
 		@media (max-width: $breakpoint-tablet) {
 			padding: 60px 80px 40px;
-		}
-		@media (max-width: $breakpoint-mobile) {
-			padding: 20px;
 		}
 	}
 
@@ -380,9 +403,11 @@
 		background-color: $color-step-text;
 		padding: 40px 60px;
 		text-align: left;
-
+		@media (max-width: $breakpoint-tablet) {
+			padding: 70px 40px 60px;
+		}
 		@media (max-width: $breakpoint-mobile) {
-			padding: 20px;
+			padding: 70px 20px 20px;
 		}
 		p:not(:last-child) {
 			margin-bottom: 20px;
@@ -400,7 +425,7 @@
 	&-btn {
 		border-radius: 3px;
 	  box-shadow: 0 0 6px 0 rgba(254, 129, 0, 0.56);
-	  background-color: #fe8100;
+	  background-color: $color-orange;
 		border: none;
 		width: 168px;
 		height: 41px;
@@ -418,7 +443,16 @@
 		&:focus:active,
 		&:active {
 			cursor: pointer;
-			background-color: darken(#fe8100, 10%);
+			background-color: darken($color-orange, 10%);
+		}
+		&[disabled] {
+			background-color: lighten($color-orange, 10%) !important;
+			&:hover,
+			&:focus,
+			&:focus:active,
+			&:active {
+				background-color: lighten($color-orange, 10%) !important;
+			}
 		}
 	}
 }

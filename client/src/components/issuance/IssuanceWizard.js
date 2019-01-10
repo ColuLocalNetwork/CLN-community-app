@@ -13,8 +13,7 @@ import DetailsStep from './DetailsStep'
 import SummaryStep from './SummaryStep'
 import {issueCommunity} from 'actions/communities'
 import {getAddresses} from 'selectors/network'
-import {setUserInformation} from 'actions/accounts'
-import { METAMASK_ACCOUNT_MODAL, ECONOMIC_CALCULATOR_MODAL } from 'constants/uiConstants'
+import { USER_DATA_MODAL, ECONOMIC_CALCULATOR_MODAL } from 'constants/uiConstants'
 
 class IssuanceWizard extends Component {
   state = {
@@ -26,17 +25,7 @@ class IssuanceWizard extends Component {
     totalSupply: '',
     communityLogo: {},
     stepPosition: {},
-    scrollPosition: 0,
-    selectedCountry: '',
-    userName: '',
-    userEmail: '',
-    gettingEmail: true
-  }
-
-  constructor (props) {
-    super(props)
-
-    this.setGettingEmail = this.setGettingEmail.bind(this)
+    scrollPosition: 0
   }
 
   componentDidMount () {
@@ -44,6 +33,17 @@ class IssuanceWizard extends Component {
     window.addEventListener('keypress', this.handleKeyPress)
     this.setState({ stepPosition: this.stepIndicator.getBoundingClientRect().top })
   }
+
+  componentDidUpdate (prevProps) {
+    if (this.props.receipt !== prevProps.receipt) {
+      this.showUserDataPopup()
+    }
+  }
+
+  showUserDataPopup = () => this.props.loadModal(USER_DATA_MODAL, {
+    setQuitIssuance: this.setQuitIssuance,
+    receipt: this.props.receipt
+  })
 
   handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -71,7 +71,6 @@ class IssuanceWizard extends Component {
     }
     const communityMetadata = {'communityType': this.state.communityType.text, 'communityLogo': this.state.communityLogo.name}
     this.props.issueCommunity(communityMetadata, currencyData)
-    this.props.hideModal()
   }
 
   handleScroll = () => this.setState({scrollPosition: window.scrollY})
@@ -156,38 +155,9 @@ class IssuanceWizard extends Component {
     }
   }
 
-  setUserName = e => this.setState({userName: e.target.value})
-  setUserEmail = e => this.setState({userEmail: e.target.value})
-  setCountry = e => this.setState({selectedCountry: e.target.value})
-  setGettingEmail = e => this.setState({gettingEmail: e.target.checked})
-
-  validateEmail = () => {
-    const re = /[a-z0-9!#$%&'*+\\/=?^_{|}~-]+(?:\.[a-z0-9!#$%&'*+\\/=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9][a-z0-9-]*[a-z0-9]/
-    return re.test(this.state.userEmail)
+  showMetamaskPopup = () => {
+    this.setIssuanceTransaction()
   }
-
-  setDisabledBtn = () => {
-    return this.state.selectedCountry !== 'Select Country' || (this.state.userEmail === '') || !this.validateEmail() ||
-        !this.state.setGettingEmail
-  }
-
-  setUserInform = () => {
-    this.props.setUserInformation({
-      country: this.state.selectedCountry,
-      userName: this.state.userName,
-      userEmail: this.state.userEmail
-    })
-  }
-
-  showMetamaskPopup = () => this.props.loadModal(METAMASK_ACCOUNT_MODAL, {
-    setUserInform: this.setUserInform,
-    setUserName: this.setUserName,
-    setUserEmail: this.setUserEmail,
-    setCountry: this.setCountry,
-    setDisabledBtn: this.setDisabledBtn,
-    validateEmail: this.validateEmail,
-    setGettingEmail: this.setGettingEmail
-  })
 
   render () {
     const steps = ['Name', 'Symbol', 'Details', 'Summary']
@@ -254,8 +224,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   issueCommunity,
   loadModal,
-  hideModal,
-  setUserInformation
+  hideModal
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(IssuanceWizard)

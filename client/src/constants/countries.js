@@ -84,7 +84,7 @@ const CountriesList = [
   'Indonesia',
   'Iran',
   'Iraq',
-  'Israel and the Occupied Territories',
+  'Israel',
   'Italy',
   'Ivory Coast (Cote d\'Ivoire)',
   'Jamaica',
