@@ -54,10 +54,14 @@ export function * addEntity ({listAddress, data}) {
   const receipt = yield SimpleListContract.methods.addEntity(hash).send({
     from: accountAddress
   })
-  return receipt
 
-  // console.log(yield SimpleListContract.methods.count().call())
-  // console.log(yield SimpleListContract.methods.getEntity(0).call())
+  yield put({type: actions.ADD_ENTITY.SUCCESS,
+    response: {
+      receipt
+    }
+  })
+
+  return receipt
 }
 
 export function * fetchEntities ({listAddress, page = 1}) {
