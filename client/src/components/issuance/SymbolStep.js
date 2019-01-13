@@ -67,7 +67,7 @@ export default class SymbolStep extends Component {
             </button>
             : <button
               className='btn-download edit-symbol'
-              onClick={() => this.setCancelEditing()}
+              onClick={this.setCancelEditing}
             >
               <FontAwesome name='times-circle' /> Cancel
             </button>
