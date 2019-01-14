@@ -60,13 +60,8 @@ class CommunitiesList extends Component {
             key={address}
             handleCommunityClick={this.handleCommunityClick}
             token={this.props.tokens[address]}
-            usdPrice={this.props.fiat.USD && this.props.fiat.USD.price}
-            marketMaker={this.props.marketMaker[address]}
             selectedCommunityAddress={this.state.selectedCommunityAddress}
             account={this.props.account}
-            openMarket={this.props.openMarket}
-            handleAddCln={this.handleAddCln}
-            loadCalculator={this.loadCalculator}
           />
           )}
         </InfiniteScroll>

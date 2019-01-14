@@ -5,8 +5,6 @@ import BigNumber from 'bignumber.js'
 import Loader from 'components/Loader'
 import {REQUEST, PENDING, SUCCESS} from 'actions/constants'
 
-const canInsertCLN = () => false
-
 export default class SummaryStep extends Component {
   renderTransactionStatus = (transactionStatus) => {
     switch (transactionStatus) {
@@ -40,13 +38,7 @@ export default class SummaryStep extends Component {
       <h2 className='step-content-title text-center'>Your community currency is ready to be born!</h2>
       <div className='step-content-summary'>
         <div className='list-item'>
-          <Community
-            canInsertCLN={canInsertCLN}
-            usdPrice={0}
-            loadCalculator={this.props.loadCalculator}
-            token={this.getToken()}
-            wrapper={'summary'}
-          />
+          <Community token={this.getToken()} />
         </div>
       </div>
       <div className='text-center wallet-container'>

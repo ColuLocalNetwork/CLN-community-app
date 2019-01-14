@@ -26,7 +26,6 @@ export default class Community extends Component {
 
 Community.defaultProps = {
   coinWrapperClassName: 'coin-wrapper',
-  wrapper: 'wrapper',
   token: {},
   handleOpen: identity
 }
