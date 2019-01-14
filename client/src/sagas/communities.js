@@ -9,7 +9,6 @@ import {
   fetchCommunitiesByOwner as fetchCommunitiesByOwnerApi,
   fetchCommunityStatistics as fetchCommunityStatisticsApi
 } from 'services/api'
-import {fetchMarketMakerData} from 'actions/marketMaker'
 import {fetchMetadata} from 'actions/metadata'
 import {createMetadata} from 'sagas/metadata'
 import {createCurrency} from 'sagas/issuance'
@@ -38,7 +37,6 @@ function * fetchCommunityWithData ({tokenAddress}) {
   const community = response.data
 
   yield put(fetchMetadata(community.tokenURI, tokenAddress))
-  yield put(fetchMarketMakerData(tokenAddress, community.mmAddress))
 
   yield entityPut({
     type: actions.FETCH_COMMUNITY_WITH_DATA.SUCCESS,
@@ -51,7 +49,6 @@ function * fetchCommunityData ({tokenAddress}) {
   const token = yield select(state => state.tokens[tokenAddress])
 
   yield put(fetchMetadata(token.tokenURI, tokenAddress))
-  yield put(fetchMarketMakerData(tokenAddress, token.mmAddress))
 
   yield put({type: actions.FETCH_COMMUNITY_DATA.SUCCESS, tokenAddress})
   return token
