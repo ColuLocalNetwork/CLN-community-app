@@ -44,7 +44,7 @@ const handlers = {
     }
     return {...state, transactions}
   },
-  [actions.BALANCE_OF.SUCCESS]: (state, action) => {
+  [actions.BALANCE_OF_TOKEN.SUCCESS]: (state, action) => {
     const balances = {...state.balances, [action.tokenAddress]: action.response.balanceOf}
     return {...state, balances}
   },
