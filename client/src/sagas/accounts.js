@@ -10,8 +10,6 @@ import {CHECK_ACCOUNT_CHANGED} from 'actions/network'
 function * setUserInformation ({user}) {
   const response = yield apiCall(addUserInformation, user)
   const data = response.data
-  console.log('----------saga data----------')
-  console.log(data)
   yield put({
     type: actions.SET_USER_INFORMATION.SUCCESS,
     user,
@@ -21,11 +19,11 @@ function * setUserInformation ({user}) {
   })
 }
 
-function * balanceOf ({tokenAddress, accountAddress, blockNumber}) {
+function * balanceOfToken ({tokenAddress, accountAddress, blockNumber}) {
   const ColuLocalNetworkContract = contract.getContract({abiName: 'ColuLocalCurrency', address: tokenAddress})
   const balanceOf = yield call(ColuLocalNetworkContract.methods.balanceOf(accountAddress).call, null, blockNumber)
 
-  yield put({type: actions.BALANCE_OF.SUCCESS,
+  yield put({type: actions.BALANCE_OF_TOKEN.SUCCESS,
     tokenAddress,
     accountAddress,
     response: {
@@ -35,7 +33,7 @@ function * balanceOf ({tokenAddress, accountAddress, blockNumber}) {
 
 function * balanceOfCln ({accountAddress}) {
   const tokenAddress = yield select(getClnAddress)
-  yield call(balanceOf, {tokenAddress, accountAddress})
+  yield call(balanceOfToken, {tokenAddress, accountAddress})
 }
 
 function * fetchTokens ({accountAddress}) {
@@ -53,7 +51,7 @@ function * fetchTokens ({accountAddress}) {
 
 function * fetchBalances ({accountAddress, tokens}) {
   for (let token of tokens) {
-    yield put(actions.balanceOf(token.address, accountAddress))
+    yield put(actions.balanceOfToken(token.address, accountAddress))
   }
 }
 
@@ -68,7 +66,7 @@ function * watchAccountChanged ({response}) {
 
 export default function * accountsSaga () {
   yield all([
-    tryTakeEvery(actions.BALANCE_OF, balanceOf),
+    tryTakeEvery(actions.BALANCE_OF_TOKEN, balanceOfToken),
     tryTakeEvery(actions.BALANCE_OF_CLN, balanceOfCln),
     takeEvery(actions.FETCH_TOKENS.REQUEST, fetchTokens),
     takeEvery(CHECK_ACCOUNT_CHANGED.SUCCESS, watchAccountChanged),
