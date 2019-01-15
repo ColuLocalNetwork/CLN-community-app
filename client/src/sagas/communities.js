@@ -11,7 +11,7 @@ import {
 } from 'services/api'
 import {fetchMetadata} from 'actions/metadata'
 import {createMetadata} from 'sagas/metadata'
-import {createCurrency} from 'sagas/issuance'
+import {createToken} from 'sagas/token'
 import {getAccountAddress} from 'selectors/accounts'
 import {getClnAddress} from 'selectors/network'
 import { contract } from 'osseus-wallet'
@@ -131,7 +131,7 @@ function * fetchClnToken () {
 function * issueCommunity ({communityMetadata, currencyData}) {
   const {hash, protocol} = yield call(createMetadata, {metadata: communityMetadata})
   const tokenURI = `${protocol}://${hash}`
-  const receipt = yield call(createCurrency, {...currencyData, tokenURI})
+  const receipt = yield call(createToken, {...currencyData, tokenURI})
 
   yield apiCall(processReceipt, receipt)
 
