@@ -3,7 +3,6 @@ import CommunitiesList from 'components/oven/CommunitiesList'
 import { connect } from 'react-redux'
 import {fetchCommunities, fetchCommunitiesByOwner} from 'actions/communities'
 import {loadModal} from 'actions/ui'
-import {openMarket} from 'actions/marketMaker'
 import {getAccountAddress} from 'selectors/accounts'
 import TopNav from 'components/TopNav'
 
@@ -27,8 +26,6 @@ class Oven extends Component {
 
 const mapStateToProps = state => ({
   tokens: state.tokens,
-  marketMaker: state.marketMaker,
-  fiat: state.fiat,
   ...state.screens.oven,
   account: getAccountAddress(state)
 })
@@ -36,7 +33,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   fetchCommunities,
   fetchCommunitiesByOwner,
-  openMarket,
   loadModal
 }
 
