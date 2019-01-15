@@ -48,6 +48,9 @@ const handlers = {
     const balances = {...state.balances, [action.tokenAddress]: action.response.balanceOf}
     return {...state, balances}
   },
+  [actions.BALANCE_OF_NATIVE.SUCCESS]: (state, action) => {
+    return {...state, ...action.response}
+  },
   [actions.FETCH_TOKENS.SUCCESS]: (state, action) => {
     return {...state, ...action.response}
   }

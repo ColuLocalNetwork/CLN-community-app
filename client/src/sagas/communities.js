@@ -60,7 +60,6 @@ const manipulateCommunity = (community) => ({
   symbol: community.symbol,
   tokenURI: community.tokenURI,
   owner: community.owner,
-  mmAddress: community.mmAddress,
   totalSupply: community.totalSupply
 })
 

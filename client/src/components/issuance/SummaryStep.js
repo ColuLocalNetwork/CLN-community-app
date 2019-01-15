@@ -27,7 +27,6 @@ export default class SummaryStep extends Component {
     symbol: this.props.communitySymbol,
     name: this.props.communityName,
     totalSupply: new BigNumber(this.props.totalSupply.toString()).multipliedBy(1e18),
-    mmAddress: this.props.EllipseMarketMakerLibAddress,
     metadata: {
       communityLogo: this.props.communityLogo
     }
@@ -49,6 +48,5 @@ export default class SummaryStep extends Component {
 }
 
 SummaryStep.propTypes = {
-  transactionStatus: PropTypes.string,
-  EllipseMarketMakerLibAddress: PropTypes.string
+  transactionStatus: PropTypes.string
 }

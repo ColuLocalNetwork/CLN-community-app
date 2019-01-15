@@ -3,9 +3,10 @@ import { contract } from 'osseus-wallet'
 
 import * as actions from 'actions/accounts'
 import {tryTakeEvery, apiCall} from './utils'
-import {getClnAddress} from 'selectors/network'
+import {getClnAddress, getNetworkType} from 'selectors/network'
 import {fetchTokens as fetchTokensApi, addUserInformation} from 'services/api'
 import {CHECK_ACCOUNT_CHANGED} from 'actions/network'
+import web3 from 'services/web3'
 
 function * setUserInformation ({user}) {
   const response = yield apiCall(addUserInformation, user)
@@ -21,7 +22,7 @@ function * setUserInformation ({user}) {
 
 function * balanceOfToken ({tokenAddress, accountAddress, blockNumber}) {
   const ColuLocalNetworkContract = contract.getContract({abiName: 'ColuLocalCurrency', address: tokenAddress})
-  const balanceOf = yield call(ColuLocalNetworkContract.methods.balanceOf(accountAddress).call, null, blockNumber)
+  const balanceOf = yield call(ColuLocalNetworkContract.methods.balanceOf(accountAddress).call)
 
   yield put({type: actions.BALANCE_OF_TOKEN.SUCCESS,
     tokenAddress,
@@ -31,9 +32,24 @@ function * balanceOfToken ({tokenAddress, accountAddress, blockNumber}) {
     }})
 }
 
+function * balanceOfNative ({accountAddress}) {
+  const balanceOfNative = yield call(web3.eth.getBalance, accountAddress)
+
+  yield put({type: actions.BALANCE_OF_NATIVE.SUCCESS,
+    accountAddress,
+    response: {
+      balanceOfNative
+    }})
+}
+
 function * balanceOfCln ({accountAddress}) {
-  const tokenAddress = yield select(getClnAddress)
-  yield call(balanceOfToken, {tokenAddress, accountAddress})
+  const networkType = yield select(getNetworkType)
+  if (networkType === 'fuse') {
+    yield call(balanceOfNative, {accountAddress})
+  } else {
+    const tokenAddress = yield select(getClnAddress)
+    yield call(balanceOfToken, {tokenAddress, accountAddress})
+  }
 }
 
 function * fetchTokens ({accountAddress}) {
@@ -67,6 +83,7 @@ function * watchAccountChanged ({response}) {
 export default function * accountsSaga () {
   yield all([
     tryTakeEvery(actions.BALANCE_OF_TOKEN, balanceOfToken),
+    tryTakeEvery(actions.BALANCE_OF_NATIVE, balanceOfNative),
     tryTakeEvery(actions.BALANCE_OF_CLN, balanceOfCln),
     takeEvery(actions.FETCH_TOKENS.REQUEST, fetchTokens),
     takeEvery(CHECK_ACCOUNT_CHANGED.SUCCESS, watchAccountChanged),

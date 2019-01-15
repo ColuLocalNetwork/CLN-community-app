@@ -96,8 +96,6 @@ class IssuanceWizard extends Component {
     this.setState({communitySymbol})
   }
 
-  loadCalculator = (token, marketMaker) => this.props.loadModal(ECONOMIC_CALCULATOR_MODAL, {token, marketMaker, wrapper: 'summary'})
-
   setCommunityType = type =>
     this.setState({communityType: type})
 
@@ -148,8 +146,6 @@ class IssuanceWizard extends Component {
             communitySymbol={this.state.communitySymbol}
             showPopup={this.showMetamaskPopup}
             transactionStatus={this.props.transactionStatus}
-            loadCalculator={this.loadCalculator}
-            EllipseMarketMakerLibAddress={this.props.addresses.EllipseMarketMakerLib}
           />
         )
     }
