@@ -6,7 +6,6 @@ import ui from './ui'
 import { connectRouter } from 'connected-react-router'
 import network from './network'
 import errors from './errors'
-import fiat from './fiat'
 import screens from './screens'
 import entities from './entities'
 
@@ -19,7 +18,6 @@ const createRootReducer = (history) => combineReducers({
   errors,
   accounts,
   router: connectRouter(history),
-  fiat,
   entities
 })
 
