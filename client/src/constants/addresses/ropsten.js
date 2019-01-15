@@ -6,5 +6,6 @@ export default {
   CurrencyFactory: '0xA1F05144f9d3298a702c8EEE3ca360bc87d05207',
   ColuWallet: '0x04f3663E2E6eF3FD3B0dF4936C2577BeCb5E19e7',
   EllipseMarketMakerLib: '0x30724FA809d40330EAcAB9c7EbcFb2A0058c381c',
-  SimpleListFactory: '0x531C305533fB5C40eb3A445AA49ed02c9C35c83E'
+  SimpleListFactory: '0x531C305533fB5C40eb3A445AA49ed02c9C35c83E',
+  TokenFactory: '0x0b103Eff850B7dfe5d782d2aFDc02870952bcd67'
 }

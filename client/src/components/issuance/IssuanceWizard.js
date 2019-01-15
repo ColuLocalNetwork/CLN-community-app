@@ -13,7 +13,7 @@ import DetailsStep from './DetailsStep'
 import SummaryStep from './SummaryStep'
 import {issueCommunity} from 'actions/communities'
 import {getAddresses} from 'selectors/network'
-import { USER_DATA_MODAL, ECONOMIC_CALCULATOR_MODAL } from 'constants/uiConstants'
+import { USER_DATA_MODAL } from 'constants/uiConstants'
 
 class IssuanceWizard extends Component {
   state = {
@@ -66,7 +66,6 @@ class IssuanceWizard extends Component {
     const currencyData = {
       name: this.state.communityName,
       symbol: this.state.communitySymbol,
-      decimals: 18,
       totalSupply: new BigNumber(this.state.totalSupply).multipliedBy(1e18)
     }
     const communityMetadata = {'communityType': this.state.communityType.text, 'communityLogo': this.state.communityLogo.name}
