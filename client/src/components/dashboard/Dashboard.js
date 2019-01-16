@@ -227,8 +227,9 @@ class Dashboard extends Component {
         match={this.props.match}
         history={this.props.history}
         showHomePage={this.showHomePage}
+        key={0}
       />,
-      <div className='dashboard-content'>
+      <div key={1} className='dashboard-content'>
         <div className='dashboard-header'>
           <div className='dashboard-logo'>
             <a href='https://cln.network/' target='_blank'><img src={ClnIcon} /></a>

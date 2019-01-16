@@ -60,8 +60,9 @@ class EntityDirectory extends Component {
         match={this.props.match}
         history={this.props.history}
         showHomePage={this.showHomePage}
+        key={0}
       />,
-      <div className='dashboard-content'>
+      <div className='dashboard-content' key={1}>
         <div className='dashboard-entity-container'>
           <button
             className='quit-button ctrl-btn'
