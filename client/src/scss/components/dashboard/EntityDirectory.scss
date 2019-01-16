@@ -227,4 +227,113 @@
     font-size: 11px;
     font-weight: 500;
   }
+  &-modal {
+    width: 1000px !important;
+    display: flex;
+    padding: 0;
+    margin: 0 auto;
+    &-business-name {
+      border-bottom: 1px solid #e2e2e2;
+      padding: 0px 20px;
+      font-size: 17px;
+      margin-bottom: 40px;
+      width: 100%;
+      &::placeholder {
+        font-size: 17px;
+        color: #b3b9c8;
+        font-style: italic;
+      }
+    }
+    &-media {
+      width: 225px;
+      padding: 40px;
+      background-color: #eceff6;
+      text-align: left;
+      &-title {
+        font-size: 36px;
+        font-weight: bold;
+        line-height: 1.16;
+        letter-spacing: -0.2px;
+        color: #25435a;
+      }
+    }
+    &-content {
+      background-color: $color-step-text;
+      padding: 40px;
+      text-align: left;
+      &-upload {
+        color: #0a7586;
+        border-radius: 3px;
+        padding: 40px 0;
+        font-size: 11px;
+        background: linear-gradient(to right, #c0c5d2 50%, rgba(255, 255, 255, 0) 0%),
+                    linear-gradient(#c0c5d2 50%, rgba(255, 255, 255, 0) 0%),
+                    linear-gradient(to right, #c0c5d2 50%, rgba(255, 255, 255, 0) 0%),
+                    linear-gradient(#c0c5d2 50%, rgba(255, 255, 255, 0) 0%);
+        &-text {
+          text-align: center;
+          .fa {
+            color: #e1e3ea;
+            font-size: 32px;
+          }
+        }
+      }
+      hr {
+        background-color: #e2e2e2;
+      }
+      &-title {
+        font-size: 12px;
+        font-weight: 500;
+        color: #1a2b59;
+      }
+      &-label {
+        font-family: $font-family-lato;
+        font-size: 11px;
+        font-weight: bold;
+        line-height: 4;
+        letter-spacing: normal;
+        color: #8d95a9;
+        span {
+          color: #b3b9c8;
+          &.fa {
+            color: #fc6e4c;
+          }
+        }
+      }
+      .form-control {
+        border: 1px solid #e2e2e2;
+        border-radius: 4px;
+        &::placeholder {
+
+        }
+      }
+    }
+  }
+}
+
+$columns: 12;
+
+@mixin col-x-list {
+  @for $i from 1 through $columns {
+    .col-#{$i} {
+      width: $i * 100/$columns * 1%
+    }
+  }
+}
+
+@include col-x-list;
+
+div[class^='col'] {
+  padding-left: 15px;
+  padding-right: 15px;
+  @media (max-width: $breakpoint-tablet) {
+    width: 100%;
+  }
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  margin-left: -15px;
+  margin-right: -15px;
 }
