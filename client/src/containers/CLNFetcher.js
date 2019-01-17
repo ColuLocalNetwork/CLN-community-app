@@ -1,6 +1,6 @@
 import {Component} from 'react'
 import { connect } from 'react-redux'
-import {fetchClnToken} from 'actions/communities'
+import {fetchClnToken} from 'actions/token'
 
 class CLNFethcher extends Component {
   componentDidMount () {

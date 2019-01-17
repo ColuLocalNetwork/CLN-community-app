@@ -6,7 +6,7 @@ const paginate = require('express-paginate')
 router.get('/', async (req, res, next) => {
   const [ results, itemCount ] = await Promise.all([
     Token.find({}).sort({openMarket: -1, blockNumber: -1}).limit(req.query.limit).skip(req.skip),
-    Token.estimatedDocumentCount()({})
+    Token.estimatedDocumentCount()
   ])
 
   const pageCount = Math.ceil(itemCount / req.query.limit)
@@ -18,8 +18,8 @@ router.get('/', async (req, res, next) => {
   })
 })
 
-router.get('/owner/:address', async (req, res) => {
-  const owner = req.params.address
+router.get('/owner/:owner', async (req, res) => {
+  const {owner} = req.params
   const results = await Token.find({ owner }).sort({ blockNumber: -1 })
 
   res.json({

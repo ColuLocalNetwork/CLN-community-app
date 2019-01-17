@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import CommunitiesList from 'components/oven/CommunitiesList'
 import { connect } from 'react-redux'
-import {fetchCommunities, fetchCommunitiesByOwner} from 'actions/communities'
+import {fetchTokens, fetchTokensByOwner} from 'actions/token'
 import {loadModal} from 'actions/ui'
 import {getAccountAddress} from 'selectors/accounts'
 import TopNav from 'components/TopNav'
@@ -9,7 +9,7 @@ import TopNav from 'components/TopNav'
 class Oven extends Component {
   componentDidUpdate (prevProps) {
     if (this.props.account && !prevProps.account) {
-      this.props.fetchCommunitiesByOwner(this.props.account)
+      this.props.fetchTokensByOwner(this.props.account)
     }
   }
 
@@ -25,14 +25,15 @@ class Oven extends Component {
 }
 
 const mapStateToProps = state => ({
-  tokens: state.tokens,
-  ...state.screens.oven,
-  account: getAccountAddress(state)
+  tokens: state.entities.tokens,
+  metadata: state.entities.metadata,
+  account: getAccountAddress(state),
+  ...state.screens.oven
 })
 
 const mapDispatchToProps = {
-  fetchCommunities,
-  fetchCommunitiesByOwner,
+  fetchTokens,
+  fetchTokensByOwner,
   loadModal
 }
 

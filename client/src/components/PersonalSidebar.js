@@ -1,24 +1,25 @@
-import React, {Component} from 'react'
-import pickBy from 'lodash/pickBy'
+import React, {Component, Fragment} from 'react'
 import {connect} from 'react-redux'
-import {fetchTokens, fetchBalances, fetchTokensWithBalances} from 'actions/accounts'
+import {fetchTokensByAccount, fetchBalances, fetchTokensWithBalances} from 'actions/accounts'
 import ProfileIcon from 'images/user.svg'
 import {BigNumber} from 'bignumber.js'
 import FontAwesome from 'react-fontawesome'
 import ReactGA from 'services/ga'
 import {formatWei} from 'utils/format'
-import {getAccount} from 'selectors/accounts'
+import {getAccount, getAccountTokens} from 'selectors/accounts'
 import CommunityLogo from 'components/elements/CommunityLogo'
 
-const PersonalSidebarCoin = ({accountAddress, token, balance}) => [
-  <CommunityLogo token={token} />,
-  <div className='personal-community-content'>
-    <div className='personal-community-content-balance'>
-      CC Balance <span>{balance ? formatWei(balance, 0) : 0}</span>
-      <p className='coin-name'>{token.name}</p>
+const PersonalSidebarCoin = ({accountAddress, token, metadata, balance}) => (
+  <Fragment>
+    <CommunityLogo token={token} metadata={metadata} />,
+    <div className='personal-community-content'>
+      <div className='personal-community-content-balance'>
+        CC Balance <span>{balance ? formatWei(balance, 0) : 0}</span>
+        <p className='coin-name'>{token.name}</p>
+      </div>
     </div>
-  </div>
-]
+  </Fragment>
+)
 
 class PersonalSidebar extends Component {
   state = {
@@ -47,21 +48,22 @@ class PersonalSidebar extends Component {
   }
 
   filterBySearch = (search, tokens) =>
-    search ? pickBy(tokens, (token) =>
+    search ? tokens.filter(token =>
       token.name.toLowerCase().search(
         this.state.search.toLowerCase()) !== -1
     ) : tokens
 
   renderIssuedCoins (accountAddress, tokens) {
-    return tokens && Object.keys(tokens).length ? Object.keys(tokens).map((key) => {
-      if ((tokens[key].owner === accountAddress)) {
+    return tokens.length ? tokens.map(token => {
+      if ((token.owner === accountAddress)) {
         return (
-          <div className='personal-community'>
+          <div className='personal-community' key={token.address}>
             <PersonalSidebarCoin
               accountAddress={accountAddress}
-              token={tokens[key]}
-              balance={this.props.account.balances[key]} />
-            <button onClick={() => this.showDashboard(tokens[key].address)} className='btn-dashboard'>
+              token={token}
+              metadata={this.props.metadata[token.tokenURI]}
+              balance={this.props.account.balances[token.address]} />
+            <button onClick={() => this.showDashboard(token.address)} className='btn-dashboard'>
               <FontAwesome name='signal' />
             </button>
           </div>
@@ -71,13 +73,14 @@ class PersonalSidebar extends Component {
   }
 
   renderPortfolioCoins (accountAddress, tokens) {
-    return tokens && Object.keys(tokens).length ? Object.keys(tokens).map((key) => {
+    return tokens.length ? tokens.map(token => {
       return (
-        <div className='personal-community'>
+        <div className='personal-community' key={token.address}>
           <PersonalSidebarCoin
             accountAddress={accountAddress}
-            token={tokens[key]}
-            balance={this.props.account.balances[key]} />
+            token={token}
+            metadata={this.props.metadata[token.tokenURI]}
+            balance={this.props.account.balances[token.address]} />
         </div>
       )
     }) : <p className='no-items'>There is no portfolio coins</p>
@@ -131,11 +134,12 @@ class PersonalSidebar extends Component {
 const mapStateToProps = (state) => ({
   accountAddress: state.network.accountAddress,
   account: getAccount(state),
-  tokens: state.tokens
+  tokens: getAccountTokens(state),
+  metadata: state.entities.metadata
 })
 
 const mapDispatchToProps = {
-  fetchTokens,
+  fetchTokensByAccount,
   fetchBalances,
   fetchTokensWithBalances
 }

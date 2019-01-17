@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux'
-import communities from './communities'
 import marketMaker from './marketMaker'
 import accounts from './accounts'
 import ui from './ui'
@@ -12,7 +11,6 @@ import entities from './entities'
 const createRootReducer = (history) => combineReducers({
   ui,
   screens,
-  tokens: communities,
   marketMaker,
   network,
   errors,
