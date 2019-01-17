@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ClnIcon from 'images/cln.png'
 import { connect } from 'react-redux'
-import {fetchCommunityWithData, fetchCommunityStatistics} from 'actions/communities'
+import {fetchTokenWithData, fetchTokenStatistics} from 'actions/token'
 import classNames from 'classnames'
 import FontAwesome from 'react-fontawesome'
 import {getClnBalance} from 'selectors/accounts'
@@ -164,12 +164,12 @@ class Dashboard extends Component {
   }
 
   handleIntervalChange = (userType, intervalValue) => {
-    this.props.fetchCommunityStatistics(this.props.match.params.address, userType, intervalValue)
+    this.props.fetchTokenStatistics(this.props.match.params.address, userType, intervalValue)
   }
 
   componentDidMount () {
     if (!this.props.token) {
-      this.props.fetchCommunityWithData(this.props.match.params.address)
+      this.props.fetchTokenWithData(this.props.match.params.address)
     }
     document.addEventListener('mousedown', this.handleClickOutside)
   }
@@ -235,7 +235,7 @@ class Dashboard extends Component {
         </div>
         <div className='dashboard-container'>
           <div className='dashboard-sidebar'>
-            <CommunityLogo token={token} />
+            <CommunityLogo token={token} metadata={this.props.metadata[token.tokenURI] || {}} />
             <h3 className='dashboard-title'>{token.name}</h3>
           </div>
           <div className='dashboard-information'>
@@ -284,14 +284,15 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = (state, {match}) => ({
-  token: state.tokens[match.params.address],
+  token: state.entities.tokens[match.params.address],
+  metadata: state.entities.metadata,
   dashboard: state.screens.dashboard,
   clnBalance: getClnBalance(state)
 })
 
 const mapDispatchToProps = {
-  fetchCommunityStatistics,
-  fetchCommunityWithData,
+  fetchTokenStatistics,
+  fetchTokenWithData,
   loadModal
 }
 
