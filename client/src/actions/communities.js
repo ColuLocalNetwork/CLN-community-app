@@ -5,7 +5,6 @@ export const entityName = 'communities'
 const communityAction = createEntityAction(entityName)
 
 export const FETCH_COMMUNITY = createRequestTypes('FETCH_COMMUNITY')
-export const FETCH_COMMUNITY_DATA = createRequestTypes('FETCH_COMMUNITY_DATA')
 export const FETCH_COMMUNITY_WITH_DATA = createRequestTypes('FETCH_COMMUNITY_WITH_DATA')
 
 export const FETCH_COMMUNITY_STATISTICS = createRequestTypes('FETCH_COMMUNITY_STATISTICS')
@@ -24,7 +23,6 @@ export const fetchCommunities = (page) => communityAction(FETCH_COMMUNITIES.REQU
 
 export const fetchCommunitiesByOwner = (owner) => communityAction(FETCH_COMMUNITIES_BY_OWNER.REQUEST, {owner})
 
-export const fetchCommunityData = (tokenAddress) => communityAction(FETCH_COMMUNITY_DATA.REQUEST, {tokenAddress})
 export const fetchCommunityWithData = (tokenAddress) => communityAction(FETCH_COMMUNITY_WITH_DATA.REQUEST, {tokenAddress})
 
 export const fetchCommunityStatistics = (tokenAddress, activityType, interval) => communityAction(FETCH_COMMUNITY_STATISTICS.REQUEST, {tokenAddress, activityType, interval})

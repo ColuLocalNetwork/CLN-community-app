@@ -11,7 +11,7 @@ import NameStep from './NameStep'
 import SymbolStep from './SymbolStep'
 import DetailsStep from './DetailsStep'
 import SummaryStep from './SummaryStep'
-import {issueCommunity} from 'actions/communities'
+import {createTokenWithMetadata} from 'actions/token'
 import {getAddresses} from 'selectors/network'
 import { USER_DATA_MODAL } from 'constants/uiConstants'
 
@@ -63,13 +63,13 @@ class IssuanceWizard extends Component {
   }
 
   setIssuanceTransaction = () => {
-    const currencyData = {
+    const tokenData = {
       name: this.state.communityName,
       symbol: this.state.communitySymbol,
       totalSupply: new BigNumber(this.state.totalSupply).multipliedBy(1e18)
     }
-    const communityMetadata = {'communityType': this.state.communityType.text, 'communityLogo': this.state.communityLogo.name}
-    this.props.issueCommunity(communityMetadata, currencyData)
+    const metadata = {communityType: this.state.communityType.text, communityLogo: this.state.communityLogo.name}
+    this.props.createTokenWithMetadata(tokenData, metadata)
   }
 
   handleScroll = () => this.setState({scrollPosition: window.scrollY})
@@ -217,7 +217,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-  issueCommunity,
+  createTokenWithMetadata,
   loadModal,
   hideModal
 }

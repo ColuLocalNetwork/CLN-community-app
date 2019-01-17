@@ -26,10 +26,7 @@ export default class SummaryStep extends Component {
   getToken = () => ({
     symbol: this.props.communitySymbol,
     name: this.props.communityName,
-    totalSupply: new BigNumber(this.props.totalSupply.toString()).multipliedBy(1e18),
-    metadata: {
-      communityLogo: this.props.communityLogo
-    }
+    totalSupply: new BigNumber(this.props.totalSupply.toString()).multipliedBy(1e18)
   })
 
   render () {
@@ -37,7 +34,7 @@ export default class SummaryStep extends Component {
       <h2 className='step-content-title text-center'>Your community currency is ready to be born!</h2>
       <div className='step-content-summary'>
         <div className='list-item'>
-          <Community token={this.getToken()} />
+          <Community token={this.getToken()} metadata={{communityLogo: this.props.communityLogo}} />
         </div>
       </div>
       <div className='text-center wallet-container'>

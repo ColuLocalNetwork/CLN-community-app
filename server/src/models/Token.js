@@ -9,15 +9,14 @@ module.exports = (mongoose) => {
     symbol: {type: String, required: [true, "can't be blank"]},
     tokenURI: {type: String},
     totalSupply: {type: String, required: [true, "can't be blank"]},
-    issuer: {type: String, required: [true, "can't be blank"]},
+    owner: {type: String, required: [true, "can't be blank"]},
     factoryAddress: {type: String, required: [true, "can't be blank"]},
     blockNumber: {type: Number}
   }, {timestamps: true})
 
   TokenSchema.index({address: 1}, {unique: true})
-  TokenSchema.index({issuer: 1})
+  TokenSchema.index({owner: 1})
   TokenSchema.index({blockNumber: -1})
-  TokenSchema.index({openMarket: -1, blockNumber: -1})
 
   TokenSchema.set('toJSON', {
     versionKey: false

@@ -22,6 +22,12 @@ export const getSelectedCommunityBalance = createSelector(
   (community, balances) => balances[community.address]
 )
 
+export const getAccountTokens = createSelector(
+  state => state.entities.tokens,
+  getAccount,
+  (tokens, account) => account.tokens.map(token => tokens[token.address])
+)
+
 export const getClnBalance = createSelector(
   getNetworkType,
   getAddresses,

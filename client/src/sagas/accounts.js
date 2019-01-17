@@ -4,12 +4,13 @@ import { contract } from 'osseus-wallet'
 import * as actions from 'actions/accounts'
 import {tryTakeEvery, apiCall} from './utils'
 import {getClnAddress, getNetworkType} from 'selectors/network'
-import {fetchTokens as fetchTokensApi, addUserInformation} from 'services/api'
+import {fetchTokensByAccount as fetchTokensByAccountApi} from 'services/api/communities'
+import {addUserInformation} from 'services/api/misc'
 import {CHECK_ACCOUNT_CHANGED} from 'actions/network'
 import web3 from 'services/web3'
 
 function * setUserInformation ({user}) {
-  const response = yield apiCall(addUserInformation, user)
+  const response = yield call(addUserInformation, user)
   const data = response.data
   yield put({
     type: actions.SET_USER_INFORMATION.SUCCESS,
@@ -52,11 +53,11 @@ function * balanceOfCln ({accountAddress}) {
   }
 }
 
-function * fetchTokens ({accountAddress}) {
-  const response = yield apiCall(fetchTokensApi, accountAddress)
+function * fetchTokensByAccount ({accountAddress}) {
+  const response = yield apiCall(fetchTokensByAccountApi, accountAddress)
   const tokens = response.data
   yield put({
-    type: actions.FETCH_TOKENS.SUCCESS,
+    type: actions.FETCH_TOKENS_BY_ACCOUNT.SUCCESS,
     accountAddress,
     response: {
       tokens
@@ -72,7 +73,7 @@ function * fetchBalances ({accountAddress, tokens}) {
 }
 
 function * fetchTokensWithBalances ({accountAddress}) {
-  const tokens = yield call(fetchTokens, {accountAddress})
+  const tokens = yield call(fetchTokensByAccount, {accountAddress})
   yield call(fetchBalances, {accountAddress, tokens})
 }
 
@@ -85,7 +86,7 @@ export default function * accountsSaga () {
     tryTakeEvery(actions.BALANCE_OF_TOKEN, balanceOfToken),
     tryTakeEvery(actions.BALANCE_OF_NATIVE, balanceOfNative),
     tryTakeEvery(actions.BALANCE_OF_CLN, balanceOfCln),
-    takeEvery(actions.FETCH_TOKENS.REQUEST, fetchTokens),
+    takeEvery(actions.FETCH_TOKENS_BY_ACCOUNT.REQUEST, fetchTokensByAccount),
     takeEvery(CHECK_ACCOUNT_CHANGED.SUCCESS, watchAccountChanged),
     tryTakeEvery(actions.FETCH_BALANCES, fetchBalances, 1),
     tryTakeEvery(actions.SET_USER_INFORMATION, setUserInformation, 1),

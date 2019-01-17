@@ -5,7 +5,7 @@ export const initialAccount = {
   balances: {},
   transactions: {
   },
-  tokens: {}
+  tokens: []
 }
 
 const handlers = {
@@ -51,7 +51,7 @@ const handlers = {
   [actions.BALANCE_OF_NATIVE.SUCCESS]: (state, action) => {
     return {...state, ...action.response}
   },
-  [actions.FETCH_TOKENS.SUCCESS]: (state, action) => {
+  [actions.FETCH_TOKENS_BY_ACCOUNT.SUCCESS]: (state, action) => {
     return {...state, ...action.response}
   }
 }

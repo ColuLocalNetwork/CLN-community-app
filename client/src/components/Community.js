@@ -9,7 +9,7 @@ export default class Community extends Component {
   render () {
     return <div className={this.props.coinWrapperClassName}>
       <div className='coin-header' onClick={this.props.handleOpen}>
-        <CommunityLogo token={this.props.token} />
+        <CommunityLogo token={this.props.token} metadata={this.props.metadata} />
         <div className='coin-details'>
           <h3 className='coin-name'>{this.props.token.name}</h3>
           <p className='coin-total'>
@@ -27,11 +27,13 @@ export default class Community extends Component {
 Community.defaultProps = {
   coinWrapperClassName: 'coin-wrapper',
   token: {},
+  metadata: {},
   handleOpen: identity
 }
 
 Community.propTypes = {
   coinWrapperClassName: PropTypes.string,
   handleOpen: PropTypes.func,
-  token: PropTypes.object
+  token: PropTypes.object,
+  metadata: PropTypes.object
 }
