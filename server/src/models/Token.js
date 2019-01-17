@@ -69,7 +69,7 @@ module.exports = (mongoose) => {
 
   token.getByAddress = (address) => {
     return new Promise((resolve, reject) => {
-      Token.findOne({'address': address}, (err, doc) => {
+      Token.findOne({address}, (err, doc) => {
         if (err) {
           return reject(err)
         }

@@ -37,31 +37,9 @@ function * fetchCommunityWithData ({tokenAddress}) {
   })
 }
 
-function * issueCommunity ({communityMetadata, currencyData}) {
-  const {hash, protocol} = yield call(createMetadata, {metadata: communityMetadata})
-  const tokenURI = `${protocol}://${hash}`
-  const receipt = yield call(createToken, {...currencyData, tokenURI})
-
-  yield apiCall(processReceipt, receipt)
-
-  const owner = yield select(getAccountAddress)
-  yield put({
-    type: actions.FETCH_COMMUNITIES_BY_OWNER.REQUEST,
-    owner
-  })
-
-  const tokenAddress = receipt.events.TokenCreated.returnValues.token
-
-  yield entityPut({
-    type: actions.ISSUE_COMMUNITY.SUCCESS,
-    tokenAddress
-  })
-}
-
 export default function * communitiesSaga () {
   yield all([
     tryTakeEvery(actions.FETCH_COMMUNITY_WITH_DATA, fetchCommunityWithData, 1),
-    tryTakeEvery(actions.FETCH_COMMUNITY_STATISTICS, fetchCommunityStatistics, 1),
-    tryTakeEvery(actions.ISSUE_COMMUNITY, issueCommunity, 1)
+    tryTakeEvery(actions.FETCH_COMMUNITY_STATISTICS, fetchCommunityStatistics, 1)
   ])
 }

@@ -58,6 +58,19 @@ function * fetchTokensByOwner ({owner}) {
   return tokens
 }
 
+function * fetchTokenWithData ({tokenAddress}) {
+  const response = yield apiCall(api.fetchToken, tokenAddress)
+  const token = response.data
+
+  yield put(fetchMetadata(token.tokenURI, tokenAddress))
+
+  yield entityPut({
+    type: actions.FETCH_TOKEN_WITH_DATA.SUCCESS,
+    tokenAddress,
+    response: token
+  })
+}
+
 function * fetchClnToken () {
   const tokenAddress = yield select(getClnAddress)
   const ColuLocalNetworkContract = contract.getContract({abiName: 'ColuLocalNetwork', address: tokenAddress})
@@ -138,12 +151,27 @@ function * createTokenWithMetadata ({tokenData, metadata}) {
   })
 }
 
+function * fetchTokenStatistics ({tokenAddress, activityType, interval}) {
+  const response = yield apiCall(api.fetchTokenStatistics, tokenAddress, activityType, interval)
+
+  const {data} = response
+
+  yield put({
+    type: actions.FETCH_TOKEN_STATISTICS.SUCCESS,
+    response: {
+      [activityType]: data
+    }
+  })
+}
+
 export default function * marketMakerSaga () {
   yield all([
     tryTakeEvery(actions.FETCH_TOKENS, fetchTokens, 1),
     tryTakeEvery(actions.FETCH_TOKENS_BY_OWNER, fetchTokensByOwner, 1),
+    tryTakeEvery(actions.FETCH_TOKEN_WITH_DATA, fetchTokenWithData, 1),
     tryTakeEvery(actions.FETCH_CLN_TOKEN, fetchClnToken),
     tryTakeEvery(actions.CREATE_TOKEN, createToken, 1),
-    tryTakeEvery(actions.CREATE_TOKEN_WITH_METADATA, createTokenWithMetadata, 1)
+    tryTakeEvery(actions.CREATE_TOKEN_WITH_METADATA, createTokenWithMetadata, 1),
+    tryTakeEvery(actions.FETCH_TOKEN_STATISTICS, fetchTokenStatistics, 1)
   ])
 }
