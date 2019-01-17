@@ -1,6 +1,5 @@
 import { all, fork } from 'redux-saga/effects'
 
-import communitiesSaga from './communities'
 import networkSaga from './network'
 import metadataSaga from './metadata'
 import accountsSaga from './accounts'
@@ -10,7 +9,6 @@ import tokenSaga from './token'
 
 export default function * rootSaga () {
   yield all([
-    fork(communitiesSaga),
     fork(metadataSaga),
     fork(networkSaga),
     fork(accountsSaga),
