@@ -10,6 +10,8 @@ const intervals = {
   day: 'dayOfMonth'
 }
 
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
+
 const genInterval = (query) => {
   const interval = query.interval || 'month'
   if (!intervals.hasOwnProperty(interval)) {
@@ -53,23 +55,10 @@ router.get('/:activityType/:address', async (req, res, next) => {
     $match.$and = [
       {'returnValues.from': {$ne: token.factoryAddress}},
       {'returnValues.from': {$ne: owner}},
-      {'returnValues.to': {$ne: token.factoryAddress}},
-      {'returnValues.to': {$ne: owner}}
+      {'returnValues.from': {$ne: ZERO_ADDRESS}}
     ]
   } else {
-    $match.$or = [
-      {
-        'returnValues.from': owner
-      },
-      {
-        'returnValues.from': token.factoryAddress,
-        'returnValues.to': owner
-      }
-      // {
-      //   'returnValues.from': community.mmAddress,
-      //   'returnValues.to': owner
-      // }
-    ]
+    $match['returnValues.from'] = owner
   }
 
   const stats = await Event.aggregate([
