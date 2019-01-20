@@ -1,25 +1,5 @@
 module.exports = [
   {
-    'constant': true,
-    'inputs': [
-      {
-        'name': '',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'tokens',
-    'outputs': [
-      {
-        'name': '',
-        'type': 'address'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function',
-    'signature': '0x4f64b2be'
-  },
-  {
     'anonymous': false,
     'inputs': [
       {

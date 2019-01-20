@@ -80,20 +80,6 @@ module.exports = [
   {
     'constant': true,
     'inputs': [],
-    'name': 'DECIMALS',
-    'outputs': [
-      {
-        'name': '',
-        'type': 'uint8'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
-  },
-  {
-    'constant': true,
-    'inputs': [],
     'name': 'decimals',
     'outputs': [
       {
@@ -322,6 +308,18 @@ module.exports = [
     'anonymous': false,
     'inputs': [
       {
+        'indexed': false,
+        'name': 'tokenURI',
+        'type': 'string'
+      }
+    ],
+    'name': 'TokenURIChanged',
+    'type': 'event'
+  },
+  {
+    'anonymous': false,
+    'inputs': [
+      {
         'indexed': true,
         'name': 'previousOwner',
         'type': 'address'
@@ -378,5 +376,19 @@ module.exports = [
     ],
     'name': 'Approval',
     'type': 'event'
+  },
+  {
+    'constant': false,
+    'inputs': [
+      {
+        'name': 'tokenURI',
+        'type': 'string'
+      }
+    ],
+    'name': 'setTokenURI',
+    'outputs': [],
+    'payable': false,
+    'stateMutability': 'nonpayable',
+    'type': 'function'
   }
 ]
