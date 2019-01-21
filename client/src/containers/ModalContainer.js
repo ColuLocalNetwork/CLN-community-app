@@ -24,7 +24,7 @@ import {
   SIMPLE_EXCHANGE_MODAL,
   ECONOMIC_CALCULATOR_MODAL,
   CONTACT_FORM,
-  ADD_ENTITY
+  ADD_DIRECTORY_ENTITY
 } from 'constants/uiConstants'
 
 const renderModal = (modalComponent, props) =>
@@ -42,7 +42,7 @@ const MODAL_COMPONENTS = {
   [SIMPLE_EXCHANGE_MODAL]: SimpleExchangeModal,
   [ECONOMIC_CALCULATOR_MODAL]: EconomicCalculatorModal,
   [CONTACT_FORM]: ContractForm,
-  [ADD_ENTITY]: AddEntityModal
+  [ADD_DIRECTORY_ENTITY]: AddEntityModal
 }
 
 const ModalContainer = (props) => {
