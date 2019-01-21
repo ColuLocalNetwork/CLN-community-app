@@ -16,7 +16,7 @@
   "reactGA": {
     "trackingId": "UA-108913015-5",
     "gaOptions": {
-      "testMode": true
+      "testMode": false
     }
   },
   "ui": {
