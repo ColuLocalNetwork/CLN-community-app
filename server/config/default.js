@@ -26,10 +26,10 @@ module.exports = {
     debug: true,
     options: {}
   },
-  mandrill: {
+  mail: {
+    templates: {}
   },
   mailchimp: {
-
   },
   amazon: {
     apiBase: 'https://s3-eu-west-1.amazonaws.com/cln-dapp-images-qa/'

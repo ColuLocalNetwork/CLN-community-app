@@ -16,7 +16,7 @@
     "uri": "mongodb://localhost/CLN-community-app",
     "options": {}
   },
-  "mandrill": {
+  "sendgrid": {
   },
   "mailchimp": {
 

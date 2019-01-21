@@ -26,9 +26,12 @@
       "authSource": "COMMUNITY_MONGO_AUTH_SOURCE"
     }
   },
-  "mandrill": {
-    "apiKey": "COMMUNITY_MANDRILL_API_KEY",
-    "sendTo": "COMMUNITY_MANDRILL_SEND_TO"
+  "mail": {
+    "apiKey": "COMMUNITY_MAIL_API_KEY",
+    "supportAddress": "COMMUNITY_MAIL_SUPPORT_ADDRESS",
+    "templates": {
+      "welcome": "COMMUNITY_MAIL_TEMPLATES_WELCOME"
+    }
   },
   "mailchimp": {
     "apiBase": "COMMUNITY_MAILCHIMP_API_BASE",

@@ -47,7 +47,7 @@ require('./models')(mongoose)
 app.use(require('./routes'))
 
 // require('./services/events')
-agenda.start()
+// agenda.start()
 
 /// catch 404 and forward to error handler
 app.use(function (req, res, next) {
