@@ -28,7 +28,7 @@ class UserDatatModal extends Component {
       email: this.state.userEmail,
       tokenAddress: this.props.receipt.events[0].address,
       country: this.state.selectedCountry,
-      receiveMail: this.state.gettingEmail
+      subscribe: this.state.gettingEmail
     })
     this.props.hideModal()
     this.props.setQuitIssuance()

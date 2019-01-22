@@ -9,7 +9,7 @@ module.exports = (mongoose) => {
     email: {type: String, required: [true, "can't be blank"], validate: [ validator.isEmail, 'invalid email' ]},
     tokenAddress: {type: String, required: [true, "can't be blank"]},
     country: {type: String, required: [true, "can't be blank"]},
-    receiveMail: {type: Boolean, default: false}
+    verified: {type: Boolean, default: false}
   }, {timestamps: true})
 
   UserSchema.index({tokenAddress: 1}, {unique: true})
