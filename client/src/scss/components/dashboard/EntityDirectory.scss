@@ -232,6 +232,15 @@
     display: flex;
     padding: 0;
     margin: 0 auto;
+    @media (max-width: $breakpoint-tablet) {
+      width: 575px !important;
+      flex-direction: column;
+    }
+    @media (max-width: $breakpoint-mobile) {
+      width: 100% !important;
+      padding: 30px 20px;
+      display: block;
+    }
     &-title {
       padding-top: 0 !important;
       padding-bottom: 10px !important;
@@ -242,8 +251,10 @@
       border-right: none;
       border-bottom: 1px solid #e2e2e2;
       padding: 15px 0;
-      font-size: 17px;
+      font-size: 20px;
       margin-bottom: 20px;
+      font-weight: 500;
+      color: #1a2b59;
       width: 100%;
       &::placeholder {
         font-size: 17px;
@@ -256,6 +267,10 @@
       padding: 30px;
       background-color: #eceff6;
       text-align: left;
+      @media (max-width: $breakpoint-tablet) {
+        width: 100%;
+        padding: 20px;
+      }
       &-title {
         font-size: 36px;
         font-weight: bold;
@@ -263,12 +278,25 @@
         letter-spacing: -0.2px;
         color: #25435a;
       }
+      &-img {
+        width: 226px;
+        height: 435px !important;
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        @media (max-width: $breakpoint-tablet) {
+          display: none;
+        }
+      }
     }
     &-content {
       background-color: $color-step-text;
       padding: 40px;
       text-align: left;
       flex: 1;
+      @media (max-width: $breakpoint-tablet) {
+        padding: 20px;
+      }
       &-upload {
         color: #0a7586;
         border-radius: 3px;
@@ -295,12 +323,17 @@
       &-select {
         border-radius: 3px;
         background-color: rgba(10, 117, 134, 0.08);
+        display: inline-block;
+        min-width: 180px;
         &-prefix {
           color: #0a7586 !important;
           font-size: 12px;
+          &__value-container {
+            padding: 4px 8px !important;
+          }
           &__control {
             background: none !important;
-            border: none !important;
+            border: 1px solid rgba(10, 117, 134, 0.08) !important;
             min-height: auto !important;
             box-shadow: none !important;
           }
@@ -315,9 +348,11 @@
           &__option {
             color: #0a7586 !important;
             font-size: 12px !important;
-            &--is-focused,
+            &--is-focused {
+              background-color: rgba(10, 117, 134, 0.53) !important;
+            }
             &--is-selected {
-              background-color: rgba(10, 117, 134, 0.08);
+              background-color: rgba(10, 117, 134, 0.08) !important;
             }
           }
           &__dropdown-indicator {
@@ -328,13 +363,44 @@
               right: 10px;
               width: 0;
               height: 0;
-              top: 14px;
+              top: 16px;
               border-style: solid;
               border-color: #0a7586 transparent transparent transparent;
               border-width: 6px;
             }
             [class^='css'] {
               display: none;
+            }
+          }
+        }
+        &.active-business-select {
+          .entity-modal-content-select-prefix__control {
+            border: 1px solid rgba(10, 117, 134, 0.53) !important;
+            position: relative;
+            &:after {
+              position: absolute;
+              z-index: 3;
+              top: -3px;
+              left: 0;
+              width: 3px;
+              height: 6px;
+              content: '';
+              display: block;
+              border: solid $color-step-text;
+              border-width: 0 2px 2px 0;
+              transform: rotate(45deg);
+            }
+            &:before {
+              position: absolute;
+              z-index: 2;
+              width: 14px;
+              height: 14px;
+              content: '';
+              display: block;
+              border-radius: 50%;
+              top: -5px;
+              left: -5px;
+              background: #0a7586;
             }
           }
         }
@@ -348,6 +414,37 @@
         font-size: 12px;
         margin-bottom: 5px;
         margin-right: 7px;
+        border: 1px solid rgba(10, 117, 134, 0.08);
+
+        &.active-business-type {
+          border: 1px solid rgba(10, 117, 134, 0.53);
+          position: relative;
+          &:after {
+            position: absolute;
+            z-index: 3;
+            top: -3px;
+            left: 0;
+            width: 3px;
+            height: 6px;
+            content: '';
+            display: block;
+            border: solid $color-step-text;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+          }
+          &:before {
+            position: absolute;
+            z-index: 2;
+            width: 14px;
+            height: 14px;
+            content: '';
+            display: block;
+            border-radius: 50%;
+            top: -5px;
+            left: -5px;
+            background: #0a7586;
+          }
+        }
       }
       hr {
         border: none;
@@ -365,6 +462,7 @@
         line-height: 4 !important;
         letter-spacing: normal !important;
         color: #1a2b59;
+        position: relative;
         span {
           color: #b3b9c8;
           font-weight: normal;
@@ -377,6 +475,9 @@
           font-size: 13px;
           line-height: 3.38;
           color: #8d95a9;
+          position: absolute;
+          top: 2px;
+          right: 0;
         }
       }
       &-form-control {
@@ -387,7 +488,9 @@
         padding: 5px 12px;
         margin-bottom: 20px;
         display: block;
+        font-size: 12px;
         box-sizing: border-box;
+        color: #1a2b59;
         &-label {
           font-size: 11px !important;
           font-weight: bold !important;
@@ -398,6 +501,9 @@
           font-size: 13px;
           color: #c0c5d2;
           font-style: italic;
+        }
+        &:focus {
+          border: 1px solid $color-orange;
         }
       }
     }
@@ -414,6 +520,9 @@
   outline: none;
   border: none;
   margin-top: 20px;
+  width: 150px;
+  margin-left: auto;
+  margin-right: auto;
   &:hover,
   &:focus,
   &:focus:active,
@@ -451,5 +560,8 @@ div[class^='col'] {
   margin-right: -15px;
   &.justify-center {
     justify-content: center;
+  }
+  @media (max-width: $breakpoint-mobile) {
+    display: block;
   }
 }

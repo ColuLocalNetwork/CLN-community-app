@@ -5,9 +5,9 @@
   },
   "api": {
     "url": {
-      "main": "https://ropsten-qa.cln.network/api/v1",
-      "ropsten": "https://ropsten-qa.cln.network/api/v1",
-      "default": "https://ropsten-qa.cln.network/api/v1"
+      "main": "http://localhost:3000/api/v1",
+      "ropsten": "http://localhost:3000/api/v1",
+      "default": "http://localhost:3000/api/v1"
     },
     "timeout": 3000,
     "retryTimeout": 500,
