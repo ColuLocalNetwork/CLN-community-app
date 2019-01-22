@@ -11,7 +11,7 @@ import CommunityLogo from 'components/elements/CommunityLogo'
 
 const PersonalSidebarCoin = ({accountAddress, token, metadata, balance}) => (
   <Fragment>
-    <CommunityLogo token={token} metadata={metadata} />,
+    <CommunityLogo token={token} metadata={metadata} />
     <div className='personal-community-content'>
       <div className='personal-community-content-balance'>
         CC Balance <span>{balance ? formatWei(balance, 0) : 0}</span>
