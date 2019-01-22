@@ -9,7 +9,7 @@ import {createList, getList, addEntity, fetchEntities} from 'actions/directory'
 import Header from './Header'
 import Entity from './Entity'
 import {loadModal, hideModal} from 'actions/ui'
-import { ADD_ENTITY } from 'constants/uiConstants'
+import { ADD_DIRECTORY_ENTITY } from 'constants/uiConstants'
 
 class EntityDirectory extends Component {
   setQuitDashboard = () => this.props.history.goBack()
@@ -38,7 +38,7 @@ class EntityDirectory extends Component {
     }
   }
 
-  loadAddingModal = () => this.props.loadModal(ADD_ENTITY, {
+  loadAddingModal = () => this.props.loadModal(ADD_DIRECTORY_ENTITY, {
     handleAddEntity: this.handleAddEntity
   })
 
@@ -60,8 +60,9 @@ class EntityDirectory extends Component {
         match={this.props.match}
         history={this.props.history}
         showHomePage={this.showHomePage}
+        key={0}
       />,
-      <div className='dashboard-content'>
+      <div className='dashboard-content' key={1}>
         <div className='dashboard-entity-container'>
           <button
             className='quit-button ctrl-btn'
