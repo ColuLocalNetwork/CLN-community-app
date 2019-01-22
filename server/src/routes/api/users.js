@@ -7,8 +7,8 @@ const User = mongoose.model('User')
 router.post('/', async (req, res) => {
   const user = new User(req.body.user)
 
-  // const results = await user.save()
-  const results = user
+  const results = await user.save()
+  // const results = user
   mailUtils.sendWelcomeMail(user)
 
   if (user.subscribe) {

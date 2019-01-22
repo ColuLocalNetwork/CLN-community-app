@@ -43,18 +43,22 @@ const sendWelcomeMail = (user) => {
 }
 
 const subscribeUser = (user) => {
+  const firstName = user.fullName.split(' ')[0]
+  const lastName = user.fullName.split(' ')[1]
+
   const request = {
     method: 'POST',
     url: '/v3/contactdb/recipients',
     body: [{
       'email': user.email,
-      'last_name': user.fullName
+      'first_name': firstName,
+      'last_name': lastName
     }]
   }
-
+  console.log(request.body)
   client.request(request).then(() => {
     console.log(`User ${user.email} added`)
-  })
+  }).catch(console.log)
 }
 
 module.exports = {
