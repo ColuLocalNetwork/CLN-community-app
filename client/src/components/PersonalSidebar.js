@@ -61,7 +61,7 @@ class PersonalSidebar extends Component {
             <PersonalSidebarCoin
               accountAddress={accountAddress}
               token={token}
-              metadata={this.props.metadata[token.tokenURI]}
+              metadata={this.props.metadata[token.tokenURI] || {}}
               balance={this.props.account.balances[token.address]} />
             <button onClick={() => this.showDashboard(token.address)} className='btn-dashboard'>
               <FontAwesome name='signal' />
@@ -79,7 +79,7 @@ class PersonalSidebar extends Component {
           <PersonalSidebarCoin
             accountAddress={accountAddress}
             token={token}
-            metadata={this.props.metadata[token.tokenURI]}
+            metadata={this.props.metadata[token.tokenURI] || {}}
             balance={this.props.account.balances[token.address]} />
         </div>
       )
