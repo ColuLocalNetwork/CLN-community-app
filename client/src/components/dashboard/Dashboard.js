@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import {fetchTokenWithData, fetchTokenStatistics} from 'actions/token'
 import classNames from 'classnames'
 import FontAwesome from 'react-fontawesome'
-import {getClnBalance} from 'selectors/accounts'
+import {getClnBalance, getAccountAddress} from 'selectors/accounts'
 import CommunityLogo from 'components/elements/CommunityLogo'
 import {formatWei} from 'utils/format'
 import {loadModal} from 'actions/ui'
@@ -214,7 +214,7 @@ class Dashboard extends Component {
 
     return [
       <Header
-        network={this.props.network}
+        accountAddress={this.props.accountAddress}
         clnBalance={this.props.clnBalance}
         match={this.props.match}
         history={this.props.history}
@@ -287,6 +287,7 @@ const mapStateToProps = (state, {match}) => ({
   token: state.entities.tokens[match.params.address],
   metadata: state.entities.metadata,
   dashboard: state.screens.dashboard,
+  accountAddress: getAccountAddress(state),
   clnBalance: getClnBalance(state)
 })
 
