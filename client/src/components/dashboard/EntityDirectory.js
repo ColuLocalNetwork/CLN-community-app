@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import FontAwesome from 'react-fontawesome'
 import { connect } from 'react-redux'
+import ReactGA from 'services/ga'
 import {getClnBalance} from 'selectors/accounts'
 import Loader from 'components/Loader'
 import {REQUEST, SUCCESS} from 'actions/constants'
@@ -51,6 +52,14 @@ class EntityDirectory extends Component {
       )
     }
   }
+  showProfile = (address, hash) => {
+    this.props.history.push(`/view/directory/${address}/${hash}`)
+    ReactGA.event({
+      category: 'Profile',
+      action: 'Click',
+      label: 'profile'
+    })
+  }
 
   render () {
     return [
@@ -98,8 +107,13 @@ class EntityDirectory extends Component {
                   </button>
                 </div>
                 {this.props.entities.length
-                  ? this.props.entities.map((entity, index) => <Entity key={index} entity={entity} />)
-                  : <p className='emptyText'>There is no any entities</p>
+                  ? this.props.entities.map((entity, index) =>
+                    <Entity
+                      key={index}
+                      entity={entity}
+                      showProfile={() => this.showProfile(this.props.match.params.address, this.props.listHashes[index])}
+                    />
+                  ) : <p className='emptyText'>There is no any entities</p>
                 }
               </div>
             )}
