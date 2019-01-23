@@ -5,10 +5,13 @@ module.exports = (mongoose) => {
   const Schema = mongoose.Schema
 
   const UserSchema = new Schema({
-    fullName: {type: String, required: [true, "can't be blank"]},
+    firstName: {type: String, required: [true, "can't be blank"]},
+    lastName: {type: String, required: [true, "can't be blank"]},
     email: {type: String, required: [true, "can't be blank"], validate: [ validator.isEmail, 'invalid email' ]},
+    accountAddress: {type: String, required: [true, "can't be blank"]},
     tokenAddress: {type: String, required: [true, "can't be blank"]},
     country: {type: String, required: [true, "can't be blank"]},
+    subscribe: {type: Boolean, default: false},
     verified: {type: Boolean, default: false}
   }, {timestamps: true})
 

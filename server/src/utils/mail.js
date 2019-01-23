@@ -32,33 +32,44 @@ const sendWelcomeMail = (user) => {
   const to = user.email
   const subject = 'Welcome to Fuse!'
   const templateData = {
-    name: user.fullName
+    name: user.firstName
   }
   const templateId = config.get('mail.templates.welcome')
   const request = createMailRequest({to, from, subject, templateId, templateData})
-
   client.request(request).then(() => {
     console.log(`Sent welcoming mail to address ${to}`)
   })
 }
 
-const subscribeUser = (user) => {
-  const firstName = user.fullName.split(' ')[0]
-  const lastName = user.fullName.split(' ')[1]
+const addToList = async (recipientId, listId) => {
+  const request = {
+    method: 'POST',
+    url: `/v3/contactdb/lists/${listId}/recipients/${recipientId}`
+  }
 
+  await client.request(request)
+}
+
+const addContact = async (user) => {
   const request = {
     method: 'POST',
     url: '/v3/contactdb/recipients',
     body: [{
       'email': user.email,
-      'first_name': firstName,
-      'last_name': lastName
+      'first_name': user.firstName,
+      'last_name': user.lastName
     }]
   }
-  console.log(request.body)
-  client.request(request).then(() => {
-    console.log(`User ${user.email} added`)
-  }).catch(console.log)
+  const body = (await client.request(request))[1]
+  const recipientId = body.persisted_recipients[0]
+  return recipientId
+}
+
+const subscribeUser = async (user) => {
+  const recipientId = await addContact(user)
+  const {listId} = mailConfig
+  await addToList(recipientId, listId)
+  console.log(`User ${user.email} subscribed to mail list`)
 }
 
 module.exports = {

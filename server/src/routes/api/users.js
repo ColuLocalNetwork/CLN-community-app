@@ -8,7 +8,7 @@ router.post('/', async (req, res) => {
   const user = new User(req.body.user)
 
   const results = await user.save()
-  // const results = user
+
   mailUtils.sendWelcomeMail(user)
 
   if (user.subscribe) {
@@ -20,18 +20,5 @@ router.post('/', async (req, res) => {
     data: results
   })
 })
-
-// router.post('/verify', async (req, res) => {
-//   const user = new User(req.body.user)
-//
-//   const results = await user.save()
-//
-//   sendWelcomeMail(user)
-//
-//   res.json({
-//     object: 'user',
-//     data: results
-//   })
-// })
 
 module.exports = router
