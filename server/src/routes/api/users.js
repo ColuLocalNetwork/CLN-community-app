@@ -9,7 +9,8 @@ router.post('/', async (req, res) => {
 
   const results = await user.save()
 
-  mailUtils.sendWelcomeMail(user)
+  // TODO: waiting for email templates
+  // mailUtils.sendWelcomeMail(user)
 
   if (user.subscribe) {
     mailUtils.subscribeUser(user)
