@@ -11,9 +11,10 @@ import NameStep from './NameStep'
 import SymbolStep from './SymbolStep'
 import DetailsStep from './DetailsStep'
 import SummaryStep from './SummaryStep'
-import {issueCommunity} from 'actions/communities'
+import {createTokenWithMetadata} from 'actions/token'
 import {getAddresses} from 'selectors/network'
-import { USER_DATA_MODAL, ECONOMIC_CALCULATOR_MODAL } from 'constants/uiConstants'
+import { USER_DATA_MODAL } from 'constants/uiConstants'
+import ReactGA from 'services/ga'
 
 class IssuanceWizard extends Component {
   state = {
@@ -32,6 +33,12 @@ class IssuanceWizard extends Component {
     window.addEventListener('scroll', this.handleScroll)
     window.addEventListener('keypress', this.handleKeyPress)
     this.setState({ stepPosition: this.stepIndicator.getBoundingClientRect().top })
+
+    ReactGA.event({
+      category: 'Issuance',
+      action: 'Load',
+      label: 'Started'
+    })
   }
 
   componentDidUpdate (prevProps) {
@@ -63,14 +70,13 @@ class IssuanceWizard extends Component {
   }
 
   setIssuanceTransaction = () => {
-    const currencyData = {
+    const tokenData = {
       name: this.state.communityName,
       symbol: this.state.communitySymbol,
-      decimals: 18,
       totalSupply: new BigNumber(this.state.totalSupply).multipliedBy(1e18)
     }
-    const communityMetadata = {'communityType': this.state.communityType.text, 'communityLogo': this.state.communityLogo.name}
-    this.props.issueCommunity(communityMetadata, currencyData)
+    const metadata = {communityType: this.state.communityType.text, communityLogo: this.state.communityLogo.name}
+    this.props.createTokenWithMetadata(tokenData, metadata)
   }
 
   handleScroll = () => this.setState({scrollPosition: window.scrollY})
@@ -95,8 +101,6 @@ class IssuanceWizard extends Component {
   handleChangeCommunitySymbol = (communitySymbol) => {
     this.setState({communitySymbol})
   }
-
-  loadCalculator = (token, marketMaker) => this.props.loadModal(ECONOMIC_CALCULATOR_MODAL, {token, marketMaker, wrapper: 'summary'})
 
   setCommunityType = type =>
     this.setState({communityType: type})
@@ -148,8 +152,6 @@ class IssuanceWizard extends Component {
             communitySymbol={this.state.communitySymbol}
             showPopup={this.showMetamaskPopup}
             transactionStatus={this.props.transactionStatus}
-            loadCalculator={this.loadCalculator}
-            EllipseMarketMakerLibAddress={this.props.addresses.EllipseMarketMakerLib}
           />
         )
     }
@@ -222,7 +224,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-  issueCommunity,
+  createTokenWithMetadata,
   loadModal,
   hideModal
 }

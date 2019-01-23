@@ -4,8 +4,7 @@ import Community from 'components/Community'
 import BigNumber from 'bignumber.js'
 import Loader from 'components/Loader'
 import {REQUEST, PENDING, SUCCESS} from 'actions/constants'
-
-const canInsertCLN = () => false
+import ReactGA from 'services/ga'
 
 export default class SummaryStep extends Component {
   renderTransactionStatus = (transactionStatus) => {
@@ -28,25 +27,33 @@ export default class SummaryStep extends Component {
   getToken = () => ({
     symbol: this.props.communitySymbol,
     name: this.props.communityName,
-    totalSupply: new BigNumber(this.props.totalSupply.toString()).multipliedBy(1e18),
-    mmAddress: this.props.EllipseMarketMakerLibAddress,
-    metadata: {
-      communityLogo: this.props.communityLogo
-    }
+    totalSupply: new BigNumber(this.props.totalSupply.toString()).multipliedBy(1e18)
   })
+
+  componentDidMount () {
+    ReactGA.event({
+      category: 'Issuance',
+      action: 'Load',
+      label: 'Finished'
+    })
+  }
+
+  componentDidUpdate (prevProps) {
+    if (this.transactionStatus === SUCCESS && prevProps.transactionStatus !== SUCCESS) {
+      ReactGA.event({
+        category: 'Issuance',
+        action: 'Load',
+        label: 'Issued'
+      })
+    }
+  }
 
   render () {
     return <div>
       <h2 className='step-content-title text-center'>Your community currency is ready to be born!</h2>
       <div className='step-content-summary'>
         <div className='list-item'>
-          <Community
-            canInsertCLN={canInsertCLN}
-            usdPrice={0}
-            loadCalculator={this.props.loadCalculator}
-            token={this.getToken()}
-            wrapper={'summary'}
-          />
+          <Community token={this.getToken()} metadata={{communityLogo: this.props.communityLogo}} />
         </div>
       </div>
       <div className='text-center wallet-container'>
@@ -57,6 +64,5 @@ export default class SummaryStep extends Component {
 }
 
 SummaryStep.propTypes = {
-  transactionStatus: PropTypes.string,
-  EllipseMarketMakerLibAddress: PropTypes.string
+  transactionStatus: PropTypes.string
 }
