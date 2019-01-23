@@ -8,8 +8,8 @@ import LoadingModal from 'components/LoadingModal'
 import ExchangeModal from 'components/exchange/ExchangeModal'
 import ErrorBoundary from 'components/ErrorBoundary'
 import UserDatatModal from 'components/issuance/UserDatatModal'
+import AddEntityModal from 'components/dashboard/AddEntityModal'
 import SimpleExchangeModal from 'components/oven/SimpleExchangeModal'
-import EconomicCalculatorModal from 'components/EconomicCalculatorModal'
 
 import {
   LOGIN_MODAL,
@@ -18,7 +18,7 @@ import {
   LOADING_MODAL,
   USER_DATA_MODAL,
   SIMPLE_EXCHANGE_MODAL,
-  ECONOMIC_CALCULATOR_MODAL,
+  ADD_DIRECTORY_ENTITY
 } from 'constants/uiConstants'
 
 const renderModal = (modalComponent, props) =>
@@ -33,7 +33,7 @@ const MODAL_COMPONENTS = {
   [LOADING_MODAL]: LoadingModal,
   [USER_DATA_MODAL]: UserDatatModal,
   [SIMPLE_EXCHANGE_MODAL]: SimpleExchangeModal,
-  [ECONOMIC_CALCULATOR_MODAL]: EconomicCalculatorModal
+  [ADD_DIRECTORY_ENTITY]: AddEntityModal
 }
 
 const ModalContainer = (props) => {

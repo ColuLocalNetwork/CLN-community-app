@@ -11,7 +11,7 @@ import CommunityLogo from 'components/elements/CommunityLogo'
 
 const PersonalSidebarCoin = ({accountAddress, token, metadata, balance}) => (
   <Fragment>
-    <CommunityLogo token={token} metadata={metadata} />,
+    <CommunityLogo token={token} metadata={metadata} />
     <div className='personal-community-content'>
       <div className='personal-community-content-balance'>
         CC Balance <span>{balance ? formatWei(balance, 0) : 0}</span>
@@ -61,7 +61,7 @@ class PersonalSidebar extends Component {
             <PersonalSidebarCoin
               accountAddress={accountAddress}
               token={token}
-              metadata={this.props.metadata[token.tokenURI]}
+              metadata={this.props.metadata[token.tokenURI] || {}}
               balance={this.props.account.balances[token.address]} />
             <button onClick={() => this.showDashboard(token.address)} className='btn-dashboard'>
               <FontAwesome name='signal' />
@@ -79,7 +79,7 @@ class PersonalSidebar extends Component {
           <PersonalSidebarCoin
             accountAddress={accountAddress}
             token={token}
-            metadata={this.props.metadata[token.tokenURI]}
+            metadata={this.props.metadata[token.tokenURI] || {}}
             balance={this.props.account.balances[token.address]} />
         </div>
       )

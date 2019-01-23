@@ -4,12 +4,14 @@ import { connect } from 'react-redux'
 import {fetchTokenWithData, fetchTokenStatistics} from 'actions/token'
 import classNames from 'classnames'
 import FontAwesome from 'react-fontawesome'
+import {getClnBalance, getAccountAddress} from 'selectors/accounts'
 import CommunityLogo from 'components/elements/CommunityLogo'
 import {formatWei} from 'utils/format'
 import {loadModal} from 'actions/ui'
 import Moment from 'moment'
 import {SIMPLE_EXCHANGE_MODAL} from 'constants/uiConstants'
 import find from 'lodash/find'
+import Header from './Header'
 
 const intervals = {
   MONTH: 'month',
@@ -186,7 +188,9 @@ class Dashboard extends Component {
     }
   }
 
-  setQuitDashboard = () => this.props.history.goBack()
+  showHomePage = (address) => {
+    this.props.history.push('/')
+  }
 
   copyToClipboard = (e) => {
     this.textArea.select()
@@ -208,15 +212,23 @@ class Dashboard extends Component {
     const {token} = this.props
     const { admin, user } = this.props.dashboard
 
-    return (
-      <div className='dashboard-content'>
+    return [
+      <Header
+        accountAddress={this.props.accountAddress}
+        clnBalance={this.props.clnBalance}
+        match={this.props.match}
+        history={this.props.history}
+        showHomePage={this.showHomePage}
+        key={0}
+      />,
+      <div key={1} className='dashboard-content'>
         <div className='dashboard-header'>
           <div className='dashboard-logo'>
             <a href='https://cln.network/' target='_blank'><img src={ClnIcon} /></a>
           </div>
           <button
             className='quit-button ctrl-btn'
-            onClick={this.setQuitDashboard}
+            onClick={this.showHomePage}
           >
             <FontAwesome className='ctrl-icon' name='times' />
           </button>
@@ -267,14 +279,16 @@ class Dashboard extends Component {
           </div>
         </div>
       </div>
-    )
+    ]
   }
 }
 
 const mapStateToProps = (state, {match}) => ({
   token: state.entities.tokens[match.params.address],
   metadata: state.entities.metadata,
-  dashboard: state.screens.dashboard
+  dashboard: state.screens.dashboard,
+  accountAddress: getAccountAddress(state),
+  clnBalance: getClnBalance(state)
 })
 
 const mapDispatchToProps = {
