@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const router = require('express').Router()
-const mailUtils = require('@utils/mail')
+const sendgridUtils = require('@utils/sendgrid')
 
 const User = mongoose.model('User')
 
@@ -10,10 +10,10 @@ router.post('/', async (req, res) => {
   const results = await user.save()
 
   // TODO: waiting for email templates
-  // mailUtils.sendWelcomeMail(user)
+  // sendgridUtils.sendWelcomeMail(user)
 
   if (user.subscribe) {
-    mailUtils.subscribeUser(user)
+    sendgridUtils.subscribeUser(user)
   }
 
   res.json({

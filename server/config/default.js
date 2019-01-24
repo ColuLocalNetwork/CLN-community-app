@@ -27,7 +27,9 @@ module.exports = {
     options: {}
   },
   mail: {
-    templates: {}
+    sendgrid: {
+      templates: {}
+    }
   },
   amazon: {
     apiBase: 'https://s3-eu-west-1.amazonaws.com/cln-dapp-images-qa/'

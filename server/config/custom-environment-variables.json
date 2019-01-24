@@ -27,11 +27,13 @@
     }
   },
   "mail": {
-    "apiKey": "COMMUNITY_MAIL_API_KEY",
-    "listId": "COMMUNITY_MAIL_LIST_ID",
     "supportAddress": "COMMUNITY_MAIL_SUPPORT_ADDRESS",
-    "templates": {
-      "welcome": "COMMUNITY_MAIL_TEMPLATES_WELCOME"
+    "sendgrid": {
+      "apiKey": "COMMUNITY_MAIL_SENDGRID_API_KEY",
+      "listId": "COMMUNITY_MAIL_SENDGRID_LIST_ID",
+      "templates": {
+        "welcome": "COMMUNITY_MAIL_SENDGRID_TEMPLATES_WELCOME"
+      }
     }
   },
   "amazon": {

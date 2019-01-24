@@ -1,7 +1,5 @@
-const client = require('@services/mail')
+const client = require('@services/sendgrid')
 const config = require('config')
-
-const mailConfig = config.get('mail')
 
 const createMailRequest = ({to, from, subject, templateId, templateData}) => {
   return {
@@ -28,13 +26,13 @@ const createMailRequest = ({to, from, subject, templateId, templateData}) => {
 }
 
 const sendWelcomeMail = (user) => {
-  const from = mailConfig.supportAddress
+  const from = config.get('mail.supportAddress')
   const to = user.email
   const subject = 'Welcome to Fuse!'
   const templateData = {
     name: user.firstName
   }
-  const templateId = config.get('mail.templates.welcome')
+  const templateId = config.get('mail.sendgrid.templates.welcome')
   const request = createMailRequest({to, from, subject, templateId, templateData})
   client.request(request).then(() => {
     console.log(`Sent welcoming mail to address ${to}`)
@@ -67,7 +65,7 @@ const addContact = async (user) => {
 
 const subscribeUser = async (user) => {
   const recipientId = await addContact(user)
-  const {listId} = mailConfig
+  const listId = config.get('mail.sendgrid.listId')
   await addToList(recipientId, listId)
   console.log(`User ${user.email} subscribed to mail list`)
 }
