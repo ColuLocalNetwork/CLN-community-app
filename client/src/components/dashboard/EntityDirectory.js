@@ -32,8 +32,7 @@ class EntityDirectory extends Component {
 
   componentDidUpdate (prevProps) {
     if (
-      (this.props.listAddress && this.props.listAddress !== prevProps.listAddress) ||
-      (this.props.transactionStatus !== prevProps.transactionStatus && this.props.transactionStatus === SUCCESS)
+      (this.props.listAddress && this.props.listAddress !== prevProps.listAddress)
     ) {
       this.props.fetchEntities(this.props.listAddress, 1)
     }
