@@ -1,7 +1,7 @@
 const client = require('@services/sendgrid')
 const config = require('config')
 
-const createMailRequest = ({to, from, subject, templateId, templateData}) => {
+const createMailRequest = ({to, from, templateId, templateData}) => {
   return {
     method: 'POST',
     url: '/v3/mail/send',
@@ -13,8 +13,7 @@ const createMailRequest = ({to, from, subject, templateId, templateData}) => {
               'email': to
             }
           ],
-          'dynamic_template_data': templateData,
-          'subject': subject
+          'dynamic_template_data': templateData
         }
       ],
       'from': {
@@ -28,12 +27,11 @@ const createMailRequest = ({to, from, subject, templateId, templateData}) => {
 const sendWelcomeMail = (user) => {
   const from = config.get('mail.supportAddress')
   const to = user.email
-  const subject = 'Welcome to Fuse!'
   const templateData = {
     name: user.firstName
   }
   const templateId = config.get('mail.sendgrid.templates.welcome')
-  const request = createMailRequest({to, from, subject, templateId, templateData})
+  const request = createMailRequest({to, from, templateId, templateData})
   client.request(request).then(() => {
     console.log(`Sent welcoming mail to address ${to}`)
   })
