@@ -53,21 +53,21 @@ function * balanceOfCln ({accountAddress}) {
   }
 }
 
-function * fetchTokensByAccount ({accountAddress}) {
-  const response = yield apiCall(fetchTokensByAccountApi, {accountAddress})
-  const tokens = response.data
-  debugger
-  yield put({
-    type: actions.FETCH_TOKENS_BY_ACCOUNT.SUCCESS,
-    accountAddress,
-    response: {
-      tokens
-    }
-  })
-  return tokens
-}
+// function * fetchTokensByAccount ({accountAddress}) {
+//   const response = yield apiCall(fetchTokensByAccountApi, {accountAddress})
+//   const tokens = response.data
+//   debugger
+//   yield put({
+//     type: actions.FETCH_TOKENS_BY_ACCOUNT.SUCCESS,
+//     accountAddress,
+//     response: {
+//       tokens
+//     }
+//   })
+//   return tokens
+// }
 
-// const fetchTokensByAccount = createFetch(fetchTokensByAccountApi, )
+const fetchTokensByAccount = createFetch('tokens', actions.FETCH_TOKENS_BY_ACCOUNT, fetchTokensByAccountApi)
 
 function * fetchBalances ({accountAddress, tokens}) {
   for (let token of tokens) {

@@ -61,7 +61,9 @@ export const createFetch = (entity, action, apiFunc) => function * (params) {
   const entities = keyBy(tokens, entityKeys[entity])
   const result = Object.keys(entities)
 
-  yield put({type: action.SUCCESS,
+  yield put({
+    ...params,
+    type: action.SUCCESS,
     entity,
     response: {
       entities,
