@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import FontAwesome from 'react-fontawesome'
 import { connect } from 'react-redux'
 import ReactGA from 'services/ga'
-import {getClnBalance} from 'selectors/accounts'
 import Loader from 'components/Loader'
+import {getClnBalance, getAccountAddress} from 'selectors/accounts'
 import {REQUEST, SUCCESS} from 'actions/constants'
 import {getEntities} from 'selectors/directory'
 import {createList, getList, addEntity, fetchEntities} from 'actions/directory'
@@ -32,7 +32,8 @@ class EntityDirectory extends Component {
 
   componentDidUpdate (prevProps) {
     if (
-      (this.props.listAddress && this.props.listAddress !== prevProps.listAddress)
+      (this.props.listAddress && this.props.listAddress !== prevProps.listAddress) ||
+      (this.props.transactionStatus !== prevProps.transactionStatus && this.props.transactionStatus === SUCCESS)
     ) {
       this.props.fetchEntities(this.props.listAddress, 1)
     }
@@ -63,7 +64,7 @@ class EntityDirectory extends Component {
   render () {
     return [
       <Header
-        network={this.props.network}
+        accountAddress={this.props.accountAddress}
         clnBalance={this.props.clnBalance}
         match={this.props.match}
         history={this.props.history}
@@ -109,6 +110,7 @@ class EntityDirectory extends Component {
                   ? this.props.entities.map((entity, index) =>
                     <Entity
                       key={index}
+                      index={index}
                       entity={entity}
                       showProfile={() => this.showProfile(this.props.match.params.address, this.props.listHashes[index])}
                     />
@@ -128,6 +130,7 @@ const mapStateToProps = (state, {match}) => ({
   entities: getEntities(state),
   network: state.network,
   clnBalance: getClnBalance(state),
+  accountAddress: getAccountAddress(state),
   ...state.screens.directory
 })
 

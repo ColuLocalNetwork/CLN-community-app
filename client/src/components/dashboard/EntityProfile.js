@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import MediaMobile from 'images/issue-popup-mobile.svg'
 import FontAwesome from 'react-fontawesome'
+import {getEntities} from 'selectors/directory'
 
 class EntityProfile extends Component {
   state = {
-    copyStatus: null
+    copyStatus: null,
+    keyHash: ''
   }
   copyToClipboard = (e) => {
     this.textArea.select()
@@ -19,7 +21,12 @@ class EntityProfile extends Component {
     this.textArea.value = this.props.match.params.hash
   };
   render () {
-    const entity = Object.keys(this.props.entities).length ? this.props.entities[this.props.match.params.hash] : null
+    const keyHash = Object.keys(this.props.listHashes).filter(hash => {
+      if (this.props.match.params.hash === this.props.listHashes[hash]) {
+        return hash
+      }
+    })
+    const entity = Object.keys(this.props.entities).length ? this.props.entities[keyHash[0]] : null
     return (
       <div className='entity-profile'>
         <div className='entity-profile-container'>
@@ -96,14 +103,15 @@ class EntityProfile extends Component {
         {this.state.copyStatus && <div className='dashboard-notification'>
           {this.state.copyStatus}
         </div>
-        }
+        }}
       </div>
     )
   }
 }
 
 const mapStateToProps = (state) => ({
-  entities: state.entities.metadata
+  entities: getEntities(state),
+  listHashes: state.screens.directory.listHashes
 })
 
 export default connect(mapStateToProps, null)(EntityProfile)

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import ProfileIcon from 'images/user-dashboard.svg'
 import EntityHeader from 'images/entity_logo.png'
+import {getEntities} from 'selectors/directory'
 import {BigNumber} from 'bignumber.js'
 import classNames from 'classnames'
 import ReactGA from 'services/ga'
@@ -26,16 +27,21 @@ class Header extends Component {
   }
 
   render () {
-    const hash = this.props.history.location.pathname.split('/')
-    const entity = Object.keys(this.props.entities).length ? this.props.entities[hash[hash.length - 1]] : null
+    const hashes = this.props.history.location.pathname.split('/')
     const link = this.props.match.path.split('/')
+    const keyHash = Object.keys(this.props.listHashes).filter(hash => {
+      if (hashes[hashes.length - 1] === this.props.listHashes[hash]) {
+        return hash
+      }
+    })
+    const entity = Object.keys(this.props.entities).length ? this.props.entities[keyHash[0]] : null
     const activeDashboardLinkClass = classNames({
       'entities-header-nav-link': true,
-      'active-link': link[2] === 'dashboard' && (entity && entity.name === undefined)
+      'active-link': link[2] === 'dashboard' && (entity === undefined)
     })
     const activeDirectoryLinkClass = classNames({
       'entities-header-nav-link': true,
-      'active-link': link[2] === 'directory' && (entity && entity.name === undefined)
+      'active-link': link[2] === 'directory' && (entity === undefined)
     })
     return (
       <div className='entities-header'>
@@ -83,7 +89,8 @@ class Header extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  entities: state.entities.metadata
+  entities: getEntities(state),
+  listHashes: state.screens.directory.listHashes
 })
 
 export default connect(mapStateToProps, null)(Header)
