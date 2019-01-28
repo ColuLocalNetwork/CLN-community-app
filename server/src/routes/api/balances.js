@@ -21,12 +21,6 @@ router.get('/:account', async (req, res, next) => {
         _id: '$address'
       }
     }
-    // {
-    //   $project: {
-    //     address: '$_id',
-    //     _id: 0
-    //   }
-    // }
   ])
 
   const addresses = events.map(ev => ev._id)

@@ -4,7 +4,6 @@ import {createEntityPut, tryTakeEvery, apiCall} from './utils'
 import * as api from 'services/api/metadata'
 import * as actions from 'actions/metadata'
 import {FETCH_TOKENS} from 'actions/token'
-import {DEFAULT_COMMUNITY_METADATA_LOGO} from 'constants/uiConstants'
 
 const entityPut = createEntityPut(actions.entityName)
 
@@ -17,9 +16,6 @@ function * fetchMetadata ({tokenURI}) {
 
   const {data} = yield apiCall(api.fetchMetadata, {protocol, hash})
 
-  if (data.metadata.image) {
-    data.metadata.communityLogo = DEFAULT_COMMUNITY_METADATA_LOGO
-  }
   yield entityPut({
     type: actions.FETCH_METADATA.SUCCESS,
     response: {
