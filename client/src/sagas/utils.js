@@ -2,6 +2,7 @@ import { call, put, takeEvery, takeLatest, select } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 
 import { getApiRoot } from 'selectors/network'
+import keyBy from 'lodash/keyBy'
 
 export const createEntityPut = (entity) => (action) => put({...action, entity})
 
@@ -43,7 +44,30 @@ export const tryTakeEvery = (action, saga, numberOfTries) => takeEvery(action.RE
 export const tryTakeLatestWithDebounce = (action, saga, timeout = CONFIG.ui.debounce) =>
   takeLatest(action.REQUEST, tryCatchWithDebounce(action, saga, 500))
 
-export function * apiCall (...args) {
+export function * apiCall (apiFunc, params) {
   const apiRoot = yield select(getApiRoot)
-  return yield call(...args, apiRoot)
+  return yield call(apiFunc, apiRoot, params)
+}
+
+const entityKeys = {
+  tokens: 'address'
+}
+
+export const createFetch = (entity, action, apiFunc) => function * (params) {
+  const response = yield apiCall(apiFunc, params)
+  const {data, ...metadata} = response
+  const tokens = data
+
+  const entities = keyBy(tokens, entityKeys[entity])
+  const result = Object.keys(entities)
+
+  yield put({type: action.SUCCESS,
+    entity,
+    response: {
+      entities,
+      result,
+      metadata
+    }})
+
+  return tokens
 }
