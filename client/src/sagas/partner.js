@@ -6,7 +6,7 @@ import * as api from 'services/api/partner'
 
 const fetchPartners = createEntitiesFetch(actions.FETCH_PARTNERS, api.fetchPartners)
 
-export default function * tokenSaga () {
+export default function * partnerSaga () {
   yield all([
     tryTakeEvery(actions.FETCH_PARTNERS, fetchPartners, 1)
   ])
