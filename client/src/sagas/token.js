@@ -9,12 +9,12 @@ import {getAccountAddress} from 'selectors/accounts'
 import * as api from 'services/api/token'
 import {processReceipt} from 'services/api/misc'
 import {transactionPending, transactionFailed, transactionSucceeded} from 'actions/utils'
-import {apiCall, createEntityPut, tryTakeEvery, createFetch} from './utils'
+import {apiCall, createEntityPut, tryTakeEvery, createEntitiesFetch} from './utils'
 
 const entityPut = createEntityPut(actions.entityName)
 
-const fetchTokens = createFetch(actions.entityName, actions.FETCH_TOKENS, api.fetchTokens)
-const fetchTokensByOwner = createFetch(actions.entityName, actions.FETCH_TOKENS_BY_OWNER, api.fetchTokensByOwner)
+const fetchTokens = createEntitiesFetch(actions.FETCH_TOKENS, api.fetchTokens)
+const fetchTokensByOwner = createEntitiesFetch(actions.FETCH_TOKENS_BY_OWNER, api.fetchTokensByOwner)
 
 function * fetchToken ({tokenAddress}) {
   const response = yield apiCall(api.fetchToken, tokenAddress)

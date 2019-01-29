@@ -50,10 +50,12 @@ export function * apiCall (apiFunc, params) {
 }
 
 const entityKeys = {
-  tokens: 'address'
+  tokens: 'address',
+  partners: 'name'
 }
 
-export const createFetch = (entity, action, apiFunc) => function * (params) {
+export const createEntitiesFetch = (action, apiFunc) => function * (params) {
+  const entity = params.entity
   const response = yield apiCall(apiFunc, params)
   const {data, ...metadata} = response
   const tokens = data

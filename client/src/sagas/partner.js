@@ -1,10 +1,10 @@
 import { all } from 'redux-saga/effects'
 
-import {tryTakeEvery, createFetch} from './utils'
-import * as actions from 'actions/token'
+import {tryTakeEvery, createEntitiesFetch} from './utils'
+import * as actions from 'actions/partner'
 import * as api from 'services/api/partner'
 
-const fetchPartners = createFetch(actions.entityName, actions.FETCH_PARTNERS, api.fetchPartners)
+const fetchPartners = createEntitiesFetch(actions.FETCH_PARTNERS, api.fetchPartners)
 
 export default function * tokenSaga () {
   yield all([

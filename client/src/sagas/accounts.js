@@ -2,7 +2,7 @@ import { all, put, call, takeEvery, select } from 'redux-saga/effects'
 import { contract } from 'osseus-wallet'
 
 import * as actions from 'actions/accounts'
-import {tryTakeEvery, apiCall, createFetch} from './utils'
+import {tryTakeEvery, createEntitiesFetch} from './utils'
 import {getClnAddress, getNetworkType} from 'selectors/network'
 import {fetchTokensByAccount as fetchTokensByAccountApi} from 'services/api/token'
 import {addUserInformation} from 'services/api/misc'
@@ -53,21 +53,7 @@ function * balanceOfCln ({accountAddress}) {
   }
 }
 
-// function * fetchTokensByAccount ({accountAddress}) {
-//   const response = yield apiCall(fetchTokensByAccountApi, {accountAddress})
-//   const tokens = response.data
-//   debugger
-//   yield put({
-//     type: actions.FETCH_TOKENS_BY_ACCOUNT.SUCCESS,
-//     accountAddress,
-//     response: {
-//       tokens
-//     }
-//   })
-//   return tokens
-// }
-
-const fetchTokensByAccount = createFetch('tokens', actions.FETCH_TOKENS_BY_ACCOUNT, fetchTokensByAccountApi)
+const fetchTokensByAccount = createEntitiesFetch(actions.FETCH_TOKENS_BY_ACCOUNT, fetchTokensByAccountApi)
 
 function * fetchBalances ({accountAddress, tokens}) {
   for (let token of tokens) {
