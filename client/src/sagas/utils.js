@@ -66,7 +66,6 @@ export const createEntitiesFetch = (action, apiFunc) => function * (params) {
   yield put({
     ...params,
     type: action.SUCCESS,
-    entity,
     response: {
       entities,
       result,
