@@ -95,12 +95,6 @@ function * createTokenWithMetadata ({tokenData, metadata}) {
 
   yield apiCall(processReceipt, {receipt})
 
-  const owner = yield select(getAccountAddress)
-  yield put({
-    type: actions.FETCH_TOKENS_BY_OWNER.REQUEST,
-    owner
-  })
-
   const tokenAddress = receipt.events.TokenCreated.returnValues.token
 
   yield entityPut({

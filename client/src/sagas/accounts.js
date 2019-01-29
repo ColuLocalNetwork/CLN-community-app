@@ -2,7 +2,7 @@ import { all, put, call, takeEvery, select } from 'redux-saga/effects'
 import { contract } from 'osseus-wallet'
 
 import * as actions from 'actions/accounts'
-import {tryTakeEvery, createEntitiesFetch} from './utils'
+import {apiCall, tryTakeEvery, createEntitiesFetch} from './utils'
 import {getClnAddress, getNetworkType} from 'selectors/network'
 import {fetchTokensByAccount as fetchTokensByAccountApi} from 'services/api/token'
 import {addUserInformation} from 'services/api/misc'
@@ -10,7 +10,7 @@ import {CHECK_ACCOUNT_CHANGED} from 'actions/network'
 import web3 from 'services/web3'
 
 function * setUserInformation ({user}) {
-  const response = yield call(addUserInformation, user)
+  const response = yield apiCall(addUserInformation, {user})
   const data = response.data
   yield put({
     type: actions.SET_USER_INFORMATION.SUCCESS,
