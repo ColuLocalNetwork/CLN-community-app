@@ -19,21 +19,22 @@ function * fetchMetadata ({tokenURI}) {
     type: actions.FETCH_METADATA.SUCCESS,
     response: {
       entities: {
-        [tokenURI]: data.metadata
+        [tokenURI]: data
       }
     }
   })
 }
 
 export function * createMetadata ({metadata}) {
-  const {data} = yield apiCall(api.createMetadata, {metadata})
+  const {data, hash} = yield apiCall(api.createMetadata, {metadata})
   yield put({
     type: actions.CREATE_METADATA.SUCCESS,
     response: {
-      data
+      data,
+      hash
     }
   })
-  return data
+  return {data, hash}
 }
 
 export function * watchTokensFetched ({response}) {
