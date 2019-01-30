@@ -1,0 +1,26 @@
+.appstore {
+  &-container {
+    position: absolute;
+    top: 100px;
+    left: 0;
+    right: 0;
+  }
+  &-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px 100px;
+    background-color: $color-orange-store;
+    &-content {
+      max-width: 538px;
+    }
+    &-title {
+      font-size: 63px;
+      font-weight: 500;
+      color: $color-step-text;
+    }
+    img {
+      max-width: 565px;
+    }
+  }
+}

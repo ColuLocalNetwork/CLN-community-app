@@ -10,6 +10,7 @@ import IssuanceWizard from 'components/issuance/IssuanceWizard'
 import Dashboard from 'components/dashboard/Dashboard'
 import EntityDirectory from 'components/dashboard/EntityDirectory'
 import EntityProfile from 'components/dashboard/EntityProfile'
+import AppStore from 'components/AppStore'
 import withTracker from 'containers/withTracker'
 import Web3, {withNetwork} from 'containers/Web3'
 import Layout from 'components/Layout'
@@ -47,6 +48,11 @@ export default class Root extends Component {
                 exact
                 path='/view/directory/:address/:hash'
                 component={withTracker(withNetwork(EntityProfile))}
+              />
+              <Route
+                exact
+                path='/view/appstore'
+                component={withTracker(withNetwork(AppStore))}
               />
             </div>
           </div>

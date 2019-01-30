@@ -33,6 +33,7 @@ $color-pink: #ff4a7b;
 
 $color-close-gray: #0a7586;
 $color-orange: #fc6e4c;
+$color-orange-store: #ff6753;
 $color-text-gray: #0d2d45;
 $color-bg-gray: #05283e;
 
@@ -122,6 +123,7 @@ $breakpoint-desktop: 1200px;
 @import 'components/Root';
 @import 'components/TopNav';
 @import 'components/PersonalSidebar';
+@import 'components/AppStore';
 
 @import 'components/oven/SimpleExchangeModal';
 
@@ -184,7 +186,7 @@ $breakpoint-desktop: 1200px;
 
 		.coin-name {
 			font-size: 15px;
-			color: #ffffff;
+			color: $color-step-text;
 			text-align: center;
       font-weight: 400;
 			text-transform: capitalize;
