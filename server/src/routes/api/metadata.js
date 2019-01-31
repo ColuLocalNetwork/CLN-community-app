@@ -16,7 +16,6 @@ router.post('/', async (req, res, next) => {
     if (error) {
       throw error
     }
-    console.log(body)
     res.json(body)
   })
 })
