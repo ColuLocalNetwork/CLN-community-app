@@ -11,9 +11,9 @@ function * fetchMetadata ({tokenURI}) {
     throw new Error(`No tokenURI given`)
   }
 
-  const [protocol, hash] = tokenURI.split('://')
+  const hash = tokenURI.split('://')[1]
 
-  const {data} = yield apiCall(api.fetchMetadata, {protocol, hash})
+  const {data} = yield apiCall(api.fetchMetadata, {hash})
 
   yield entityPut({
     type: actions.FETCH_METADATA.SUCCESS,

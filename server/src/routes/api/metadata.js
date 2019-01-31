@@ -3,7 +3,8 @@ const config = require('config')
 const request = require('request')
 
 const urlBase = config.get('ipfsProxy.urlBase')
-router.get('/:protocol/:hash', async (req, res, next) => {
+
+router.get('/:hash', async (req, res, next) => {
   const hash = req.params.hash
   return res.redirect(`${urlBase}/metadata/${hash}`)
 })
