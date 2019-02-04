@@ -22,4 +22,10 @@ router.post('/', async (req, res) => {
   })
 })
 
+router.post('/users/login', async (req, res) => {
+  res.json({
+    data: 'ok'
+  })
+})
+
 module.exports = router
