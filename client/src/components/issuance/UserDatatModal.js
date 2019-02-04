@@ -26,6 +26,7 @@ class UserDatatModal extends Component {
   }
 
   setUserInformation () {
+    debugger
     this.props.setUserInformation({
       firstName: this.state.firstName,
       lastName: this.state.lastName,

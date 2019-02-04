@@ -4,7 +4,8 @@ const sendgridUtils = require('@utils/sendgrid')
 const sigUtil = require('eth-sig-util')
 const config = require('config')
 const moment = require('moment')
-
+const jwt = require('jsonwebtoken')
+const auth = require('@routes/auth')
 const User = mongoose.model('User')
 const chainId = config.get('web3.chainId')
 
@@ -44,6 +45,18 @@ router.post('/', async (req, res) => {
   })
 })
 
+router.post('/verify', auth.required, async (req, res) => {
+  console.log(req.user)
+  const {accountAddress} = req.user
+  if (req.user.accountAddress !== req.body.user.accountAddress) {
+    return res.status(404).json({error: 'The session token does not match the account'})
+  }
+
+  const result = await User.findOneAndUpdate({accountAddress}, {verified: true})
+  console.log(result)
+  return res.json({message: 'account verified'})
+})
+
 router.post('/login/:accountAddress', async (req, res) => {
   const {signature, date} = req.body
   const {accountAddress} = req.params
@@ -73,7 +86,12 @@ router.post('/login/:accountAddress', async (req, res) => {
     })
   }
 
-  res.json({verified: recoveredAccount === accountAddress.toLowerCase(), recoveredAccount})
+  const secret = config.get('api.secret')
+  const token = jwt.sign({ accountAddress }, secret, {
+    expiresIn: '7d'
+  })
+
+  res.json({token})
 })
 
 module.exports = router
