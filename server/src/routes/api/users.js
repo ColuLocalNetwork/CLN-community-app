@@ -46,15 +46,17 @@ router.post('/', async (req, res) => {
 })
 
 router.post('/verify', auth.required, async (req, res) => {
-  console.log(req.user)
   const {accountAddress} = req.user
   if (req.user.accountAddress !== req.body.user.accountAddress) {
     return res.status(404).json({error: 'The session token does not match the account'})
   }
 
   const result = await User.findOneAndUpdate({accountAddress}, {verified: true})
-  console.log(result)
-  return res.json({message: 'account verified'})
+  if (result) {
+    return res.json({message: 'account verified'})
+  } else {
+    return res.status(404).json({error: 'Bad account'})
+  }
 })
 
 router.post('/login/:accountAddress', async (req, res) => {
