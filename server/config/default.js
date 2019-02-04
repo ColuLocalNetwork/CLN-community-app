@@ -22,6 +22,7 @@ module.exports = {
       return `wss://${this.web3.network}.infura.io/ws/v3/${this.web3.apiKey}`
     }),
     network: 'ropsten',
+    chainId: 3,
     pageSize: 1000
   },
   mongo: {
