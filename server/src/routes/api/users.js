@@ -41,9 +41,8 @@ router.post('/verify', auth.required, async (req, res) => {
   }
 })
 
-router.post('/login/:accountAddress', async (req, res) => {
-  const {signature, date} = req.body
-  const {accountAddress} = req.params
+const validateDate = (req, res, next) => {
+  const {date} = req.body
 
   const signatureDate = moment(date)
   if (!signatureDate.isValid()) {
@@ -58,6 +57,11 @@ router.post('/login/:accountAddress', async (req, res) => {
       error: 'Bad date supplied'
     })
   }
+  next()
+}
+router.post('/login/:accountAddress', validateDate, async (req, res) => {
+  const {signature, date} = req.body
+  const {accountAddress} = req.params
 
   const recoveredAccount = sigUtil.recoverTypedSignature({
     data: generateSignatureData({accountAddress, date}),
