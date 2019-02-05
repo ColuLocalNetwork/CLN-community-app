@@ -7,17 +7,25 @@ import {getAccountAddress} from 'selectors/accounts'
 import TopNav from 'components/TopNav'
 
 class Oven extends Component {
+  componentDidMount () {
+    if (this.props.account) {
+      this.props.fetchTokensByOwner(this.props.account)
+    }
+  }
+
   componentDidUpdate (prevProps) {
     if (this.props.account && !prevProps.account) {
       this.props.fetchTokensByOwner(this.props.account)
     }
   }
+  showHomePage = () => this.props.history.push('/')
 
   render = () => (
     <div>
       <TopNav
         active
         history={this.props.history}
+        showHomePage={this.showHomePage}
       />
       <CommunitiesList {...this.props} />
     </div>

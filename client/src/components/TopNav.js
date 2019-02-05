@@ -74,11 +74,10 @@ class TopNav extends Component {
       'top-nav-links': true,
       'show-top-nav-links': true
     })
-    console.log(this.props)
     return (
       <div className={topNavClass}>
         <div className='top-nav-logo'>
-          <Logo showHomePage={this.showHomePage} />
+          <Logo showHomePage={() => this.showHomePage()} />
         </div>
         <div className={navLinksClass}>
           <button onClick={this.showIssuance} className='top-nav-issuance'>

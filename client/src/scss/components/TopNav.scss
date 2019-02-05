@@ -287,8 +287,15 @@
 	}
 
 	&.navigator-appstore {
-		background: $color-orange-store;
+		background: transparent;
 		box-shadow: none;
+		position: absolute;
+		& + .appstore-container {
+			padding-top: 100px;
+			@media (max-width: $breakpoint-tablet) {
+				padding-top: 70px;
+			}
+		}
 		.top-nav-issuance {
 			box-shadow: none;
     	background: none;
