@@ -4,12 +4,6 @@
     "secret": "COMMUNITY_API_SECRET",
     "port": "PORT"
   },
-  "ipfs": {
-    "host": "COMMUNITY_IPFS_HOST",
-    "port": "COMMUNITY_IPFS_PORT",
-    "protocol": "COMMUNITY_IPFS_PROTOCOL",
-    "timeout": "COMMUNITY_IPFS_TIMEOUT"
-  },
   "ipfsProxy": {
     "urlBase": "COMMUNITY_IPFS_PROXY_URL_BASE"
   },

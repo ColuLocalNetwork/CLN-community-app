@@ -7,27 +7,9 @@ const moment = require('moment')
 const jwt = require('jsonwebtoken')
 const auth = require('@routes/auth')
 const User = mongoose.model('User')
-const chainId = config.get('web3.chainId')
+const generateSignatureData = require('@utils/auth').generateSignatureData
 
-const generateSignatureData = ({ accountAddress, date, chainId }) => {
-  return { types: {
-    EIP712Domain: [
-      { name: 'name', type: 'string' }, { name: 'version', type: 'string' }, { name: 'chainId', type: 'uint256' }
-    ],
-    Person: [{ name: 'wallet', type: 'address' }],
-    Login: [
-      { name: 'account', type: 'string' },
-      { name: 'date', type: 'string' },
-      { name: 'content', type: 'string' }
-    ]
-  },
-  primaryType: 'Login',
-  domain: { name: 'CLN Communities QA', version: '1', chainId },
-  message: { account: accountAddress, date, content: 'Login request' }
-  }
-}
-
-router.post('/', async (req, res) => {
+router.post('/', auth.required, async (req, res) => {
   const user = new User(req.body.user)
 
   const results = await user.save()
@@ -78,7 +60,7 @@ router.post('/login/:accountAddress', async (req, res) => {
   }
 
   const recoveredAccount = sigUtil.recoverTypedSignature({
-    data: generateSignatureData({accountAddress, date, chainId}),
+    data: generateSignatureData({accountAddress, date}),
     sig: signature
   })
 

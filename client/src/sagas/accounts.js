@@ -12,7 +12,7 @@ import {getAccountAddress} from 'selectors/accounts'
 
 function * addUserInformation ({user}) {
   const accountAddress = yield select(getAccountAddress)
-  const response = yield apiCall(addUserInformationApi, {user: {...user, accountAddress}})
+  const response = yield apiCall(addUserInformationApi, {user: {...user, accountAddress}}, {auth: true})
   const {data} = response
   yield put({
     type: actions.ADD_USER_INFORMATION.SUCCESS,

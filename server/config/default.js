@@ -3,13 +3,14 @@ const defer = require('config/defer').deferConfig
 module.exports = {
   api: {
     secret: 'secret',
-    port: 3000
-  },
-  ipfs: {
-    host: '127.0.0.1',
-    port: 5001,
-    protocol: 'http',
-    timeout: 3000
+    port: 3000,
+    auth: {
+      domain: {
+        name: 'CLN Communities Dev',
+        chainId: 3,
+        version: 1
+      }
+    }
   },
   ipfsProxy: {
     urlBase: 'http://localhost:4000/api'

@@ -1,28 +1,11 @@
-import { all, select } from 'redux-saga/effects'
+import { all, put, select } from 'redux-saga/effects'
 
 import { apiCall, tryTakeEvery } from './utils'
 import * as actions from 'actions/auth'
 import {getAccountAddress} from 'selectors/accounts'
 import web3 from 'services/web3'
 import * as api from 'services/api/auth'
-
-const generateSignatureData = ({ accountAddress, date, chainId }) => {
-  return { types: {
-    EIP712Domain: [
-      { name: 'name', type: 'string' }, { name: 'version', type: 'string' }, { name: 'chainId', type: 'uint256' }
-    ],
-    Person: [{ name: 'wallet', type: 'address' }],
-    Login: [
-      { name: 'account', type: 'string' },
-      { name: 'date', type: 'string' },
-      { name: 'content', type: 'string' }
-    ]
-  },
-  primaryType: 'Login',
-  domain: { name: 'CLN Communities QA', version: '1', chainId },
-  message: { account: accountAddress, date, content: 'Login request' }
-  }
-}
+import {generateSignatureData} from 'utils/web3'
 
 function * login () {
   const accountAddress = yield select(getAccountAddress)
@@ -49,8 +32,13 @@ function * login () {
   const signature = yield promise
   if (signature) {
     const response = yield apiCall(api.login, {accountAddress, signature, date})
-    console.log(response)
-    console.log('login')
+    yield put({
+      type: actions.LOGIN.SUCCESS,
+      accountAddress,
+      response: {
+        authToken: response.token
+      }
+    })
   }
 }
 
