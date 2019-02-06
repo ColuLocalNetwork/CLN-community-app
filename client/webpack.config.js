@@ -20,7 +20,7 @@ module.exports = {
   },
   devServer: {
     host: '0.0.0.0',
-    port: process.env.COMMUNITY_COLU_PORT || 9001,
+    port: process.env.COMMUNITY_COLU_PORT || 9000,
     historyApiFallback: true
   },
   plugins: [

@@ -31,7 +31,7 @@ class StoreModal extends React.Component {
         <div className='text-left'>
           {Object.keys(this.props.partner.social).map((social, key) =>
             <div key={key} className='appstore-modal-social'>
-              <a href={this.props.partner.social[social]}>
+              <a href={this.props.partner.social[social]} target='_blank'>
                 <span className={`fab fa-${social}`} />
               </a>
             </div>

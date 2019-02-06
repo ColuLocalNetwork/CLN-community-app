@@ -8,6 +8,55 @@ import {loadModal, hideModal} from 'actions/ui'
 import FontAwesome from 'react-fontawesome'
 import { APPSTORE_MODAL } from 'constants/uiConstants'
 
+const Partners = (activeGenre, partners, loadModal) => {
+  return (
+    <div className='appstore-genres'>
+      {partners !== undefined && Object.keys(partners).map((partner, key) => {
+        if (activeGenre === partners[partner].category) {
+          return (
+            <div className='appstore-genre' key={key}>
+              {Partner(partners, partner, key, loadModal)}
+            </div>
+          )
+        } else if (activeGenre === 'All Genres') {
+          return (
+            <div className='appstore-genre' key={key}>
+              {Partner(partners, partner, key, loadModal)}
+            </div>
+          )
+        }
+      })}
+    </div>
+  )
+}
+
+const Partner = (partners, partner, key, loadModal) => {
+  return (
+    <React.Fragment>
+      <div className='appstore-genre-content' onClick={() => loadModal(APPSTORE_MODAL, {
+        partner: partners[partner]
+      })}>
+        <img className='appstore-genre-logo' src={partners[partner].image} />
+        <div className='appstore-genre-blocks'>
+          <h3 className='appstore-genre-title'>
+            {partners[partner].title}
+          </h3>
+          <p className='appstore-genre-author'>
+            By <span>{partners[partner].author}</span>
+          </p>
+        </div>
+      </div>
+      <div className='appstore-genre-category'>
+        <FontAwesome name='dollar-sign' />
+        {partners[partner].category}
+      </div>
+      <p className='appstore-genre-description'>
+        {partners[partner].description}
+      </p>
+    </React.Fragment>
+  )
+}
+
 class AppStore extends Component {
   state = {
     activeGenre: 'All Genres'
@@ -17,14 +66,6 @@ class AppStore extends Component {
     this.props.fetchPartners()
   }
   showHomePage = () => this.props.history.push('/')
-
-  Capitalize (str) {
-    return str.charAt(0).toUpperCase() + str.slice(1)
-  }
-
-  loadAddingModal = (partner) => this.props.loadModal(APPSTORE_MODAL, {
-    partner: this.props.partners[partner]
-  })
 
   renderGenres (partners) {
     const genres = []
@@ -45,57 +86,10 @@ class AppStore extends Component {
           key={key}
           onClick={() => this.setState({activeGenre: genre})}
         >
-          {this.Capitalize(genre)}
+          {genre}
         </span>
       )
     })
-  }
-
-  renderPartner (partners, partner, key) {
-    return (
-      <React.Fragment>
-        <div className='appstore-genre-content' onClick={() => this.loadAddingModal(partner)}>
-          <img className='appstore-genre-logo' src={partners[partner].image} />
-          <div className='appstore-genre-blocks'>
-            <h3 className='appstore-genre-title'>
-              {partners[partner].title}
-            </h3>
-            <p className='appstore-genre-author'>
-              By <span>{partners[partner].author}</span>
-            </p>
-          </div>
-        </div>
-        <div className='appstore-genre-category'>
-          <FontAwesome name='dollar-sign' />
-          {this.Capitalize(partners[partner].category)}
-        </div>
-        <p className='appstore-genre-description'>
-          {partners[partner].description}
-        </p>
-      </React.Fragment>
-    )
-  }
-
-  renderPartners (partners) {
-    return (
-      <div className='appstore-genres'>
-        {partners !== undefined && Object.keys(partners).map((partner, key) => {
-          if (this.state.activeGenre === partners[partner].category) {
-            return (
-              <div className='appstore-genre' key={key}>
-                {this.renderPartner(partners, partner, key)}
-              </div>
-            )
-          } else if (this.state.activeGenre === 'All Genres') {
-            return (
-              <div className='appstore-genre' key={key}>
-                {this.renderPartner(partners, partner, key)}
-              </div>
-            )
-          }
-        })}
-      </div>
-    )
   }
 
   render () {
@@ -132,7 +126,7 @@ class AppStore extends Component {
               {this.renderGenres(this.props.partners)}
             </div>
             <div className='appstore-genres'>
-              {this.renderPartners(partners)}
+              {Partners(this.state.activeGenre, partners, this.props.loadModal)}
             </div>
           </div>
         </div>

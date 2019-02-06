@@ -80,6 +80,7 @@
       text-transform: capitalize;
       font-weight: 500;
       color: $color-filter-genre;
+      display: inline-block;
       &::first-letter {
         text-transform: uppercase;
       }
