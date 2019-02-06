@@ -18,7 +18,8 @@ var isProduction = process.env.NODE_ENV === 'production'
 var app = express()
 
 if (config.get('api.allowCors')) {
-  app.use(require('cors'))
+  const cors = require('cors')
+  app.use(cors())
 }
 
 app.use(morgan('common'))
@@ -47,7 +48,7 @@ require('./models')(mongoose)
 
 app.use(require('./routes'))
 
-// agenda.start()
+agenda.start()
 
 /// catch 404 and forward to error handler
 app.use(function (req, res, next) {
