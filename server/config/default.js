@@ -2,6 +2,7 @@ const defer = require('config/defer').deferConfig
 
 module.exports = {
   api: {
+    allowCors: true,
     secret: 'secret',
     port: 3000,
     auth: {

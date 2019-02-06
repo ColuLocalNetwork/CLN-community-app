@@ -1,7 +1,6 @@
 require('module-alias/register')
 const express = require('express')
 const bodyParser = require('body-parser')
-const cors = require('cors')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
 const path = require('path')
@@ -18,7 +17,9 @@ var isProduction = process.env.NODE_ENV === 'production'
 
 var app = express()
 
-app.use(cors())
+if (config.get('api.allowCors')) {
+  app.use(require('cors'))
+}
 
 app.use(morgan('common'))
 
@@ -46,7 +47,7 @@ require('./models')(mongoose)
 
 app.use(require('./routes'))
 
-agenda.start()
+// agenda.start()
 
 /// catch 404 and forward to error handler
 app.use(function (req, res, next) {

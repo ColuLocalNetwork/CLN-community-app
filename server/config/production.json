@@ -1,4 +1,6 @@
-{  "api": {
+{
+  "api": {
+    "allowCors": false,
     "auth": {
       "domain": {
         "name": "CLN Communities Prod",
