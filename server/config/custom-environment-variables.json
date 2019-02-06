@@ -2,6 +2,7 @@
   "network": "COMMUNITY_NETWORK",
   "api": {
     "secret": "COMMUNITY_API_SECRET",
+    "tokenExpiresIn": "COMMUNITY_TOKEN_EXPIRES_IN",
     "port": "PORT"
   },
   "ipfsProxy": {

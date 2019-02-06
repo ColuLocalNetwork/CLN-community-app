@@ -4,6 +4,7 @@ module.exports = {
   api: {
     allowCors: true,
     secret: 'secret',
+    tokenExpiresIn: '7d',
     port: 3000,
     auth: {
       domain: {

@@ -75,8 +75,10 @@ router.post('/login/:accountAddress', validateDate, async (req, res) => {
   }
 
   const secret = config.get('api.secret')
+  const expiresIn = config.get('api.tokenExpiresIn')
+
   const token = jwt.sign({ accountAddress }, secret, {
-    expiresIn: '7d'
+    expiresIn
   })
 
   res.json({token})
