@@ -12,7 +12,6 @@
     "auth": {
       "domain": {
         "name": "CLN Communities Prod",
-        "chainId": 1,
         "version": 1
       }
     }

@@ -9,7 +9,9 @@ module.exports = {
     auth: {
       domain: {
         name: 'CLN Communities Dev',
-        chainId: 3,
+        chainId: defer(function () {
+          return this.web3.network === 'mainnet' ? 1 : 3
+        }),
         version: 1
       }
     }
@@ -25,7 +27,6 @@ module.exports = {
       return `wss://${this.web3.network}.infura.io/ws/v3/${this.web3.apiKey}`
     }),
     network: 'ropsten',
-    chainId: 3,
     pageSize: 1000,
     addresses: {
       ropsten: {

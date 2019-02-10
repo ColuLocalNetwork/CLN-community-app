@@ -3,7 +3,6 @@
     "auth": {
       "domain": {
         "name": "CLN Communities QA",
-        "chainId": 3,
         "version": 1
       }
     }
