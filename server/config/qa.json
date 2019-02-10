@@ -6,8 +6,5 @@
         "version": 1
       }
     }
-  },
-  "mongo": {
-    "debug": true
   }
 }
