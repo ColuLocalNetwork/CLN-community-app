@@ -29,18 +29,6 @@ router.post('/', auth.required, async (req, res) => {
   })
 })
 
-router.post('/mail', async (req, res) => {
-  const token = await Token.findOne({address: req.body.user.tokenAddress})
-  console.log(token)
-  sendgridUtils.sendWelcomeMail(req.body.user, token)
-  // const user = new User(req.body.user)
-
-  res.json({
-    object: 'user',
-    token
-  })
-})
-
 router.post('/verify', auth.required, async (req, res) => {
   const {accountAddress} = req.user
   if (req.user.accountAddress !== req.body.user.accountAddress) {
