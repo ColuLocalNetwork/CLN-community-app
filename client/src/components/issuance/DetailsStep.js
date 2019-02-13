@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
-import Online from 'images/Online.svg'
-import Geographical from 'images/Geographical.svg'
+import Online from 'images/online.png'
+import Geographical from 'images/geographical.png'
 import PropTypes from 'prop-types'
 import CoinIcon1 from 'images/Coin1.svg'
 import CoinIcon2 from 'images/Coin2.svg'
@@ -78,7 +78,7 @@ export default class DetailsStep extends Component {
       })
       logoArr.push(
         <div className={totalSupplyClass} key={key} onClick={() => setCommunityLogo({ name: key + '.svg', icon: communityLogos[key] })}>
-          <img src={communityLogos[key]} className='logo-img' />
+          <div className={`logo-img ${key}`} />
           <span className='symbol-text'>{communitySymbol}</span>
         </div>
       )
