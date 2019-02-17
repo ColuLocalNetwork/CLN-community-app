@@ -2,7 +2,7 @@ const router = require('express').Router()
 const mongoose = require('mongoose')
 const Token = mongoose.model('Token')
 const paginate = require('express-paginate')
-const deployBridge = require('@utils/bridge').deployBridge
+const bridgeUtils = require('@utils/bridge')
 
 router.get('/', async (req, res, next) => {
   const [ results, itemCount ] = await Promise.all([
@@ -37,9 +37,15 @@ router.get('/:address', async (req, res, next) => {
 
 router.post('/bridge/:address', async (req, res) => {
   const {address} = req.params
-  const token = await Token.findOne({ address })
-  const result = await deployBridge(token)
-  return res.json({ data: result })
+  const bridgeExists = await bridgeUtils.bridgeMappingExists(address)
+
+  if (!bridgeExists) {
+    const token = await Token.findOne({ address })
+    const result = await bridgeUtils.deployBridge(token)
+    return res.json({ data: result })
+  } else {
+    return res.status(400).json({ error: 'Bridge already exists' })
+  }
 })
 
 module.exports = router

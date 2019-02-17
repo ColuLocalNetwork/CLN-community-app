@@ -7,6 +7,7 @@ const foreignAddressess = require('@utils/network').addresses
 const homeAddresses = config.get('web3.addresses.fuse')
 
 const TOKEN_DECIMALS = 18
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 function extractEvent (abi, eventName) {
   for (let abiObject of abi) {
@@ -99,7 +100,7 @@ async function addBridgeMapping (
   foreignBlockNumber,
   homeBlockNumber) {
   console.log('Add bridge mapping')
-  const {from, web3} = createWeb3(config.get('web3.provider'))
+  const {from, web3} = createWeb3(config.get('web3.fuseProvider'))
 
   const mapper = new web3.eth.Contract(BridgeMapperABI, homeAddresses.BridgeMapper, {
     from
@@ -125,10 +126,11 @@ async function addBridgeMapping (
     data
   })
 
-  console.log(receipt)
+  console.log('Bridge mapping added')
+  return receipt
 }
 
-async function addBridgeForToken (token) {
+async function deployBridge (token) {
   const { foreignBridgeAdderss, foreignBridgeBlockNumber } = await deployForeignBridge(token)
   const { homeBridgeAddress, homeBridgeToken, homeBridgeBlockNumber } = await deployHomeBridge(
     token
@@ -154,6 +156,14 @@ async function addBridgeForToken (token) {
   }
 }
 
+async function bridgeMappingExists (tokenAddress) {
+  const {web3} = createWeb3(config.get('web3.fuseProvider'))
+  const mapper = new web3.eth.Contract(BridgeMapperABI, homeAddresses.BridgeMapper)
+  const homeAddress = await mapper.methods.homeTokenByForeignToken(tokenAddress).call()
+  return homeAddress && homeAddress !== ZERO_ADDRESS
+}
+
 module.exports = {
-  addBridgeForToken
+  deployBridge,
+  bridgeMappingExists
 }
