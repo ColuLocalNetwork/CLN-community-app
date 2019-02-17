@@ -2,6 +2,7 @@ const router = require('express').Router()
 const mongoose = require('mongoose')
 const Token = mongoose.model('Token')
 const paginate = require('express-paginate')
+const deployBridge = require('@utils/bridge').deployBridge
 
 router.get('/', async (req, res, next) => {
   const [ results, itemCount ] = await Promise.all([
@@ -32,6 +33,13 @@ router.get('/:address', async (req, res, next) => {
   const {address} = req.params
   const token = await Token.findOne({ address })
   return res.json({ data: token })
+})
+
+router.post('/bridge/:address', async (req, res) => {
+  const {address} = req.params
+  const token = await Token.findOne({ address })
+  const result = await deployBridge(token)
+  return res.json({ data: result })
 })
 
 module.exports = router

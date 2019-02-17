@@ -47,12 +47,10 @@
     "cors": "2.7.1",
     "debug": "2.6.9",
     "eth-sig-util": "^2.1.1",
-    "ethers": "^4.0.25",
     "express": "4.16.3",
     "express-async-errors": "^2.1.2",
     "express-jwt": "^5.3.1",
     "express-paginate": "^1.0.0",
-    "ganache-cli": "^6.1.8",
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11",
     "methods": "1.1.2",
@@ -64,7 +62,7 @@
     "request": "^2.88.0",
     "truffle-contract": "^4.0.0-beta.1",
     "validator": "^10.10.0",
-    "web3": "^1.0.0-beta.39"
+    "web3": "^1.0.0-beta.37"
   },
   "devDependencies": {
     "nodemon": "^1.18.3",
