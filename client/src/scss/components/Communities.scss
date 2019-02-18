@@ -26,7 +26,7 @@
 		border-top-left-radius: 66px;
 		border-top-right-radius: 66px;
 	}
-	&.CoinIcon1 {
+	&.CoinIcon1\.svg {
 		background-image: linear-gradient(to bottom, #496a7f, #05283e);
 		box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.59);
 		&:before {
@@ -36,7 +36,7 @@
 			background-color: rgba(255, 255, 255, 0.18);
 		}
 	}
-	&.CoinIcon2 {
+	&.CoinIcon2\.svg {
 		background-image: linear-gradient(to bottom, #ff9a70, #fc6e4c);
 		box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.59);
 		&:before {
@@ -46,7 +46,7 @@
 			background-color: rgba(255, 255, 255, 0.18);
 		}
 	}
-	&.CoinIcon3 {
+	&.CoinIcon3\.svg {
 		background-image: linear-gradient(to bottom, #06a1af, #0a7586);
 		box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.59);
 		&:before {
