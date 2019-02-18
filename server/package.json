@@ -44,6 +44,7 @@
     "async": "^2.6.1",
     "body-parser": "^1.18.3",
     "config": "^1.30.0",
+    "config-aws-secrets": "git+https://github.com/leonprou/config-aws-secrets.git",
     "cors": "2.7.1",
     "debug": "2.6.9",
     "eth-sig-util": "^2.1.1",

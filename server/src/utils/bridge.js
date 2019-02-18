@@ -21,7 +21,7 @@ const HomeBridgeDeployedEventAbi = extractEvent(HomeBridgeFactoryABI, 'HomeBridg
 
 const createWeb3 = (providerUrl) => {
   const web3 = new Web3(providerUrl)
-  const account = web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY)
+  const account = web3.eth.accounts.wallet.add(config.get('secrets.privateKey'))
   return {from: account.address, web3}
 }
 
@@ -131,10 +131,15 @@ async function addBridgeMapping (
 }
 
 async function deployBridge (token) {
-  const { foreignBridgeAdderss, foreignBridgeBlockNumber } = await deployForeignBridge(token)
-  const { homeBridgeAddress, homeBridgeToken, homeBridgeBlockNumber } = await deployHomeBridge(
-    token
-  )
+  const [deployForeignBridgeResponse, deployHomeBridgeResponse] = await Promise.all([
+    deployForeignBridge(token),
+    deployHomeBridge(
+      token
+    )
+  ])
+
+  const { foreignBridgeAdderss, foreignBridgeBlockNumber } = deployForeignBridgeResponse
+  const { homeBridgeAddress, homeBridgeToken, homeBridgeBlockNumber } = deployHomeBridgeResponse
 
   const foreignBridgeToken = token.address
   await addBridgeMapping(
