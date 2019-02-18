@@ -16,7 +16,9 @@ export default class SummaryStep extends Component {
       case PENDING:
         return <Loader color='#3a3269' className='loader' />
       case SUCCESS:
-        return null
+        return <button className='symbol-btn' disabled>
+          Issue
+        </button>
       default:
         return (<button onClick={this.props.showPopup} className='symbol-btn'>
           Issue

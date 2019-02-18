@@ -4,11 +4,13 @@ import Modal from 'components/Modal'
 import MediaMobile from 'images/issue-popup-mobile.svg'
 import {addUserInformation} from 'actions/accounts'
 import {login} from 'actions/auth'
+import FontAwesome from 'react-fontawesome'
 import CountriesList from 'constants/countries'
+import Select from 'react-select'
 
 class UserDatatModal extends Component {
   state = {
-    country: 'Select Country',
+    country: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -22,7 +24,7 @@ class UserDatatModal extends Component {
   setFirstName = e => this.setState({firstName: e.target.value})
   setLastName = e => this.setState({lastName: e.target.value})
   setUserEmail = e => this.setState({email: e.target.value})
-  setCountry = e => this.setState({country: e.target.value})
+  setCountry = country => this.setState({country: country})
   setSubscribe = e => this.setState({subscribe: e.target.checked})
 
   validateEmail = () => {
@@ -43,11 +45,18 @@ class UserDatatModal extends Component {
     this.props.setQuitIssuance()
   }
 
+  trim (string) {
+    return string.replace(/^\s+|\s+$/g, '')
+  }
+
   render () {
     return (
       <Modal className='issued-popup' onClose={this.props.hideModal}>
+        <div className='issued-popup-close' onClick={() => this.props.hideModal()}>
+          <FontAwesome name='times' />
+        </div>
         <div className='issued-popup-media'>
-          <h3 className='issued-popup-media-title'>Congratulations, a new crypto was born</h3>
+          <h3 className='issued-popup-media-title'>Congratulation, a new crypto was born</h3>
           <img className='issued-popup-media-img' src={MediaMobile} />
         </div>
         <div className='issued-popup-container'>
@@ -85,15 +94,14 @@ class UserDatatModal extends Component {
           </div>
           <div className='form-control'>
             <label>Country</label>
-            <select
-              onChange={this.setCountry}
+            <Select
+              className='user-modal-select'
+              classNamePrefix='user-modal-select-prefix'
               value={this.state.country}
-            >
-              <option value='Select Country' disabled>Select Country</option>
-              {CountriesList.map((country, key) =>
-                <option key={key}>{country}</option>
-              )}
-            </select>
+              options={CountriesList}
+              placeholder={'Select Country...'}
+              onChange={this.setCountry}
+            />
           </div>
           <div className='form-control'>
             <input
@@ -111,8 +119,8 @@ class UserDatatModal extends Component {
           <button
             disabled={
               this.state.country === 'Select Country' ||
-              this.state.firstName === '' ||
-              this.state.lastName === '' ||
+              this.trim(this.state.firstName) === '' ||
+              this.trim(this.state.lastName) === '' ||
               !this.validateEmail() ||
               !this.state.subscribe
             }
