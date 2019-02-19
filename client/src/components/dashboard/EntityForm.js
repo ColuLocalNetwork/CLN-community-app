@@ -36,11 +36,11 @@ class EntityForm extends Component {
   })
 
   handleBusinessNameChange = (event) => this.setState({businessName: event.target.value})
-  handleBusinessAddressChange = (event) => this.setState({businessAddress: event.target.value.slice(0, 100)})
+  handleBusinessAddressChange = (event, maxLength) => this.setState({businessAddress: event.target.value.slice(0, maxLength)})
   handleBusinessEmailChange = (event) => this.setState({businessEmail: event.target.value})
   handleBusinessPhoneChange = (event) => this.setState({businessPhone: event.target.value})
   handleBusinessLinkChange = (event) => this.setState({businessLink: event.target.value})
-  handleBusinessDescriptionChange = (event) => this.setState({businessDescription: event.target.value.slice(0, 490)})
+  handleBusinessDescriptionChange = (event, maxLength) => this.setState({businessDescription: event.target.value.slice(0, maxLength)})
 
   setActiveBusinessTypeChange = (type) => this.setState({activeBusinessType: type})
 
@@ -123,7 +123,7 @@ class EntityForm extends Component {
                 placeholder='Type...'
                 maxLength={MAX_LENGTH_OF_BUSINESS_ADDRESS}
                 value={this.state.businessAddress}
-                onChange={this.handleBusinessAddressChange}
+                onChange={(e) => this.handleBusinessAddressChange(e, MAX_LENGTH_OF_BUSINESS_ADDRESS)}
               />
             </div>
           </div>
@@ -183,7 +183,7 @@ class EntityForm extends Component {
             rows='10'
             maxLength={MAX_LENGTH_OF_BUSINESS_DESCRIPTION}
             value={this.state.businessDescription}
-            onChange={this.handleBusinessDescriptionChange}
+            onChange={(e) => this.handleBusinessDescriptionChange(e, MAX_LENGTH_OF_BUSINESS_DESCRIPTION)}
           />
         </div>
       </div>,
