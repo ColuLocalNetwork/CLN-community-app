@@ -80,6 +80,12 @@ export default class DetailsStep extends Component {
     return logoArr
   }
 
+  checkCondition (evt, condition) {
+    if (condition) {
+      evt.preventDefault()
+    }
+  }
+
   render () {
     return (
       <div className='step-content-details'>
@@ -112,7 +118,7 @@ export default class DetailsStep extends Component {
                   type='number'
                   placeholder='Type something...'
                   value={this.props.totalSupply}
-                  onKeyDown={(evt) => (evt.key === 'e' || evt.key === '-') && evt.preventDefault()}
+                  onKeyDown={(evt) => this.checkCondition(evt, (evt.key === 'e' || evt.key === '-'))}
                   onChange={(event) => this.props.setTotalSupply(event.target.value)}
                 />
                 <div className='other-details' onClick={() => this.setState({showOtherSupply: false})}>

@@ -45,10 +45,6 @@ class UserDatatModal extends Component {
     this.props.setQuitIssuance()
   }
 
-  trim (string) {
-    return string.replace(/^\s+|\s+$/g, '')
-  }
-
   render () {
     return (
       <Modal className='issued-popup' onClose={this.props.hideModal}>
@@ -56,7 +52,7 @@ class UserDatatModal extends Component {
           <FontAwesome name='times' />
         </div>
         <div className='issued-popup-media'>
-          <h3 className='issued-popup-media-title'>Congratulation, a new crypto was born</h3>
+          <h3 className='issued-popup-media-title'>Congratulations, a new crypto was born</h3>
           <img className='issued-popup-media-img' src={MediaMobile} />
         </div>
         <div className='issued-popup-container'>
@@ -119,8 +115,8 @@ class UserDatatModal extends Component {
           <button
             disabled={
               this.state.country === 'Select Country' ||
-              this.trim(this.state.firstName) === '' ||
-              this.trim(this.state.lastName) === '' ||
+              this.state.firstName.trim() === '' ||
+              this.state.lastName.trim() === '' ||
               !this.validateEmail() ||
               !this.state.subscribe
             }

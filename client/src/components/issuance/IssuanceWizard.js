@@ -34,6 +34,7 @@ class IssuanceWizard extends Component {
     window.addEventListener('scroll', this.handleScroll)
     window.addEventListener('keypress', this.handleKeyPress)
     this.setState({ stepPosition: this.stepIndicator.getBoundingClientRect().top })
+    this.showUserDataPopup()
 
     ReactGA.event({
       category: 'Issuance',

@@ -62,6 +62,8 @@ class EntityForm extends Component {
       'entity-modal-content-select': true,
       'active-business-select': this.state.activeBusinessType === this.state.selectedBusinessType.value
     })
+    const MAX_LENGTH_OF_BUSINESS_ADDRESS = 100
+    const MAX_LENGTH_OF_BUSINESS_DESCRIPTION = 490
     return [
       <h4 className='entity-modal-title' key={0}>
         Business name
@@ -119,7 +121,7 @@ class EntityForm extends Component {
               <input
                 className='entity-modal-content-form-control'
                 placeholder='Type...'
-                maxLength='100'
+                maxLength={MAX_LENGTH_OF_BUSINESS_ADDRESS}
                 value={this.state.businessAddress}
                 onChange={this.handleBusinessAddressChange}
               />
@@ -179,7 +181,7 @@ class EntityForm extends Component {
           <textarea
             className='entity-modal-content-form-control'
             rows='10'
-            maxLength='490'
+            maxLength={MAX_LENGTH_OF_BUSINESS_DESCRIPTION}
             value={this.state.businessDescription}
             onChange={this.handleBusinessDescriptionChange}
           />
