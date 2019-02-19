@@ -8,7 +8,7 @@ const paginate = require('express-paginate')
 const process = require('process')
 const util = require('util')
 const config = require('config')
-const initSecrets = require('config-aws-secrets')
+const initSecrets = require('@utils/awsSecrets')
 require('express-async-errors')
 
 async function initConfig () {
