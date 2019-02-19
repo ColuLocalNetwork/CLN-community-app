@@ -9,8 +9,10 @@ import {CHECK_ACCOUNT_CHANGED} from 'actions/network'
 import {fetchTokensByAccount} from 'sagas/token'
 import web3 from 'services/web3'
 import {getAccountAddress} from 'selectors/accounts'
+import {login} from 'sagas/auth'
 
 function * addUserInformation ({user}) {
+  yield call(login)
   const accountAddress = yield select(getAccountAddress)
   const response = yield apiCall(addUserInformationApi, {user: {...user, accountAddress}}, {auth: true})
   const {data} = response

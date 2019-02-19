@@ -7,7 +7,7 @@ import web3 from 'services/web3'
 import * as api from 'services/api/auth'
 import {generateSignatureData} from 'utils/web3'
 
-function * login () {
+export function * login () {
   const accountAddress = yield select(getAccountAddress)
   const chainId = yield select(state => state.network.networkId)
 

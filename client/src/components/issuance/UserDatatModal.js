@@ -3,7 +3,6 @@ import {connect} from 'react-redux'
 import Modal from 'components/Modal'
 import MediaMobile from 'images/issue-popup-mobile.svg'
 import {addUserInformation} from 'actions/accounts'
-import {login} from 'actions/auth'
 import FontAwesome from 'react-fontawesome'
 import CountriesList from 'constants/countries'
 import Select from 'react-select'
@@ -15,10 +14,6 @@ class UserDatatModal extends Component {
     lastName: '',
     email: '',
     subscribe: true
-  }
-
-  componentDidMount () {
-    this.props.login()
   }
 
   setFirstName = e => this.setState({firstName: e.target.value})
@@ -39,10 +34,8 @@ class UserDatatModal extends Component {
       email: this.state.email,
       country: this.state.country,
       subscribe: this.state.subscribe,
-      tokenAddress: this.props.receipt.events[0].address
+      tokenAddress: this.props.tokenAddress
     })
-    this.props.hideModal()
-    this.props.setQuitIssuance()
   }
 
   render () {
@@ -132,8 +125,7 @@ class UserDatatModal extends Component {
 }
 
 const mapDispatchToProps = {
-  addUserInformation,
-  login
+  addUserInformation
 }
 
 export default connect(null, mapDispatchToProps)(UserDatatModal)

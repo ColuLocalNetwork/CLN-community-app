@@ -9,6 +9,8 @@ import CommunityLogo from 'components/elements/CommunityLogo'
 import {formatWei} from 'utils/format'
 import Moment from 'moment'
 import find from 'lodash/find'
+import { USER_DATA_MODAL } from 'constants/uiConstants'
+import {loadModal, hideModal} from 'actions/ui'
 import Header from './Header'
 
 const intervals = {
@@ -169,7 +171,16 @@ class Dashboard extends Component {
     if (!this.props.token) {
       this.props.fetchToken(this.props.match.params.address)
     }
+    if (this.props.location.search === '?verify') {
+      this.showUserDataPopup()
+    }
     document.addEventListener('mousedown', this.handleClickOutside)
+  }
+
+  componentDidUpdate (prevProps) {
+    if (this.props.dashboard.informationAdded && !prevProps.dashboard.informationAdded) {
+      this.props.hideModal()
+    }
   }
 
   componentWillUnmount () {
@@ -196,7 +207,11 @@ class Dashboard extends Component {
     }, 2000)
     this.textArea.value = ''
     this.textArea.value = this.props.match.params.address
-  };
+  }
+
+  showUserDataPopup = () => this.props.loadModal(USER_DATA_MODAL, {
+    tokenAddress: this.props.match.params.address
+  })
 
   render () {
     if (!this.props.token) {
@@ -284,7 +299,9 @@ const mapStateToProps = (state, {match}) => ({
 
 const mapDispatchToProps = {
   fetchTokenStatistics,
-  fetchToken
+  fetchToken,
+  loadModal,
+  hideModal
 }
 
 export default connect(
