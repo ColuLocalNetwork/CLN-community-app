@@ -43,7 +43,7 @@ class Dashboard extends Component {
 
   componentDidMount () {
     if (!this.props.token) {
-      setTimeout(() => this.props.fetchToken(this.props.match.params.address), 1000)
+      this.props.fetchToken(this.props.match.params.address)
     }
     if (this.props.accountAddress) {
       this.props.isUserExists(this.props.accountAddress)
