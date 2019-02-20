@@ -29,6 +29,14 @@ router.post('/', auth.required, async (req, res) => {
   })
 })
 
+router.get('/:accountAddress/:tokenAddress', async (req, res) => {
+  const {accountAddress, tokenAddress} = req.params
+  const user = await User.findOne({accountAddress, tokenAddress})
+  return res.json({
+    userExists: !!user
+  })
+})
+
 router.post('/verify', auth.required, async (req, res) => {
   const {accountAddress} = req.user
   if (req.user.accountAddress !== req.body.user.accountAddress) {

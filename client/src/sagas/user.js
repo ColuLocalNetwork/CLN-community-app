@@ -1,10 +1,10 @@
-import { all, put, select } from 'redux-saga/effects'
+import { all, call, put, select } from 'redux-saga/effects'
 
 import { apiCall, tryTakeEvery } from './utils'
-import * as actions from 'actions/auth'
+import * as actions from 'actions/user'
 import {getAccountAddress} from 'selectors/accounts'
 import web3 from 'services/web3'
-import * as api from 'services/api/auth'
+import * as api from 'services/api/user'
 import {generateSignatureData} from 'utils/web3'
 
 export function * login () {
@@ -42,8 +42,23 @@ export function * login () {
   }
 }
 
-export default function * authSaga () {
+function * addUserInformation ({user}) {
+  yield call(login)
+  const accountAddress = yield select(getAccountAddress)
+  const response = yield apiCall(api.addUserInformationApi, {user: {...user, accountAddress}}, {auth: true})
+  const {data} = response
+  yield put({
+    type: actions.ADD_USER_INFORMATION.SUCCESS,
+    user,
+    response: {
+      data
+    }
+  })
+}
+
+export default function * userSaga () {
   yield all([
+    tryTakeEvery(actions.ADD_USER_INFORMATION, addUserInformation, 1),
     tryTakeEvery(actions.LOGIN, login, 1)
   ])
 }
