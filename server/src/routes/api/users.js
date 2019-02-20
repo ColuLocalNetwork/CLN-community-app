@@ -13,10 +13,10 @@ const generateSignatureData = require('@utils/auth').generateSignatureData
 
 router.post('/', auth.required, async (req, res) => {
   const user = new User(req.body.user)
-
+  const {tokenAddress} = req.body
   const results = await user.save()
 
-  const token = await Token.findOne({address: user.tokenAddress})
+  const token = await Token.findOne({address: tokenAddress})
   sendgridUtils.sendWelcomeMail(user, token)
 
   if (user.subscribe) {
@@ -29,9 +29,9 @@ router.post('/', auth.required, async (req, res) => {
   })
 })
 
-router.get('/:accountAddress/:tokenAddress', async (req, res) => {
-  const {accountAddress, tokenAddress} = req.params
-  const user = await User.findOne({accountAddress, tokenAddress})
+router.get('/:accountAddress', async (req, res) => {
+  const {accountAddress} = req.params
+  const user = await User.findOne({accountAddress})
   return res.json({
     userExists: !!user
   })

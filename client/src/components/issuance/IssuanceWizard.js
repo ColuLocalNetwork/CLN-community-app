@@ -42,7 +42,7 @@ class IssuanceWizard extends Component {
   componentDidUpdate (prevProps) {
     if (this.props.receipt !== prevProps.receipt) {
       const tokenAddress = this.props.receipt.events[0].address
-      this.props.history.push(`/view/dashboard/${tokenAddress}?verify`)
+      this.props.history.push(`/view/dashboard/${tokenAddress}`)
     }
   }
 

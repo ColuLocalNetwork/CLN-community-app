@@ -7,11 +7,11 @@ export const login = (apiRoot, {accountAddress, signature, date}) =>
     .send({signature, date})
     .then(response => response.body)
 
-export const addUserInformation = (apiRoot, {user, authToken}) =>
+export const addUser = (apiRoot, {user, authToken}) =>
   request.post(`${API_ROOT}/users`).send({user})
     .set('Authorization', `Bearer ${authToken}`)
     .then(response => response.body)
 
 export const isUserExists = (apiRoot, {accountAddress}) =>
-  request.get(`${API_ROOT}/users/:${accountAddress}`)
+  request.get(`${API_ROOT}/users/${accountAddress}`)
     .then(response => response.body)

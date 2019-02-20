@@ -42,13 +42,16 @@ export function * login () {
   }
 }
 
-function * addUserInformation ({user}) {
+function * addUser ({user, tokenAddress}) {
   yield call(login)
+
   const accountAddress = yield select(getAccountAddress)
-  const response = yield apiCall(api.addUserInformationApi, {user: {...user, accountAddress}}, {auth: true})
+  const response = yield apiCall(api.addUserInformationApi,
+    {user: {...user, accountAddress}, tokenAddress}, {auth: true})
+
   const {data} = response
   yield put({
-    type: actions.ADD_USER_INFORMATION.SUCCESS,
+    type: actions.ADD_USER.SUCCESS,
     user,
     response: {
       data
@@ -56,9 +59,21 @@ function * addUserInformation ({user}) {
   })
 }
 
+function * isUserExists ({accountAddress}) {
+  const response = yield apiCall(api.isUserExists, {accountAddress})
+
+  // const {data} = response
+  yield put({
+    type: actions.IS_USER_EXISTS.SUCCESS,
+    accountAddress,
+    response
+  })
+}
+
 export default function * userSaga () {
   yield all([
-    tryTakeEvery(actions.ADD_USER_INFORMATION, addUserInformation, 1),
-    tryTakeEvery(actions.LOGIN, login, 1)
+    tryTakeEvery(actions.LOGIN, login, 1),
+    tryTakeEvery(actions.ADD_USER, addUser, 1),
+    tryTakeEvery(actions.IS_USER_EXISTS, isUserExists, 1)
   ])
 }

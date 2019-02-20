@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {connect} from 'react-redux'
 import Modal from 'components/Modal'
 import MediaMobile from 'images/issue-popup-mobile.svg'
-import {addUserInformation} from 'actions/accounts'
+import {addUser} from 'actions/accounts'
 import FontAwesome from 'react-fontawesome'
 import CountriesList from 'constants/countries'
 import Select from 'react-select'
@@ -27,15 +27,15 @@ class UserDatatModal extends Component {
     return re.test(this.state.email)
   }
 
-  addUserInformation () {
-    this.props.addUserInformation({
+  addUser () {
+    const user = {
       firstName: this.state.firstName,
       lastName: this.state.lastName,
       email: this.state.email,
       country: this.state.country,
-      subscribe: this.state.subscribe,
-      tokenAddress: this.props.tokenAddress
-    })
+      subscribe: this.state.subscribe
+    }
+    this.props.addUser(user, this.props.tokenAddress)
   }
 
   render () {
@@ -114,7 +114,7 @@ class UserDatatModal extends Component {
               !this.state.subscribe
             }
             className='issued-popup-btn'
-            onClick={() => this.addUserInformation()}
+            onClick={() => this.addUser()}
           >
             Done
           </button>
@@ -125,7 +125,7 @@ class UserDatatModal extends Component {
 }
 
 const mapDispatchToProps = {
-  addUserInformation
+  addUser
 }
 
 export default connect(null, mapDispatchToProps)(UserDatatModal)
