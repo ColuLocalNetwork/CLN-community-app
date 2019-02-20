@@ -7,7 +7,7 @@ const AddEntityModal = (props) =>
   <Modal className='entity-modal' onClose={props.hideModal}>
     <div className='entity-modal-media'>
       <h3 className='entity-modal-media-title'>
-        Bring Your Business to Fuse
+        Bring Your Businesses to Fuse
       </h3>
       <img className='entity-modal-media-img' src={DynamicImg} />
     </div>

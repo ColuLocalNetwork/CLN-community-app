@@ -64,20 +64,20 @@ class EntityForm extends Component {
     })
     return [
       <h4 className='entity-modal-title' key={0}>
-        Business name
+        Businesses name
       </h4>,
       <input
         key={1}
         type='text'
         className='entity-modal-business-name'
-        placeholder='Your business name...'
+        placeholder='Your businesses name...'
         value={this.state.businessName}
         onChange={this.handleBusinessNameChange}
       />,
       <div className='row' key={2}>
         <div className='col-12'>
           <p className='entity-modal-content-label'>
-            Business Type <span>Select one</span>
+            Businesses Type <span>Select one</span>
           </p>
           <div className='entity-modal-content-types'>
             {businessTypes.map((type, key) =>
@@ -112,7 +112,7 @@ class EntityForm extends Component {
           <div className='row'>
             <div className='col-4'>
               <p className='entity-modal-content-form-control-label'>
-                Business Address
+                Businesses Address
               </p>
             </div>
             <div className='col-8'>
@@ -127,7 +127,7 @@ class EntityForm extends Component {
           <div className='row'>
             <div className='col-4'>
               <p className='entity-modal-content-form-control-label'>
-                Business email
+                Businesses email
               </p>
             </div>
             <div className='col-8'>

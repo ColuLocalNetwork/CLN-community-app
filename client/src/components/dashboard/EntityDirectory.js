@@ -93,7 +93,7 @@ class EntityDirectory extends Component {
               <div>
                 <div className='dashboard-entity-content'>
                   <div className='dashboard-entity-search'>
-                    All business
+                    All businesses
                     <button className='btn-entity-search'>
                       <FontAwesome name='search' />
                     </button>
@@ -103,7 +103,7 @@ class EntityDirectory extends Component {
                     onClick={() => this.loadAddingModal()}
                     disabled={this.props.transactionStatus === REQUEST}
                   >
-                    + New Business
+                    + New Businesses
                   </button>
                 </div>
                 {this.props.entities.length
