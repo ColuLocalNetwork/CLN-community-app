@@ -34,9 +34,7 @@ class Header extends Component {
         return hash
       }
     })
-    console.log(link[2])
     const entity = Object.keys(this.props.entities).length ? this.props.entities[keyHash[0]] : null
-    console.log(entity)
     const activeDashboardLinkClass = classNames({
       'entities-header-nav-link': true,
       'active-link': link[2] === 'dashboard' && (entity === undefined || entity === null)

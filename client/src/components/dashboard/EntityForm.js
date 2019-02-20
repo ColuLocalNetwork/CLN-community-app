@@ -66,7 +66,7 @@ class EntityForm extends Component {
     const MAX_LENGTH_OF_BUSINESS_DESCRIPTION = 490
     return [
       <h4 className='entity-modal-title' key={0}>
-        Businesses name
+        Business name
       </h4>,
       <input
         key={1}
@@ -79,7 +79,7 @@ class EntityForm extends Component {
       <div className='row' key={2}>
         <div className='col-12'>
           <p className='entity-modal-content-label'>
-            Businesses Type <span>Select one</span>
+            Business Type <span>Select one</span>
           </p>
           <div className='entity-modal-content-types'>
             {businessTypes.map((type, key) =>
@@ -114,7 +114,7 @@ class EntityForm extends Component {
           <div className='row'>
             <div className='col-4'>
               <p className='entity-modal-content-form-control-label'>
-                Businesses Address
+                Business Address
               </p>
             </div>
             <div className='col-8'>
@@ -130,7 +130,7 @@ class EntityForm extends Component {
           <div className='row'>
             <div className='col-4'>
               <p className='entity-modal-content-form-control-label'>
-                Businesses email
+                Business email
               </p>
             </div>
             <div className='col-8'>
