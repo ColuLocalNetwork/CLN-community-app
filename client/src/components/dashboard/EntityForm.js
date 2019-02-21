@@ -72,7 +72,7 @@ class EntityForm extends Component {
         key={1}
         type='text'
         className='entity-modal-business-name'
-        placeholder='Your businesses name...'
+        placeholder='Your business name...'
         value={this.state.businessName}
         onChange={this.handleBusinessNameChange}
       />,
