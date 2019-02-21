@@ -7,8 +7,8 @@ export const login = (apiRoot, {accountAddress, signature, date}) =>
     .send({signature, date})
     .then(response => response.body)
 
-export const addUser = (apiRoot, {user, authToken}) =>
-  request.post(`${API_ROOT}/users`).send({user})
+export const addUser = (apiRoot, {user, tokenAddress, authToken}) =>
+  request.post(`${API_ROOT}/users`).send({user, tokenAddress})
     .set('Authorization', `Bearer ${authToken}`)
     .then(response => response.body)
 

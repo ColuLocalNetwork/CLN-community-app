@@ -46,7 +46,7 @@ function * addUser ({user, tokenAddress}) {
   yield call(login)
 
   const accountAddress = yield select(getAccountAddress)
-  const response = yield apiCall(api.addUserInformationApi,
+  const response = yield apiCall(api.addUser,
     {user: {...user, accountAddress}, tokenAddress}, {auth: true})
 
   const {data} = response
