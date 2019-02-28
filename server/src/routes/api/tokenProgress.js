@@ -4,7 +4,7 @@ const TokenProgress = mongoose.model('TokenProgress')
 
 router.get('/:tokenAddress', async (req, res, next) => {
   const {tokenAddress} = req.params
-  const tokenProgress = await TokenProgress.findOne({ tokenAddress })
+  const tokenProgress = await TokenProgress.findOne({ tokenAddress }).lean()
   return res.json({ data: tokenProgress })
 })
 
