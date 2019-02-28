@@ -8,11 +8,6 @@ export const getAddresses = createSelector(
   (networkType, addresses) => addresses[networkType] || {}
 )
 
-export const getCurrencyFactoryAddress = createSelector(
-  getAddresses,
-  (addresses) => addresses.CurrencyFactory
-)
-
 export const getClnAddress = createSelector(
   getAddresses,
   (addresses) => addresses.ColuLocalNetwork
@@ -29,3 +24,5 @@ export const getApiRoot = createSelector(
   getNetworkType,
   networkType => CONFIG.api.url[networkType] || CONFIG.api.url.default
 )
+
+// export const getCurrentWe

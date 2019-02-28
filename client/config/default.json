@@ -1,6 +1,7 @@
 {
   "web3": {
     "provider": "http://localhost:8545",
+    "fuseProvider": "http://rpc.fuse.io",
     "supportedNetworks": ["main", "ropsten", "fuse"],
     "addresses": {
       "ropsten": {

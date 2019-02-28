@@ -6,10 +6,13 @@ import {tryTakeEvery} from './utils'
 import {getClnAddress, getNetworkType} from 'selectors/network'
 import {CHECK_ACCOUNT_CHANGED} from 'actions/network'
 import {fetchTokensByAccount} from 'sagas/token'
-import web3 from 'services/web3'
+import web3, {getWeb3} from 'services/web3'
+import {getContract} from 'services/contract'
 
-function * balanceOfToken ({tokenAddress, accountAddress, blockNumber}) {
-  const ColuLocalNetworkContract = contract.getContract({abiName: 'ColuLocalCurrency', address: tokenAddress})
+function * balanceOfToken ({tokenAddress, accountAddress, options}) {
+  const web3 = getWeb3()
+  const ColuLocalNetworkContract = getContract({web3, abiName: 'ColuLocalCurrency', address: tokenAddress})
+  // const ColuLocalNetworkContract = contract.getContract({abiName: 'ColuLocalCurrency', address: tokenAddress})
   const balanceOf = yield call(ColuLocalNetworkContract.methods.balanceOf(accountAddress).call)
 
   yield put({type: actions.BALANCE_OF_TOKEN.SUCCESS,
@@ -17,7 +20,8 @@ function * balanceOfToken ({tokenAddress, accountAddress, blockNumber}) {
     accountAddress,
     response: {
       balanceOf
-    }})
+    }}
+  )
 }
 
 function * balanceOfNative ({accountAddress}) {

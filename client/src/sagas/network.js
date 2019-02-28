@@ -1,6 +1,8 @@
 import { all, call, put, takeEvery, select } from 'redux-saga/effects'
 import request from 'superagent'
-import web3 from 'services/web3'
+// import web3 from 'services/web3'
+// import {getWeb3} from 'services/web3'
+import {givenWeb3 as web3} from 'services/web3'
 import {isNetworkSupported} from 'utils/network'
 import * as actions from 'actions/network'
 import {balanceOfCln} from 'actions/accounts'
@@ -31,14 +33,14 @@ function * getAccountAddress () {
 
 function * getNetworkType () {
   try {
-    const {networkType, networkId} = yield getNetworkTypeInternal()
+    const {networkType, networkId} = yield getNetworkTypeInternal(web3)
     yield put({type: actions.GET_NETWORK_TYPE.SUCCESS,
       response: {
         networkType,
         networkId,
         isMetaMask: web3.currentProvider.isMetaMask || false
       }})
-    const accountAddress = yield getAccountAddress()
+    const accountAddress = yield getAccountAddress(web3)
 
     if (accountAddress) {
       const isChanged = yield call(checkAccountChanged, {selectedAddress: accountAddress})
