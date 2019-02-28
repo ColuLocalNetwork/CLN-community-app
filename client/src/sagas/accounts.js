@@ -6,12 +6,11 @@ import {tryTakeEvery} from './utils'
 import {getClnAddress, getNetworkType} from 'selectors/network'
 import {CHECK_ACCOUNT_CHANGED} from 'actions/network'
 import {fetchTokensByAccount} from 'sagas/token'
-import web3, {getWeb3} from 'services/web3'
+import web3 from 'services/web3'
 import {getContract} from 'services/contract'
 
 function * balanceOfToken ({tokenAddress, accountAddress, options}) {
-  const web3 = getWeb3()
-  const ColuLocalNetworkContract = getContract({web3, abiName: 'ColuLocalCurrency', address: tokenAddress})
+  const ColuLocalNetworkContract = getContract({abiName: 'ColuLocalCurrency', address: tokenAddress, options})
   // const ColuLocalNetworkContract = contract.getContract({abiName: 'ColuLocalCurrency', address: tokenAddress})
   const balanceOf = yield call(ColuLocalNetworkContract.methods.balanceOf(accountAddress).call)
 

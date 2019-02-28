@@ -15,6 +15,7 @@ import TokenProgress from './TokenProgress'
 import TopNav from './../TopNav'
 import Breadcrumbs from './../elements/Breadcrumbs'
 import ActivityContent from './ActivityContent'
+import Bridge from './Bridge'
 
 const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
 
@@ -205,6 +206,9 @@ class Dashboard extends Component {
               loadUserDataModal={this.loadUserDataModal}
             />
         }
+      </div>,
+      <div>
+        {this.props.accountAddress && <Bridge accountAddress={this.props.accountAddress} />}
       </div>
     ]
   }
