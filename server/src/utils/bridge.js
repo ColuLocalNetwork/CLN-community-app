@@ -57,8 +57,8 @@ async function deployForeignBridge (token) {
 
 function extractHomeBridgeData (web3, receipt) {
   const log = receipt.logs[receipt.logs.length - 1]
-  const event = web3.eth.abi.decodeLog(HomeBridgeDeployedEventAbi.inputs, log.data, log.topics)
-
+  const topics = log.topics.slice(1)
+  const event = web3.eth.abi.decodeLog(HomeBridgeDeployedEventAbi.inputs, log.data, topics)
   const result = {
     homeBridgeAddress: event._homeBridge,
     homeBridgeBlockNumber: event._blockNumber,
