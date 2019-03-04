@@ -1,13 +1,19 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import CommunityLogo from 'components/elements/CommunityLogo'
+import {fetchTokenProgress} from 'actions/token'
 import FontAwesome from 'react-fontawesome'
 
 class TokenProgress extends Component {
+  componentDidMount () {
+    this.props.fetchTokenProgress(this.props.match.params.address)
+  }
   render () {
     const { token } = this.props
     const steps = this.props.steps !== undefined ? this.props.steps : { tokenIssued: false, bridgeDeployed: false, detailsGiven: false }
-    const progressOverall = Object.keys(steps).length * 20
+    const filteredSteps = Object.keys(steps).filter(step => steps[step])
+    const progressOverall = filteredSteps.length * 20
     return (
       <div className='dashboard-sidebar'>
         <CommunityLogo token={token} metadata={this.props.metadata[token.tokenURI] || {}} />
@@ -43,4 +49,15 @@ TokenProgress.propTypes = {
   token: PropTypes.object.isRequired
 }
 
-export default TokenProgress
+const mapStateToProps = (state, {match}) => ({
+  dashboard: state.screens.dashboard
+})
+
+const mapDispatchToProps = {
+  fetchTokenProgress
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TokenProgress)

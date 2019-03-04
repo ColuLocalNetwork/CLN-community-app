@@ -56,7 +56,6 @@ class Dashboard extends Component {
     if (this.props.accountAddress) {
       this.props.isUserExists(this.props.accountAddress)
     }
-    this.props.fetchTokenProgress(this.props.match.params.address)
     document.addEventListener('mousedown', this.handleClickOutside)
   }
 
@@ -120,7 +119,7 @@ class Dashboard extends Component {
         <Breadcrumbs breadCrumbsText={token.name} setToHomepage={this.showHomePage} />
         <div className='dashboard-container'>
           <div className='dashboard-section'>
-            <TokenProgress token={token} metadata={this.props.metadata} steps={steps} />
+            <TokenProgress token={token} metadata={this.props.metadata} steps={steps} match={this.props.match} />
             <div className='dashboard-information'>
               <div className='dashboard-information-header'>
                 <p className='dashboard-information-text'>Total supply</p>
@@ -214,7 +213,6 @@ const mapStateToProps = (state, {match}) => ({
 const mapDispatchToProps = {
   fetchTokenStatistics,
   fetchToken,
-  fetchTokenProgress,
   isUserExists,
   loadModal,
   hideModal
