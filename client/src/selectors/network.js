@@ -8,10 +8,7 @@ export const getAddresses = createSelector(
   (networkType, addresses) => addresses[networkType] || {}
 )
 
-export const getClnAddress = createSelector(
-  getAddresses,
-  (addresses) => addresses.ColuLocalNetwork
-)
+export const getAddress = (state, contractName) => getAddresses(state)[contractName]
 
 export const getEtherscanUrl = createSelector(
   getNetworkType,
@@ -24,5 +21,3 @@ export const getApiRoot = createSelector(
   getNetworkType,
   networkType => CONFIG.api.url[networkType] || CONFIG.api.url.default
 )
-
-// export const getCurrentWe

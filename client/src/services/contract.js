@@ -2,9 +2,6 @@ import abis from 'constants/abi'
 import {getWeb3} from 'services/web3'
 
 const contracts = {
-  // main: {},
-  // ropsten: {},
-  // fuse: {}
 }
 
 export const getContract = ({address, abiName, options}) => {

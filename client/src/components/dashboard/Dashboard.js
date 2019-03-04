@@ -208,7 +208,7 @@ class Dashboard extends Component {
         }
       </div>,
       <div>
-        {this.props.accountAddress && <Bridge accountAddress={this.props.accountAddress} />}
+        {this.props.accountAddress && <Bridge accountAddress={this.props.accountAddress} foreignTokenAddress={this.props.match.params.address} />}
       </div>
     ]
   }
