@@ -21,7 +21,7 @@ const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
 class UserDataModal extends React.Component {
   componentDidMount (prevProps) {
     if (this.props.token.owner === this.props.accountAddress && !this.props.userExists) {
-      //this.timerId = setTimeout(this.props.loadUserDataModal, LOAD_USER_DATA_MODAL_TIMEOUT)
+      this.timerId = setTimeout(this.props.loadUserDataModal, LOAD_USER_DATA_MODAL_TIMEOUT)
     }
   }
 
@@ -41,7 +41,8 @@ UserDataModal.propTypes = {
 
 class Dashboard extends Component {
   state = {
-    copyStatus: null
+    copyStatus: null,
+    transferToFuse: 0
   }
 
   handleIntervalChange = (userType, intervalValue) => {
@@ -98,6 +99,8 @@ class Dashboard extends Component {
   loadUserDataModal = () => this.props.loadModal(USER_DATA_MODAL, {
     tokenAddress: this.props.match.params.address
   })
+
+  setTransferToFuse = (e) => this.setState({ transferToFuse: e.target.value })
 
   render () {
     if (!this.props.token) {
@@ -204,7 +207,7 @@ class Dashboard extends Component {
             </div>
             <div className='dashboard-transfer'>
               <div className='dashboard-transfer-form'>
-                <input value={0} />
+                <input value={this.state.transferToFuse} onChange={(e) => this.setTransferToFuse(e)} />
                 <div className='dashboard-transfer-form-currency'>POA</div>
               </div>
               <button className='dashboard-transfer-btn'>Transfer to fuse</button>
