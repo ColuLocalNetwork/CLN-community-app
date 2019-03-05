@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import MainNetLogo from 'images/Mainnet.png'
+import MainnetLogo from 'images/Mainnet.png'
 import RopstenLogo from 'images/Ropsten.png'
 import FuseLogo from 'images/fuseLogo.svg'
 import { connect } from 'react-redux'
@@ -21,7 +21,7 @@ const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
 class UserDataModal extends React.Component {
   componentDidMount (prevProps) {
     if (this.props.token.owner === this.props.accountAddress && !this.props.userExists) {
-      this.timerId = setTimeout(this.props.loadUserDataModal, LOAD_USER_DATA_MODAL_TIMEOUT)
+      //this.timerId = setTimeout(this.props.loadUserDataModal, LOAD_USER_DATA_MODAL_TIMEOUT)
     }
   }
 
@@ -102,6 +102,14 @@ class Dashboard extends Component {
 
   setTransferToFuse = (e) => this.setState({ transferToFuse: e.target.value })
 
+  renderNetworkLogo (network) {
+    switch (network) {
+      case 'ropsten': return RopstenLogo
+      case 'main': return MainnetLogo
+      default: return MainnetLogo
+    }
+  }
+
   render () {
     if (!this.props.token) {
       return null
@@ -109,6 +117,7 @@ class Dashboard extends Component {
 
     const { token } = this.props
     const { admin, user } = this.props.dashboard
+    console.log(this.props.networkType)
     return [
       <TopNav
         key={0}
@@ -118,7 +127,7 @@ class Dashboard extends Component {
       />,
       <div key={1} className='dashboard-content'>
         <Breadcrumbs breadCrumbsText={token.name} setToHomepage={this.showHomePage} />
-        <div className='dashboard-container'>
+        <div className={`dashboard-container ${this.props.networkType}`}>
           <div className='dashboard-section'>
             <div className='dashboard-sidebar'>
               <CommunityLogo token={token} metadata={this.props.metadata[token.tokenURI] || {}} />
@@ -184,9 +193,9 @@ class Dashboard extends Component {
           <div className='dashboard-sidebar'>
             <div className='dashboard-network'>
               <div className='dashboard-network-content'>
-                <div className='dashboard-network-title'>Ropsten</div>
+                <div className='dashboard-network-title'>{this.props.networkType}</div>
                 <div className='dashboard-network-logo'>
-                  <img src={RopstenLogo} />
+                  <img src={this.renderNetworkLogo(this.props.networkType)} />
                 </div>
                 <div className='dashboard-network-text'>Balance</div>
                 <div className='dashboard-network-balance'>3,500.00 <span>FSM</span></div>
