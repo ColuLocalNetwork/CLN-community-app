@@ -94,7 +94,11 @@ class Bridge extends Component {
               <input value={this.state.transferToFuse} onChange={this.setTransferToFuse} />
               <div className='dashboard-transfer-form-currency'>{this.props.token.symbol}</div>
             </div>
-            <button className='dashboard-transfer-btn' onClick={this.handleTransfer}>Transfer to fuse</button>
+            <button disabled={this.props.transactionStatus === 'PENDING'}
+              className='dashboard-transfer-btn' onClick={this.handleTransfer}>
+              Transfer to fuse
+            </button>
+            <span>Confirmations: {this.props.confirmationNumber} </span>
           </div>
         ) : (
           <button className='dashboard-transfer-btn'

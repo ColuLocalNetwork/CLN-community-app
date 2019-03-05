@@ -1,5 +1,4 @@
-import { call, put, takeEvery, takeLatest, select } from 'redux-saga/effects'
-import { delay } from 'redux-saga'
+import { call, put, takeEvery, takeLatest, select, delay } from 'redux-saga/effects'
 
 import {transactionPending, transactionFailed, transactionSucceeded} from 'actions/utils'
 import { getApiRoot } from 'selectors/network'
