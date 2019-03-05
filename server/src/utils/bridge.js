@@ -46,7 +46,7 @@ async function deployForeignBridge (token) {
 
   const event = receipt.events.ForeignBridgeDeployed
   const result = {
-    foreignBridgeAdderss: event.returnValues._foreignBridge,
+    foreignBridgeAddress: event.returnValues._foreignBridge,
     foreignBridgeBlockNumber: event.returnValues._blockNumber
   }
 
@@ -62,7 +62,7 @@ function extractHomeBridgeData (web3, receipt) {
   const result = {
     homeBridgeAddress: event._homeBridge,
     homeBridgeBlockNumber: event._blockNumber,
-    homeBridgeToken: event._token
+    homeTokenAddress: event._token
   }
   return result
 }
@@ -139,14 +139,14 @@ async function deployBridge (token) {
     )
   ])
 
-  const { foreignBridgeAdderss, foreignBridgeBlockNumber } = deployForeignBridgeResponse
-  const { homeBridgeAddress, homeBridgeToken, homeBridgeBlockNumber } = deployHomeBridgeResponse
+  const { foreignBridgeAddress, foreignBridgeBlockNumber } = deployForeignBridgeResponse
+  const { homeBridgeAddress, homeTokenAddress, homeBridgeBlockNumber } = deployHomeBridgeResponse
 
-  const foreignBridgeToken = token.address
+  const foreignTokenAddress = token.address
   await addBridgeMapping(
-    foreignBridgeToken,
-    homeBridgeToken,
-    foreignBridgeAdderss,
+    foreignTokenAddress,
+    homeTokenAddress,
+    foreignBridgeAddress,
     homeBridgeAddress,
     foreignBridgeBlockNumber,
     homeBridgeBlockNumber
@@ -155,9 +155,9 @@ async function deployBridge (token) {
   bridgeDeployed(token.address)
 
   return {
-    foreignBridgeToken,
-    homeBridgeToken,
-    foreignBridgeAdderss,
+    foreignTokenAddress,
+    homeTokenAddress,
+    foreignBridgeAddress,
     homeBridgeAddress,
     foreignBridgeBlockNumber,
     homeBridgeBlockNumber

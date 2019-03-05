@@ -9,8 +9,8 @@ import web3 from 'services/web3'
 import {getContract} from 'services/contract'
 
 function * balanceOfToken ({tokenAddress, accountAddress, options}) {
-  const ColuLocalNetworkContract = getContract({abiName: 'BasicToken', address: tokenAddress, options})
-  const balanceOf = yield call(ColuLocalNetworkContract.methods.balanceOf(accountAddress).call)
+  const basicTokenContract = getContract({abiName: 'BasicToken', address: tokenAddress, options})
+  const balanceOf = yield call(basicTokenContract.methods.balanceOf(accountAddress).call)
 
   yield put({type: actions.BALANCE_OF_TOKEN.SUCCESS,
     tokenAddress,

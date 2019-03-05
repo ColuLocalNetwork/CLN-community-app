@@ -8,8 +8,8 @@ import {createMetadata} from 'sagas/metadata'
 import {getAccountAddress} from 'selectors/accounts'
 import * as api from 'services/api/token'
 import {processReceipt} from 'services/api/misc'
-import {transactionPending, transactionFailed, transactionSucceeded} from 'actions/utils'
-import {apiCall, createEntityPut, tryTakeEvery, createEntitiesFetch} from './utils'
+import {transactionSucceeded} from 'actions/utils'
+import {apiCall, createEntityPut, tryTakeEvery, createEntitiesFetch, transactionFlow} from './utils'
 
 const entityPut = createEntityPut(actions.entityName)
 
@@ -58,7 +58,7 @@ export function * createToken ({name, symbol, totalSupply, tokenURI}) {
   })
   const accountAddress = yield select(getAccountAddress)
 
-  const createTokenPromise = TokenFactoryContract.methods.createToken(
+  const transactionPromise = TokenFactoryContract.methods.createToken(
     name,
     symbol,
     totalSupply.toFixed(),
@@ -66,26 +66,7 @@ export function * createToken ({name, symbol, totalSupply, tokenURI}) {
   ).send({
     from: accountAddress
   })
-
-  const transactionHash = yield new Promise((resolve, reject) => {
-    createTokenPromise.on('transactionHash', (transactionHash) =>
-      resolve(transactionHash)
-    )
-    createTokenPromise.on('error', (error) =>
-      reject(error)
-    )
-  })
-
-  yield put(transactionPending(actions.CREATE_TOKEN, transactionHash))
-
-  const receipt = yield createTokenPromise
-
-  if (!Number(receipt.status)) {
-    yield put(transactionFailed(actions.CREATE_TOKEN, receipt))
-    return receipt
-  }
-
-  yield put(transactionSucceeded(actions.CREATE_TOKEN, receipt))
+  const receipt = yield transactionFlow({transactionPromise, action: actions.CREATE_TOKEN})
 
   return receipt
 }

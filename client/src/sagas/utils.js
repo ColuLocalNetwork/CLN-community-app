@@ -1,6 +1,7 @@
 import { call, put, takeEvery, takeLatest, select } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 
+import {transactionPending, transactionFailed, transactionSucceeded} from 'actions/utils'
 import { getApiRoot } from 'selectors/network'
 import { getAccount } from 'selectors/accounts'
 import keyBy from 'lodash/keyBy'
@@ -78,4 +79,28 @@ export const createEntitiesFetch = (action, apiFunc) => function * (params) {
     }})
 
   return tokens
+}
+
+export function * transactionFlow ({transactionPromise, action}) {
+  const transactionHash = yield new Promise((resolve, reject) => {
+    transactionPromise.on('transactionHash', (transactionHash) =>
+      resolve(transactionHash)
+    )
+    transactionPromise.on('error', (error) =>
+      reject(error)
+    )
+  })
+
+  yield put(transactionPending(action, transactionHash))
+
+  const receipt = yield transactionPromise
+
+  if (!Number(receipt.status)) {
+    yield put(transactionFailed(action, receipt))
+    return receipt
+  }
+
+  yield put(transactionSucceeded(action, receipt))
+
+  return receipt
 }

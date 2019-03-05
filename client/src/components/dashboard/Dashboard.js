@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import MainnetLogo from 'images/Mainnet.png'
-import RopstenLogo from 'images/Ropsten.png'
-import FuseLogo from 'images/fuseLogo.svg'
 import { connect } from 'react-redux'
 import {fetchToken, fetchTokenStatistics} from 'actions/token'
 import {isUserExists} from 'actions/user'
@@ -42,8 +39,7 @@ UserDataModal.propTypes = {
 
 class Dashboard extends Component {
   state = {
-    copyStatus: null,
-    transferToFuse: 0
+    copyStatus: null
   }
 
   handleIntervalChange = (userType, intervalValue) => {
@@ -100,16 +96,6 @@ class Dashboard extends Component {
     tokenAddress: this.props.match.params.address
   })
 
-  setTransferToFuse = (e) => this.setState({ transferToFuse: e.target.value })
-
-  renderNetworkLogo (network) {
-    switch (network) {
-      case 'ropsten': return RopstenLogo
-      case 'main': return MainnetLogo
-      default: return MainnetLogo
-    }
-  }
-
   render () {
     if (!this.props.token) {
       return null
@@ -164,6 +150,7 @@ class Dashboard extends Component {
               }
             </div>
           </div>
+<<<<<<< HEAD
           <div className='dashboard-sidebar'>
             <div className='dashboard-network'>
               <div className='dashboard-network-content'>
@@ -195,6 +182,10 @@ class Dashboard extends Component {
               </div>
               <button className='dashboard-transfer-btn'>Transfer to fuse</button>
             </div>
+=======
+          <div>
+            <Bridge accountAddress={this.props.accountAddress} token={this.props.token} foreignTokenAddress={this.props.match.params.address} />
+>>>>>>> start work on confirmations
           </div>
         </div>
         {
@@ -206,9 +197,6 @@ class Dashboard extends Component {
               loadUserDataModal={this.loadUserDataModal}
             />
         }
-      </div>,
-      <div>
-        {this.props.accountAddress && <Bridge accountAddress={this.props.accountAddress} foreignTokenAddress={this.props.match.params.address} />}
       </div>
     ]
   }

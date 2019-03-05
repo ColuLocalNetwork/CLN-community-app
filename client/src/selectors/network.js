@@ -10,6 +10,33 @@ export const getAddresses = createSelector(
 
 export const getAddress = (state, contractName) => getAddresses(state)[contractName]
 
+export const getNetworkSide = (state) => state.network.networkType === state.network.homeNetwork
+  ? 'home'
+  : 'foreign'
+
+export const getBridgeStatus = createSelector(
+  state => state.network,
+  getNetworkSide,
+  (network, networkSide) => networkSide === 'home' ? {
+    from: {
+      network: network.homeNetwork,
+      bridge: 'home'
+    },
+    to: {
+      network: network.foreignNetwork,
+      bridge: 'foreign'
+    }
+  } : {
+    from: {
+      network: network.foreignNetwork,
+      bridge: 'foreign'
+    },
+    to: {
+      network: network.homeNetwork,
+      bridge: 'home'
+    }
+  }
+)
 export const getEtherscanUrl = createSelector(
   getNetworkType,
   networkType => networkType === 'main'

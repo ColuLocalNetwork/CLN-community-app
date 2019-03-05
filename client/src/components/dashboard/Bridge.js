@@ -1,26 +1,112 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import {BigNumber} from 'bignumber.js'
+import web3 from 'web3'
+import FontAwesome from 'react-fontawesome'
+
 import {balanceOfToken} from 'actions/accounts'
-import {fetchHomeToken, fetchForeignBridge, fetchHomeBridge, deployBridge, tranferToHome} from 'actions/bridge'
+import {fetchHomeToken, fetchForeignBridge, fetchHomeBridge, deployBridge, transferToHome, transferToForeign} from 'actions/bridge'
 import {getBalances} from 'selectors/accounts'
+import {getNetworkSide, getBridgeStatus} from 'selectors/network'
+import RopstenLogo from 'images/Ropsten.png'
+import FuseLogo from 'images/fuseLogo.svg'
 
-class Bridge extends Component {
+const NetworkLogo = ({network}) => network === 'fuse'
+  ? <div className='dashboard-network-logo fuse-logo'><img src={FuseLogo} /></div>
+  : <div className='dashboard-network-logo'><img src={RopstenLogo} /></div>
+
+class Balance extends Component {
   componentDidMount () {
-    this.props.balanceOfToken(this.props.homeTokenAddress, this.props.accountAddress, {
-      networkBridge: 'home'
-    })
-
-    this.props.balanceOfToken(this.props.foreignTokenAddress, this.props.accountAddress, {
-      networkBridge: 'foreign'
-    })
+    this.props.balanceOfToken(this.props.tokenAddress, this.props.accountAddress, {networkBridge: this.props.bridgeSide.bridge})
   }
 
-  render = () => <div>
-    <div>Foreign Balance: {this.props.balances[this.props.foreignTokenAddress]}</div>
-    <div>Home Balance: {this.props.balances[this.props.homeTokenAddress]}</div>
-    <div><button onClick={() => this.props.tranferToHome(this.props.foreignTokenAddress, this.props.foreignBridgeAddress, '1000000000000000000')}>Transfer 1 token</button></div>
+  render = () => <div className='dashboard-network-content'>
+    <div className='dashboard-network-title'>{this.props.bridgeSide.network}</div>
+    <NetworkLogo network={this.props.bridgeSide.network} />
+    <div className='dashboard-network-text'>Balance</div>
+    <div className='dashboard-network-balance balance-fuse'>
+      <span>{new BigNumber(this.props.balances[this.props.tokenAddress]).div(1e18).toFormat(2, 1)} {this.props.token.symbol}</span>
+    </div>
+    <button className='dashboard-network-btn'>Show more</button>
   </div>
+}
+
+Balance.propTypes = {
+  balanceOfToken: PropTypes.func.isRequired,
+  tokenAddress: PropTypes.string.isRequired,
+  accountAddress: PropTypes.string.isRequired,
+  token: PropTypes.object,
+  bridgeSide: PropTypes.object.isRequired
+}
+
+class Bridge extends Component {
+  state = {
+    transferToFuse: 0
+  }
+
+  componentDidMount () {
+    this.props.fetchHomeToken(this.props.foreignTokenAddress)
+    this.props.fetchHomeBridge(this.props.foreignTokenAddress)
+    this.props.fetchForeignBridge(this.props.foreignTokenAddress)
+  }
+
+  isOwner = () => this.props.accountAddress === this.props.token.owner
+
+  setTransferToFuse = (e) => this.setState({ transferToFuse: e.target.value })
+
+  handleTransfer = () => {
+    const value = web3.utils.toWei(this.state.transferToFuse)
+    if (this.props.bridgeStatus.to.bridge === 'home') {
+      this.props.transferToHome(this.props.foreignTokenAddress, this.props.foreignBridgeAddress, value)
+    } else {
+      this.props.transferToForeign(this.props.homeTokenAddress, this.props.homeBridgeAddress, value)
+    }
+  }
+
+  render = () => (<div className='dashboard-sidebar'>
+    {(this.props.foreignTokenAddress && this.props.homeTokenAddress) ? <div className='dashboard-network'>
+      <Balance
+        balanceOfToken={this.props.balanceOfToken}
+        tokenAddress={this.props.homeNetwork === this.props.bridgeStatus.from.network ? this.props.homeTokenAddress : this.props.foreignTokenAddress}
+        accountAddress={this.props.accountAddress}
+        token={this.props.token}
+        balances={this.props.balances}
+        bridgeSide={this.props.bridgeStatus.from}
+      />
+      <div className='dashboard-network-content network-arrow'>
+        <FontAwesome name='long-arrow-alt-right' />
+      </div>
+      <Balance
+        balanceOfToken={this.props.balanceOfToken}
+        tokenAddress={this.props.homeNetwork === this.props.bridgeStatus.to.network ? this.props.homeTokenAddress : this.props.foreignTokenAddress}
+        accountAddress={this.props.accountAddress}
+        token={this.props.token}
+        balances={this.props.balances}
+        bridgeSide={this.props.bridgeStatus.to}
+      />
+    </div> : null}
+    <div className='dashboard-transfer'>
+      {
+        this.props.foreignBridgeAddress ? (
+          <div>
+            <div className='dashboard-transfer-form'>
+              <input value={this.state.transferToFuse} onChange={this.setTransferToFuse} />
+              <div className='dashboard-transfer-form-currency'>{this.props.token.symbol}</div>
+            </div>
+            <button className='dashboard-transfer-btn' onClick={this.handleTransfer}>Transfer to fuse</button>
+          </div>
+        ) : (
+          <button className='dashboard-transfer-btn'
+            disabled={!this.isOwner() || this.props.bridgeDeploying}
+            onClick={() => this.props.deployBridge(this.props.foreignTokenAddress)}>
+            {this.props.bridgeDeploying ? 'Pending' : 'Deploy Bridge'}
+          </button>
+        )
+      }
+    </div>
+
+  </div>)
 }
 
 Bridge.propTypes = {
@@ -31,26 +117,22 @@ Bridge.propTypes = {
 }
 
 class BridgeContainer extends Component {
-  componentDidMount () {
-    this.props.fetchHomeToken(this.props.foreignTokenAddress)
-    this.props.fetchHomeBridge(this.props.foreignTokenAddress)
-    this.props.fetchForeignBridge(this.props.foreignTokenAddress)
-  }
-
   render = () => {
-    if (this.props.foreignTokenAddress && this.props.homeTokenAddress) {
+    if (this.props.accountAddress && this.props.foreignTokenAddress) {
       return <Bridge
         {...this.props} />
     } else {
-      return <div>
-        <button onClick={() => this.props.deployBridge(this.props.foreignTokenAddress)}>Deploy bridge</button>
-      </div>
+      return null
     }
   }
 }
 
 const mapStateToProps = (state) => ({
   ...state.screens.bridge,
+  homeNetwork: state.network.homeNetwork,
+  foreignNetwork: state.network.foreignNetwork,
+  bridgeStatus: getBridgeStatus(state),
+  networkSide: getNetworkSide(state),
   balances: getBalances(state)
 })
 
@@ -60,7 +142,8 @@ const mapDispatchToProps = {
   fetchHomeBridge,
   fetchHomeToken,
   fetchForeignBridge,
-  tranferToHome
+  transferToHome,
+  transferToForeign
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BridgeContainer)

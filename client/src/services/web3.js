@@ -9,17 +9,15 @@ const config = {
   }
 }
 
-// export const getWeb3 = ({networkBridge} = {}) => {
-//   return !networkBridge ? givenWeb3 : web3ByBridge[networkBridge]
-// }
-
 export const getWeb3 = ({networkBridge} = {}) => {
   if (!networkBridge) {
     return givenWeb3
   }
   if (networkBridge === 'home' && Web3.givenProvider.networkVersion === '121') {
     return givenWeb3
-  } else if (networkBridge === 'foreign' && Web3.givenProvider.networkVersion !== '121') {
+  }
+
+  if (networkBridge === 'foreign' && Web3.givenProvider.networkVersion !== '121') {
     return givenWeb3
   }
   const web3 = web3ByBridge[networkBridge]
@@ -34,10 +32,6 @@ const web3ByBridge = {
   home: homeWeb3,
   foreign: foreignWeb3
 }
-
-// const web3ByNetwork: {
-//   main
-// }
 
 init({config})
 

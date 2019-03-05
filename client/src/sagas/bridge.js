@@ -1,10 +1,9 @@
 import { all, put, select } from 'redux-saga/effects'
 
-import {apiCall, tryTakeEvery} from './utils'
+import {apiCall, tryTakeEvery, transactionFlow} from './utils'
 import {getContract} from 'services/contract'
 import {zeroAddressToNull} from 'utils/web3'
 import {getAccountAddress} from 'selectors/accounts'
-import {transactionPending, transactionFailed, transactionSucceeded} from 'actions/utils'
 import * as actions from 'actions/bridge'
 import * as api from 'services/api/token'
 
@@ -55,37 +54,44 @@ export function * deployBridge ({foreignTokenAddress}) {
 
   yield put({
     type: actions.DEPLOY_BRIDGE.SUCCESS,
-    response: response
+    response: response.data
   })
 }
 
-export function * transferToHome ({foreignTokenAddress, foreignBridgeAddress, value}) {
+function * transferToHome ({foreignTokenAddress, foreignBridgeAddress, value}) {
   const accountAddress = yield select(getAccountAddress)
   const basicToken = getContract({abiName: 'BasicToken', address: foreignTokenAddress})
 
-  const transferTokenPromise = basicToken.methods.transfer(foreignBridgeAddress, value).send({
+  const transactionPromise = basicToken.methods.transfer(foreignBridgeAddress, value).send({
+    from: accountAddress
+  })
+  // console.log(p)?
+  // debugger
+
+  yield transactionFlow({transactionPromise, action: actions.TRANSFER_TO_HOME})
+
+  const receipt = yield new Promise((resolve, reject) => {
+    const emitter = transactionPromise.on('confirmation', (confirmationNumber, receipt) => {
+      console.log(confirmationNumber)
+      if (confirmationNumber >= CONFIG.web3.bridge.confirmations.home) {
+        emitter.off('confirmation')
+        resolve(receipt)
+      }
+    })
+  })
+
+  yield put({type: 'TRANSFER_TO_HOME_CONFIRMED', response: {receipt}})
+}
+
+function * transferToForeign ({homeTokenAddress, homeBridgeAddress, value}) {
+  const accountAddress = yield select(getAccountAddress)
+  const basicToken = getContract({abiName: 'BasicToken', address: homeTokenAddress})
+
+  const transactionPromise = basicToken.methods.transfer(homeBridgeAddress, value).send({
     from: accountAddress
   })
 
-  const transactionHash = yield new Promise((resolve, reject) => {
-    transferTokenPromise.on('transactionHash', (transactionHash) =>
-      resolve(transactionHash)
-    )
-    transferTokenPromise.on('error', (error) =>
-      reject(error)
-    )
-  })
-
-  yield put(transactionPending(actions.TRANSFER_TO_HOME, transactionHash))
-
-  const receipt = yield transferTokenPromise
-
-  if (!Number(receipt.status)) {
-    yield put(transactionFailed(actions.TRANSFER_TO_HOME, receipt))
-    return receipt
-  }
-
-  yield put(transactionSucceeded(actions.TRANSFER_TO_HOME, receipt))
+  yield transactionFlow({transactionPromise, action: actions.TRANSFER_TO_FOREIGN})
 }
 
 export default function * marketMakerSaga () {
@@ -94,6 +100,7 @@ export default function * marketMakerSaga () {
     tryTakeEvery(actions.FETCH_HOME_BRIDGE, fetchHomeBridge, 1),
     tryTakeEvery(actions.FETCH_FOREIGN_BRIDGE, fetchForeignBridge, 1),
     tryTakeEvery(actions.DEPLOY_BRIDGE, deployBridge, 1),
-    tryTakeEvery(actions.TRANSFER_TO_HOME, transferToHome, 1)
+    tryTakeEvery(actions.TRANSFER_TO_HOME, transferToHome, 1),
+    tryTakeEvery(actions.TRANSFER_TO_FOREIGN, transferToForeign, 1)
   ])
 }
