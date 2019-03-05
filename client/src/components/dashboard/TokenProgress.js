@@ -28,11 +28,11 @@ class TokenProgress extends Component {
         <div className={steps.tokenIssued ? 'dashboard-progress-text text-positive' : 'dashboard-progress-text text-negative'}>
           <FontAwesome name={steps.tokenIssued ? 'check' : 'minus'} /> <span className='progress-text-content'>Deploy a token</span>
         </div>
-        <div className={steps.bridgeDeployed ? 'dashboard-progress-text text-positive' : 'dashboard-progress-text text-negative'}>
-          <FontAwesome name={steps.bridgeDeployed ? 'check' : 'minus'} /> <span className='progress-text-content'>Personal details</span>
-        </div>
         <div className={steps.detailsGiven ? 'dashboard-progress-text text-positive' : 'dashboard-progress-text text-negative'}>
-          <FontAwesome name={steps.detailsGiven ? 'check' : 'minus'} /> <span className='progress-text-content'>Deploy a bridge to Fuse-chain</span>
+          <FontAwesome name={steps.detailsGiven ? 'check' : 'minus'} /> <span className='progress-text-content'>Personal details</span>
+        </div>
+        <div className={steps.bridgeDeployed ? 'dashboard-progress-text text-positive' : 'dashboard-progress-text text-negative'}>
+          <FontAwesome name={steps.bridgeDeployed ? 'check' : 'minus'} /> <span className='progress-text-content'>Deploy a bridge to Fuse-chain</span>
         </div>
         <div className='dashboard-progress-text text-negative'>
           <FontAwesome name='minus' /> <span className='progress-text-content'>Link to add a business list</span>
@@ -49,15 +49,11 @@ TokenProgress.propTypes = {
   token: PropTypes.object.isRequired
 }
 
-const mapStateToProps = (state, {match}) => ({
-  dashboard: state.screens.dashboard
-})
-
 const mapDispatchToProps = {
   fetchTokenProgress
 }
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(TokenProgress)
