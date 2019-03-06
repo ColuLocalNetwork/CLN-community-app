@@ -116,6 +116,12 @@ class Dashboard extends Component {
     window.open(explorerUrl, '_blank')
   }
 
+  checkCondition (evt, condition) {
+    if (condition) {
+      evt.preventDefault()
+    }
+  }
+
   render () {
     if (!this.props.token) {
       return null
