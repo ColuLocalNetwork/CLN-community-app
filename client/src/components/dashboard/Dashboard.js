@@ -102,6 +102,12 @@ class Dashboard extends Component {
 
   setTransferToFuse = (e) => this.setState({ transferToFuse: e.target.value })
 
+  checkCondition (evt, condition) {
+    if (condition) {
+      evt.preventDefault()
+    }
+  }
+
   render () {
     if (!this.props.token) {
       return null
@@ -181,7 +187,7 @@ class Dashboard extends Component {
               }
             </div>
           </div>
-          <div className='dashboard-sidebar'>
+          <div className='dashboard-bridge'>
             <div className='dashboard-network'>
               <div className='dashboard-network-content'>
                 <div className='dashboard-network-title'>Ropsten</div>
@@ -195,6 +201,21 @@ class Dashboard extends Component {
               <div className='dashboard-network-content network-arrow'>
                 <FontAwesome name='long-arrow-alt-right' />
               </div>
+              <div className='dashboard-transfer'>
+                <div className='dashboard-transfer-form'>
+                  <input
+                    value={this.state.transferToFuse}
+                    type='number'
+                    onChange={(e) => this.setTransferToFuse(e)}
+                    onKeyDown={(evt) => this.checkCondition(evt, (evt.key === 'e' || evt.key === '-'))}
+                  />
+                  <div className='dashboard-transfer-form-currency'>POA</div>
+                </div>
+                <button className='dashboard-transfer-btn'>Transfer to fuse</button>
+              </div>
+              <div className='dashboard-network-content network-arrow'>
+                <FontAwesome name='long-arrow-alt-right' />
+              </div>
               <div className='dashboard-network-content'>
                 <div className='dashboard-network-title'>Fuse</div>
                 <div className='dashboard-network-logo fuse-logo'>
@@ -204,13 +225,6 @@ class Dashboard extends Component {
                 <div className='dashboard-network-balance balance-fuse'>3,500.00 <span>POA</span></div>
                 <button className='dashboard-network-btn'>Show more</button>
               </div>
-            </div>
-            <div className='dashboard-transfer'>
-              <div className='dashboard-transfer-form'>
-                <input value={this.state.transferToFuse} onChange={(e) => this.setTransferToFuse(e)} />
-                <div className='dashboard-transfer-form-currency'>POA</div>
-              </div>
-              <button className='dashboard-transfer-btn'>Transfer to fuse</button>
             </div>
           </div>
         </div>

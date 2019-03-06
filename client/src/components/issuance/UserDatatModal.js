@@ -109,7 +109,9 @@ class UserDatatModal extends Component {
             disabled={
               !this.state.country.value ||
               this.state.firstName.trim() === '' ||
+              this.state.firstName.length < 3 ||
               this.state.lastName.trim() === '' ||
+              this.state.lastName.length < 3 ||
               !this.validateEmail()
             }
             className='issued-popup-btn'
