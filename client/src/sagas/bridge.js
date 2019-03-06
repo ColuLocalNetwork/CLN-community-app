@@ -1,10 +1,10 @@
-import { eventChannel } from 'redux-saga'
-import { call, fork, take, all, put, select } from 'redux-saga/effects'
+import { fork, all, put, select } from 'redux-saga/effects'
 
-import {apiCall, tryTakeEvery, transactionFlow} from './utils'
+import {apiCall, tryTakeEvery} from './utils'
 import {getContract} from 'services/contract'
 import {zeroAddressToNull} from 'utils/web3'
 import {getAccountAddress} from 'selectors/accounts'
+import {transactionConfirmations, transactionFlow} from './transaction'
 import * as actions from 'actions/bridge'
 import * as api from 'services/api/token'
 
@@ -60,21 +60,6 @@ export function * deployBridge ({foreignTokenAddress}) {
   })
 }
 
-function createConfirmationChannel (transactionPromise) {
-  return eventChannel(emit => {
-    const func = (confirmationNumber, receipt) => {
-      emit({receipt, confirmationNumber})
-    }
-
-    const emitter = transactionPromise.on('confirmation', func)
-
-    const unsubscribe = () => {
-      emitter.off('confirmation')
-    }
-    return unsubscribe
-  })
-}
-
 function * transferToHome ({foreignTokenAddress, foreignBridgeAddress, value, confirmationsLimit}) {
   const accountAddress = yield select(getAccountAddress)
   const basicToken = getContract({abiName: 'BasicToken', address: foreignTokenAddress})
@@ -83,19 +68,9 @@ function * transferToHome ({foreignTokenAddress, foreignBridgeAddress, value, co
     from: accountAddress
   })
 
-  const confirmationChannel = yield call(createConfirmationChannel, transactionPromise)
-
-  yield fork(transactionFlow, {transactionPromise, action: actions.TRANSFER_TO_HOME})
-
-  let isOpen = true
-  while (isOpen) {
-    const response = yield take(confirmationChannel)
-    yield put({ type: actions.TRANSFER_TO_HOME.CONFIRMATION, response })
-    if (response.confirmationNumber > confirmationsLimit) {
-      confirmationChannel.close()
-      isOpen = false
-    }
-  }
+  const action = actions.TRANSFER_TO_HOME
+  yield fork(transactionFlow, {transactionPromise, action})
+  yield fork(transactionConfirmations, {transactionPromise, action, confirmationsLimit})
 }
 
 function * transferToForeign ({homeTokenAddress, homeBridgeAddress, value, confirmationsLimit}) {
@@ -107,19 +82,9 @@ function * transferToForeign ({homeTokenAddress, homeBridgeAddress, value, confi
     gasPrice: 1e9
   })
 
-  const confirmationChannel = yield call(createConfirmationChannel, transactionPromise)
-
-  yield fork(transactionFlow, {transactionPromise, action: actions.TRANSFER_TO_FOREIGN})
-
-  let isOpen = true
-  while (isOpen) {
-    const response = yield take(confirmationChannel)
-    yield put({ type: actions.TRANSFER_TO_HOME.CONFIRMATION, response })
-    if (response.confirmationNumber > confirmationsLimit) {
-      confirmationChannel.close()
-      isOpen = false
-    }
-  }
+  const action = actions.TRANSFER_TO_FOREIGN
+  yield fork(transactionFlow, {transactionPromise, action})
+  yield fork(transactionConfirmations, {transactionPromise, action, confirmationsLimit})
 }
 
 export default function * marketMakerSaga () {

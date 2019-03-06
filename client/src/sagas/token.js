@@ -11,7 +11,8 @@ import {getAccountAddress} from 'selectors/accounts'
 import * as api from 'services/api/token'
 import {processReceipt} from 'services/api/misc'
 import {transactionSucceeded} from 'actions/utils'
-import {apiCall, createEntityPut, tryTakeEvery, createEntitiesFetch, transactionFlow} from './utils'
+import {apiCall, createEntityPut, tryTakeEvery, createEntitiesFetch} from './utils'
+import {transactionFlow} from './transaction'
 
 const entityPut = createEntityPut(actions.entityName)
 
