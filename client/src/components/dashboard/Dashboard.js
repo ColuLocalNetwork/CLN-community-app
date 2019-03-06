@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import MainNetLogo from 'images/Mainnet.png'
+import MainnetLogo from 'images/Mainnet.png'
 import RopstenLogo from 'images/Ropsten.png'
 import FuseLogo from 'images/fuseLogo.svg'
 import { connect } from 'react-redux'
-import {fetchToken, fetchTokenStatistics, fetchTokenProgress} from 'actions/token'
+import {fetchToken, fetchTokenStatistics} from 'actions/token'
 import {isUserExists} from 'actions/user'
 import FontAwesome from 'react-fontawesome'
 import {getClnBalance, getAccountAddress} from 'selectors/accounts'
-import CommunityLogo from 'components/elements/CommunityLogo'
 import {formatWei} from 'utils/format'
 import { USER_DATA_MODAL } from 'constants/uiConstants'
 import {loadModal, hideModal} from 'actions/ui'
+import TokenProgress from './TokenProgress'
 import TopNav from './../TopNav'
 import Breadcrumbs from './../elements/Breadcrumbs'
 import ActivityContent from './ActivityContent'
@@ -56,7 +56,6 @@ class Dashboard extends Component {
     if (this.props.accountAddress) {
       this.props.isUserExists(this.props.accountAddress)
     }
-    this.props.fetchTokenProgress(this.props.match.params.address)
     document.addEventListener('mousedown', this.handleClickOutside)
   }
 
@@ -108,13 +107,21 @@ class Dashboard extends Component {
     }
   }
 
+  renderNetworkLogo (network) {
+    switch (network) {
+      case 'ropsten': return RopstenLogo
+      case 'main': return MainnetLogo
+      default: return MainnetLogo
+    }
+  }
+
   render () {
     if (!this.props.token) {
       return null
     }
 
     const { token } = this.props
-    const { admin, user } = this.props.dashboard
+    const { admin, user, steps } = this.props.dashboard
     return [
       <TopNav
         key={0}
@@ -124,34 +131,9 @@ class Dashboard extends Component {
       />,
       <div key={1} className='dashboard-content'>
         <Breadcrumbs breadCrumbsText={token.name} setToHomepage={this.showHomePage} />
-        <div className='dashboard-container'>
+        <div className={`dashboard-container ${this.props.networkType}`}>
           <div className='dashboard-section'>
-            <div className='dashboard-sidebar'>
-              <CommunityLogo token={token} metadata={this.props.metadata[token.tokenURI] || {}} />
-              <h3 className='dashboard-title'>{token.name}</h3>
-              <div className='dashboard-progress'>
-                <div className='dashboard-progress-bar-80' />
-                <div className='dashboard-progress-content'>
-                  <div className='dashboard-progress-title'>Overall progress</div>
-                  <div className='dashboard-progress-percent'>80%</div>
-                </div>
-              </div>
-              <div className='dashboard-progress-text text-positive'>
-                <FontAwesome name='check' /> <span className='progress-text-content'>Deploy a token</span>
-              </div>
-              <div className='dashboard-progress-text text-positive'>
-                <FontAwesome name='check' /> <span className='progress-text-content'>Personal details</span>
-              </div>
-              <div className='dashboard-progress-text text-negative'>
-                <FontAwesome name='minus' /> <span className='progress-text-content'>Deploy a bridge to Fuse-chain</span>
-              </div>
-              <div className='dashboard-progress-text text-positive'>
-                <FontAwesome name='check' /> <span className='progress-text-content'>Link to add a business list</span>
-              </div>
-              <div className='dashboard-progress-text text-positive'>
-                <FontAwesome name='check' /> <span className='progress-text-content'>Plug into a white label wallet</span>
-              </div>
-            </div>
+            <TokenProgress token={token} metadata={this.props.metadata} steps={steps} match={this.props.match} />
             <div className='dashboard-information'>
               <div className='dashboard-information-header'>
                 <p className='dashboard-information-text'>Total supply</p>
@@ -190,9 +172,9 @@ class Dashboard extends Component {
           <div className='dashboard-bridge'>
             <div className='dashboard-network'>
               <div className='dashboard-network-content'>
-                <div className='dashboard-network-title'>Ropsten</div>
+                <div className='dashboard-network-title'>{this.props.networkType}</div>
                 <div className='dashboard-network-logo'>
-                  <img src={RopstenLogo} />
+                  <img src={this.renderNetworkLogo(this.props.networkType)} />
                 </div>
                 <div className='dashboard-network-text'>Balance</div>
                 <div className='dashboard-network-balance'>3,500.00 <span>FSM</span></div>
@@ -253,7 +235,6 @@ const mapStateToProps = (state, {match}) => ({
 const mapDispatchToProps = {
   fetchTokenStatistics,
   fetchToken,
-  fetchTokenProgress,
   isUserExists,
   loadModal,
   hideModal

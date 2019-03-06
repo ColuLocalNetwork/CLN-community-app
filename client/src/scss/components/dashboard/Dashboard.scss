@@ -50,20 +50,7 @@
       height: 50px;
     }
   }
-  &-container {
-    z-index: 20;
-    align-items: flex-start;
-    justify-content: flex-start;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    @media (max-width: $breakpoint-tablet) {
-      width: auto;
-  	}
-    @media (max-width: $breakpoint-mobile) {
 
-  	}
-  }
   &-sidebar {
     width: 270px;
     border-radius: 10px;
@@ -456,6 +443,7 @@
       font-size: 15px;
       color: $color-filter-text;
       text-align: center;
+      text-transform: capitalize;
     }
     &-logo {
       width: 50px;
@@ -485,7 +473,7 @@
     }
     &-balance {
       font-size: 11px;
-      color: $color-ropsten;
+      color: $color-orange;
       font-weight: 600;
       span {
         font-weight: 300;
@@ -506,8 +494,9 @@
       &:hover,
       &:focus:active,
       &:active {
-        background-color: $color-ropsten;
+        background-color: $color-orange;
         color: $color-step-text;
+        cursor: pointer;
       }
     }
   }
@@ -543,7 +532,7 @@
       border: none;
       color: $color-step-text;
       padding: 15px 20px;
-      background-color: $color-ropsten;
+      background-color: $color-orange;
       border-radius: 3px;
       text-transform: uppercase;
       display: inline-block;
@@ -553,7 +542,77 @@
       outline: none;
       &:hover {
         cursor: pointer;
-        background-color: lighten($color-ropsten, 10%);
+        background-color: lighten($color-orange, 10%);
+      }
+    }
+  }
+  &-container {
+    z-index: 20;
+    align-items: flex-start;
+    justify-content: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    @media (max-width: $breakpoint-tablet) {
+      width: auto;
+    }
+    &.ropsten {
+      .dashboard {
+        &-progress {
+          &-bar-20 {
+            @include donutChart(20, $color-ropsten);
+          }
+          &-bar-40 {
+            @include donutChart(40, $color-ropsten);
+          }
+          &-bar-60 {
+            @include donutChart(60, $color-ropsten);
+          }
+          &-bar-80 {
+            @include donutChart(80, $color-ropsten);
+          }
+          &-bar-100 {
+            @include donutChart(100, $color-ropsten);
+          }
+          &-text {
+            &.text-positive {
+              .fa {
+                color: $color-ropsten;
+              }
+            }
+          }
+        }
+        &-information {
+          &-period {
+            color: $color-ropsten;
+            &-text {
+              color: $color-ropsten;
+            }
+          }
+        }
+        &-transfer {
+          &-btn {
+            background-color: $color-ropsten;
+            &:hover {
+              background-color: lighten($color-ropsten, 10%);
+            }
+          }
+        }
+        &-network {
+          &-balance {
+            color: $color-ropsten;
+            &.balance-fuse {
+              color: $color-close-gray;
+            }
+          }
+          &-btn {
+            &:hover,
+            &:focus:active,
+            &:active {
+              background-color: $color-ropsten;
+            }
+          }
+        }
       }
     }
   }
