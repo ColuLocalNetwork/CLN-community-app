@@ -109,11 +109,11 @@ class Bridge extends Component {
             </div>
             <button disabled={this.isWaitingForConfirmation()}
               className='dashboard-transfer-btn' onClick={this.handleTransfer}>
-              Transfer to fuse
+              {this.isWaitingForConfirmation() ? 'PENDING' : 'Transfer to fuse'}
             </button>
             {
               this.isWaitingForConfirmation()
-                ? <span>Confirmations: {this.props.confirmationNumber} / {this.props.confirmationsLimit} </span>
+                ? <div>Confirmations: {this.props.confirmationNumber} / {this.props.confirmationsLimit} </div>
                 : null
             }
           </div>

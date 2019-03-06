@@ -1,9 +1,11 @@
-import { all, call, put, select } from 'redux-saga/effects'
+import { all, call, put, select, takeEvery } from 'redux-saga/effects'
 import { contract } from 'osseus-wallet'
 
 import {getAddress} from 'selectors/network'
 import * as actions from 'actions/token'
 import {fetchMetadata} from 'actions/metadata'
+import {DEPLOY_BRIDGE} from 'actions/bridge'
+import {ADD_USER} from 'actions/user'
 import {createMetadata} from 'sagas/metadata'
 import {getAccountAddress} from 'selectors/accounts'
 import * as api from 'services/api/token'
@@ -116,6 +118,8 @@ export default function * tokenSaga () {
     tryTakeEvery(actions.CREATE_TOKEN, createToken, 1),
     tryTakeEvery(actions.CREATE_TOKEN_WITH_METADATA, createTokenWithMetadata, 1),
     tryTakeEvery(actions.FETCH_TOKEN_STATISTICS, fetchTokenStatistics, 1),
-    tryTakeEvery(actions.FETCH_TOKEN_PROGRESS, fetchTokenProgress, 1)
+    tryTakeEvery(actions.FETCH_TOKEN_PROGRESS, fetchTokenProgress, 1),
+    takeEvery(DEPLOY_BRIDGE.SUCCESS, fetchTokenProgress),
+    takeEvery(ADD_USER.SUCCESS, fetchTokenProgress)
   ])
 }

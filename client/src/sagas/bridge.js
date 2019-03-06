@@ -7,7 +7,6 @@ import {zeroAddressToNull} from 'utils/web3'
 import {getAccountAddress} from 'selectors/accounts'
 import * as actions from 'actions/bridge'
 import * as api from 'services/api/token'
-import {balanceOfToken} from 'actions/accounts'
 
 export function * fetchHomeToken ({foreignTokenAddress}) {
   const contractAddress = yield select(state => state.network.addresses.fuse.BridgeMapper)
@@ -56,6 +55,7 @@ export function * deployBridge ({foreignTokenAddress}) {
 
   yield put({
     type: actions.DEPLOY_BRIDGE.SUCCESS,
+    tokenAddress: foreignTokenAddress,
     response: response.data
   })
 }
@@ -75,7 +75,7 @@ function createConfirmationChannel (transactionPromise) {
   })
 }
 
-function * transferToHome ({foreignTokenAddress, foreignBridgeAddress, value}) {
+function * transferToHome ({foreignTokenAddress, foreignBridgeAddress, value, confirmationsLimit}) {
   const accountAddress = yield select(getAccountAddress)
   const basicToken = getContract({abiName: 'BasicToken', address: foreignTokenAddress})
 
@@ -87,7 +87,6 @@ function * transferToHome ({foreignTokenAddress, foreignBridgeAddress, value}) {
 
   yield fork(transactionFlow, {transactionPromise, action: actions.TRANSFER_TO_HOME})
 
-  const confirmationsLimit = CONFIG.web3.bridge.confirmations.home
   let isOpen = true
   while (isOpen) {
     const response = yield take(confirmationChannel)
@@ -99,7 +98,7 @@ function * transferToHome ({foreignTokenAddress, foreignBridgeAddress, value}) {
   }
 }
 
-function * transferToForeign ({homeTokenAddress, homeBridgeAddress, value}) {
+function * transferToForeign ({homeTokenAddress, homeBridgeAddress, value, confirmationsLimit}) {
   const accountAddress = yield select(getAccountAddress)
   const basicToken = getContract({abiName: 'BasicToken', address: homeTokenAddress})
 
@@ -112,7 +111,6 @@ function * transferToForeign ({homeTokenAddress, homeBridgeAddress, value}) {
 
   yield fork(transactionFlow, {transactionPromise, action: actions.TRANSFER_TO_FOREIGN})
 
-  const confirmationsLimit = CONFIG.web3.bridge.confirmations.foreign
   let isOpen = true
   while (isOpen) {
     const response = yield take(confirmationChannel)
