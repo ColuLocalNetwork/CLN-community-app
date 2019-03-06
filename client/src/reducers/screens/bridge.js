@@ -22,6 +22,10 @@ export default (state = initialState, action) => {
       return {...state, ...action.response}
     case TRANSFER_TO_FOREIGN.PENDING:
       return {...state, ...action.response}
+    case TRANSFER_TO_HOME.REQUEST:
+      return {...state, confirmationsLimit: action.confirmationsLimit}
+    case TRANSFER_TO_FOREIGN.REQUEST:
+      return {...state, confirmationsLimit: action.confirmationsLimit}
     case LOCATION_CHANGE:
       return initialState
     default:

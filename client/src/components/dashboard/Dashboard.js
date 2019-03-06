@@ -150,42 +150,8 @@ class Dashboard extends Component {
               }
             </div>
           </div>
-<<<<<<< HEAD
-          <div className='dashboard-sidebar'>
-            <div className='dashboard-network'>
-              <div className='dashboard-network-content'>
-                <div className='dashboard-network-title'>{this.props.networkType}</div>
-                <div className='dashboard-network-logo'>
-                  <img src={this.renderNetworkLogo(this.props.networkType)} />
-                </div>
-                <div className='dashboard-network-text'>Balance</div>
-                <div className='dashboard-network-balance'>3,500.00 <span>FSM</span></div>
-                <button className='dashboard-network-btn'>Show more</button>
-              </div>
-              <div className='dashboard-network-content network-arrow'>
-                <FontAwesome name='long-arrow-alt-right' />
-              </div>
-              <div className='dashboard-network-content'>
-                <div className='dashboard-network-title'>Fuse</div>
-                <div className='dashboard-network-logo fuse-logo'>
-                  <img src={FuseLogo} />
-                </div>
-                <div className='dashboard-network-text'>Balance</div>
-                <div className='dashboard-network-balance balance-fuse'>3,500.00 <span>POA</span></div>
-                <button className='dashboard-network-btn'>Show more</button>
-              </div>
-            </div>
-            <div className='dashboard-transfer'>
-              <div className='dashboard-transfer-form'>
-                <input value={this.state.transferToFuse} onChange={(e) => this.setTransferToFuse(e)} />
-                <div className='dashboard-transfer-form-currency'>POA</div>
-              </div>
-              <button className='dashboard-transfer-btn'>Transfer to fuse</button>
-            </div>
-=======
           <div>
             <Bridge accountAddress={this.props.accountAddress} token={this.props.token} foreignTokenAddress={this.props.match.params.address} />
->>>>>>> start work on confirmations
           </div>
         </div>
         {

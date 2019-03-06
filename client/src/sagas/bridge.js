@@ -7,6 +7,7 @@ import {zeroAddressToNull} from 'utils/web3'
 import {getAccountAddress} from 'selectors/accounts'
 import * as actions from 'actions/bridge'
 import * as api from 'services/api/token'
+import {balanceOfToken} from 'actions/accounts'
 
 export function * fetchHomeToken ({foreignTokenAddress}) {
   const contractAddress = yield select(state => state.network.addresses.fuse.BridgeMapper)
@@ -84,7 +85,7 @@ function * transferToHome ({foreignTokenAddress, foreignBridgeAddress, value}) {
 
   const confirmationChannel = yield call(createConfirmationChannel, transactionPromise)
 
-  transactionFlow({transactionPromise, action: actions.TRANSFER_TO_HOME})
+  yield fork(transactionFlow, {transactionPromise, action: actions.TRANSFER_TO_HOME})
 
   const confirmationsLimit = CONFIG.web3.bridge.confirmations.home
   let isOpen = true
@@ -103,7 +104,8 @@ function * transferToForeign ({homeTokenAddress, homeBridgeAddress, value}) {
   const basicToken = getContract({abiName: 'BasicToken', address: homeTokenAddress})
 
   const transactionPromise = basicToken.methods.transfer(homeBridgeAddress, value).send({
-    from: accountAddress
+    from: accountAddress,
+    gasPrice: 1e9
   })
 
   const confirmationChannel = yield call(createConfirmationChannel, transactionPromise)

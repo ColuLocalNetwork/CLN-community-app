@@ -13,5 +13,5 @@ export const fetchForeignBridge = (foreignTokenAddress) => requestAction(FETCH_F
 export const fetchHomeToken = (foreignTokenAddress) => requestAction(FETCH_HOME_TOKEN, {foreignTokenAddress})
 
 export const deployBridge = (foreignTokenAddress) => requestAction(DEPLOY_BRIDGE, {foreignTokenAddress})
-export const transferToHome = (foreignTokenAddress, foreignBridgeAddress, value) => requestAction(TRANSFER_TO_HOME, {foreignTokenAddress, foreignBridgeAddress, value})
-export const transferToForeign = (homeTokenAddress, homeBridgeAddress, value) => requestAction(TRANSFER_TO_FOREIGN, {homeTokenAddress, homeBridgeAddress, value})
+export const transferToHome = (foreignTokenAddress, foreignBridgeAddress, value) => requestAction(TRANSFER_TO_HOME, {foreignTokenAddress, foreignBridgeAddress, value, confirmationsLimit: CONFIG.web3.bridge.confirmations.home})
+export const transferToForeign = (homeTokenAddress, homeBridgeAddress, value) => requestAction(TRANSFER_TO_FOREIGN, {homeTokenAddress, homeBridgeAddress, value, confirmationsLimit: CONFIG.web3.bridge.confirmations.foreign})

@@ -8,7 +8,7 @@ import FontAwesome from 'react-fontawesome'
 import {balanceOfToken} from 'actions/accounts'
 import {fetchHomeToken, fetchForeignBridge, fetchHomeBridge, deployBridge, transferToHome, transferToForeign} from 'actions/bridge'
 import {getBalances} from 'selectors/accounts'
-import {getNetworkSide, getBridgeStatus} from 'selectors/network'
+import {getBridgeStatus} from 'selectors/network'
 import RopstenLogo from 'images/Ropsten.png'
 import FuseLogo from 'images/fuseLogo.svg'
 
@@ -19,6 +19,12 @@ const NetworkLogo = ({network}) => network === 'fuse'
 class Balance extends Component {
   componentDidMount () {
     this.props.balanceOfToken(this.props.tokenAddress, this.props.accountAddress, {networkBridge: this.props.bridgeSide.bridge})
+  }
+
+  componentDidUpdate (prevProps) {
+    if (this.props.waitingForConfirmation === false && prevProps.waitingForConfirmation) {
+      this.props.balanceOfToken(this.props.tokenAddress, this.props.accountAddress, {networkBridge: this.props.bridgeSide.bridge})
+    }
   }
 
   render = () => <div className='dashboard-network-content'>
@@ -64,6 +70,11 @@ class Bridge extends Component {
     }
   }
 
+  isConfirmed = () => this.props.confirmationsLimit <= this.props.confirmationNumber
+  isSent = () => this.props.transactionStatus === 'PENDING' || this.props.transactionStatus === 'SUCCESS'
+
+  isWaitingForConfirmation = () => this.isSent() && !this.isConfirmed()
+
   render = () => (<div className='dashboard-sidebar'>
     {(this.props.foreignTokenAddress && this.props.homeTokenAddress) ? <div className='dashboard-network'>
       <Balance
@@ -73,6 +84,7 @@ class Bridge extends Component {
         token={this.props.token}
         balances={this.props.balances}
         bridgeSide={this.props.bridgeStatus.from}
+        waitingForConfirmation={this.isWaitingForConfirmation()}
       />
       <div className='dashboard-network-content network-arrow'>
         <FontAwesome name='long-arrow-alt-right' />
@@ -84,6 +96,7 @@ class Bridge extends Component {
         token={this.props.token}
         balances={this.props.balances}
         bridgeSide={this.props.bridgeStatus.to}
+        waitingForConfirmation={this.isWaitingForConfirmation()}
       />
     </div> : null}
     <div className='dashboard-transfer'>
@@ -94,11 +107,15 @@ class Bridge extends Component {
               <input value={this.state.transferToFuse} onChange={this.setTransferToFuse} />
               <div className='dashboard-transfer-form-currency'>{this.props.token.symbol}</div>
             </div>
-            <button disabled={this.props.transactionStatus === 'PENDING'}
+            <button disabled={this.isWaitingForConfirmation()}
               className='dashboard-transfer-btn' onClick={this.handleTransfer}>
               Transfer to fuse
             </button>
-            <span>Confirmations: {this.props.confirmationNumber} </span>
+            {
+              this.isWaitingForConfirmation()
+                ? <span>Confirmations: {this.props.confirmationNumber} / {this.props.confirmationsLimit} </span>
+                : null
+            }
           </div>
         ) : (
           <button className='dashboard-transfer-btn'
@@ -136,7 +153,6 @@ const mapStateToProps = (state) => ({
   homeNetwork: state.network.homeNetwork,
   foreignNetwork: state.network.foreignNetwork,
   bridgeStatus: getBridgeStatus(state),
-  networkSide: getNetworkSide(state),
   balances: getBalances(state)
 })
 
