@@ -20,9 +20,9 @@ const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
 
 class UserDataModal extends React.Component {
   componentDidMount (prevProps) {
-    if (this.props.token.owner === this.props.accountAddress && !this.props.userExists) {
+    //if (this.props.token.owner === this.props.accountAddress && !this.props.userExists) {
       this.timerId = setTimeout(this.props.loadUserDataModal, LOAD_USER_DATA_MODAL_TIMEOUT)
-    }
+    //}
   }
 
   componentWillUnmount () {
@@ -189,11 +189,11 @@ class Dashboard extends Component {
                     value={this.state.transferToFuse}
                     type='number'
                     onChange={(e) => this.setTransferToFuse(e)}
-                    onKeyDown={(evt) => this.checkCondition(evt, (evt.key === 'e' || evt.key === '-'))}
+                    onKeyDown={(evt) => this.checkCondition(evt, (evt.key === 'e' || evt.key === '-' || evt.key === 'E' || evt.key === '+'))}
                   />
                   <div className='dashboard-transfer-form-currency'>POA</div>
                 </div>
-                <button className='dashboard-transfer-btn'>Transfer to fuse</button>
+                <button className='dashboard-transfer-btn' disabled={this.state.transferToFuse === 0 || !this.state.transferToFuse}>Transfer to fuse</button>
               </div>
               <div className='dashboard-network-content network-arrow'>
                 <FontAwesome name='long-arrow-alt-right' />

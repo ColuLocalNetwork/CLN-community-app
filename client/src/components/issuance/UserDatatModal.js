@@ -22,6 +22,11 @@ class UserDatatModal extends Component {
   setCountry = country => this.setState({country: country})
   setSubscribe = e => this.setState({subscribe: e.target.checked})
 
+  validateText = (state) => {
+    const re = /^\d+$/
+    return re.test(state)
+  }
+
   validateEmail = () => {
     const re = /[a-z0-9!#$%&'*+\\/=?^_{|}~-]+(?:\.[a-z0-9!#$%&'*+\\/=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9][a-z0-9-]*[a-z0-9]/
     return re.test(this.state.email)
@@ -39,6 +44,8 @@ class UserDatatModal extends Component {
   }
 
   render () {
+    console.log(this.validateText(this.state.firstName))
+    console.log(this.validateText(this.state.lastName))
     return (
       <Modal className='issued-popup' onClose={this.props.hideModal}>
         <div className='issued-popup-close' onClick={() => this.props.hideModal()}>
@@ -52,23 +59,29 @@ class UserDatatModal extends Component {
           <p className='issued-popup-text'>{"Let's continue this wonderful relationship"}</p>
           <div className='form-control'>
             <label>First Name</label>
-            <input
-              id='firstName'
-              type='text'
-              placeholder='Type your first name'
-              value={this.state.firstName}
-              onChange={this.setFirstName}
-            />
+            <div className='form-control-with-error'>
+              <input
+                id='firstName'
+                type='text'
+                placeholder='Type your first name'
+                value={this.state.firstName}
+                onChange={this.setFirstName}
+              />
+              {this.validateText(this.state.firstName) && <p className='error-text'>Please type only letters for First Name</p>}
+            </div>
           </div>
           <div className='form-control'>
             <label>Last Name</label>
-            <input
-              id='lastName'
-              type='text'
-              placeholder='Type your last name'
-              value={this.state.lastName}
-              onChange={this.setLastName}
-            />
+            <div className='form-control-with-error'>
+              <input
+                id='lastName'
+                type='text'
+                placeholder='Type your last name'
+                value={this.state.lastName}
+                onChange={this.setLastName}
+              />
+              {this.validateText(this.state.lastName) && <p className='error-text'>Please type only letters for Last Name</p>}
+            </div>
           </div>
           <div className='form-control'>
             <label>Email Address</label>
@@ -112,6 +125,8 @@ class UserDatatModal extends Component {
               this.state.firstName.length < 3 ||
               this.state.lastName.trim() === '' ||
               this.state.lastName.length < 3 ||
+              !this.validateText(this.state.firstName) ||
+              !this.validateText(this.state.lastName) ||
               !this.validateEmail()
             }
             className='issued-popup-btn'
