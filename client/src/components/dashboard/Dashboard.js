@@ -19,9 +19,9 @@ const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
 
 class UserDataModal extends React.Component {
   componentDidMount (prevProps) {
-    if (this.props.token.owner === this.props.accountAddress && !this.props.userExists) {
+    //if (this.props.token.owner === this.props.accountAddress && !this.props.userExists) {
       this.timerId = setTimeout(this.props.loadUserDataModal, LOAD_USER_DATA_MODAL_TIMEOUT)
-    }
+    //}
   }
 
   componentWillUnmount () {
