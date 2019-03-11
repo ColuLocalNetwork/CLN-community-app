@@ -13,6 +13,7 @@ import TopNav from './../TopNav'
 import Breadcrumbs from './../elements/Breadcrumbs'
 import ActivityContent from './ActivityContent'
 import Bridge from './Bridge'
+import {getBlockExplorerUrl} from 'utils/network'
 
 const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
 
@@ -96,6 +97,11 @@ class Dashboard extends Component {
     tokenAddress: this.props.match.params.address
   })
 
+  openBlockExplorer = () => {
+    const explorerUrl = `${getBlockExplorerUrl(this.props.foreignNetwork)}/address/${this.props.match.params.address}`
+    window.open(explorerUrl, '_blank')
+  }
+
   render () {
     if (!this.props.token) {
       return null
@@ -132,6 +138,7 @@ class Dashboard extends Component {
                   <span className='text-asset'>Asset ID</span>
                   <form>
                     <textarea
+                      onClick={this.openBlockExplorer}
                       ref={textarea => (this.textArea = textarea)}
                       value={this.props.match.params.address}
                       readOnly
@@ -169,6 +176,7 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = (state, {match}) => ({
+  foreignNetwork: state.network.foreignNetwork,
   token: state.entities.tokens[match.params.address],
   metadata: state.entities.metadata,
   dashboard: state.screens.dashboard,

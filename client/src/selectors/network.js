@@ -40,12 +40,6 @@ export const getBridgeStatus = createSelector(
     }
   }
 )
-export const getEtherscanUrl = createSelector(
-  getNetworkType,
-  networkType => networkType === 'main'
-    ? 'https://etherscan.io/'
-    : 'https://ropsten.etherscan.io/'
-)
 
 export const getApiRoot = createSelector(
   getNetworkType,
