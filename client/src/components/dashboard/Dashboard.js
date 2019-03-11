@@ -150,9 +150,7 @@ class Dashboard extends Component {
               }
             </div>
           </div>
-          <div>
-            <Bridge accountAddress={this.props.accountAddress} token={this.props.token} foreignTokenAddress={this.props.match.params.address} />
-          </div>
+          <Bridge accountAddress={this.props.accountAddress} token={this.props.token} foreignTokenAddress={this.props.match.params.address} />
         </div>
         {
           this.props.token && this.props.accountAddress && this.props.dashboard.hasOwnProperty('userExists') &&

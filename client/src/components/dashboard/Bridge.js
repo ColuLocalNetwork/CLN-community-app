@@ -75,7 +75,7 @@ class Bridge extends Component {
 
   isWaitingForConfirmation = () => this.isSent() && !this.isConfirmed()
 
-  render = () => (<div className='dashboard-sidebar'>
+  render = () => (<div className='dashboard-bridge'>
     {(this.props.foreignTokenAddress && this.props.homeTokenAddress) ? <div className='dashboard-network'>
       <Balance
         balanceOfToken={this.props.balanceOfToken}
