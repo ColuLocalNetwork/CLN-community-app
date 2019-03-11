@@ -7,6 +7,7 @@ import FontAwesome from 'react-fontawesome'
 
 import {balanceOfToken} from 'actions/accounts'
 import {fetchHomeToken, fetchForeignBridge, fetchHomeBridge, deployBridge, transferToHome, transferToForeign, watchForeignBridge} from 'actions/bridge'
+import {getBlockNumber} from 'actions/network'
 import {getBalances} from 'selectors/accounts'
 import {getBridgeStatus} from 'selectors/network'
 import RopstenLogo from 'images/Ropsten.png'
@@ -80,6 +81,8 @@ class Bridge extends Component {
     } else {
       this.props.transferToForeign(this.props.homeTokenAddress, this.props.homeBridgeAddress, value)
     }
+    this.props.getBlockNumber(this.props.bridgeStatus.to.network)
+    this.props.getBlockNumber(this.props.bridgeStatus.from.network)
   }
 
   render = () => (<div className='dashboard-sidebar'>
@@ -175,7 +178,8 @@ const mapDispatchToProps = {
   fetchForeignBridge,
   transferToHome,
   transferToForeign,
-  watchForeignBridge
+  watchForeignBridge,
+  getBlockNumber
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BridgeContainer)

@@ -1,4 +1,4 @@
-import { call, all, put, select } from 'redux-saga/effects'
+import { call, all, put, select, takeEvery } from 'redux-saga/effects'
 
 import {apiCall, tryTakeEvery} from './utils'
 import {getContract} from 'services/contract'
