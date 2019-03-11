@@ -31,15 +31,15 @@ function * getAccountAddress () {
 }
 
 function * deduceBridgeSides (networkType) {
-  if (networkType === 'ropsten' || networkType === 'main') {
-    return {
-      foreignNetwork: networkType,
-      homeNetwork: 'fuse'
-    }
-  } else {
+  if (networkType === 'fuse') {
     const foreignNetwork = yield select(state => state.network.foreignNetwork)
     return {
       foreignNetwork,
+      homeNetwork: 'fuse'
+    }
+  } else {
+    return {
+      foreignNetwork: networkType,
       homeNetwork: 'fuse'
     }
   }
