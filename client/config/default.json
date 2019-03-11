@@ -23,7 +23,11 @@
         "home": 1,
         "foreign": 8
       },
-      "pollingTimeout": 5000
+      "pollingTimeout": 5000,
+      "network": {
+        "homeNetwork": "fuse",
+        "foreignNetwork": "ropsten"
+      }
     }
   },
   "api": {
