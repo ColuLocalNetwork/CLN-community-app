@@ -1,9 +1,10 @@
-import { call, all, put, select, takeEvery } from 'redux-saga/effects'
+import { call, all, put, select, delay } from 'redux-saga/effects'
 
 import {apiCall, tryTakeEvery} from './utils'
 import {getContract} from 'services/contract'
 import {zeroAddressToNull} from 'utils/web3'
 import {getAccountAddress} from 'selectors/accounts'
+import {getBlockNumber} from 'selectors/network'
 import {transactionFlow} from './transaction'
 import * as actions from 'actions/bridge'
 import * as api from 'services/api/token'
@@ -85,20 +86,55 @@ function * transferToForeign ({homeTokenAddress, homeBridgeAddress, value, confi
   yield call(transactionFlow, {transactionPromise, action, confirmationsLimit})
 }
 
-function * watchForeignBridge ({foreignBridgeAddress, fromBlock}) {
-  const options = {networkBridge: 'foreign'}
-  const foreignBridge = getContract({abiName: 'BasicForeignBridge', address: foreignBridgeAddress, options})
+function * watchForeignBridge ({foreignBridgeAddress}) {
+  const foreignNetwork = yield select(state => state.network.foreignNetwork)
+  const fromBlock = yield select(getBlockNumber, foreignNetwork)
+  let relayEvent = null
 
-  // foreignBridge.getPastEvents('RelayedMessage', {fromBlock: '5149856'}, (error, events) => {
-  //   console.log(events)
-  //   debugger
-  // })
+  while (!relayEvent) {
+    const options = {networkBridge: 'foreign'}
+    const foreignBridge = getContract({abiName: 'BasicForeignBridge', address: foreignBridgeAddress, options})
+    const events = yield foreignBridge.getPastEvents('RelayedMessage', {fromBlock})
+    yield delay(5000)
 
-  const events = yield foreignBridge.getPastEvents('RelayedMessage', {fromBlock})
-  debugger
+    if (events.length) {
+      relayEvent = events[0]
+    }
+  }
+
+  yield put({
+    type: actions.WATCH_FOREIGN_BRIDGE.SUCCESS,
+    response: {
+      relayEvent
+    }
+  })
 }
 
-export default function * marketMakerSaga () {
+function * watchHomeBridge ({homeBridgeAddress}) {
+  const homeNetwork = yield select(state => state.network.homeNetwork)
+  const fromBlock = yield select(getBlockNumber, homeNetwork)
+  let relayEvent = null
+
+  while (!relayEvent) {
+    const options = {networkBridge: 'home'}
+    const foreignBridge = getContract({abiName: 'BasicHomeBridge', address: homeBridgeAddress, options})
+    const events = yield foreignBridge.getPastEvents('AffirmationCompleted', {fromBlock})
+    yield delay(5000)
+
+    if (events.length) {
+      relayEvent = events[0]
+    }
+  }
+
+  yield put({
+    type: actions.WATCH_HOME_BRIDGE.SUCCESS,
+    response: {
+      relayEvent
+    }
+  })
+}
+
+export default function * bridgeSaga () {
   yield all([
     tryTakeEvery(actions.FETCH_HOME_TOKEN, fetchHomeToken, 1),
     tryTakeEvery(actions.FETCH_HOME_BRIDGE, fetchHomeBridge, 1),
@@ -106,6 +142,7 @@ export default function * marketMakerSaga () {
     tryTakeEvery(actions.DEPLOY_BRIDGE, deployBridge, 1),
     tryTakeEvery(actions.TRANSFER_TO_HOME, transferToHome, 1),
     tryTakeEvery(actions.TRANSFER_TO_FOREIGN, transferToForeign, 1),
-    tryTakeEvery(actions.WATCH_FOREIGN_BRIDGE, watchForeignBridge, 1)
+    tryTakeEvery(actions.WATCH_FOREIGN_BRIDGE, watchForeignBridge, 1),
+    tryTakeEvery(actions.WATCH_HOME_BRIDGE, watchHomeBridge, 1)
   ])
 }

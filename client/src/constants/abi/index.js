@@ -6,4 +6,5 @@ module.exports = {
   BridgeMapper: require('./BridgeMapper'),
   BasicToken: require('./BasicToken'),
   BasicForeignBridge: require('./BasicForeignBridge'),
+  BasicHomeBridge: require('./BasicHomeBridge')
 }
