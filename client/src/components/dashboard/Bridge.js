@@ -61,9 +61,9 @@ class Bridge extends Component {
   componentDidUpdate (prevProps) {
     if (this.props.waitingForConfirmation && !prevProps.waitingForConfirmation) {
       if (this.props.bridgeStatus.to.bridge === 'home') {
-        this.props.watchHomeBridge(this.props.homeBridgeAddress)
+        this.props.watchHomeBridge(this.props.homeBridgeAddress, this.props.transactionHash)
       } else {
-        this.props.watchForeignBridge(this.props.foreignBridgeAddress)
+        this.props.watchForeignBridge(this.props.foreignBridgeAddress, this.props.transactionHash)
       }
     }
 
@@ -97,7 +97,6 @@ class Bridge extends Component {
         balances={this.props.balances}
         bridgeSide={this.props.bridgeStatus.from}
         transferStatus={this.props.transferStatus}
-        waitingForConfirmation={this.props.waitingForConfirmation}
       />
       <div className='dashboard-network-content network-arrow'>
         <FontAwesome name='long-arrow-alt-right' />
@@ -110,7 +109,6 @@ class Bridge extends Component {
         balances={this.props.balances}
         bridgeSide={this.props.bridgeStatus.to}
         transferStatus={this.props.transferStatus}
-        waitingForConfirmation={this.props.waitingForConfirmation}
       />
     </div> : null}
     <div className='dashboard-transfer'>
@@ -118,10 +116,10 @@ class Bridge extends Component {
         this.props.foreignBridgeAddress ? (
           <div>
             <div className='dashboard-transfer-form'>
-              <input value={this.state.transferAmount} onChange={this.setTransferAmount} />
+              <input type='number' value={this.state.transferAmount} onChange={this.setTransferAmount} disabled={this.props.transferStatus} />
               <div className='dashboard-transfer-form-currency'>{this.props.token.symbol}</div>
             </div>
-            <button disabled={this.props.transferStatus}
+            <button disabled={this.props.transferStatus || !Number(this.state.transferAmount)}
               className='dashboard-transfer-btn' onClick={this.handleTransfer}>
               {this.props.transferStatus || `Transfer to ${this.props.bridgeStatus.to.network}`}
             </button>

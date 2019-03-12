@@ -22,7 +22,8 @@
       "confirmations": {
         "home": 1,
         "foreign": 8
-      }
+      },
+      "pollingTimeout": 5000
     }
   },
   "api": {

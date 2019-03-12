@@ -19,5 +19,5 @@ export const deployBridge = (foreignTokenAddress) => requestAction(DEPLOY_BRIDGE
 export const transferToHome = (foreignTokenAddress, foreignBridgeAddress, value) => requestAction(TRANSFER_TO_HOME, {foreignTokenAddress, foreignBridgeAddress, value, confirmationsLimit: CONFIG.web3.bridge.confirmations.foreign})
 export const transferToForeign = (homeTokenAddress, homeBridgeAddress, value) => requestAction(TRANSFER_TO_FOREIGN, {homeTokenAddress, homeBridgeAddress, value, confirmationsLimit: CONFIG.web3.bridge.confirmations.home})
 
-export const watchForeignBridge = (foreignBridgeAddress) => requestAction(WATCH_FOREIGN_BRIDGE, {foreignBridgeAddress})
-export const watchHomeBridge = (homeBridgeAddress) => requestAction(WATCH_HOME_BRIDGE, {homeBridgeAddress})
+export const watchForeignBridge = (foreignBridgeAddress, transactionHash) => requestAction(WATCH_FOREIGN_BRIDGE, {foreignBridgeAddress, transactionHash})
+export const watchHomeBridge = (homeBridgeAddress, transactionHash) => requestAction(WATCH_HOME_BRIDGE, {homeBridgeAddress, transactionHash})

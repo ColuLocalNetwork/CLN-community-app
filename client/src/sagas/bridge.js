@@ -86,21 +86,34 @@ function * transferToForeign ({homeTokenAddress, homeBridgeAddress, value, confi
   yield call(transactionFlow, {transactionPromise, action, confirmationsLimit})
 }
 
-function * watchForeignBridge ({foreignBridgeAddress}) {
-  const foreignNetwork = yield select(state => state.network.foreignNetwork)
-  const fromBlock = yield select(getBlockNumber, foreignNetwork)
-  let relayEvent = null
-
-  while (!relayEvent) {
-    const options = {networkBridge: 'foreign'}
-    const foreignBridge = getContract({abiName: 'BasicForeignBridge', address: foreignBridgeAddress, options})
-    const events = yield foreignBridge.getPastEvents('RelayedMessage', {fromBlock})
-    yield delay(5000)
-
-    if (events.length) {
-      relayEvent = events[0]
+const getRelayEventByTransactionHash = (events, transactionHash) => {
+  for (let ev of events) {
+    if (ev.returnValues.transactionHash === transactionHash) {
+      return ev
     }
   }
+}
+
+function * pollForBridgeEvent ({bridgeContract, transactionHash, fromBlock, eventName}) {
+  while (true) {
+    const events = yield bridgeContract.getPastEvents(eventName, {fromBlock})
+    const bridgeEvent = getRelayEventByTransactionHash(events, transactionHash)
+
+    if (bridgeEvent) {
+      return bridgeEvent
+    }
+
+    yield delay(CONFIG.web3.bridge.pollingTimeout)
+  }
+}
+
+function * watchForeignBridge ({foreignBridgeAddress, transactionHash}) {
+  const foreignNetwork = yield select(state => state.network.foreignNetwork)
+  const fromBlock = yield select(getBlockNumber, foreignNetwork)
+  const options = {networkBridge: 'foreign'}
+  const bridgeContract = getContract({abiName: 'BasicForeignBridge', address: foreignBridgeAddress, options})
+
+  const relayEvent = yield pollForBridgeEvent({bridgeContract, transactionHash, fromBlock, eventName: 'RelayedMessage'})
 
   yield put({
     type: actions.WATCH_FOREIGN_BRIDGE.SUCCESS,
@@ -110,21 +123,13 @@ function * watchForeignBridge ({foreignBridgeAddress}) {
   })
 }
 
-function * watchHomeBridge ({homeBridgeAddress}) {
+function * watchHomeBridge ({homeBridgeAddress, transactionHash}) {
   const homeNetwork = yield select(state => state.network.homeNetwork)
   const fromBlock = yield select(getBlockNumber, homeNetwork)
-  let relayEvent = null
+  const options = {networkBridge: 'home'}
+  const bridgeContract = getContract({abiName: 'BasicHomeBridge', address: homeBridgeAddress, options})
 
-  while (!relayEvent) {
-    const options = {networkBridge: 'home'}
-    const foreignBridge = getContract({abiName: 'BasicHomeBridge', address: homeBridgeAddress, options})
-    const events = yield foreignBridge.getPastEvents('AffirmationCompleted', {fromBlock})
-    yield delay(5000)
-
-    if (events.length) {
-      relayEvent = events[0]
-    }
-  }
+  const relayEvent = yield pollForBridgeEvent({bridgeContract, transactionHash, fromBlock, eventName: 'AffirmationCompleted'})
 
   yield put({
     type: actions.WATCH_HOME_BRIDGE.SUCCESS,
