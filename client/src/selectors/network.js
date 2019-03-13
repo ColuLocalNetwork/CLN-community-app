@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect'
 
 export const getNetworkType = state => state.network.networkType
+export const getForeignNetwork = state => state.network.foreignNetwork
 
 export const getAddresses = createSelector(
   getNetworkType,
@@ -42,6 +43,6 @@ export const getBridgeStatus = createSelector(
 )
 
 export const getApiRoot = createSelector(
-  getNetworkType,
+  getForeignNetwork,
   networkType => CONFIG.api.url[networkType] || CONFIG.api.url.default
 )
