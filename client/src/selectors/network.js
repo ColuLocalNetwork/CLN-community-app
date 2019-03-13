@@ -5,8 +5,11 @@ export const getForeignNetwork = state => state.network.foreignNetwork
 
 export const getAddresses = createSelector(
   getNetworkType,
+  getForeignNetwork,
   state => state.network.addresses,
-  (networkType, addresses) => addresses[networkType] || {}
+  (networkType, foreignNetwork, addresses) => addresses[networkType]
+    ? {...addresses[networkType], ...addresses.fuse[foreignNetwork]}
+    : {}
 )
 
 export const getAddress = (state, contractName) => getAddresses(state)[contractName]

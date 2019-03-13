@@ -4,13 +4,13 @@ import {apiCall, tryTakeEvery} from './utils'
 import {getContract} from 'services/contract'
 import {zeroAddressToNull} from 'utils/web3'
 import {getAccountAddress} from 'selectors/accounts'
-import {getBlockNumber} from 'selectors/network'
+import {getBlockNumber, getAddress} from 'selectors/network'
 import {transactionFlow} from './transaction'
 import * as actions from 'actions/bridge'
 import * as api from 'services/api/token'
 
 export function * fetchHomeToken ({foreignTokenAddress}) {
-  const contractAddress = yield select(state => state.network.addresses.fuse.BridgeMapper)
+  const contractAddress = yield select(getAddress, 'BridgeMapper')
   const options = {networkBridge: 'home'}
   const bridgeMapperContract = getContract({abiName: 'BridgeMapper', address: contractAddress, options})
   const homeTokenAddress = yield bridgeMapperContract.methods.homeTokenByForeignToken(foreignTokenAddress).call()
@@ -24,7 +24,7 @@ export function * fetchHomeToken ({foreignTokenAddress}) {
 }
 
 export function * fetchHomeBridge ({foreignTokenAddress}) {
-  const contractAddress = yield select(state => state.network.addresses.fuse.BridgeMapper)
+  const contractAddress = yield select(getAddress, 'BridgeMapper')
   const options = {networkBridge: 'home'}
   const bridgeMapperContract = getContract({abiName: 'BridgeMapper', address: contractAddress, options})
   const homeBridgeAddress = yield bridgeMapperContract.methods.homeBridgeByForeignToken(foreignTokenAddress).call()
@@ -38,7 +38,7 @@ export function * fetchHomeBridge ({foreignTokenAddress}) {
 }
 
 export function * fetchForeignBridge ({foreignTokenAddress}) {
-  const contractAddress = yield select(state => state.network.addresses.fuse.BridgeMapper)
+  const contractAddress = yield select(getAddress, 'BridgeMapper')
   const options = {networkBridge: 'home'}
   const bridgeMapperContract = getContract({abiName: 'BridgeMapper', address: contractAddress, options})
   const foreignBridgeAddress = yield bridgeMapperContract.methods.foreignBridgeByForeignToken(foreignTokenAddress).call()
