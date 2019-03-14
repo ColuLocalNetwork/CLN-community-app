@@ -38,7 +38,7 @@ const getWeb3ByNetwork = ({networkType} = {}) => {
   }
   const networkId = networkNameToId[networkType]
 
-  if (Web3.givenProvider.networkVersion === networkId) {
+  if (Web3.givenProvider.networkVersion === String(networkId)) {
     return givenWeb3
   }
 
