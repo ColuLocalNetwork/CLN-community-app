@@ -60,8 +60,8 @@ function * addUser ({user, tokenAddress}) {
   })
 }
 
-function * isUserExists ({accountAddress}) {
-  const response = yield apiCall(api.isUserExists, {accountAddress})
+function * isUserExists ({accountAddress, options}) {
+  const response = yield apiCall(api.isUserExists, {accountAddress}, options)
 
   yield put({
     type: actions.IS_USER_EXISTS.SUCCESS,

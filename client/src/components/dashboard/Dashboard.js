@@ -52,9 +52,9 @@ class Dashboard extends Component {
       this.props.fetchToken(this.props.tokenAddress, {networkType: this.props.tokenNetworkType})
     }
     if (this.props.accountAddress) {
-      this.props.isUserExists(this.props.accountAddress)
+      this.props.isUserExists(this.props.accountAddress, {networkType: this.props.tokenNetworkType})
     }
-    if (this.props.tokenNetworkType !== this.props.networkType) {
+    if (this.props.networkType !== 'fuse' && this.props.tokenNetworkType !== this.props.networkType) {
       this.props.loadModal(WRONG_NETWORK_MODAL)
     }
     document.addEventListener('mousedown', this.handleClickOutside)
@@ -66,7 +66,7 @@ class Dashboard extends Component {
     }
 
     if (this.props.accountAddress && !prevProps.accountAddress) {
-      this.props.isUserExists(this.props.accountAddress)
+      this.props.isUserExists(this.props.accountAddress, {networkType: this.props.tokenNetworkType})
     }
   }
 
@@ -101,7 +101,7 @@ class Dashboard extends Component {
   })
 
   openBlockExplorer = () => {
-    const explorerUrl = `${getBlockExplorerUrl(this.props.foreignNetwork)}/address/${this.props.tokenAddress}`
+    const explorerUrl = `${getBlockExplorerUrl(this.props.tokenNetworkType)}/address/${this.props.tokenAddress}`
     window.open(explorerUrl, '_blank')
   }
 
@@ -179,7 +179,6 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = (state, {match}) => ({
-  foreignNetwork: state.network.foreignNetwork,
   networkType: state.network.networkType,
   token: state.entities.tokens[match.params.address],
   tokenAddress: match.params.address,

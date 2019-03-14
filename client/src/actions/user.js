@@ -10,4 +10,4 @@ export const login = () => requestAction(LOGIN)
 export const logout = () => requestAction(LOGOUT)
 
 export const addUser = (user, tokenAddress) => requestAction(ADD_USER, {user, tokenAddress})
-export const isUserExists = (accountAddress) => requestAction(IS_USER_EXISTS, {accountAddress})
+export const isUserExists = (accountAddress, options) => requestAction(IS_USER_EXISTS, {accountAddress, options})
