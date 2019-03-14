@@ -1,17 +1,17 @@
 import Web3 from 'web3'
 
-export const getWeb3 = ({networkBridge} = {}) => {
-  if (!networkBridge) {
+export const getWeb3 = ({bridgeType} = {}) => {
+  if (!bridgeType) {
     return givenWeb3
   }
-  if (networkBridge === 'home' && Web3.givenProvider.networkVersion === '121') {
+  if (bridgeType === 'home' && Web3.givenProvider.networkVersion === '121') {
     return givenWeb3
   }
 
-  if (networkBridge === 'foreign' && Web3.givenProvider.networkVersion !== '121') {
+  if (bridgeType === 'foreign' && Web3.givenProvider.networkVersion !== '121') {
     return givenWeb3
   }
-  const web3 = web3ByBridge[networkBridge]
+  const web3 = web3ByBridge[bridgeType]
   return web3
 }
 

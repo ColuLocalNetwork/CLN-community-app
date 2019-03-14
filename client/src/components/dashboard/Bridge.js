@@ -28,16 +28,16 @@ const NetworkLogo = ({network}) => {
 class Balance extends Component {
   componentDidMount () {
     if (this.props.accountAddress) {
-      this.props.balanceOfToken(this.props.tokenAddress, this.props.accountAddress, {networkBridge: this.props.bridgeSide.bridge})
+      this.props.balanceOfToken(this.props.tokenAddress, this.props.accountAddress, {bridgeType: this.props.bridgeSide.bridge})
     }
   }
 
   componentDidUpdate (prevProps) {
     if (!this.props.transferStatus && prevProps.transferStatus) {
-      this.props.balanceOfToken(this.props.tokenAddress, this.props.accountAddress, {networkBridge: this.props.bridgeSide.bridge})
+      this.props.balanceOfToken(this.props.tokenAddress, this.props.accountAddress, {bridgeType: this.props.bridgeSide.bridge})
     }
     if (this.props.accountAddress && !prevProps.accountAddress) {
-      this.props.balanceOfToken(this.props.tokenAddress, this.props.accountAddress, {networkBridge: this.props.bridgeSide.bridge})
+      this.props.balanceOfToken(this.props.tokenAddress, this.props.accountAddress, {bridgeType: this.props.bridgeSide.bridge})
     }
   }
 
