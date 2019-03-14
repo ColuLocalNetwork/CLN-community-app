@@ -8,3 +8,5 @@ const blockExplorers = {
 }
 
 export const getBlockExplorerUrl = (networkType) => blockExplorers[networkType]
+
+export const getApiRoot = (networkType) => CONFIG.api.url[networkType]

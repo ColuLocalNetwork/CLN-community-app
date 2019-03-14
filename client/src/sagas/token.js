@@ -20,11 +20,11 @@ const fetchTokens = createEntitiesFetch(actions.FETCH_TOKENS, api.fetchTokens)
 const fetchTokensByOwner = createEntitiesFetch(actions.FETCH_TOKENS_BY_OWNER, api.fetchTokensByOwner)
 export const fetchTokensByAccount = createEntitiesFetch(actions.FETCH_TOKENS_BY_ACCOUNT, api.fetchTokensByAccount)
 
-function * fetchToken ({tokenAddress}) {
-  const response = yield apiCall(api.fetchToken, {tokenAddress})
+function * fetchToken ({tokenAddress, options}) {
+  const response = yield apiCall(api.fetchToken, {tokenAddress}, options)
   const token = response.data
 
-  yield put(fetchMetadata(token.tokenURI, tokenAddress))
+  yield put(fetchMetadata(token.tokenURI, tokenAddress, options))
 
   yield entityPut({
     type: actions.FETCH_TOKEN.SUCCESS,

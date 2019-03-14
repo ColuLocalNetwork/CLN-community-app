@@ -22,7 +22,7 @@ export const fetchTokens = (page) => tokenAction(FETCH_TOKENS.REQUEST, {page})
 export const fetchTokensByOwner = (owner) => tokenAction(FETCH_TOKENS_BY_OWNER.REQUEST, {owner})
 export const fetchTokensByAccount = (accountAddress) => tokenAction(FETCH_TOKENS_BY_ACCOUNT.REQUEST, {accountAddress})
 
-export const fetchToken = (tokenAddress) => tokenAction(FETCH_TOKEN.REQUEST, {tokenAddress})
+export const fetchToken = (tokenAddress, options) => tokenAction(FETCH_TOKEN.REQUEST, {tokenAddress, options})
 
 export const fetchClnToken = () => tokenAction(FETCH_CLN_TOKEN.REQUEST)
 

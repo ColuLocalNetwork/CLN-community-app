@@ -44,8 +44,3 @@ export const getBridgeStatus = createSelector(
     }
   }
 )
-
-export const getApiRoot = createSelector(
-  getForeignNetwork,
-  networkType => CONFIG.api.url[networkType] || CONFIG.api.url.default
-)
