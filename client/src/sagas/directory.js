@@ -2,12 +2,13 @@ import { all, call, put, select } from 'redux-saga/effects'
 
 import {getContract} from 'services/contract'
 import * as actions from 'actions/directory'
-import {tryTakeEvery} from './utils'
+import {apiCall, tryTakeEvery} from './utils'
 import {getAccountAddress} from 'selectors/accounts'
 import {getAddress} from 'selectors/network'
 import {createMetadata} from 'sagas/metadata'
 import {fetchMetadata} from 'actions/metadata'
 import {isZeroAddress} from 'utils/web3'
+import {processReceipt} from 'services/api/misc'
 
 export function * createList ({tokenAddress}) {
   const accountAddress = yield select(getAccountAddress)
@@ -52,8 +53,11 @@ export function * addEntity ({listAddress, data}) {
   const {hash} = yield call(createMetadata, {metadata: data})
 
   const receipt = yield SimpleListContract.methods.addEntity(hash).send({
-    from: accountAddress
+    from: accountAddress,
+    gasPrice: 1e9
   })
+
+  yield apiCall(processReceipt, {receipt})
 
   yield put({type: actions.ADD_DIRECTORY_ENTITY.SUCCESS,
     response: {
