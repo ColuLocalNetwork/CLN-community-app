@@ -50,7 +50,7 @@ class Balance extends Component {
         ? new BigNumber(this.props.balances[this.props.tokenAddress]).div(1e18).toFormat(2, 1)
         : 0 }
       </span>
-      <span>{this.props.token.symbol}</span>
+      <span> {this.props.token.symbol}</span>
     </div>
     <button className='dashboard-network-btn'>Show more</button>
   </div>
