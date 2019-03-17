@@ -6,13 +6,16 @@ const Networks = ({networks}) => networks.map(network => <strong key={network} c
   .reduce((prev, curr) => [prev, ' or ', curr])
 
 class WrongNetworkModal extends React.Component {
-  onClose = () => {
+  handleClose = () => {
     this.props.hideModal()
+    if (this.props.handleClose) {
+      this.props.handleClose()
+    }
   }
 
   render () {
     return (
-      <Modal onClose={this.onClose}>
+      <Modal onClose={this.handleClose}>
         <h4>{'Hi there, seems that you\'re on the wrong network.'}</h4>
         <p>Please open Metamask and switch to the <Networks networks={this.props.supportedNetworks} /> to view correct CLN and CC information</p>
       </Modal>
@@ -25,7 +28,8 @@ WrongNetworkModal.defaultProps = {
 }
 
 WrongNetworkModal.propTypes = {
-  supportedNetworks: PropTypes.array
+  supportedNetworks: PropTypes.array,
+  handleClose: PropTypes.func
 }
 
 export default WrongNetworkModal

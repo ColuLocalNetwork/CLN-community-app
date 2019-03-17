@@ -49,13 +49,13 @@ class Dashboard extends Component {
 
   componentDidMount () {
     if (!this.props.token) {
-      this.props.fetchToken(this.props.tokenAddress, {networkType: this.props.tokenNetworkType})
+      this.props.fetchToken(this.props.tokenAddress)
     }
     if (this.props.accountAddress) {
-      this.props.isUserExists(this.props.accountAddress, {networkType: this.props.tokenNetworkType})
+      this.props.isUserExists(this.props.accountAddress)
     }
     if (this.props.networkType !== 'fuse' && this.props.tokenNetworkType !== this.props.networkType) {
-      this.props.loadModal(WRONG_NETWORK_MODAL, {supportedNetworks: [this.props.tokenNetworkType]})
+      this.props.loadModal(WRONG_NETWORK_MODAL, {supportedNetworks: [this.props.tokenNetworkType], handleClose: this.showHomePage})
     }
     document.addEventListener('mousedown', this.handleClickOutside)
   }
@@ -66,7 +66,7 @@ class Dashboard extends Component {
     }
 
     if (this.props.accountAddress && !prevProps.accountAddress) {
-      this.props.isUserExists(this.props.accountAddress, {networkType: this.props.tokenNetworkType})
+      this.props.isUserExists(this.props.accountAddress)
     }
   }
 
@@ -80,7 +80,7 @@ class Dashboard extends Component {
     }
   }
 
-  showHomePage = (address) => {
+  showHomePage = () => {
     this.props.history.push('/')
   }
 

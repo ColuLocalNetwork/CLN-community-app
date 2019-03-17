@@ -6,14 +6,14 @@ import * as actions from 'actions/metadata'
 
 const entityPut = createEntityPut(actions.entityName)
 
-function * fetchMetadata ({tokenURI, options}) {
+function * fetchMetadata ({tokenURI}) {
   if (!tokenURI) {
     throw new Error(`No tokenURI given`)
   }
 
   const hash = tokenURI.split('://')[1]
 
-  const {data} = yield apiCall(api.fetchMetadata, {hash}, options)
+  const {data} = yield apiCall(api.fetchMetadata, {hash})
 
   yield entityPut({
     type: actions.FETCH_METADATA.SUCCESS,
