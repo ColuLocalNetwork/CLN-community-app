@@ -55,7 +55,7 @@ class Dashboard extends Component {
       this.props.isUserExists(this.props.accountAddress, {networkType: this.props.tokenNetworkType})
     }
     if (this.props.networkType !== 'fuse' && this.props.tokenNetworkType !== this.props.networkType) {
-      this.props.loadModal(WRONG_NETWORK_MODAL)
+      this.props.loadModal(WRONG_NETWORK_MODAL, {supportedNetworks: [this.props.tokenNetworkType]})
     }
     document.addEventListener('mousedown', this.handleClickOutside)
   }
