@@ -15,7 +15,10 @@ import ActivityContent from './ActivityContent'
 import Bridge from './Bridge'
 import ReactGA from 'services/ga'
 import EntityDirectory from './EntityDirectory'
+<<<<<<< HEAD
 import {getBlockExplorerUrl} from 'utils/network'
+=======
+>>>>>>> businesses redesign
 
 const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
 
@@ -176,7 +179,11 @@ class Dashboard extends Component {
               }
             </div>
           </div>
+<<<<<<< HEAD
           <Bridge accountAddress={this.props.accountAddress} token={this.props.token} foreignTokenAddress={this.props.tokenAddress} />
+=======
+          <Bridge accountAddress={this.props.accountAddress} token={this.props.token} foreignTokenAddress={this.props.match.params.address} />
+>>>>>>> businesses redesign
           <div className='dashboard-entities'>
             <EntityDirectory
               showProfile={this.showProfile}

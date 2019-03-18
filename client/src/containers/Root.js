@@ -37,6 +37,14 @@ export default class Root extends Component {
                 component={withTracker(withNetwork(EntityProfile))}
               />
             </Layout>
+<<<<<<< HEAD
+=======
+            <Route
+              exact
+              path='/view/appstore'
+              component={withTracker(withNetwork(AppStore))}
+            />
+>>>>>>> businesses redesign
           </React.Fragment>
         </ConnectedRouter>
       </Provider>)
