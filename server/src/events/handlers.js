@@ -22,10 +22,18 @@ const handleBridgeMappingUpdatedEvent = (event) => {
   return bridgeDeployed(tokenAddress)
 }
 
+const handleEntityAddedEvent = (event) => {
+  const hash = event.returnValues.hash
+  const listAddress = event.address
+  console.log(event)
+  return Promise.resolve()
+}
+
 const eventsHandlers = {
   TokenCreated: handleTokenCreatedEvent,
   Transfer: handleTransferEvent,
-  BridgeMappingUpdated: handleBridgeMappingUpdatedEvent
+  BridgeMappingUpdated: handleBridgeMappingUpdatedEvent,
+  EntityAdded: handleEntityAddedEvent
 }
 
 const handleEvent = function (eventName, event) {
