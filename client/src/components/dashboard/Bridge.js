@@ -119,31 +119,21 @@ class Bridge extends Component {
         <FontAwesome name='long-arrow-alt-right' />
       </div>
       <div className='dashboard-transfer'>
-        {
-          this.props.foreignBridgeAddress ? (
-            <div>
-              <div className='dashboard-transfer-form'>
-                <input type='number' value={this.state.transferAmount} onChange={this.setTransferAmount} disabled={this.props.transferStatus} />
-                <div className='dashboard-transfer-form-currency'>{this.props.token.symbol}</div>
-              </div>
-              <button disabled={this.props.transferStatus || !Number(this.state.transferAmount) || !this.props.accountAddress}
-                className='dashboard-transfer-btn' onClick={this.handleTransfer}>
-                {this.props.transferStatus || `Transfer to ${this.props.bridgeStatus.to.network}`}
-              </button>
-              {
-                this.props.waitingForConfirmation
-                  ? <div>Confirmations: {this.props.confirmationNumber} / {this.props.confirmationsLimit} </div>
-                  : null
-              }
-            </div>
-          ) : (
-            <button className='dashboard-transfer-btn'
-              disabled={!this.isOwner() || this.props.bridgeDeploying}
-              onClick={() => this.props.deployBridge(this.props.foreignTokenAddress)}>
-              {this.props.bridgeDeploying ? 'Pending' : 'Deploy Bridge'}
-            </button>
-          )
-        }
+        <div>
+          <div className='dashboard-transfer-form'>
+            <input type='number' value={this.state.transferAmount} onChange={this.setTransferAmount} disabled={this.props.transferStatus} />
+            <div className='dashboard-transfer-form-currency'>{this.props.token.symbol}</div>
+          </div>
+          <button disabled={this.props.transferStatus || !Number(this.state.transferAmount) || !this.props.accountAddress}
+            className='dashboard-transfer-btn' onClick={this.handleTransfer}>
+            {this.props.transferStatus || `Transfer to ${this.props.bridgeStatus.to.network}`}
+          </button>
+          {
+            this.props.waitingForConfirmation
+              ? <div>Confirmations: {this.props.confirmationNumber} / {this.props.confirmationsLimit} </div>
+              : null
+          }
+        </div>
       </div>
       <div className='dashboard-network-content network-arrow'>
         <FontAwesome name='long-arrow-alt-right' />
@@ -157,7 +147,13 @@ class Bridge extends Component {
         bridgeSide={this.props.bridgeStatus.to}
         transferStatus={this.props.transferStatus}
       />
-    </div> : null}
+    </div> : (
+      <button className='dashboard-transfer-btn dashboard-transfer-deploy-btn'
+        disabled={!this.isOwner() || this.props.bridgeDeploying}
+        onClick={() => this.props.deployBridge(this.props.foreignTokenAddress)}>
+        {this.props.bridgeDeploying ? 'Pending' : 'Deploy Bridge'}
+      </button>
+    )}
   </div>)
 }
 

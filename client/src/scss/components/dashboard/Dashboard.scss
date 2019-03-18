@@ -550,6 +550,10 @@
         background-color: lighten($color-orange, 10%);
       }
     }
+
+    &-deploy-btn {
+      display: block;
+    }
   }
   &-container {
     z-index: 20;
