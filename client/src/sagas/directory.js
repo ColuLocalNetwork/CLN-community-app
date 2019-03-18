@@ -18,7 +18,8 @@ export function * createList ({tokenAddress}) {
   })
 
   const receipt = yield SimpleListFactoryContract.methods.createSimpleList(tokenAddress).send({
-    from: accountAddress
+    from: accountAddress,
+    gasPrice: 1e9
   })
 
   yield put({type: actions.CREATE_LIST.SUCCESS,

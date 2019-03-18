@@ -1,7 +1,8 @@
 const tokenUtils = require('@utils/token')
 const eventUtils = require('@utils/event')
 const bridgeDeployed = require('@utils/tokenProgress').bridgeDeployed
-
+const getMetadata = require('@utils/metadata').getMetadata
+// const Business = 
 const handleTokenCreatedEvent = async (event) => {
   const blockNumber = event.blockNumber
   const eventArgs = event.returnValues
@@ -22,10 +23,12 @@ const handleBridgeMappingUpdatedEvent = (event) => {
   return bridgeDeployed(tokenAddress)
 }
 
-const handleEntityAddedEvent = (event) => {
+const handleEntityAddedEvent = async (event) => {
   const hash = event.returnValues.hash
   const listAddress = event.address
-  console.log(event)
+  const metadata = await getMetadata(hash)
+  const {name} = metadata.data
+
   return Promise.resolve()
 }
 
