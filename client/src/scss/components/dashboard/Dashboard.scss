@@ -303,7 +303,10 @@
       text-transform: uppercase;
       margin-bottom: 7px;
       span {
-        color: $color-negative-text;
+        text-transform: capitalize;
+        @media (max-width: $breakpoint-mobile) {
+          display: block;
+        }
       }
       .text-asset {
         color: $color-author;
@@ -330,7 +333,7 @@
 
         @media (max-width: $breakpoint-mobile) {
           margin-left: 0;
-          min-width: 320px;
+          min-width: 333px;
         }
       }
 
@@ -395,9 +398,15 @@
       justify-content: space-between;
 
       &.entity-footer {
-        margin-top: 20px;
         border-top: 1px solid rgba(255, 255, 255, 0.19);
+        margin-right: 40px;
+        margin-left: 40px;
         justify-content: flex-start;
+        border-top: 1px solid rgba(0, 0, 0, 0.2);
+        @media (max-width: $breakpoint-mobile) {
+          margin-right: 0;
+          margin-left: 0;
+        }
       }
 
       @media (max-width: $breakpoint-mobile) {
@@ -502,7 +511,6 @@
     }
   }
   &-transfer {
-    margin-top: 30px;
     text-align: center;
     line-height: 95px;
     &-form {
@@ -514,6 +522,7 @@
       padding-right: 10px;
       padding-left: 3px;
       overflow: hidden;
+      margin-top: 30px;
       input {
         border: none;
         height: 14px;
@@ -535,6 +544,7 @@
       padding: 15px 20px;
       background-color: $color-orange;
       border-radius: 3px;
+      font-size: 11px;
       text-transform: uppercase;
       display: inline-block;
       margin: 0 auto;
@@ -543,7 +553,7 @@
       outline: none;
       &:hover {
         cursor: pointer;
-        background-color: lighten($color-orange, 10%);
+        background-color: darken($color-orange, 20%);
       }
     }
   }
@@ -595,7 +605,7 @@
           &-btn {
             background-color: $color-ropsten;
             &:hover {
-              background-color: lighten($color-ropsten, 10%);
+              background-color: darken($color-ropsten, 10%);
             }
           }
         }
@@ -613,6 +623,16 @@
               background-color: $color-ropsten;
             }
           }
+        }
+      }
+      .btn-entity-adding {
+        .fa {
+          color: $color-ropsten;
+        }
+        &:hover,
+        &:focus:active,
+        &:active {
+          color: $color-ropsten;
         }
       }
     }

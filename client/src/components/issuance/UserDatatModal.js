@@ -44,8 +44,6 @@ class UserDatatModal extends Component {
   }
 
   render () {
-    console.log(this.validateText(this.state.firstName))
-    console.log(this.validateText(this.state.lastName))
     return (
       <Modal className='issued-popup' onClose={this.props.hideModal}>
         <div className='issued-popup-close' onClick={() => this.props.hideModal()}>

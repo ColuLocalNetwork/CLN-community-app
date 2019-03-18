@@ -89,6 +89,36 @@ class Bridge extends Component {
       <div className='dashboard-network-content network-arrow'>
         <FontAwesome name='long-arrow-alt-right' />
       </div>
+      <div className='dashboard-transfer'>
+        {
+          this.props.foreignBridgeAddress ? (
+            <React.Fragment>
+              <div className='dashboard-transfer-form'>
+                <input value={this.state.transferToFuse} onChange={this.setTransferToFuse} />
+                <div className='dashboard-transfer-form-currency'>{this.props.token.symbol}</div>
+              </div>
+              <button disabled={this.isWaitingForConfirmation()}
+                className='dashboard-transfer-btn' onClick={this.handleTransfer}>
+                {this.isWaitingForConfirmation() ? 'PENDING' : 'Transfer to fuse'}
+              </button>
+              {
+                this.isWaitingForConfirmation()
+                  ? <div>Confirmations: {this.props.confirmationNumber} / {this.props.confirmationsLimit} </div>
+                  : null
+              }
+            </React.Fragment>
+          ) : (
+            <button className='dashboard-transfer-btn'
+              disabled={!this.isOwner() || this.props.bridgeDeploying}
+              onClick={() => this.props.deployBridge(this.props.foreignTokenAddress)}>
+              {this.props.bridgeDeploying ? 'Pending' : 'Deploy Bridge'}
+            </button>
+          )
+        }
+      </div>
+      <div className='dashboard-network-content network-arrow'>
+        <FontAwesome name='long-arrow-alt-right' />
+      </div>
       <Balance
         balanceOfToken={this.props.balanceOfToken}
         tokenAddress={this.props.homeNetwork === this.props.bridgeStatus.to.network ? this.props.homeTokenAddress : this.props.foreignTokenAddress}
@@ -99,34 +129,6 @@ class Bridge extends Component {
         waitingForConfirmation={this.isWaitingForConfirmation()}
       />
     </div> : null}
-    <div className='dashboard-transfer'>
-      {
-        this.props.foreignBridgeAddress ? (
-          <div>
-            <div className='dashboard-transfer-form'>
-              <input value={this.state.transferToFuse} onChange={this.setTransferToFuse} />
-              <div className='dashboard-transfer-form-currency'>{this.props.token.symbol}</div>
-            </div>
-            <button disabled={this.isWaitingForConfirmation()}
-              className='dashboard-transfer-btn' onClick={this.handleTransfer}>
-              {this.isWaitingForConfirmation() ? 'PENDING' : 'Transfer to fuse'}
-            </button>
-            {
-              this.isWaitingForConfirmation()
-                ? <div>Confirmations: {this.props.confirmationNumber} / {this.props.confirmationsLimit} </div>
-                : null
-            }
-          </div>
-        ) : (
-          <button className='dashboard-transfer-btn'
-            disabled={!this.isOwner() || this.props.bridgeDeploying}
-            onClick={() => this.props.deployBridge(this.props.foreignTokenAddress)}>
-            {this.props.bridgeDeploying ? 'Pending' : 'Deploy Bridge'}
-          </button>
-        )
-      }
-    </div>
-
   </div>)
 }
 
