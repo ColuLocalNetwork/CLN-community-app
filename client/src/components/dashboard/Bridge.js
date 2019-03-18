@@ -100,8 +100,8 @@ class Bridge extends Component {
     } else {
       this.props.transferToForeign(this.props.homeTokenAddress, this.props.homeBridgeAddress, value)
     }
-    this.props.getBlockNumber(this.props.bridgeStatus.to.network)
-    this.props.getBlockNumber(this.props.bridgeStatus.from.network)
+    this.props.getBlockNumber(this.props.bridgeStatus.to.network, this.props.bridgeStatus.to.bridge)
+    this.props.getBlockNumber(this.props.bridgeStatus.from.network, this.props.bridgeStatus.from.bridge)
   }
 
   render = () => (<div className='dashboard-sidebar'>

@@ -106,8 +106,8 @@ function * checkAccountChanged ({selectedAddress}) {
   return false
 }
 
-function * getBlockNumber ({networkType}) {
-  const web3 = getWeb3({networkType})
+function * getBlockNumber ({networkType, bridgeType}) {
+  const web3 = getWeb3({bridgeType})
   const blockNumber = yield call(web3.eth.getBlockNumber)
   yield put({
     type: actions.GET_BLOCK_NUMBER.SUCCESS,
