@@ -1,16 +1,17 @@
-import { fork, all, put, select } from 'redux-saga/effects'
+import { call, all, put, select, delay } from 'redux-saga/effects'
 
 import {apiCall, tryTakeEvery} from './utils'
 import {getContract} from 'services/contract'
 import {zeroAddressToNull} from 'utils/web3'
 import {getAccountAddress} from 'selectors/accounts'
-import {transactionConfirmations, transactionFlow} from './transaction'
+import {getBlockNumber, getAddress} from 'selectors/network'
+import {transactionFlow} from './transaction'
 import * as actions from 'actions/bridge'
 import * as api from 'services/api/token'
 
 export function * fetchHomeToken ({foreignTokenAddress}) {
-  const contractAddress = yield select(state => state.network.addresses.fuse.BridgeMapper)
-  const options = {networkBridge: 'home'}
+  const contractAddress = yield select(getAddress, 'BridgeMapper')
+  const options = {bridgeType: 'home'}
   const bridgeMapperContract = getContract({abiName: 'BridgeMapper', address: contractAddress, options})
   const homeTokenAddress = yield bridgeMapperContract.methods.homeTokenByForeignToken(foreignTokenAddress).call()
 
@@ -23,8 +24,8 @@ export function * fetchHomeToken ({foreignTokenAddress}) {
 }
 
 export function * fetchHomeBridge ({foreignTokenAddress}) {
-  const contractAddress = yield select(state => state.network.addresses.fuse.BridgeMapper)
-  const options = {networkBridge: 'home'}
+  const contractAddress = yield select(getAddress, 'BridgeMapper')
+  const options = {bridgeType: 'home'}
   const bridgeMapperContract = getContract({abiName: 'BridgeMapper', address: contractAddress, options})
   const homeBridgeAddress = yield bridgeMapperContract.methods.homeBridgeByForeignToken(foreignTokenAddress).call()
 
@@ -37,8 +38,8 @@ export function * fetchHomeBridge ({foreignTokenAddress}) {
 }
 
 export function * fetchForeignBridge ({foreignTokenAddress}) {
-  const contractAddress = yield select(state => state.network.addresses.fuse.BridgeMapper)
-  const options = {networkBridge: 'home'}
+  const contractAddress = yield select(getAddress, 'BridgeMapper')
+  const options = {bridgeType: 'home'}
   const bridgeMapperContract = getContract({abiName: 'BridgeMapper', address: contractAddress, options})
   const foreignBridgeAddress = yield bridgeMapperContract.methods.foreignBridgeByForeignToken(foreignTokenAddress).call()
 
@@ -69,8 +70,7 @@ function * transferToHome ({foreignTokenAddress, foreignBridgeAddress, value, co
   })
 
   const action = actions.TRANSFER_TO_HOME
-  yield fork(transactionFlow, {transactionPromise, action})
-  yield fork(transactionConfirmations, {transactionPromise, action, confirmationsLimit})
+  yield call(transactionFlow, {transactionPromise, action, confirmationsLimit})
 }
 
 function * transferToForeign ({homeTokenAddress, homeBridgeAddress, value, confirmationsLimit}) {
@@ -83,17 +83,71 @@ function * transferToForeign ({homeTokenAddress, homeBridgeAddress, value, confi
   })
 
   const action = actions.TRANSFER_TO_FOREIGN
-  yield fork(transactionFlow, {transactionPromise, action})
-  yield fork(transactionConfirmations, {transactionPromise, action, confirmationsLimit})
+  yield call(transactionFlow, {transactionPromise, action, confirmationsLimit})
 }
 
-export default function * marketMakerSaga () {
+const getRelayEventByTransactionHash = (events, transactionHash) => {
+  for (let ev of events) {
+    if (ev.returnValues.transactionHash === transactionHash) {
+      return ev
+    }
+  }
+}
+
+function * pollForBridgeEvent ({bridgeContract, transactionHash, fromBlock, eventName}) {
+  while (true) {
+    const events = yield bridgeContract.getPastEvents(eventName, {fromBlock})
+    const bridgeEvent = getRelayEventByTransactionHash(events, transactionHash)
+
+    if (bridgeEvent) {
+      return bridgeEvent
+    }
+
+    yield delay(CONFIG.web3.bridge.pollingTimeout)
+  }
+}
+
+function * watchForeignBridge ({foreignBridgeAddress, transactionHash}) {
+  const foreignNetwork = yield select(state => state.network.foreignNetwork)
+  const fromBlock = yield select(getBlockNumber, foreignNetwork)
+  const options = {bridgeType: 'foreign'}
+  const bridgeContract = getContract({abiName: 'BasicForeignBridge', address: foreignBridgeAddress, options})
+
+  const relayEvent = yield pollForBridgeEvent({bridgeContract, transactionHash, fromBlock, eventName: 'RelayedMessage'})
+
+  yield put({
+    type: actions.WATCH_FOREIGN_BRIDGE.SUCCESS,
+    response: {
+      relayEvent
+    }
+  })
+}
+
+function * watchHomeBridge ({homeBridgeAddress, transactionHash}) {
+  const homeNetwork = yield select(state => state.network.homeNetwork)
+  const fromBlock = yield select(getBlockNumber, homeNetwork)
+  const options = {bridgeType: 'home'}
+  const bridgeContract = getContract({abiName: 'BasicHomeBridge', address: homeBridgeAddress, options})
+
+  const relayEvent = yield pollForBridgeEvent({bridgeContract, transactionHash, fromBlock, eventName: 'AffirmationCompleted'})
+
+  yield put({
+    type: actions.WATCH_HOME_BRIDGE.SUCCESS,
+    response: {
+      relayEvent
+    }
+  })
+}
+
+export default function * bridgeSaga () {
   yield all([
     tryTakeEvery(actions.FETCH_HOME_TOKEN, fetchHomeToken, 1),
     tryTakeEvery(actions.FETCH_HOME_BRIDGE, fetchHomeBridge, 1),
     tryTakeEvery(actions.FETCH_FOREIGN_BRIDGE, fetchForeignBridge, 1),
     tryTakeEvery(actions.DEPLOY_BRIDGE, deployBridge, 1),
     tryTakeEvery(actions.TRANSFER_TO_HOME, transferToHome, 1),
-    tryTakeEvery(actions.TRANSFER_TO_FOREIGN, transferToForeign, 1)
+    tryTakeEvery(actions.TRANSFER_TO_FOREIGN, transferToForeign, 1),
+    tryTakeEvery(actions.WATCH_FOREIGN_BRIDGE, watchForeignBridge, 1),
+    tryTakeEvery(actions.WATCH_HOME_BRIDGE, watchHomeBridge, 1)
   ])
 }

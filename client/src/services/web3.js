@@ -1,26 +1,17 @@
-import {init, get} from 'osseus-wallet'
 import Web3 from 'web3'
-import abi from 'constants/abi'
 
-const config = {
-  osseus_wallet: {
-    abi,
-    ...CONFIG.web3
-  }
-}
-
-export const getWeb3 = ({networkBridge} = {}) => {
-  if (!networkBridge) {
+export const getWeb3 = ({bridgeType} = {}) => {
+  if (!bridgeType) {
     return givenWeb3
   }
-  if (networkBridge === 'home' && Web3.givenProvider.networkVersion === '121') {
+  if (bridgeType === 'home' && Web3.givenProvider.networkVersion === '121') {
     return givenWeb3
   }
 
-  if (networkBridge === 'foreign' && Web3.givenProvider.networkVersion !== '121') {
+  if (bridgeType === 'foreign' && Web3.givenProvider.networkVersion !== '121') {
     return givenWeb3
   }
-  const web3 = web3ByBridge[networkBridge]
+  const web3 = web3ByBridge[bridgeType]
   return web3
 }
 
@@ -33,6 +24,4 @@ const web3ByBridge = {
   foreign: foreignWeb3
 }
 
-init({config})
-
-export default get()
+export default givenWeb3

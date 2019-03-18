@@ -6,7 +6,7 @@ import {isUserExists} from 'actions/user'
 import FontAwesome from 'react-fontawesome'
 import {getClnBalance, getAccountAddress} from 'selectors/accounts'
 import {formatWei} from 'utils/format'
-import { USER_DATA_MODAL } from 'constants/uiConstants'
+import { USER_DATA_MODAL, WRONG_NETWORK_MODAL } from 'constants/uiConstants'
 import {loadModal, hideModal} from 'actions/ui'
 import TokenProgress from './TokenProgress'
 import TopNav from './../TopNav'
@@ -15,6 +15,7 @@ import ActivityContent from './ActivityContent'
 import Bridge from './Bridge'
 import ReactGA from 'services/ga'
 import EntityDirectory from './EntityDirectory'
+import {getBlockExplorerUrl} from 'utils/network'
 
 const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
 
@@ -45,15 +46,18 @@ class Dashboard extends Component {
   }
 
   handleIntervalChange = (userType, intervalValue) => {
-    this.props.fetchTokenStatistics(this.props.match.params.address, userType, intervalValue)
+    this.props.fetchTokenStatistics(this.props.tokenAddress, userType, intervalValue)
   }
 
   componentDidMount () {
     if (!this.props.token) {
-      this.props.fetchToken(this.props.match.params.address)
+      this.props.fetchToken(this.props.tokenAddress)
     }
     if (this.props.accountAddress) {
       this.props.isUserExists(this.props.accountAddress)
+    }
+    if (this.props.networkType !== 'fuse' && this.props.tokenNetworkType !== this.props.networkType) {
+      this.props.loadModal(WRONG_NETWORK_MODAL, {supportedNetworks: [this.props.tokenNetworkType], handleClose: this.showHomePage})
     }
     document.addEventListener('mousedown', this.handleClickOutside)
   }
@@ -78,7 +82,7 @@ class Dashboard extends Component {
     }
   }
 
-  showHomePage = (address) => {
+  showHomePage = () => {
     this.props.history.push('/')
   }
 
@@ -100,12 +104,17 @@ class Dashboard extends Component {
       this.setState({copyStatus: ''})
     }, 2000)
     this.textArea.value = ''
-    this.textArea.value = this.props.match.params.address
+    this.textArea.value = this.props.tokenAddress
   }
 
   loadUserDataModal = () => this.props.loadModal(USER_DATA_MODAL, {
-    tokenAddress: this.props.match.params.address
+    tokenAddress: this.props.tokenAddress
   })
+
+  openBlockExplorer = () => {
+    const explorerUrl = `${getBlockExplorerUrl(this.props.tokenNetworkType)}/address/${this.props.tokenAddress}`
+    window.open(explorerUrl, '_blank')
+  }
 
   render () {
     if (!this.props.token) {
@@ -143,8 +152,9 @@ class Dashboard extends Component {
                   <span className='text-asset'>Asset ID</span>
                   <form>
                     <textarea
+                      onClick={this.openBlockExplorer}
                       ref={textarea => (this.textArea = textarea)}
-                      value={this.props.match.params.address}
+                      value={this.props.tokenAddress}
                       readOnly
                     />
                   </form>
@@ -161,7 +171,7 @@ class Dashboard extends Component {
               }
             </div>
           </div>
-          <Bridge accountAddress={this.props.accountAddress} token={this.props.token} foreignTokenAddress={this.props.match.params.address} />
+          <Bridge accountAddress={this.props.accountAddress} token={this.props.token} foreignTokenAddress={this.props.tokenAddress} />
           <div className='dashboard-entities'>
             <EntityDirectory
               showProfile={this.showProfile}
@@ -185,7 +195,10 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = (state, {match}) => ({
+  networkType: state.network.networkType,
   token: state.entities.tokens[match.params.address],
+  tokenAddress: match.params.address,
+  tokenNetworkType: match.params.networkType,
   metadata: state.entities.metadata,
   dashboard: state.screens.dashboard,
   accountAddress: getAccountAddress(state),

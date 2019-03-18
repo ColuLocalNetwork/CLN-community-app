@@ -337,6 +337,10 @@
         }
       }
 
+      textarea:hover {
+        cursor: pointer
+      }
+
       @media (max-width: $breakpoint-mobile) {
         font-size: 10px;
       }
