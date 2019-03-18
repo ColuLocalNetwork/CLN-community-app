@@ -9,6 +9,8 @@ module.exports = (mongoose) => {
     active: {type: Boolean, default: true}
   })
 
+  BusinessSchema.index({listAddress: 1, hash: 1}, {unique: true})
+
   const Business = mongoose.model('Business', BusinessSchema)
 
   function business () {}

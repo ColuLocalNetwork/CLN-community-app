@@ -2,7 +2,9 @@ const tokenUtils = require('@utils/token')
 const eventUtils = require('@utils/event')
 const bridgeDeployed = require('@utils/tokenProgress').bridgeDeployed
 const getMetadata = require('@utils/metadata').getMetadata
-// const Business = 
+const mongoose = require('mongoose')
+const Business = mongoose.model('Business')
+
 const handleTokenCreatedEvent = async (event) => {
   const blockNumber = event.blockNumber
   const eventArgs = event.returnValues
@@ -28,6 +30,11 @@ const handleEntityAddedEvent = async (event) => {
   const listAddress = event.address
   const metadata = await getMetadata(hash)
   const {name} = metadata.data
+  new Business({
+    hash,
+    listAddress,
+    name
+  }).save()
 
   return Promise.resolve()
 }

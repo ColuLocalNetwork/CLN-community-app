@@ -10,7 +10,6 @@ router.get('/:hash', async (req, res) => {
 
 router.post('/', async (req, res, next) => {
   const body = await metadataUtils.createMetadata(req.body.metadata)
-  console.log(body)
   return res.json(body)
 })
 
