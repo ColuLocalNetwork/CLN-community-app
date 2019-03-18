@@ -22,9 +22,9 @@ class UserDatatModal extends Component {
   setCountry = country => this.setState({country: country})
   setSubscribe = e => this.setState({subscribe: e.target.checked})
 
-  validateText = (state) => {
+  isInvalidText = (text) => {
     const re = /^\d+$/
-    return re.test(state)
+    return re.test(text)
   }
 
   validateEmail = () => {
@@ -44,8 +44,6 @@ class UserDatatModal extends Component {
   }
 
   render () {
-    console.log(this.validateText(this.state.firstName))
-    console.log(this.validateText(this.state.lastName))
     return (
       <Modal className='issued-popup' onClose={this.props.hideModal}>
         <div className='issued-popup-close' onClick={() => this.props.hideModal()}>
@@ -67,7 +65,7 @@ class UserDatatModal extends Component {
                 value={this.state.firstName}
                 onChange={this.setFirstName}
               />
-              {this.validateText(this.state.firstName) && <p className='error-text'>Please type only letters for First Name</p>}
+              {this.isInvalidText(this.state.firstName) && <p className='error-text'>Please type only letters for First Name</p>}
             </div>
           </div>
           <div className='form-control'>
@@ -80,7 +78,7 @@ class UserDatatModal extends Component {
                 value={this.state.lastName}
                 onChange={this.setLastName}
               />
-              {this.validateText(this.state.lastName) && <p className='error-text'>Please type only letters for Last Name</p>}
+              {this.isInvalidText(this.state.lastName) && <p className='error-text'>Please type only letters for Last Name</p>}
             </div>
           </div>
           <div className='form-control'>
@@ -125,8 +123,8 @@ class UserDatatModal extends Component {
               this.state.firstName.length < 3 ||
               this.state.lastName.trim() === '' ||
               this.state.lastName.length < 3 ||
-              !this.validateText(this.state.firstName) ||
-              !this.validateText(this.state.lastName) ||
+              !this.isInvalidText(this.state.firstName) ||
+              !this.isInvalidText(this.state.lastName) ||
               !this.validateEmail()
             }
             className='issued-popup-btn'

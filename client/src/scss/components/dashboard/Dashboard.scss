@@ -50,17 +50,6 @@
       height: 50px;
     }
   }
-  &-container {
-    z-index: 20;
-    align-items: flex-start;
-    justify-content: flex-start;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px 20px;
-    @media (max-width: $breakpoint-tablet) {
-      width: auto;
-  	}
-
 
   &-sidebar {
     width: 270px;
@@ -345,10 +334,6 @@
         }
       }
 
-      textarea:hover {
-        cursor: pointer
-      }
-
       @media (max-width: $breakpoint-mobile) {
         font-size: 10px;
       }
@@ -564,18 +549,14 @@
   }
   &-container {
     z-index: 20;
-    display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-    width: 1200px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 20px 20px;
     @media (max-width: $breakpoint-tablet) {
-
-  	}
-    @media (max-width: $breakpoint-mobile) {
-
-  	}
+      width: auto;
+    }
     &.ropsten {
       .dashboard {
         &-progress {
