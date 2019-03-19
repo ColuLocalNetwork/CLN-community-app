@@ -74,6 +74,24 @@ class TopNav extends Component {
       'top-nav-links': true,
       'show-top-nav-links': true
     })
+    const NavList = [
+      {
+        'name': 'Blog',
+        'link': 'http://fusenetwork.staging.wpengine.com/'
+      },
+      {
+        'name': 'Explorer',
+        'link': 'https://explorer.fuse.io/'
+      },
+      {
+        'name': 'Token',
+        'link': '/'
+      },
+      {
+        'name': 'Learn',
+        'link': '/'
+      }
+    ]
     return (
       <div className={topNavClass}>
         <div className='top-nav-logo'>
@@ -84,17 +102,15 @@ class TopNav extends Component {
             <FontAwesome name='plus' className='top-nav-issuance-plus' onClick={this.props.setToggleMenu} /> Currency issuer
           </button>
           <div className='top-nav-currency'>
-            <a className='top-nav-text'
-              href='https://intercom.help/colu_cln/community-currencies'
-              target='_blank'
-              name='FAQ'>
-              FAQ</a>
-            <a className='top-nav-text'
-              href='https://cln.network/wp-content/uploads/pdf/cln_whitepaper.pdf'
-              target='_blank'
-              name='whitepaper'>
-              Whitepaper</a>
-            <span className='top-nav-text' onClick={() => this.showAppStore()}>AppStore</span>
+            {NavList.map(item =>
+              <a className='top-nav-text'
+                href={item.link}
+                target='_blank'
+                name={item.name}
+              >
+                {item.name}
+              </a>
+            )}
             <div className='separator-vertical' />
           </div>
           <div className='top-nav-text profile' onClick={this.showConnectMetamask}>

@@ -82,12 +82,12 @@
     justify-content: flex-end;
     align-items: center;
 		@media (max-width: $breakpoint-tablet) {
-			 flex-direction: column;
-			 background: darken($color-home-banner-bg, 5%);
-			 padding: 20px 28px;
-			 align-items: center;
-			 width: 100%;
-			 margin-top: 30px;
+		 flex-direction: column;
+		 background: darken($color-home-banner-bg, 5%);
+		 padding: 20px 28px;
+		 align-items: center;
+		 width: 100%;
+		 margin-top: 30px;
 		}
 	}
 	.top-nav-links {
@@ -113,24 +113,13 @@
 		.top-nav-text {
 			@include flex-box();
 			align-items: center;
-			color: #BCB9C8;
+			color: $color-nav;
 			font-size: 12px;
 			font-weight: 400;
 			line-height: 25px;
 			margin: 0 12px;
 			position:relative;
 			justify-content: center;
-			&:after {
-				content: "";
-				position: absolute;
-				bottom: -17px;
-				right:0;
-				width: 100%;
-				height: 10px;
-				background-color: $colu-green;
-				opacity: 0;
-				transition: opacity 0.2s ease-in;
-			}
 			.profile {
 				&-icon {
 					line-height: 14px;
@@ -170,7 +159,7 @@
 				}
 			}
 			&:hover {
-				color: $color-step-text;
+				color: darken($color-nav, 10%);
 				cursor: pointer;
 			}
 			.balance-address {
