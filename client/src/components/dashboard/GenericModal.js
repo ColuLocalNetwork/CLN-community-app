@@ -14,7 +14,7 @@ const GenericModal = (props) =>
       <div className='generic-modal-text'>
         {props.body}
       </div>
-      {props.buttonText && <button className='dashboard-transfer-btn'>{props.buttonText}</button>}
+      {props.buttonText && <button className='dashboard-transfer-btn' onClick={props.buttonAction}>{props.buttonText}</button>}
     </div>
   </Modal>
 
