@@ -6,7 +6,7 @@ import {isUserExists} from 'actions/user'
 import FontAwesome from 'react-fontawesome'
 import {getClnBalance, getAccountAddress} from 'selectors/accounts'
 import {formatWei} from 'utils/format'
-import { USER_DATA_MODAL, WRONG_NETWORK_MODAL, GENERIC_MODAL } from 'constants/uiConstants'
+import { USER_DATA_MODAL, WRONG_NETWORK_MODAL } from 'constants/uiConstants'
 import {loadModal, hideModal} from 'actions/ui'
 import TokenProgress from './TokenProgress'
 import TopNav from './../TopNav'
@@ -57,7 +57,6 @@ class Dashboard extends Component {
     if (this.props.networkType !== 'fuse' && this.props.tokenNetworkType !== this.props.networkType) {
       this.props.loadModal(WRONG_NETWORK_MODAL, {supportedNetworks: [this.props.tokenNetworkType], handleClose: this.showHomePage})
     }
-    this.props.loadModal(GENERIC_MODAL)
     document.addEventListener('mousedown', this.handleClickOutside)
   }
 

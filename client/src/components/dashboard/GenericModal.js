@@ -9,12 +9,12 @@ const GenericModal = (props) =>
     </div>
     <div className='generic-modal-container'>
       <div className='generic-modal-title'>
-        Something about Metamask
+        {props.title}
       </div>
       <div className='generic-modal-text'>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin luctus pretium placerat. Morbi quis quam ac massa mattis efficitur. Donec nec nibh sodales libero convallis eleifend ut in lectus
+        {props.body}
       </div>
-      <button className='dashboard-transfer-btn'>Deploy a list</button>
+      {props.buttonText && <button className='dashboard-transfer-btn'>{props.buttonText}</button>}
     </div>
   </Modal>
 
