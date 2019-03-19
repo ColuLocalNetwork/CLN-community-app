@@ -2,20 +2,25 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import MediaMobile from 'images/issue-popup-mobile.svg'
 import FontAwesome from 'react-fontawesome'
+<<<<<<< HEAD
 import TopNav from './../TopNav'
 import { getList, fetchEntities } from 'actions/directory'
 import { getEntities } from 'selectors/directory'
+=======
+>>>>>>> fetching businesses from backend
 
 class EntityProfile extends Component {
   state = {
-    copyStatus: null,
-    keyHash: ''
+    copyStatus: null
   }
 
+<<<<<<< HEAD
   componentDidMount () {
     this.props.getList(this.props.match.params.address)
   }
 
+=======
+>>>>>>> fetching businesses from backend
   copyToClipboard = (e) => {
     this.textArea.select()
     document.execCommand('copy')
@@ -28,6 +33,7 @@ class EntityProfile extends Component {
     this.textArea.value = this.props.match.params.hash
   }
 
+<<<<<<< HEAD
   showHomePage = (address) => this.props.history.push('/')
 
   componentDidUpdate (prevProps) {
@@ -36,13 +42,10 @@ class EntityProfile extends Component {
     }
   }
 
+=======
+>>>>>>> fetching businesses from backend
   render () {
-    const keyHash = Object.keys(this.props.listHashes).filter(hash => {
-      if (this.props.match.params.hash === this.props.listHashes[hash]) {
-        return hash
-      }
-    })
-    const entity = Object.keys(this.props.entities).length ? this.props.entities[keyHash[0]] : null
+    const entity = this.props.metadata[`ipfs://${this.props.hash}`]
     return (
       <React.Fragment>
         <TopNav
@@ -139,11 +142,17 @@ class EntityProfile extends Component {
   }
 }
 
+<<<<<<< HEAD
 const mapStateToProps = (state) => ({
   entities: getEntities(state),
   network: state.network,
   listHashes: state.screens.directory.listHashes,
   listAddress: state.screens.directory.listAddress
+=======
+const mapStateToProps = (state, {match}) => ({
+  hash: match.params.hash,
+  metadata: state.entities.metadata
+>>>>>>> fetching businesses from backend
 })
 
 const mapDispatchToProps = {

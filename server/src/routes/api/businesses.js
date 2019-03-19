@@ -3,11 +3,20 @@ const mongoose = require('mongoose')
 const Business = mongoose.model('Business')
 const paginate = require('express-paginate')
 
-router.get(':/listAddress', async (req, res, next) => {
+const getQueryFilter = (req) => {
   const {listAddress} = req.params
+  if (req.query.hasOwnProperty('active')) {
+    const {active} = req.query
+    return {listAddress, active}
+  } else {
+    return {listAddress}
+  }
+}
+router.get('/:listAddress', async (req, res, next) => {
+  const queryFilter = getQueryFilter(req)
   const [ results, itemCount ] = await Promise.all([
-    Business.find({listAddress}).sort({name: 1}).limit(req.query.limit).skip(req.skip),
-    Business.count({})
+    Business.find(queryFilter).sort({name: 1}).limit(req.query.limit).skip(req.skip).lean(),
+    Business.estimatedDocumentCount({})
   ])
 
   const pageCount = Math.ceil(itemCount / req.query.limit)

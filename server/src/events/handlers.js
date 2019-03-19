@@ -30,10 +30,12 @@ const handleEntityAddedEvent = async (event) => {
   const listAddress = event.address
   const metadata = await getMetadata(hash)
   const {name} = metadata.data
+  const {active} = metadata.data
   new Business({
     hash,
     listAddress,
-    name
+    name,
+    active
   }).save()
 
   return Promise.resolve()
