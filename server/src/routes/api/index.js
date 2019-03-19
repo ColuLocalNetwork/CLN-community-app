@@ -1,6 +1,5 @@
 const router = require('express').Router()
 
-router.use('/communities', require('./communities'))
 router.use('/metadata', require('./metadata'))
 router.use('/images', require('./images'))
 router.use('/receipts', require('./receipts'))
