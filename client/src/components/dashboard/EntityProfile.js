@@ -139,7 +139,7 @@ class EntityProfile extends Component {
   }
 }
 
-const mapStateToProps = (state, {match}) => ({
+const mapStateToProps = (state) => ({
   entities: getEntities(state),
   network: state.network,
   listHashes: state.screens.directory.listHashes,
