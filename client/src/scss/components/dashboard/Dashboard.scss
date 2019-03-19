@@ -233,7 +233,7 @@
     border-radius: 10px;
     padding: 20px;
     @media (max-width: $breakpoint-mobile) {
-      margin-left:0;
+      margin-left: 0;
   	}
     &-text {
       font-size: 12px;
@@ -337,7 +337,7 @@
         }
       }
 
-      textarea:hover {
+     textarea:hover {
         cursor: pointer
       }
 
@@ -560,6 +560,10 @@
         background-color: darken($color-orange, 20%);
       }
     }
+
+    &-deploy-btn {
+      display: block;
+    }
   }
   &-container {
     z-index: 20;
@@ -567,7 +571,7 @@
     justify-content: flex-start;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 20px 20px;
     @media (max-width: $breakpoint-tablet) {
       width: auto;
     }
