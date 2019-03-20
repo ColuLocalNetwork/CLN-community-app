@@ -120,8 +120,12 @@ class ActivityContent extends Component {
     this.props.handleChange(this.props.userType, interval.value)
   }
 
+  //componentDidUpdate (prevProps)
+
   render () {
     const latestDataEntry = getLatestDataEntry(this.state.interval.value, this.props.stats)
+    //console.log(latestDataEntry)
+    console.log(this.props.stats)
     return (
       <div className='dashboard-information-content' >
         <div className='dashboard-information-content-activity' key='0'>
@@ -131,7 +135,7 @@ class ActivityContent extends Component {
           <ActivityDropdown interval={this.state.interval} handleChange={this.handleIntervalChange} />
         </div>
         <div className='dashboard-information-content-number' key='1'>
-          <p className='dashboard-information-small-text'>
+          <p className='dashboard-information-ю-text'>
             Number of transactions
           </p>
           <p className='dashboard-information-number'>
