@@ -2,25 +2,18 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import MediaMobile from 'images/issue-popup-mobile.svg'
 import FontAwesome from 'react-fontawesome'
-<<<<<<< HEAD
 import TopNav from './../TopNav'
-import { getList, fetchEntities } from 'actions/directory'
-import { getEntities } from 'selectors/directory'
-=======
->>>>>>> fetching businesses from backend
+import { getList, fetchBusinesses } from 'actions/directory'
 
 class EntityProfile extends Component {
   state = {
     copyStatus: null
   }
 
-<<<<<<< HEAD
   componentDidMount () {
     this.props.getList(this.props.match.params.address)
   }
 
-=======
->>>>>>> fetching businesses from backend
   copyToClipboard = (e) => {
     this.textArea.select()
     document.execCommand('copy')
@@ -33,17 +26,14 @@ class EntityProfile extends Component {
     this.textArea.value = this.props.match.params.hash
   }
 
-<<<<<<< HEAD
   showHomePage = (address) => this.props.history.push('/')
 
   componentDidUpdate (prevProps) {
     if (this.props.listAddress && this.props.listAddress !== prevProps.listAddress) {
-      this.props.fetchEntities(this.props.listAddress, 1)
+      this.props.fetchBusinesses(this.props.listAddress, 1)
     }
   }
 
-=======
->>>>>>> fetching businesses from backend
   render () {
     const entity = this.props.metadata[`ipfs://${this.props.hash}`]
     return (
@@ -142,22 +132,14 @@ class EntityProfile extends Component {
   }
 }
 
-<<<<<<< HEAD
-const mapStateToProps = (state) => ({
-  entities: getEntities(state),
-  network: state.network,
-  listHashes: state.screens.directory.listHashes,
-  listAddress: state.screens.directory.listAddress
-=======
 const mapStateToProps = (state, {match}) => ({
   hash: match.params.hash,
   metadata: state.entities.metadata
->>>>>>> fetching businesses from backend
 })
 
 const mapDispatchToProps = {
   getList,
-  fetchEntities
+  fetchBusinesses
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EntityProfile)

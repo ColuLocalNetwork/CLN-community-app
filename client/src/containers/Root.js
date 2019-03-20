@@ -23,20 +23,13 @@ export default class Root extends Component {
             <Layout>
               <Route path='/' component={withNetwork(CLNFetcher)} />
               <Route exact path='/' component={withTracker(withNetwork(Oven))} />
-
               <Route
                 path='/view/issuance'
                 component={withTracker(withNetwork(IssuanceWizard))}
               />
-
               <Route
                 path='/view/dashboard/:networkType/:address'
                 component={withTracker(withNetwork(Dashboard))}
-              />
-              <Route
-                exact
-                path='/view/directory/:address/:hash'
-                component={withTracker(withNetwork(EntityProfile))}
               />
               <Route
                 exact
