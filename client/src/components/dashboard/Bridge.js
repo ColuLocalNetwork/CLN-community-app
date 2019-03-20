@@ -13,6 +13,7 @@ import {getBridgeStatus} from 'selectors/network'
 import RopstenLogo from 'images/Ropsten.png'
 import MainnetLogo from 'images/Mainnet.png'
 import FuseLogo from 'images/fuseLogo.svg'
+import {isOwner} from 'utils/token'
 
 const NetworkLogo = ({network}) => {
   switch (network) {
@@ -88,8 +89,6 @@ class Bridge extends Component {
       this.setState({transferAmount: 0})
     }
   }
-
-  isOwner = () => this.props.accountAddress === this.props.token.owner
 
   setTransferAmount = (e) => this.setState({ transferAmount: e.target.value })
 
@@ -178,7 +177,7 @@ class Bridge extends Component {
 <<<<<<< HEAD
     </div> : (
       <button className='dashboard-transfer-btn dashboard-transfer-deploy-btn'
-        disabled={!this.isOwner() || this.props.bridgeDeploying}
+        disabled={!isOwner(this.props.token, this.props.accountAddress) || this.props.bridgeDeploying}
         onClick={() => this.props.deployBridge(this.props.foreignTokenAddress)}>
         {this.props.bridgeDeploying ? 'Pending' : 'Deploy Bridge'}
       </button>

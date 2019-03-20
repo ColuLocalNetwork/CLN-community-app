@@ -11,6 +11,7 @@ import EmptyBusinessList from 'images/emptyBusinessList.png'
 import {loadModal, hideModal} from 'actions/ui'
 import { ADD_DIRECTORY_ENTITY } from 'constants/uiConstants'
 import ReactGA from 'services/ga'
+import {isOwner} from 'utils/token'
 
 class EntityDirectory extends Component {
   state = {
@@ -117,7 +118,7 @@ class EntityDirectory extends Component {
             <button
               className='dashboard-transfer-btn'
               onClick={() => this.handleCreateList()}
-              disabled={this.props.transactionStatus === REQUEST}
+              disabled={this.props.transactionStatus === REQUEST || !isOwner(this.props.token, this.props.accountAddress)}
             >
               Deploy business list
             </button>

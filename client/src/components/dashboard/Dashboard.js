@@ -178,6 +178,7 @@ class Dashboard extends Component {
             <EntityDirectory
               history={this.props.history}
               tokenAddress={this.props.match.params.address}
+              token={this.props.token}
               copyToClipboard={this.copyToClipboard}
             />
           </div>
