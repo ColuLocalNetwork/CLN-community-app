@@ -32,8 +32,11 @@ export function * createList ({tokenAddress}) {
 
 export function * getList ({tokenAddress}) {
   const contractAddress = yield select(getAddress, 'SimpleListFactory')
-  const SimpleListFactoryContract = getContract({abiName: 'SimpleListFactory',
-    address: contractAddress
+  const options = {bridgeType: 'home'}
+  const SimpleListFactoryContract = getContract({
+    abiName: 'SimpleListFactory',
+    address: contractAddress,
+    options
   })
 
   const listAddress = yield SimpleListFactoryContract.methods.tokenToListMap(tokenAddress).call()

@@ -10,6 +10,7 @@ import Entity from './Entity'
 import EmptyBusinessList from 'images/emptyBusinessList.png'
 import {loadModal, hideModal} from 'actions/ui'
 import { ADD_DIRECTORY_ENTITY } from 'constants/uiConstants'
+import ReactGA from 'services/ga'
 
 class EntityDirectory extends Component {
   state = {
@@ -20,6 +21,15 @@ class EntityDirectory extends Component {
 
   showHomePage = (address) => {
     this.props.history.push('/')
+  }
+
+  showProfile = (address, hash) => {
+    this.props.history.push(`/view/directory/${address}/${hash}`)
+    ReactGA.event({
+      category: 'Directory',
+      action: 'Click',
+      label: 'directory'
+    })
   }
 
   handleAddEntity = (data) => {
@@ -77,7 +87,7 @@ class EntityDirectory extends Component {
             entity={entity}
             address={this.props.tokenAddress}
             copyToClipboard={this.props.copyToClipboard}
-            showProfile={() => this.props.showProfile(this.props.tokenAddress, this.props.listHashes[index])}
+            showProfile={() => this.showProfile(this.props.tokenAddress, this.props.listHashes[index])}
           />
         ))
     } else {

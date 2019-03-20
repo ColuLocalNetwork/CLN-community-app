@@ -13,7 +13,6 @@ import TopNav from 'components/TopNav'
 import Breadcrumbs from 'components/elements/Breadcrumbs'
 import ActivityContent from './ActivityContent'
 import Bridge from './Bridge'
-import ReactGA from 'services/ga'
 import EntityDirectory from './EntityDirectory'
 <<<<<<< HEAD
 import {getBlockExplorerUrl} from 'utils/network'
@@ -87,15 +86,6 @@ class Dashboard extends Component {
 
   showHomePage = () => {
     this.props.history.push('/')
-  }
-
-  showProfile = (address, hash) => {
-    this.props.history.push(`/view/directory/${address}/${hash}`)
-    ReactGA.event({
-      category: 'Directory',
-      action: 'Click',
-      label: 'directory'
-    })
   }
 
   copyToClipboard = (e) => {
@@ -186,7 +176,7 @@ class Dashboard extends Component {
 >>>>>>> businesses redesign
           <div className='dashboard-entities'>
             <EntityDirectory
-              showProfile={this.showProfile}
+              history={this.props.history}
               tokenAddress={this.props.match.params.address}
               copyToClipboard={this.copyToClipboard}
             />
