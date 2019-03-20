@@ -18,8 +18,7 @@ export function * createList ({tokenAddress}) {
   })
 
   const receipt = yield SimpleListFactoryContract.methods.createSimpleList(tokenAddress).send({
-    from: accountAddress,
-    gasPrice: 1e9
+    from: accountAddress
   })
 
   yield put({type: actions.CREATE_LIST.SUCCESS,
@@ -54,8 +53,7 @@ export function * addEntity ({listAddress, data}) {
   const {hash} = yield call(createMetadata, {metadata: data})
 
   const receipt = yield SimpleListContract.methods.addEntity(hash).send({
-    from: accountAddress,
-    gasPrice: 1e9
+    from: accountAddress
   })
 
   yield apiCall(processReceipt, {receipt})
