@@ -171,7 +171,12 @@ class Dashboard extends Component {
               }
             </div>
           </div>
-          <Bridge accountAddress={this.props.accountAddress} token={this.props.token} foreignTokenAddress={this.props.tokenAddress} />
+          <Bridge
+            accountAddress={this.props.accountAddress}
+            token={this.props.token}
+            foreignTokenAddress={this.props.tokenAddress}
+            network={this.props.networkType}
+          />
           <div className='dashboard-entities'>
             <EntityDirectory
               showProfile={this.showProfile}
