@@ -22,15 +22,9 @@ class UserDatatModal extends Component {
   setCountry = country => this.setState({country: country})
   setSubscribe = e => this.setState({subscribe: e.target.checked})
 
-<<<<<<< HEAD
   isInvalidText = (text) => {
     const re = /^\d+$/
     return re.test(text)
-=======
-  validateText = (state) => {
-    const re = /^\d+$/
-    return re.test(state)
->>>>>>> validation for user popup
   }
 
   validateEmail = () => {
@@ -71,11 +65,7 @@ class UserDatatModal extends Component {
                 value={this.state.firstName}
                 onChange={this.setFirstName}
               />
-<<<<<<< HEAD
               {this.isInvalidText(this.state.firstName) && <p className='error-text'>Please type only letters for First Name</p>}
-=======
-              {this.validateText(this.state.firstName) && <p className='error-text'>Please type only letters for First Name</p>}
->>>>>>> validation for user popup
             </div>
           </div>
           <div className='form-control'>
@@ -88,11 +78,7 @@ class UserDatatModal extends Component {
                 value={this.state.lastName}
                 onChange={this.setLastName}
               />
-<<<<<<< HEAD
               {this.isInvalidText(this.state.lastName) && <p className='error-text'>Please type only letters for Last Name</p>}
-=======
-              {this.validateText(this.state.lastName) && <p className='error-text'>Please type only letters for Last Name</p>}
->>>>>>> validation for user popup
             </div>
           </div>
           <div className='form-control'>

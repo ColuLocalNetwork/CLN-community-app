@@ -14,18 +14,15 @@ import Breadcrumbs from 'components/elements/Breadcrumbs'
 import ActivityContent from './ActivityContent'
 import Bridge from './Bridge'
 import EntityDirectory from './EntityDirectory'
-<<<<<<< HEAD
 import {getBlockExplorerUrl} from 'utils/network'
-=======
->>>>>>> businesses redesign
 
 const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
 
 class UserDataModal extends React.Component {
   componentDidMount (prevProps) {
-    //if (this.props.token.owner === this.props.accountAddress && !this.props.userExists) {
+    if (this.props.token.owner === this.props.accountAddress && !this.props.userExists) {
       this.timerId = setTimeout(this.props.loadUserDataModal, LOAD_USER_DATA_MODAL_TIMEOUT)
-    //}
+    }
   }
 
   componentWillUnmount () {
@@ -169,11 +166,7 @@ class Dashboard extends Component {
               }
             </div>
           </div>
-<<<<<<< HEAD
           <Bridge accountAddress={this.props.accountAddress} token={this.props.token} foreignTokenAddress={this.props.tokenAddress} />
-=======
-          <Bridge accountAddress={this.props.accountAddress} token={this.props.token} foreignTokenAddress={this.props.match.params.address} />
->>>>>>> businesses redesign
           <div className='dashboard-entities'>
             <EntityDirectory
               history={this.props.history}
