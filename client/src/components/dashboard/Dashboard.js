@@ -6,8 +6,10 @@ import {isUserExists} from 'actions/user'
 import FontAwesome from 'react-fontawesome'
 import {getClnBalance, getAccountAddress} from 'selectors/accounts'
 import {formatWei} from 'utils/format'
-import { USER_DATA_MODAL, WRONG_NETWORK_MODAL } from 'constants/uiConstants'
+import { USER_DATA_MODAL, WRONG_NETWORK_MODAL, GENERIC_MODAL } from 'constants/uiConstants'
 import {loadModal, hideModal} from 'actions/ui'
+import { deployBridge } from 'actions/bridge'
+import { createList } from 'actions/directory'
 import TokenProgress from './TokenProgress'
 import TopNav from 'components/TopNav'
 import Breadcrumbs from 'components/elements/Breadcrumbs'
@@ -112,6 +114,20 @@ class Dashboard extends Component {
     }
   }
 
+  setDeployingBridge = () => {
+    this.props.deployBridge(this.props.tokenAddress)
+    this.props.hideModal()
+  }
+
+  loadBridgePopup = (token) => this.props.loadModal(GENERIC_MODAL, {
+    content: {
+      title: 'Bridge is not deployed yet',
+      body: 'In order to access cheaper and faster transactions on the Fuse chain, a bridge between the Ethereum network and the Fuse chain needs to be deployed. The bridge is a special smart contracts that locks the funds on one side of the bridge and unlock it on the other side. The bridge is opreated by validators who sign and lock the tokens  or unlocking it to provide easy movement between the chains.',
+      buttonText: token.address === token.owner ? 'Deploy a Bridge to Fuse network' : 'Got it'
+    },
+    buttonAction: () => this.setDeployingBridge()
+  })
+
   render () {
     if (!this.props.token) {
       return null
@@ -129,7 +145,13 @@ class Dashboard extends Component {
         <Breadcrumbs breadCrumbsText={token.name} setToHomepage={this.showHomePage} />
         <div className={`dashboard-container ${this.props.networkType}`}>
           <div className='dashboard-section'>
-            <TokenProgress token={token} metadata={this.props.metadata} steps={steps} match={this.props.match} />
+            <TokenProgress
+              token={token}
+              metadata={this.props.metadata}
+              steps={steps}
+              match={this.props.match}
+              loadTextPopup={() => this.loadBridgePopup(token)}
+            />
             <div className='dashboard-information'>
               <div className='dashboard-information-header'>
                 <p className='dashboard-information-text'>Total supply</p>
@@ -166,13 +188,20 @@ class Dashboard extends Component {
               }
             </div>
           </div>
-          <Bridge accountAddress={this.props.accountAddress} token={this.props.token} foreignTokenAddress={this.props.tokenAddress} />
+          <Bridge
+            accountAddress={this.props.accountAddress}
+            token={this.props.token}
+            foreignTokenAddress={this.props.tokenAddress}
+            loadBridgePopup={this.loadBridgePopup}
+            handleTransfer={this.handleTransfer}
+          />
           <div className='dashboard-entities'>
             <EntityDirectory
               history={this.props.history}
               tokenAddress={this.props.match.params.address}
               token={this.props.token}
               copyToClipboard={this.copyToClipboard}
+              loadBusinessListPopup={this.loadBusinessListPopup}
             />
           </div>
         </div>
@@ -206,7 +235,9 @@ const mapDispatchToProps = {
   fetchToken,
   isUserExists,
   loadModal,
-  hideModal
+  hideModal,
+  deployBridge,
+  createList
 }
 
 export default connect(

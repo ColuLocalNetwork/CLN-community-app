@@ -31,7 +31,10 @@ class TokenProgress extends Component {
         <div className={steps.detailsGiven ? 'dashboard-progress-text text-positive' : 'dashboard-progress-text text-negative'}>
           <FontAwesome name={steps.detailsGiven ? 'check' : 'minus'} /> <span className='progress-text-content'>Personal details</span>
         </div>
-        <div className={steps.bridgeDeployed ? 'dashboard-progress-text text-positive' : 'dashboard-progress-text text-negative'}>
+        <div
+          className={steps.bridgeDeployed ? 'dashboard-progress-text text-positive' : 'dashboard-progress-text text-negative'}
+          onClick={() => this.props.loadTextPopup()}
+        >
           <FontAwesome name={steps.bridgeDeployed ? 'check' : 'minus'} /> <span className='progress-text-content'>Deploy a bridge to Fuse-chain</span>
         </div>
         <div className='dashboard-progress-text text-negative'>
