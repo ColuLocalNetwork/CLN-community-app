@@ -114,7 +114,7 @@ class Bridge extends Component {
           balances={this.props.balances}
           bridgeSide={this.props.bridgeStatus.from}
           transferStatus={this.props.transferStatus}
-          className={this.props.foreignTokenAddress && this.props.homeTokenAddress ? `balance-${this.props.network}` : 'balance-disabled'}
+          className={`balance-${this.props.network}`}
         />
         <div className='dashboard-network-content network-arrow'>
           <FontAwesome name='long-arrow-alt-right' />
