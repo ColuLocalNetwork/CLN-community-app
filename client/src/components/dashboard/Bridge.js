@@ -24,7 +24,7 @@ const NetworkLogo = ({network}) => {
   }
 }
 
-function Balance (props) {
+const Balance = (props) => {
   useEffect(() => {
     if (props.tokenAddress && props.accountAddress && !props.transferStatus) {
       props.balanceOfToken(props.tokenAddress, props.accountAddress, {bridgeType: props.bridgeSide.bridge})
