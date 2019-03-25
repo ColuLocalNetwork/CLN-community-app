@@ -1,13 +1,13 @@
 
-export const loadState = (key, defaulObj) => {
+export const loadState = (key) => {
   try {
     const serializedState = window.localStorage.getItem(key)
-    if (serializedState === null) {
-      return defaulObj
+    if (!serializedState) {
+      return serializedState
     }
     return JSON.parse(serializedState)
   } catch (err) {
-    return defaulObj
+    return null
   }
 }
 
