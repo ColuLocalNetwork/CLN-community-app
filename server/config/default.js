@@ -44,7 +44,8 @@ module.exports = {
       },
       mainnet: {
         ColuLocalNetwork: '0x4162178B78D6985480A308B2190EE5517460406D',
-        TokenFactory: '0xac051e086FD2046FC75A53D38088B4DD6e00E25b'
+        TokenFactory: '0xac051e086FD2046FC75A53D38088B4DD6e00E25b',
+        ForeignBridgeFactory: '0xE600496e0267D6b7AFDb62f83D46062199f0B0d7'
       },
       fuse: defer(function () {
         if (this.web3.network === 'mainnet') {
