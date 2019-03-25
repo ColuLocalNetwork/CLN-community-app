@@ -34,7 +34,7 @@ module.exports = {
       return `wss://${this.web3.network}.infura.io/ws/v3/${this.web3.apiKey}`
     }),
     fuseProvider: 'http://rpc.fuse.io',
-    network: 'ropsten',
+    network: 'mainnet',
     pageSize: 1000,
     addresses: {
       ropsten: {
@@ -46,10 +46,19 @@ module.exports = {
         ColuLocalNetwork: '0x4162178B78D6985480A308B2190EE5517460406D',
         TokenFactory: '0xac051e086FD2046FC75A53D38088B4DD6e00E25b'
       },
-      fuse: {
-        HomeBridgeFactory: '0xFb5CC1688Ec06c57cbAB6cC34c33413154A666Fa',
-        BridgeMapper: '0x9cb2820EA169D37aFa13C097776bDDB9b19d3C14'
-      }
+      fuse: defer(function () {
+        if (this.web3.network === 'mainnet') {
+          return {
+            HomeBridgeFactory: '0x93EF4d4032E053978aA71792Efd05d8b583a2B78',
+            BridgeMapper: '0x41063a48F46EE7E20E7EbAd0185992724B4Ee56c'
+          }
+        } else {
+          return {
+            HomeBridgeFactory: '0xFb5CC1688Ec06c57cbAB6cC34c33413154A666Fa',
+            BridgeMapper: '0x9cb2820EA169D37aFa13C097776bDDB9b19d3C14'
+          }
+        }
+      })
     }
   },
   mongo: {

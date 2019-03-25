@@ -22,7 +22,7 @@ const HomeBridgeDeployedEventAbi = extractEvent(HomeBridgeFactoryABI, 'HomeBridg
 
 const createWeb3 = (providerUrl) => {
   const web3 = new Web3(providerUrl)
-  const account = web3.eth.accounts.wallet.add(add0xPrefix(config.get('secrets.fuse.bridge.ropsten.privateKey')))
+  const account = web3.eth.accounts.wallet.add(add0xPrefix(config.get('secrets.fuse.bridge.privateKey')))
   return {from: account.address, web3}
 }
 
