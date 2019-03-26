@@ -66,11 +66,13 @@ export const createEntitiesFetch = (action, apiFunc) => function * (params) {
   if (!entity) {
     throw Error(`No entity name given for action ${action.REQUEST}`)
   }
-  const response = yield apiCall(apiFunc, params)
-  const {data, ...metadata} = response
-  const tokens = data
 
-  const entities = keyBy(tokens, entityKeys[entity])
+  const response = yield apiCall(apiFunc, params)
+
+  const {data, ...metadata} = response
+
+  const dataArray = Array.isArray(data) ? data : [data]
+  const entities = keyBy(dataArray, entityKeys[entity])
   const result = Object.keys(entities)
 
   yield put({
@@ -82,5 +84,5 @@ export const createEntitiesFetch = (action, apiFunc) => function * (params) {
       metadata
     }})
 
-  return tokens
+  return data
 }

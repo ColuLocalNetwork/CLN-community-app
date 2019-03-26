@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import MediaMobile from 'images/issue-popup-mobile.svg'
 import FontAwesome from 'react-fontawesome'
 import TopNav from './../TopNav'
-import { getList, fetchBusinesses, activateBusiness } from 'actions/directory'
+import { getList, fetchBusinesses, fetchBusiness, activateBusiness } from 'actions/directory'
 import CustomCopyToClipboard from 'components/common/CustomCopyToClipboard'
 
 class EntityProfile extends Component {
@@ -12,16 +12,10 @@ class EntityProfile extends Component {
   }
 
   componentDidMount () {
-    this.props.getList(this.props.match.params.address)
+    this.props.fetchBusiness(this.props.listAddress, this.props.hash)
   }
 
   showHomePage = (address) => this.props.history.push('/')
-
-  componentDidUpdate (prevProps) {
-    if (this.props.listAddress && this.props.listAddress !== prevProps.listAddress) {
-      this.props.fetchBusinesses(this.props.listAddress, 1)
-    }
-  }
 
   render () {
     const {entity} = this.props
@@ -100,7 +94,7 @@ class EntityProfile extends Component {
                     <form>
                       <textarea
                         ref={textarea => (this.textArea = textarea)}
-                        value={this.props.match.params.hash}
+                        value={this.props.hash}
                         readOnly
                       />
                     </form>
@@ -121,6 +115,7 @@ class EntityProfile extends Component {
 }
 
 const mapStateToProps = (state, {match}) => ({
+  listAddress: match.params.listAddress,
   hash: match.params.hash,
   metadata: state.entities.metadata,
   entity: state.entities.metadata[[`ipfs://${match.params.hash}`]]
@@ -129,6 +124,7 @@ const mapStateToProps = (state, {match}) => ({
 const mapDispatchToProps = {
   getList,
   fetchBusinesses,
+  fetchBusiness,
   activateBusiness
 }
 
