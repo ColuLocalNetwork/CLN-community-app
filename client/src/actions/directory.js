@@ -10,6 +10,8 @@ export const GET_LIST = createTransactionRequestTypes('GET_LIST')
 export const ADD_DIRECTORY_ENTITY = createTransactionRequestTypes('ADD_DIRECTORY_ENTITY')
 export const REMOVE_ENTITY = createTransactionRequestTypes('REMOVE_ENTITY')
 
+export const ACTIVATE_BUSINESS = createTransactionRequestTypes('ACTIVATE_BUSINESS')
+// export cons
 export const FETCH_BUSINESSES = createTransactionRequestTypes('FETCH_BUSINESSES')
 
 export const createList = (tokenAddress) => action(CREATE_LIST.REQUEST, {tokenAddress})
@@ -19,3 +21,6 @@ export const addEntity = (listAddress, data) => action(ADD_DIRECTORY_ENTITY.REQU
 export const removeEntity = (listAddress, hash) => action(REMOVE_ENTITY.REQUEST, {listAddress, hash})
 
 export const fetchBusinesses = (listAddress, page) => businessesAction(FETCH_BUSINESSES.REQUEST, {listAddress, page})
+
+export const activateBusiness = () => action(ACTIVATE_BUSINESS.REQUEST)
+export const deactivateBusiness = () => action(ACTIVATE_BUSINESS.REQUEST)

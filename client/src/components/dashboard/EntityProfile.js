@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import MediaMobile from 'images/issue-popup-mobile.svg'
 import FontAwesome from 'react-fontawesome'
 import TopNav from './../TopNav'
-import { getList, fetchBusinesses } from 'actions/directory'
+import { getList, fetchBusinesses, activateBusiness } from 'actions/directory'
 import CustomCopyToClipboard from 'components/common/CustomCopyToClipboard'
 
 class EntityProfile extends Component {
@@ -24,7 +24,7 @@ class EntityProfile extends Component {
   }
 
   render () {
-    const entity = this.props.metadata[`ipfs://${this.props.hash}`]
+    const {entity} = this.props
     return (
       <React.Fragment>
         <TopNav
@@ -52,7 +52,10 @@ class EntityProfile extends Component {
                       <FontAwesome name='edit' /> Edit business profile
                     </p>
                     <p className='entity-profile-link'>
-                      <FontAwesome name='signature' /> Deactivate
+                      <FontAwesome name='signature' />
+                      {entity && entity.active
+                        ? 'Deactivate'
+                        : 'Activate' }
                     </p>
                   </div>
                 </div>
@@ -119,12 +122,14 @@ class EntityProfile extends Component {
 
 const mapStateToProps = (state, {match}) => ({
   hash: match.params.hash,
-  metadata: state.entities.metadata
+  metadata: state.entities.metadata,
+  entity: state.entities.metadata[[`ipfs://${match.params.hash}`]]
 })
 
 const mapDispatchToProps = {
   getList,
-  fetchBusinesses
+  fetchBusinesses,
+  activateBusiness
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EntityProfile)
