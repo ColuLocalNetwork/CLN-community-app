@@ -72,12 +72,14 @@ export function * addEntity ({listAddress, data}) {
 }
 
 const fetchBusinesses = createEntitiesFetch(actions.FETCH_BUSINESSES, api.fetchBusinesses)
+const fetchBusiness = createEntitiesFetch(actions.FETCH_BUSINESS, api.fetchBusiness)
 
 export default function * marketMakerSaga () {
   yield all([
     tryTakeEvery(actions.CREATE_LIST, createList, 1),
     tryTakeEvery(actions.GET_LIST, getList, 1),
     tryTakeEvery(actions.ADD_DIRECTORY_ENTITY, addEntity, 1),
-    tryTakeEvery(actions.FETCH_BUSINESSES, fetchBusinesses, 1)
+    tryTakeEvery(actions.FETCH_BUSINESSES, fetchBusinesses, 1),
+    tryTakeEvery(actions.FETCH_BUSINESS, fetchBusiness, 1)
   ])
 }
