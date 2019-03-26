@@ -34,7 +34,7 @@ class EntityDirectory extends Component {
   }
 
   handleAddEntity = (data) => {
-    this.props.addEntity(this.props.listAddress, data)
+    this.props.addEntity(this.props.listAddress, {...data, active: true})
     this.props.hideModal()
   }
 
