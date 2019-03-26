@@ -34,7 +34,7 @@ module.exports = {
       return `wss://${this.web3.network}.infura.io/ws/v3/${this.web3.apiKey}`
     }),
     fuseProvider: 'http://rpc.fuse.io',
-    network: 'mainnet',
+    network: 'ropsten',
     pageSize: 1000,
     addresses: {
       ropsten: {
