@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import MediaMobile from 'images/issue-popup-mobile.svg'
 import FontAwesome from 'react-fontawesome'
 import TopNav from './../TopNav'
-import { getList, fetchBusinesses, fetchBusiness, activateBusiness } from 'actions/directory'
+import { getList, fetchBusinesses, fetchBusiness, activateBusiness, deactivateBusiness } from 'actions/directory'
 import CustomCopyToClipboard from 'components/common/CustomCopyToClipboard'
 
 class EntityProfile extends Component {
@@ -16,6 +16,10 @@ class EntityProfile extends Component {
   }
 
   showHomePage = (address) => this.props.history.push('/')
+
+  handleDeactivate = () => this.props.deactivateBusiness(this.props.listAddress, this.props.hash)
+
+  handleActivate = () => this.props.activateBusiness(this.props.listAddress, this.props.hash)
 
   render () {
     const {entity} = this.props
@@ -45,12 +49,16 @@ class EntityProfile extends Component {
                     <p className='entity-profile-link'>
                       <FontAwesome name='edit' /> Edit business profile
                     </p>
-                    <p className='entity-profile-link'>
-                      <FontAwesome name='signature' />
-                      {entity && entity.active
-                        ? 'Deactivate'
-                        : 'Activate' }
-                    </p>
+                    {entity && entity.active
+                      ? <p className='entity-profile-link' onClick={this.handleDeactivate}>
+                        <FontAwesome name='signature' />
+                        Deactivate
+                      </p>
+                      : <p className='entity-profile-link' onClick={this.handleAactivate}>
+                        <FontAwesome name='signature' />
+                        Activate
+                      </p>
+                    }
                   </div>
                 </div>
               </div>
@@ -117,7 +125,6 @@ class EntityProfile extends Component {
 const mapStateToProps = (state, {match}) => ({
   listAddress: match.params.listAddress,
   hash: match.params.hash,
-  metadata: state.entities.metadata,
   entity: state.entities.metadata[`ipfs://${match.params.hash}`]
 })
 
@@ -125,7 +132,8 @@ const mapDispatchToProps = {
   getList,
   fetchBusinesses,
   fetchBusiness,
-  activateBusiness
+  activateBusiness,
+  deactivateBusiness
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EntityProfile)

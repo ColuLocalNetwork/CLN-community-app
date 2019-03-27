@@ -44,7 +44,7 @@ export function * fetchForeignBridge ({foreignTokenAddress}) {
   const foreignBridgeAddress = yield bridgeMapperContract.methods.foreignBridgeByForeignToken(foreignTokenAddress).call()
 
   yield put({
-    type: actions.FETCH_HOME_BRIDGE.SUCCESS,
+    type: actions.FETCH_FOREIGN_BRIDGE.SUCCESS,
     response: {
       foreignBridgeAddress: zeroAddressToNull(foreignBridgeAddress)
     }

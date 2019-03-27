@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import FontAwesome from 'react-fontawesome'
 import { connect } from 'react-redux'
 import Loader from 'components/Loader'
@@ -12,6 +12,31 @@ import {loadModal, hideModal} from 'actions/ui'
 import { ADD_DIRECTORY_ENTITY } from 'constants/uiConstants'
 import ReactGA from 'services/ga'
 import {isOwner} from 'utils/token'
+import {fetchHomeToken} from 'actions/bridge'
+
+const EntityDirectoryDataFetcher = (props) => {
+  useEffect(() => {
+    if (props.homeTokenAddress) {
+      props.getList(props.homeTokenAddress)
+    } else {
+      props.fetchHomeToken(props.foreignTokenAddress)
+    }
+  }, [props.homeTokenAddress])
+
+  useEffect(() => {
+    if (props.listAddress) {
+      props.fetchBusinesses(props.listAddress, 1)
+    }
+  }, [props.listAddress])
+
+  useEffect(() => {
+    if (props.listAddress && props.transactionStatus === SUCCESS) {
+      props.fetchBusinesses(props.listAddress, 1)
+    }
+  }, [props.transactionStatus])
+
+  return null
+}
 
 class EntityDirectory extends Component {
   state = {
@@ -39,19 +64,6 @@ class EntityDirectory extends Component {
   }
 
   handleCreateList = () => this.props.createList(this.props.tokenAddress)
-
-  componentDidMount () {
-    this.props.getList(this.props.tokenAddress)
-  }
-
-  componentDidUpdate (prevProps) {
-    if (
-      (this.props.listAddress && this.props.listAddress !== prevProps.listAddress) ||
-      (this.props.transactionStatus !== prevProps.transactionStatus && this.props.transactionStatus === SUCCESS)
-    ) {
-      this.props.fetchBusinesses(this.props.listAddress, 1)
-    }
-  }
 
   loadAddingModal = () => this.props.loadModal(ADD_DIRECTORY_ENTITY, {
     handleAddEntity: this.handleAddEntity,
@@ -161,6 +173,13 @@ class EntityDirectory extends Component {
         {!this.props.listAddress && <div className='dashboard-empty-list'>
           <img src={EmptyBusinessList} />
         </div>}
+        <EntityDirectoryDataFetcher
+          fetchHomeToken={this.props.fetchHomeToken}
+          getList={this.props.getList}
+          homeTokenAddress={this.props.homeTokenAddress}
+          foreignTokenAddress={this.props.foreignTokenAddress}
+          fetchBusinesses={this.props.fetchBusinesses}
+          transactionStatus={this.props.transactionStatus} />
       </div>
     )
   }
@@ -171,6 +190,7 @@ const mapStateToProps = (state, {match}) => ({
   network: state.network,
   clnBalance: getClnBalance(state),
   accountAddress: getAccountAddress(state),
+  homeTokenAddress: state.screens.bridge.homeTokenAddress,
   ...state.screens.directory
 })
 
@@ -180,7 +200,8 @@ const mapDispatchToProps = {
   addEntity,
   loadModal,
   hideModal,
-  fetchBusinesses
+  fetchBusinesses,
+  fetchHomeToken
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EntityDirectory)

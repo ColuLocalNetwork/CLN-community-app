@@ -10,7 +10,7 @@ import {isZeroAddress} from 'utils/web3'
 import {processReceipt} from 'services/api/misc'
 import * as api from 'services/api/business'
 
-export function * createList ({tokenAddress}) {
+function * createList ({tokenAddress}) {
   const accountAddress = yield select(getAccountAddress)
   const contractAddress = yield select(getAddress, 'SimpleListFactory')
   const SimpleListFactoryContract = getContract({abiName: 'SimpleListFactory',
@@ -30,7 +30,7 @@ export function * createList ({tokenAddress}) {
   return receipt
 }
 
-export function * getList ({tokenAddress}) {
+function * getList ({tokenAddress}) {
   const contractAddress = yield select(getAddress, 'SimpleListFactory')
   const options = {bridgeType: 'home'}
   const SimpleListFactoryContract = getContract({
@@ -48,7 +48,7 @@ export function * getList ({tokenAddress}) {
   return listAddress
 }
 
-export function * addEntity ({listAddress, data}) {
+function * addEntity ({listAddress, data}) {
   const accountAddress = yield select(getAccountAddress)
   const SimpleListContract = getContract({abiName: 'SimpleList',
     address: listAddress
@@ -62,7 +62,7 @@ export function * addEntity ({listAddress, data}) {
 
   yield apiCall(processReceipt, {receipt})
 
-  yield put({type: actions.ADD_DIRECTORY_ENTITY.SUCCESS,
+  yield put({type: actions.ADD_ENTITY.SUCCESS,
     response: {
       receipt
     }
@@ -71,15 +71,69 @@ export function * addEntity ({listAddress, data}) {
   return receipt
 }
 
+function * removeEntity ({listAddress, hash}) {
+  const accountAddress = yield select(getAccountAddress)
+  const SimpleListContract = getContract({abiName: 'SimpleList',
+    address: listAddress
+  })
+
+  const receipt = yield SimpleListContract.methods.deleteEntity(hash).send({
+    from: accountAddress
+  })
+
+  yield apiCall(processReceipt, {receipt})
+
+  yield put({type: actions.REMOVE_DIRECTORY_ENTITY.SUCCESS,
+    response: {
+      receipt
+    }
+  })
+
+  return receipt
+}
+
+function * editEntity ({listAddress, hash, data}) {
+  const accountAddress = yield select(getAccountAddress)
+  const SimpleListContract = getContract({abiName: 'SimpleList',
+    address: listAddress
+  })
+
+  const receipt = yield SimpleListContract.methods.deleteEntity(hash).send({
+    from: accountAddress
+  })
+
+  yield apiCall(processReceipt, {receipt})
+
+  yield put({type: actions.REMOVE_DIRECTORY_ENTITY.SUCCESS,
+    response: {
+      receipt
+    }
+  })
+
+  return receipt
+}
+
+export function * activateBusiness ({listAddress, hash}) {
+
+}
+
+export function * deactivateBusiness ({listAddress, hash}) {
+
+}
+
 const fetchBusinesses = createEntitiesFetch(actions.FETCH_BUSINESSES, api.fetchBusinesses)
 const fetchBusiness = createEntitiesFetch(actions.FETCH_BUSINESS, api.fetchBusiness)
 
-export default function * marketMakerSaga () {
+export default function * businessSaga () {
   yield all([
     tryTakeEvery(actions.CREATE_LIST, createList, 1),
     tryTakeEvery(actions.GET_LIST, getList, 1),
-    tryTakeEvery(actions.ADD_DIRECTORY_ENTITY, addEntity, 1),
+    tryTakeEvery(actions.ADD_ENTITY, addEntity, 1),
+    tryTakeEvery(actions.REMOVE_ENTITY, removeEntity, 1),
+    tryTakeEvery(actions.EDIT_ENTITY, editEntity, 1),
     tryTakeEvery(actions.FETCH_BUSINESSES, fetchBusinesses, 1),
-    tryTakeEvery(actions.FETCH_BUSINESS, fetchBusiness, 1)
+    tryTakeEvery(actions.FETCH_BUSINESS, fetchBusiness, 1),
+    tryTakeEvery(actions.ACTIVATE_BUSINESS, activateBusiness, 1),
+    tryTakeEvery(actions.DEACTIVATE_BUSINESS, deactivateBusiness, 1)
   ])
 }
