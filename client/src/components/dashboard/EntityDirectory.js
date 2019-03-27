@@ -9,7 +9,7 @@ import {createList, getList, addEntity, fetchBusinesses} from 'actions/directory
 import Entity from './Entity'
 import EmptyBusinessList from 'images/emptyBusinessList.png'
 import {loadModal, hideModal} from 'actions/ui'
-import { ADD_DIRECTORY_ENTITY, GENERIC_MODAL } from 'constants/uiConstants'
+import { ADD_DIRECTORY_ENTITY } from 'constants/uiConstants'
 import ReactGA from 'services/ga'
 import {isOwner} from 'utils/token'
 
@@ -57,20 +57,6 @@ class EntityDirectory extends Component {
     handleAddEntity: this.handleAddEntity,
     accountAddress: this.props.network.accountAddress
   })
-
-  loadBusinessListPopup = (token) => this.props.loadModal(GENERIC_MODAL, {
-    content: {
-      title: 'Business list is not deployed yet',
-      body: token.address === token.owner ? 'So you have a community currency and you connected it to the Fuse chain. Now it is the time to create a community! The first step is to deploy a list of businesses that can recieve your community currency in exchange of goods and services. The business list is managed via a smart contract to provide transaparency and business logic for the payments. This list will allow community members to know to what businesses they can use their tokens within the community wallet!' : 'The first step to become a community is to have a list of businesses that can recieve this community currency in exchange of goods and services. The business list is managed via a smart contract to provide transaparency and business logic for the payments. This list will allow community members to know to what businesses they can use their tokens within the community wallet!',
-      buttonText: token.address === token.owner ? 'Deploy a Business list to Fuse network' : 'Got it'
-    },
-    buttonAction: () => this.setDeployingList()
-  })
-
-  setDeployingList = () => {
-    this.props.createList(this.props.tokenAddress)
-    this.props.hideModal()
-  }
 
   renderTransactionStatus = (transactionStatus) => {
     if (transactionStatus === REQUEST) {
@@ -131,7 +117,7 @@ class EntityDirectory extends Component {
             </p>
             <button
               className='dashboard-transfer-btn'
-              onClick={() => this.loadBusinessListPopup(this.props.token)}
+              onClick={this.props.loadBusinessListPopup}
               disabled={this.props.transactionStatus === REQUEST || !isOwner(this.props.token, this.props.accountAddress)}
             >
               Deploy business list

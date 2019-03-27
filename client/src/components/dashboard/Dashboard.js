@@ -119,13 +119,27 @@ class Dashboard extends Component {
     this.props.hideModal()
   }
 
-  loadBridgePopup = (token) => this.props.loadModal(GENERIC_MODAL, {
+  setDeployingList = () => {
+    this.props.createList(this.props.tokenAddress)
+    this.props.hideModal()
+  }
+
+  loadBridgePopup = (accountAddress, token) => this.props.loadModal(GENERIC_MODAL, {
     content: {
       title: 'Bridge is not deployed yet',
       body: 'In order to access cheaper and faster transactions on the Fuse chain, a bridge between the Ethereum network and the Fuse chain needs to be deployed. The bridge is a special smart contracts that locks the funds on one side of the bridge and unlock it on the other side. The bridge is opreated by validators who sign and lock the tokens  or unlocking it to provide easy movement between the chains.',
-      buttonText: token.address === token.owner ? 'Deploy a Bridge to Fuse network' : 'Got it'
+      buttonText: accountAddress === token.owner ? 'Deploy a Bridge to Fuse network' : 'Got it'
     },
     buttonAction: () => this.setDeployingBridge()
+  })
+
+  loadBusinessListPopup = (accountAddress, token) => this.props.loadModal(GENERIC_MODAL, {
+    content: {
+      title: 'Business list is not deployed yet',
+      body: accountAddress === token.owner ? 'So you have a community currency and you connected it to the Fuse chain. Now it is the time to create a community! The first step is to deploy a list of businesses that can recieve your community currency in exchange of goods and services. The business list is managed via a smart contract to provide transaparency and business logic for the payments. This list will allow community members to know to what businesses they can use their tokens within the community wallet!' : 'The first step to become a community is to have a list of businesses that can recieve this community currency in exchange of goods and services. The business list is managed via a smart contract to provide transaparency and business logic for the payments. This list will allow community members to know to what businesses they can use their tokens within the community wallet!',
+      buttonText: accountAddress === token.owner ? 'Deploy a Business list to Fuse network' : 'Got it'
+    },
+    buttonAction: () => this.setDeployingList()
   })
 
   render () {
@@ -150,7 +164,9 @@ class Dashboard extends Component {
               metadata={this.props.metadata}
               steps={steps}
               match={this.props.match}
-              loadTextPopup={() => this.loadBridgePopup(token)}
+              loadBridgePopup={() => this.loadBridgePopup(this.props.accountAddress, token)}
+              loadUserDataModal={this.loadUserDataModal}
+              loadBusinessListPopup={() => this.loadBusinessListPopup(this.props.accountAddress, token)}
             />
             <div className='dashboard-information'>
               <div className='dashboard-information-header'>
@@ -192,8 +208,9 @@ class Dashboard extends Component {
             accountAddress={this.props.accountAddress}
             token={this.props.token}
             foreignTokenAddress={this.props.tokenAddress}
-            loadBridgePopup={this.loadBridgePopup}
+            loadBridgePopup={() => this.loadBridgePopup(this.props.accountAddress, token)}
             handleTransfer={this.handleTransfer}
+            network={this.props.networkType}
           />
           <div className='dashboard-entities'>
             <EntityDirectory
@@ -201,7 +218,7 @@ class Dashboard extends Component {
               tokenAddress={this.props.match.params.address}
               token={this.props.token}
               copyToClipboard={this.copyToClipboard}
-              loadBusinessListPopup={this.loadBusinessListPopup}
+              loadBusinessListPopup={() => this.loadBusinessListPopup(this.props.accountAddress, token)}
             />
           </div>
         </div>
