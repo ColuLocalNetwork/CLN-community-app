@@ -6,7 +6,7 @@ import {isUserExists} from 'actions/user'
 import FontAwesome from 'react-fontawesome'
 import {getClnBalance, getAccountAddress} from 'selectors/accounts'
 import {formatWei} from 'utils/format'
-import { USER_DATA_MODAL, WRONG_NETWORK_MODAL, GENERIC_MODAL } from 'constants/uiConstants'
+import { USER_DATA_MODAL, WRONG_NETWORK_MODAL, BUSINESS_LIST_MODAL, BRIDGE_MODAL } from 'constants/uiConstants'
 import {loadModal, hideModal} from 'actions/ui'
 import { deployBridge } from 'actions/bridge'
 import { createList } from 'actions/directory'
@@ -124,21 +124,15 @@ class Dashboard extends Component {
     this.props.hideModal()
   }
 
-  loadBridgePopup = (accountAddress, token) => this.props.loadModal(GENERIC_MODAL, {
-    content: {
-      title: 'Bridge is not deployed yet',
-      body: 'In order to access cheaper and faster transactions on the Fuse chain, a bridge between the Ethereum network and the Fuse chain needs to be deployed. The bridge is a special smart contracts that locks the funds on one side of the bridge and unlock it on the other side. The bridge is opreated by validators who sign and lock the tokens  or unlocking it to provide easy movement between the chains.',
-      buttonText: accountAddress === token.owner ? 'Deploy a Bridge to Fuse network' : 'Got it'
-    },
+  loadBridgePopup = (accountAddress, token) => this.props.loadModal(BRIDGE_MODAL, {
+    accountAddress: this.props.accountAddress,
+    owner: token.owner,
     buttonAction: () => this.setDeployingBridge()
   })
 
-  loadBusinessListPopup = (accountAddress, token) => this.props.loadModal(GENERIC_MODAL, {
-    content: {
-      title: 'Business list is not deployed yet',
-      body: accountAddress === token.owner ? 'So you have a community currency and you connected it to the Fuse chain. Now it is the time to create a community! The first step is to deploy a list of businesses that can recieve your community currency in exchange of goods and services. The business list is managed via a smart contract to provide transaparency and business logic for the payments. This list will allow community members to know to what businesses they can use their tokens within the community wallet!' : 'The first step to become a community is to have a list of businesses that can recieve this community currency in exchange of goods and services. The business list is managed via a smart contract to provide transaparency and business logic for the payments. This list will allow community members to know to what businesses they can use their tokens within the community wallet!',
-      buttonText: accountAddress === token.owner ? 'Deploy a Business list to Fuse network' : 'Got it'
-    },
+  loadBusinessListPopup = (accountAddress, token) => this.props.loadModal(BUSINESS_LIST_MODAL, {
+    accountAddress: this.props.accountAddress,
+    owner: token.owner,
     buttonAction: () => this.setDeployingList()
   })
 
