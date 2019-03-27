@@ -118,7 +118,7 @@ const mapStateToProps = (state, {match}) => ({
   listAddress: match.params.listAddress,
   hash: match.params.hash,
   metadata: state.entities.metadata,
-  entity: state.entities.metadata[[`ipfs://${match.params.hash}`]]
+  entity: state.entities.metadata[`ipfs://${match.params.hash}`]
 })
 
 const mapDispatchToProps = {
