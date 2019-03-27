@@ -182,7 +182,7 @@ class Dashboard extends Component {
           <div className='dashboard-entities'>
             <EntityDirectory
               history={this.props.history}
-              tokenAddress={this.props.match.params.address}
+              foreignTokenAddress={this.props.tokenAddress}
               token={this.props.token}
               loadBusinessListPopup={() => this.loadBusinessListPopup(accountAddress, token)}
             />
