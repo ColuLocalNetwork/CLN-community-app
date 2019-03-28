@@ -13,7 +13,7 @@
       },
       "fuse": {
         "ropsten": {
-          "SimpleListFactory": "0xa34831188ed0319367ed050ad9b89a3ea74e5250",
+          "SimpleListFactory": "0x93d274626C812EaA5fA93d81b05804bDc12e270e",
           "BridgeMapper": "0x9cb2820EA169D37aFa13C097776bDDB9b19d3C14"
         },
         "main": {

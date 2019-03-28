@@ -51,7 +51,7 @@ class EntityProfile extends Component {
                         <FontAwesome name='signature' />
                         Deactivate
                       </p>
-                      : <p className='entity-profile-link' onClick={this.handleAactivate}>
+                      : <p className='entity-profile-link' onClick={this.handleActivate}>
                         <FontAwesome name='signature' />
                         Activate
                       </p>
