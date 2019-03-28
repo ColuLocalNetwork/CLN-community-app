@@ -58,17 +58,6 @@ class EntityDirectory extends Component {
     })
   }
 
-  deployingList = () => {
-    this.props.createList(this.props.homeTokenAddress)
-    this.props.hideModal()
-  }
-
-  loadBusinessListPopup = () => this.props.loadModal(BUSINESS_LIST_MODAL, {
-    accountAddress: this.props.accountAddress,
-    owner: this.props.token.owner,
-    buttonAction: this.deployingList
-  })
-
   handleAddEntity = (data) => {
     this.props.addEntity(this.props.listAddress, {...data, active: true})
     this.props.hideModal()
