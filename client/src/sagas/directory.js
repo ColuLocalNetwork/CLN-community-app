@@ -98,7 +98,10 @@ function * editEntity ({listAddress, hash, data}) {
     address: listAddress
   })
 
-  const receipt = yield SimpleListContract.methods.deleteEntity(hash).send({
+  const response = yield call(createMetadata, {metadata: data})
+  const newHash = response.hash
+  debugger
+  const receipt = yield SimpleListContract.methods.replaceEntity(hash, newHash).send({
     from: accountAddress
   })
 
@@ -114,11 +117,23 @@ function * editEntity ({listAddress, hash, data}) {
 }
 
 export function * activateBusiness ({listAddress, hash}) {
-
+  const data = yield select(state => state.entities.metadata[`ipfs://${hash}`])
+  const receipt = yield editEntity({listAddress, hash, data: {...data, activate: true}})
+  yield put({type: actions.ACTIVATE_BUSINESS.SUCCESS,
+    response: {
+      receipt
+    }
+  })
 }
 
 export function * deactivateBusiness ({listAddress, hash}) {
-
+  const data = yield select(state => state.entities.metadata[`ipfs://${hash}`])
+  const receipt = yield editEntity({listAddress, hash, data: {...data, activate: false}})
+  yield put({type: actions.DEACTIVATE_BUSINESS.SUCCESS,
+    response: {
+      receipt
+    }
+  })
 }
 
 const fetchBusinesses = createEntitiesFetch(actions.FETCH_BUSINESSES, api.fetchBusinesses)

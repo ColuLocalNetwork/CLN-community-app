@@ -9,7 +9,7 @@ import {createList, getList, addEntity, fetchBusinesses} from 'actions/directory
 import Entity from './Entity'
 import EmptyBusinessList from 'images/emptyBusinessList.png'
 import {loadModal, hideModal} from 'actions/ui'
-import { ADD_DIRECTORY_ENTITY } from 'constants/uiConstants'
+import { ADD_DIRECTORY_ENTITY, BUSINESS_LIST_MODAL } from 'constants/uiConstants'
 import ReactGA from 'services/ga'
 import {isOwner} from 'utils/token'
 import {fetchHomeToken} from 'actions/bridge'
@@ -58,12 +58,21 @@ class EntityDirectory extends Component {
     })
   }
 
+  deployingList = () => {
+    this.props.createList(this.props.homeTokenAddress)
+    this.props.hideModal()
+  }
+
+  loadBusinessListPopup = () => this.props.loadModal(BUSINESS_LIST_MODAL, {
+    accountAddress: this.props.accountAddress,
+    owner: this.props.token.owner,
+    buttonAction: this.deployingList
+  })
+
   handleAddEntity = (data) => {
     this.props.addEntity(this.props.listAddress, {...data, active: true})
     this.props.hideModal()
   }
-
-  handleCreateList = () => this.props.createList(this.props.tokenAddress)
 
   loadAddingModal = () => this.props.loadModal(ADD_DIRECTORY_ENTITY, {
     handleAddEntity: this.handleAddEntity,
@@ -107,6 +116,10 @@ class EntityDirectory extends Component {
     }
   }
 
+  canDeployBusinessList = () => this.props.transactionStatus !== REQUEST &&
+    isOwner(this.props.token, this.props.accountAddress) &&
+    this.props.homeTokenAddress
+
   render () {
     const business = this.props.entities
     const filteredBusiness = this.filterBySearch(this.state.search, business)
@@ -129,7 +142,7 @@ class EntityDirectory extends Component {
             <button
               className='dashboard-transfer-btn'
               onClick={this.props.loadBusinessListPopup}
-              disabled={this.props.transactionStatus === REQUEST || !isOwner(this.props.token, this.props.accountAddress)}
+              disabled={!this.canDeployBusinessList()}
             >
               Deploy business list
             </button>
@@ -176,6 +189,7 @@ class EntityDirectory extends Component {
         <EntityDirectoryDataFetcher
           fetchHomeToken={this.props.fetchHomeToken}
           getList={this.props.getList}
+          listAddress={this.props.listAddress}
           homeTokenAddress={this.props.homeTokenAddress}
           foreignTokenAddress={this.props.foreignTokenAddress}
           fetchBusinesses={this.props.fetchBusinesses}
