@@ -94,20 +94,21 @@ function * removeEntity ({listAddress, hash}) {
 
 function * editEntity ({listAddress, hash, data}) {
   const accountAddress = yield select(getAccountAddress)
+
   const SimpleListContract = getContract({abiName: 'SimpleList',
     address: listAddress
   })
 
   const response = yield call(createMetadata, {metadata: data})
   const newHash = response.hash
-  debugger
+
   const receipt = yield SimpleListContract.methods.replaceEntity(hash, newHash).send({
     from: accountAddress
   })
 
   yield apiCall(processReceipt, {receipt})
 
-  yield put({type: actions.REMOVE_DIRECTORY_ENTITY.SUCCESS,
+  yield put({type: actions.EDIT_ENTITY.SUCCESS,
     response: {
       receipt
     }
@@ -118,7 +119,7 @@ function * editEntity ({listAddress, hash, data}) {
 
 export function * activateBusiness ({listAddress, hash}) {
   const data = yield select(state => state.entities.metadata[`ipfs://${hash}`])
-  const receipt = yield editEntity({listAddress, hash, data: {...data, activate: true}})
+  const receipt = yield editEntity({listAddress, hash, data: {...data, active: true}})
   yield put({type: actions.ACTIVATE_BUSINESS.SUCCESS,
     response: {
       receipt
@@ -128,7 +129,7 @@ export function * activateBusiness ({listAddress, hash}) {
 
 export function * deactivateBusiness ({listAddress, hash}) {
   const data = yield select(state => state.entities.metadata[`ipfs://${hash}`])
-  const receipt = yield editEntity({listAddress, hash, data: {...data, activate: false}})
+  const receipt = yield editEntity({listAddress, hash, data: {...data, active: false}})
   yield put({type: actions.DEACTIVATE_BUSINESS.SUCCESS,
     response: {
       receipt
