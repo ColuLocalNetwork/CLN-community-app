@@ -47,7 +47,7 @@ const Balance = (props) => {
 
 Balance.propTypes = {
   balanceOfToken: PropTypes.func.isRequired,
-  accountAddress: PropTypes.string.isRequired,
+  accountAddress: PropTypes.string,
   tokenAddress: PropTypes.string,
   token: PropTypes.object,
   bridgeSide: PropTypes.object.isRequired
