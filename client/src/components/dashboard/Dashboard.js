@@ -211,7 +211,7 @@ const mapStateToProps = (state, {match}) => ({
   dashboard: state.screens.dashboard,
   accountAddress: getAccountAddress(state),
   clnBalance: getClnBalance(state),
-  homeTokenAddress: state.screens.bridge.homeTokenAddress
+  homeTokenAddress: state.entities.bridges[match.params.address] && state.entities.bridges[match.params.address].homeTokenAddress
 })
 
 const mapDispatchToProps = {

@@ -17,9 +17,9 @@ function * createList ({tokenAddress}) {
     address: contractAddress
   })
 
-  const receipt = yield SimpleListFactoryContract.methods.createSimpleList(tokenAddress).send({
-    from: accountAddress,
-    gasPrice: 1e9
+  const method = SimpleListFactoryContract.methods.createSimpleList(tokenAddress)
+  const receipt = yield method.send({
+    from: accountAddress
   })
 
   yield put({type: actions.CREATE_LIST.SUCCESS,
@@ -55,8 +55,8 @@ function * addEntity ({listAddress, data}) {
   })
 
   const {hash} = yield call(createMetadata, {metadata: data})
-
-  const receipt = yield SimpleListContract.methods.addEntity(hash).send({
+  const method = SimpleListContract.methods.addEntity(hash)
+  const receipt = yield method.send({
     from: accountAddress
   })
 

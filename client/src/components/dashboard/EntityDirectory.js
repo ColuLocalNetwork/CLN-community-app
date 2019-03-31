@@ -9,7 +9,7 @@ import {createList, getList, addEntity, fetchBusinesses} from 'actions/directory
 import Entity from './Entity'
 import EmptyBusinessList from 'images/emptyBusinessList.png'
 import {loadModal, hideModal} from 'actions/ui'
-import { ADD_DIRECTORY_ENTITY } from 'constants/uiConstants'
+import { ADD_DIRECTORY_ENTITY, WRONG_NETWORK_MODAL } from 'constants/uiConstants'
 import ReactGA from 'services/ga'
 import {isOwner} from 'utils/token'
 import {fetchHomeToken} from 'actions/bridge'
@@ -109,6 +109,14 @@ class EntityDirectory extends Component {
     isOwner(this.props.token, this.props.accountAddress) &&
     this.props.homeTokenAddress
 
+  handleDeployList = () => {
+    if (this.props.network.networkType === 'fuse') {
+      this.props.loadBusinessListPopup()
+    } else {
+      this.props.loadModal(WRONG_NETWORK_MODAL, {supportedNetworks: ['fuse']})
+    }
+  }
+
   render () {
     const business = this.props.entities
     const filteredBusiness = this.filterBySearch(this.state.search, business)
@@ -130,7 +138,7 @@ class EntityDirectory extends Component {
             </p>
             <button
               className='dashboard-transfer-btn'
-              onClick={this.props.loadBusinessListPopup}
+              onClick={this.handleDeployList}
               disabled={!this.canDeployBusinessList()}
             >
               Deploy business list
@@ -188,12 +196,12 @@ class EntityDirectory extends Component {
   }
 }
 
-const mapStateToProps = (state, {match}) => ({
+const mapStateToProps = (state, {match, foreignTokenAddress}) => ({
   entities: getEntities(state),
   network: state.network,
   clnBalance: getClnBalance(state),
   accountAddress: getAccountAddress(state),
-  homeTokenAddress: state.screens.bridge.homeTokenAddress,
+  homeTokenAddress: state.entities.bridges[foreignTokenAddress] && state.entities.bridges[foreignTokenAddress].homeTokenAddress,
   ...state.screens.directory
 })
 
