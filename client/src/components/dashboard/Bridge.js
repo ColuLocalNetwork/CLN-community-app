@@ -215,6 +215,7 @@ class BridgeContainer extends Component {
 }
 
 const mapStateToProps = (state, {foreignTokenAddress}) => ({
+  ...state.screens.bridge,
   ...state.entities.bridges[foreignTokenAddress],
   homeNetwork: state.network.homeNetwork,
   bridgeStatus: getBridgeStatus(state),
