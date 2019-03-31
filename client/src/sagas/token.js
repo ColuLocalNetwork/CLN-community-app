@@ -33,11 +33,13 @@ function * fetchClnToken () {
   }
 
   const response = yield all(calls)
-  response.address = tokenAddress
 
   yield entityPut({type: actions.FETCH_CLN_TOKEN.SUCCESS,
-    tokenAddress,
-    response
+    address: tokenAddress,
+    response: {
+      ...response,
+      address: tokenAddress
+    }
   })
 }
 

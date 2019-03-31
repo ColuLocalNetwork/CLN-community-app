@@ -55,10 +55,11 @@ export function * apiCall (apiFunc, params, options = {}) {
   return yield call(apiFunc, apiRoot, params)
 }
 
-const entityKeys = {
+export const entityKeys = {
   tokens: 'address',
   partners: 'name',
-  businesses: 'hash'
+  businesses: 'hash',
+  bridges: 'foreignTokenAddress'
 }
 
 export const createEntitiesFetch = (action, apiFunc) => function * (params) {
