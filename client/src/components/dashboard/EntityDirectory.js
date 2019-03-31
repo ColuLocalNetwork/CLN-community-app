@@ -9,7 +9,7 @@ import {createList, getList, addEntity, fetchBusinesses} from 'actions/directory
 import Entity from './Entity'
 import EmptyBusinessList from 'images/emptyBusinessList.png'
 import {loadModal, hideModal} from 'actions/ui'
-import { ADD_DIRECTORY_ENTITY, BUSINESS_LIST_MODAL } from 'constants/uiConstants'
+import { ADD_DIRECTORY_ENTITY } from 'constants/uiConstants'
 import ReactGA from 'services/ga'
 import {isOwner} from 'utils/token'
 import {fetchHomeToken} from 'actions/bridge'
