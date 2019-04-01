@@ -6,7 +6,7 @@ import TopNav from './../TopNav'
 import CopyToClipboard from 'components/common/CopyToClipboard'
 import {loadModal} from 'actions/ui'
 import { getList, fetchBusinesses, fetchBusiness, activateBusiness, deactivateBusiness, editEntity } from 'actions/directory'
-import { ADD_DIRECTORY_ENTITY } from 'constants/uiConstants'
+import { ADD_DIRECTORY_ENTITY, WRONG_NETWORK_MODAL } from 'constants/uiConstants'
 import ReactGA from 'services/ga'
 
 class EntityProfile extends Component {
@@ -14,6 +14,14 @@ class EntityProfile extends Component {
   componentDidMount () {
     if (!this.props.entity) {
       this.props.fetchBusiness(this.props.listAddress, this.props.hash)
+    }
+  }
+
+  onlyOnFuse = (successFunc) => {
+    if (this.props.networkType === 'fuse') {
+      successFunc()
+    } else {
+      this.props.loadModal(WRONG_NETWORK_MODAL, {supportedNetworks: ['fuse']})
     }
   }
 
@@ -39,15 +47,14 @@ class EntityProfile extends Component {
 
   showHomePage = (address) => this.props.history.push('/')
 
-  handleDeactivate = () => this.props.deactivateBusiness(this.props.listAddress, this.props.hash)
+  handleDeactivate = () => this.onlyOnFuse(() => this.props.deactivateBusiness(this.props.listAddress, this.props.hash))
 
-  handleActivate = () => this.props.activateBusiness(this.props.listAddress, this.props.hash)
+  handleActivate = () => this.onlyOnFuse(() => this.props.activateBusiness(this.props.listAddress, this.props.hash))
+
+  handleEdit = () =>
+    this.onlyOnFuse(() => this.props.loadModal(ADD_DIRECTORY_ENTITY, {submitEntity: this.editEntity, entity: this.props.entity}))
 
   editEntity = (data) => this.props.editEntity(this.props.listAddress, this.props.hash, data)
-
-  handleEdit = () => {
-    this.props.loadModal(ADD_DIRECTORY_ENTITY, {submitEntity: this.editEntity, entity: this.props.entity})
-  }
 
   render () {
     const {entity} = this.props
