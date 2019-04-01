@@ -1,4 +1,4 @@
-import {GET_LIST, CREATE_LIST, FETCH_BUSINESSES, ADD_ENTITY} from 'actions/directory'
+import {GET_LIST, CREATE_LIST, FETCH_BUSINESSES, ADD_ENTITY, EDIT_ENTITY} from 'actions/directory'
 import {REQUEST, SUCCESS, FAILURE} from 'actions/constants'
 import union from 'lodash/union'
 
@@ -25,6 +25,8 @@ export default (state = initialState, action) => {
       return {...state, transactionStatus: FAILURE}
     case ADD_ENTITY.SUCCESS:
       return {...state, transactionStatus: SUCCESS}
+    case EDIT_ENTITY.SUCCESS:
+      return {...state, editEntityReceipt: action.response.receipt}
     default:
       return state
   }

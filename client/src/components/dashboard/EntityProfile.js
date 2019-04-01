@@ -7,11 +7,34 @@ import CopyToClipboard from 'components/common/CopyToClipboard'
 import {loadModal} from 'actions/ui'
 import { getList, fetchBusinesses, fetchBusiness, activateBusiness, deactivateBusiness, editEntity } from 'actions/directory'
 import { ADD_DIRECTORY_ENTITY } from 'constants/uiConstants'
+import ReactGA from 'services/ga'
 
 class EntityProfile extends Component {
 
   componentDidMount () {
-    this.props.fetchBusiness(this.props.listAddress, this.props.hash)
+    if (!this.props.entity) {
+      this.props.fetchBusiness(this.props.listAddress, this.props.hash)
+    }
+  }
+
+  showProfile = (address, hash) => {
+    this.props.history.push(`/view/directory/${address}/${hash}`)
+    ReactGA.event({
+      category: 'Directory',
+      action: 'Click',
+      label: 'directory'
+    })
+  }
+
+  componentDidUpdate (prevProps) {
+    if (this.props.editEntityReceipt && !prevProps.editEntityReceipt) {
+      const {newHash} = this.props.editEntityReceipt.events.EntityReplaced.returnValues
+      this.showProfile(this.props.listAddress, newHash)
+    }
+
+    if (this.props.hash !== prevProps.hash) {
+      this.props.fetchBusiness(this.props.listAddress, this.props.hash)
+    }
   }
 
   showHomePage = (address) => this.props.history.push('/')
@@ -130,7 +153,8 @@ class EntityProfile extends Component {
 const mapStateToProps = (state, {match}) => ({
   listAddress: match.params.listAddress,
   hash: match.params.hash,
-  entity: state.entities.metadata[`ipfs://${match.params.hash}`]
+  entity: state.entities.metadata[`ipfs://${match.params.hash}`],
+  editEntityReceipt: state.screens.directory.editEntityReceipt
 })
 
 const mapDispatchToProps = {
