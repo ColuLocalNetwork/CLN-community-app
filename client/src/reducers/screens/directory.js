@@ -14,7 +14,7 @@ export default (state = initialState, action) => {
     case CREATE_LIST.REQUEST:
       return {...state, transactionStatus: REQUEST}
     case CREATE_LIST.SUCCESS:
-      return {...state, ...action.response, transactionStatus: SUCCESS}
+      return {...state, transactionStatus: SUCCESS}
     case FETCH_BUSINESSES.SUCCESS:
       return {...state,
         listHashes: union(state.listHashes, action.response.result),
