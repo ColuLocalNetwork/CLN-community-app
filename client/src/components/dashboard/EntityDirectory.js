@@ -58,22 +58,16 @@ class EntityDirectory extends Component {
     })
   }
 
-  handleAddEntity = (data) => {
-    this.props.addEntity(this.props.listAddress, {...data, active: true})
-    this.props.hideModal()
-  }
-
   handleAddBusiness =() => {
     if (this.props.network.networkType === 'fuse') {
-      this.props.loadAddingModal()
+      this.loadAddingModal()
     } else {
       this.props.loadModal(WRONG_NETWORK_MODAL, {supportedNetworks: ['fuse']})
     }
   }
 
   loadAddingModal = () => this.props.loadModal(ADD_DIRECTORY_ENTITY, {
-    handleAddEntity: this.handleAddEntity,
-    accountAddress: this.props.network.accountAddress
+    submitEntity: (data) => this.props.addEntity(this.props.listAddress, {...data, active: true})
   })
 
   renderTransactionStatus = (transactionStatus) => {

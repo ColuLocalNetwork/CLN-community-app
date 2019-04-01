@@ -4,7 +4,7 @@ import MediaMobile from 'images/issue-popup-mobile.svg'
 import FontAwesome from 'react-fontawesome'
 import TopNav from 'components/TopNav'
 import {loadModal} from 'actions/ui'
-import { getList, fetchBusinesses, fetchBusiness, activateBusiness, deactivateBusiness } from 'actions/directory'
+import { getList, fetchBusinesses, fetchBusiness, activateBusiness, deactivateBusiness, editEntity } from 'actions/directory'
 import CustomCopyToClipboard from 'components/common/CustomCopyToClipboard'
 import { ADD_DIRECTORY_ENTITY } from 'constants/uiConstants'
 
@@ -23,8 +23,10 @@ class EntityProfile extends Component {
 
   handleActivate = () => this.props.activateBusiness(this.props.listAddress, this.props.hash)
 
+  editEntity = (data) => this.props.editEntity(this.props.listAddress, this.props.hash, data)
+
   handleEdit = () => {
-    this.props.loadModal(ADD_DIRECTORY_ENTITY, {entity: this.props.entity})
+    this.props.loadModal(ADD_DIRECTORY_ENTITY, {submitEntity: this.editEntity, entity: this.props.entity})
   }
 
   render () {
@@ -140,7 +142,8 @@ const mapDispatchToProps = {
   fetchBusinesses,
   fetchBusiness,
   activateBusiness,
-  deactivateBusiness
+  deactivateBusiness,
+  editEntity
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EntityProfile)
