@@ -9,7 +9,7 @@ import {createList, getList, addEntity, fetchBusinesses} from 'actions/directory
 import Entity from './Entity'
 import EmptyBusinessList from 'images/emptyBusinessList.png'
 import {loadModal, hideModal} from 'actions/ui'
-import { ADD_DIRECTORY_ENTITY, WRONG_NETWORK_MODAL } from 'constants/uiConstants'
+import { ADD_DIRECTORY_ENTITY } from 'constants/uiConstants'
 import ReactGA from 'services/ga'
 import {isOwner} from 'utils/token'
 import {fetchHomeToken} from 'actions/bridge'
@@ -59,11 +59,7 @@ class EntityDirectory extends Component {
   }
 
   handleAddBusiness =() => {
-    if (this.props.network.networkType === 'fuse') {
-      this.loadAddingModal()
-    } else {
-      this.props.loadModal(WRONG_NETWORK_MODAL, {supportedNetworks: ['fuse']})
-    }
+    this.props.onlyOnFuse(this.loadAddingModal)
   }
 
   loadAddingModal = () => this.props.loadModal(ADD_DIRECTORY_ENTITY, {
@@ -111,14 +107,6 @@ class EntityDirectory extends Component {
     isOwner(this.props.token, this.props.accountAddress) &&
     this.props.homeTokenAddress
 
-  handleDeployList = () => {
-    if (this.props.network.networkType === 'fuse') {
-      this.props.loadBusinessListPopup()
-    } else {
-      this.props.loadModal(WRONG_NETWORK_MODAL, {supportedNetworks: ['fuse']})
-    }
-  }
-
   render () {
     const business = this.props.entities
     const filteredBusiness = this.filterBySearch(this.state.search, business)
@@ -140,7 +128,7 @@ class EntityDirectory extends Component {
             </p>
             <button
               className='dashboard-transfer-btn'
-              onClick={this.handleDeployList}
+              onClick={this.props.loadBusinessListPopup}
               disabled={!this.canDeployBusinessList()}
             >
               Deploy business list
@@ -153,7 +141,7 @@ class EntityDirectory extends Component {
                   <p className='dashboard-entity-content-title'>Businesses List</p>
                   <button
                     className='btn-entity-adding'
-                    onClick={this.loadAddingModal}
+                    onClick={this.handleAddBusiness}
                     disabled={this.props.transactionStatus === REQUEST}
                   >
                     <FontAwesome name='plus-circle' /> New Business

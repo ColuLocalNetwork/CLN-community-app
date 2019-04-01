@@ -107,11 +107,23 @@ class Dashboard extends Component {
     buttonAction: this.props.deployBridge
   })
 
-  loadBusinessListPopup = () => this.props.loadModal(BUSINESS_LIST_MODAL, {
-    tokenAddress: this.props.tokenAddress,
-    isOwner: isOwner(this.props.token, this.props.accountAddress),
-    buttonAction: this.props.createList
-  })
+  onlyOnFuse = (successFunc) => {
+    if (this.props.networkType === 'fuse') {
+      successFunc()
+    } else {
+      this.props.loadModal(WRONG_NETWORK_MODAL, {supportedNetworks: ['fuse']})
+    }
+  }
+
+  loadBusinessListPopup = () => {
+    this.onlyOnFuse(() => {
+      this.props.loadModal(BUSINESS_LIST_MODAL, {
+        tokenAddress: this.props.homeTokenAddress,
+        isOwner: isOwner(this.props.token, this.props.accountAddress),
+        buttonAction: this.props.createList
+      })
+    })
+  }
 
   render () {
     if (!this.props.token) {
@@ -135,9 +147,9 @@ class Dashboard extends Component {
               metadata={this.props.metadata}
               steps={steps}
               match={this.props.match}
-              loadBridgePopup={() => this.loadBridgePopup(accountAddress, token)}
+              loadBridgePopup={this.loadBridgePopup}
               loadUserDataModal={this.loadUserDataModal}
-              loadBusinessListPopup={() => this.loadBusinessListPopup(accountAddress, token)}
+              loadBusinessListPopup={this.loadBusinessListPopup}
             />
             <div className='dashboard-information'>
               <div className='dashboard-information-header'>
@@ -175,7 +187,7 @@ class Dashboard extends Component {
             accountAddress={accountAddress}
             token={this.props.token}
             foreignTokenAddress={this.props.tokenAddress}
-            loadBridgePopup={() => this.loadBridgePopup(accountAddress, token)}
+            loadBridgePopup={this.loadBridgePopup}
             handleTransfer={this.handleTransfer}
             network={this.props.networkType}
           />
@@ -184,7 +196,8 @@ class Dashboard extends Component {
               history={this.props.history}
               foreignTokenAddress={this.props.tokenAddress}
               token={this.props.token}
-              loadBusinessListPopup={() => this.loadBusinessListPopup(accountAddress, token)}
+              loadBusinessListPopup={this.loadBusinessListPopup}
+              onlyOnFuse={this.onlyOnFuse}
             />
           </div>
         </div>
