@@ -16,14 +16,15 @@ class EntityForm extends Component {
     businessAccount: ''
   }
 
-  constructor (props) {
-    super(props)
-    this.handleSelectChange = this.handleSelectChange.bind(this)
-  }
-
-  handleSelectChange = selectedBusinessType => {
+  handleSelectChange = (selectedBusinessType) => {
     this.setState({ selectedBusinessType })
     this.setState({ activeBusinessType: selectedBusinessType.value })
+  }
+
+  componentDidMount () {
+    if (this.props.entity) {
+      this.setState(this.props.entity)
+    }
   }
 
   handleAddEntity = () => this.props.addEntity({

@@ -63,6 +63,14 @@ class EntityDirectory extends Component {
     this.props.hideModal()
   }
 
+  handleAddBusiness =() => {
+    if (this.props.network.networkType === 'fuse') {
+      this.props.loadAddingModal()
+    } else {
+      this.props.loadModal(WRONG_NETWORK_MODAL, {supportedNetworks: ['fuse']})
+    }
+  }
+
   loadAddingModal = () => this.props.loadModal(ADD_DIRECTORY_ENTITY, {
     handleAddEntity: this.handleAddEntity,
     accountAddress: this.props.network.accountAddress
@@ -151,7 +159,7 @@ class EntityDirectory extends Component {
                   <p className='dashboard-entity-content-title'>Businesses List</p>
                   <button
                     className='btn-entity-adding'
-                    onClick={() => this.loadAddingModal()}
+                    onClick={this.loadAddingModal}
                     disabled={this.props.transactionStatus === REQUEST}
                   >
                     <FontAwesome name='plus-circle' /> New Business
@@ -170,7 +178,7 @@ class EntityDirectory extends Component {
                   <div className='dashboard-empty-text'>You can keep watching Netflix later, add a business and let’s start Rock’n’Roll!</div>
                   <button
                     className='dashboard-transfer-btn'
-                    onClick={() => this.loadAddingModal()}
+                    onClick={this.handleAddBusiness}
                     disabled={this.props.transactionStatus === REQUEST}
                   >
                     Add new business

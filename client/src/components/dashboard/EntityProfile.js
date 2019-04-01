@@ -4,7 +4,9 @@ import MediaMobile from 'images/issue-popup-mobile.svg'
 import FontAwesome from 'react-fontawesome'
 import TopNav from './../TopNav'
 import CopyToClipboard from 'components/common/CopyToClipboard'
+import {loadModal} from 'actions/ui'
 import { getList, fetchBusinesses, fetchBusiness, activateBusiness, deactivateBusiness } from 'actions/directory'
+import { ADD_DIRECTORY_ENTITY } from 'constants/uiConstants'
 
 class EntityProfile extends Component {
 
@@ -17,6 +19,10 @@ class EntityProfile extends Component {
   handleDeactivate = () => this.props.deactivateBusiness(this.props.listAddress, this.props.hash)
 
   handleActivate = () => this.props.activateBusiness(this.props.listAddress, this.props.hash)
+
+  handleEdit = () => {
+    this.props.loadModal(ADD_DIRECTORY_ENTITY, {entity: this.props.entity})
+  }
 
   render () {
     const {entity} = this.props
@@ -43,7 +49,7 @@ class EntityProfile extends Component {
                       <p className='entity-profile-type'>{entity.businessType}</p>}
                   </div>
                   <div>
-                    <p className='entity-profile-link'>
+                    <p className='entity-profile-link' onClick={this.handleEdit}>
                       <FontAwesome name='edit' /> Edit business profile
                     </p>
                     {entity && entity.active
@@ -126,6 +132,7 @@ const mapStateToProps = (state, {match}) => ({
 })
 
 const mapDispatchToProps = {
+  loadModal,
   getList,
   fetchBusinesses,
   fetchBusiness,
