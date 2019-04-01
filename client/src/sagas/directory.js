@@ -9,6 +9,7 @@ import {createMetadata} from 'sagas/metadata'
 import {isZeroAddress} from 'utils/web3'
 import {processReceipt} from 'services/api/misc'
 import * as api from 'services/api/business'
+import web3 from 'services/web3'
 
 function * createList ({tokenAddress}) {
   const accountAddress = yield select(getAccountAddress)
@@ -17,17 +18,18 @@ function * createList ({tokenAddress}) {
     address: contractAddress
   })
 
+  // Using sendTransaction because the regulat way of myContract.method doesn't return on success
+  // (Web3 bug)
   const method = SimpleListFactoryContract.methods.createSimpleList(tokenAddress)
-  const receipt = yield method.send({
-    from: accountAddress
+  yield web3.eth.sendTransaction({
+    from: accountAddress,
+    to: contractAddress,
+    data: method.encodeABI(),
+    gasPrice: 1e9
   })
 
-  yield put({type: actions.CREATE_LIST.SUCCESS,
-    response: {
-      listAddress: receipt.events.SimpleListCreated.returnValues.list
-    }})
-
-  return receipt
+  yield put({type: actions.GET_LIST.REQUEST, tokenAddress})
+  yield put({type: actions.CREATE_LIST.SUCCESS})
 }
 
 function * getList ({tokenAddress}) {
