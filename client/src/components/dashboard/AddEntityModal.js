@@ -12,7 +12,7 @@ const AddEntityModal = (props) =>
       <img className='entity-modal-media-img' src={DynamicImg} />
     </div>
     <div className='entity-modal-content'>
-      <EntityForm addEntity={props.handleAddEntity} accountAddress={props.accountAddress} />
+      <EntityForm addEntity={props.handleAddEntity} accountAddress={props.accountAddress} entity={props.entity} />
     </div>
   </Modal>
 
