@@ -1,6 +1,6 @@
 import React from 'react'
 import FontAwesome from 'react-fontawesome'
-import CopyToClipboard from 'components/common/CustomCopyToClipboard'
+import CopyToClipboard from 'components/common/CopyToClipboard'
 
 const Entity = ({entity, address, showProfile}) =>
   <div className='entity'>

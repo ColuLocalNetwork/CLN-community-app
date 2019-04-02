@@ -4,7 +4,7 @@ import MediaMobile from 'images/issue-popup-mobile.svg'
 import FontAwesome from 'react-fontawesome'
 import TopNav from './../TopNav'
 import { getList, fetchBusinesses } from 'actions/directory'
-import CopyToClipboard from 'components/common/CustomCopyToClipboard'
+import CopyToClipboard from 'components/common/CopyToClipboard'
 
 class EntityProfile extends Component {
 

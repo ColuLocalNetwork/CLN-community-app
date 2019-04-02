@@ -18,7 +18,7 @@ import Bridge from './Bridge'
 import EntityDirectory from './EntityDirectory'
 import {getBlockExplorerUrl} from 'utils/network'
 import {isOwner} from 'utils/token'
-import CopyToClipboard from 'components/common/CustomCopyToClipboard'
+import CopyToClipboard from 'components/common/CopyToClipboard'
 
 const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
 
