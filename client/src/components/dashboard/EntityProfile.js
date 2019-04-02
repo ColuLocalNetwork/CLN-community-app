@@ -7,9 +7,6 @@ import { getList, fetchBusinesses } from 'actions/directory'
 import CopyToClipboard from 'components/common/CustomCopyToClipboard'
 
 class EntityProfile extends Component {
-  state = {
-    copyStatus: null
-  }
 
   componentDidMount () {
     this.props.getList(this.props.match.params.address)
