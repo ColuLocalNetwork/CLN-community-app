@@ -4,7 +4,7 @@ import MediaMobile from 'images/issue-popup-mobile.svg'
 import FontAwesome from 'react-fontawesome'
 import TopNav from './../TopNav'
 import { getList, fetchBusinesses } from 'actions/directory'
-import CustomCopyToClipboard from 'components/common/CustomCopyToClipboard'
+import CopyToClipboard from 'components/common/CustomCopyToClipboard'
 
 class EntityProfile extends Component {
   state = {
@@ -102,11 +102,11 @@ class EntityProfile extends Component {
                       />
                     </form>
                   </div>
-                  <CustomCopyToClipboard text={this.props.match.params.hash}>
+                  <CopyToClipboard text={this.props.match.params.hash}>
                     <p className='dashboard-information-period'>
                       <FontAwesome name='clone' />
                     </p>
-                  </CustomCopyToClipboard>
+                  </CopyToClipboard>
                 </div>
               </div>
             </div>

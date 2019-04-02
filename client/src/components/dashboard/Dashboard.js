@@ -18,7 +18,7 @@ import Bridge from './Bridge'
 import EntityDirectory from './EntityDirectory'
 import {getBlockExplorerUrl} from 'utils/network'
 import {isOwner} from 'utils/token'
-import CustomCopyToClipboard from 'components/common/CustomCopyToClipboard'
+import CopyToClipboard from 'components/common/CustomCopyToClipboard'
 
 const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
 
@@ -163,11 +163,11 @@ class Dashboard extends Component {
                     />
                   </form>
                 </div>
-                <CustomCopyToClipboard text={this.props.tokenAddress}>
+                <CopyToClipboard text={this.props.tokenAddress}>
                   <p className='dashboard-information-period'>
                     <FontAwesome name='clone' />
                   </p>
-                </CustomCopyToClipboard>
+                </CopyToClipboard>
               </div>
             </div>
           </div>
