@@ -2,10 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import get from 'lodash/get'
+import omit from 'lodash/omit'
+import capitalize from 'lodash/capitalize'
 import Select from 'react-select'
 import { Formik, Field } from 'formik'
 import entityShape from 'utils/validation/shapes/entity'
 import { businessTypes, options } from 'constants/dropdownOptions'
+import FontAwesome from 'react-fontawesome'
 
 class EntityForm extends Component {
 
@@ -14,76 +17,89 @@ class EntityForm extends Component {
 
     const { entity } = props
 
-    console.log({entity});
-    
     this.initialValues = {
-      name: '',
-      address: '',
-      email: '',
-      phone: '',
-      websiteUrl: '',
-      description: '',
-      type: '',
-      account: '',
-      selectedBusinessType: {}
+      name: get(entity, 'name', ''),
+      address: get(entity, 'address', ''),
+      email: get(entity, 'email', ''),
+      phone: get(entity, 'phone', ''),
+      websiteUrl: get(entity, 'websiteUrl', ''),
+      description: get(entity, 'description', ''),
+      type: get(entity, 'type', '', ''),
+      account: get(entity, 'account', ''),
+      selectedType: options().some(({value}) => value === get(entity, 'type', '')) ? {
+        value: get(entity, 'type', ''),
+        label: capitalize(get(entity, 'type', ''))
+      } : {}
     }
 
     this.validationSchema = entityShape
   }
 
-  componentDidMount() {
-    if (this.props.entity) {
-      this.setState(this.props.entity)
-    }
-  }
-
   onSubmit = (values, form) => {
-    console.log({values});
-    this.props.submitEntity(values)
+    const {
+      submitEntity
+    } = this.props
+
+    const entity = omit(values, 'selectedType');
+    
+    submitEntity(entity)
   }
 
-  renderForm = (form) => {
-
-    const { errors, touched, handleSubmit, setFieldValue, setFieldTouched, values } = form
-
-    console.log({ errors, values });
-
-    const modalContentSelectClass = classNames({
-      'entity-modal-content-select': true,
-      'active-business-select': values.businessType === values.selectedBusinessType.value
-    })
+  renderForm = ({ errors, isSubmitting, isValidating, handleSubmit, setFieldValue, setFieldTouched, values }) => {
 
     return (
-      <form className='entity-modal-content' onSubmit={handleSubmit} noValidate>
-        <h4 className='entity-modal-title' key={0}>
-          Business name
-      </h4>
+      <form className='entity-modal-content' onSubmit={handleSubmit}>
+        <h4 className='entity-modal-title'>Business name</h4>
         <Field
           onFocus={() => setFieldTouched('name', true)}
-          name="name"
+          name='name'
           type='text'
           className='entity-modal-business-name'
           placeholder='Your business name...'
         />
-        <div className='row'>
-          <div className='col-12'>
+        <div className='row entity-modal-title'>
+          <div className='col-2'>
             <p className='entity-modal-content-label'>
-              Business Type <span>Select one</span>
+              Logo&nbsp; <FontAwesome className='entity-modal-content-label-icon' name='info-circle' />
+            </p>
+            <div className='entity-modal-content-logo-rectangle'>
+              <div className='entity-modal-content-upload-wrapper'>
+                <span className='entity-modal-content-upload-wrapper-icon'><FontAwesome name='file-upload' /></span>
+                <small>Upload</small>
+              </div>
+            </div>
+
+          </div>
+          <div className='col-5'>
+            <p className='entity-modal-content-label'>
+              Picture &nbsp;
+            <FontAwesome className='entity-modal-content-label-icon' name='info-circle' />
+            </p>
+            <div className='entity-modal-content-picture-rectangle'>
+              <div className='entity-modal-content-upload-wrapper'>
+                <span className='entity-modal-content-upload-wrapper-icon'><FontAwesome name='file-upload' /></span>
+                <small>Upload</small>
+              </div>
+            </div>
+          </div>
+          <div className='col-5'>
+            <p className='entity-modal-content-label'>
+              Business Type &nbsp;<span className='entity-modal-content-label-second'>Select one</span>
             </p>
             <div className='entity-modal-content-types'>
               {
                 businessTypes().map(({ value, label }, key) =>
                   <Field
-                    name="businessType"
+                    name='type'
                     key={key}
                     render={({ field }) => (
                       <span
                         {...field}
                         className={classNames({
                           'entity-modal-content-type': true,
-                          'active-business-type': values.businessType === value
+                          'active-business-type': values.type === value
                         })}
-                        onClick={() => setFieldValue('businessType', value)}
+                        onClick={() => setFieldValue('type', value)}
                       >
                         {label}
                       </span>
@@ -92,15 +108,15 @@ class EntityForm extends Component {
                 )
               }
               <Select
-                name="businessType"
-                className={modalContentSelectClass}
+                className={classNames('entity-modal-content-select', {
+                  'active-business-select': ((values.type) && (values.type === values.selectedType.value))
+                })}
                 classNamePrefix='entity-modal-content-select-prefix'
-                value={values.businessTypes}
                 options={options()}
                 placeholder={'Other...'}
-                onChange={({ value, ...rest }) => {
-                  setFieldValue('selectedBusinessType', {value, ...rest})
-                  setFieldValue('businessType', value)
+                onChange={(val) => {
+                  setFieldValue('selectedType', val)
+                  setFieldValue('type', val.value)
                 }}
               />
             </div>
@@ -110,7 +126,7 @@ class EntityForm extends Component {
         <div className='row'>
           <div className='col-7'>
             <p className='entity-modal-content-label'>
-              Contact info
+              More info
           </p>
             <div className='row'>
               <div className='col-4'>
@@ -196,17 +212,17 @@ class EntityForm extends Component {
           <div className='col-5'>
             <p className='entity-modal-content-label'>
               Description
-          <span className='entity-modal-content-label-type'>{values.description.length}/490</span>
+              <span className='entity-modal-content-label-type'>{values.description.length}/490</span>
             </p>
             <Field
               name="description"
-              render={({ field }) => <textarea className='entity-modal-content-form-control' {...field} rows='14' />}
+              render={({ field }) => <textarea placeholder='Type...' className='entity-modal-content-form-control' {...field} rows='14' />}
             />
           </div>
         </div>
         <div className='row justify-center'>
           <div className='col-12'>
-            <button type="submit" className='btn-add-entity'>Save</button>
+            <button type='submit' className='btn-add-entity'>Save</button>
           </div>
         </div>
       </form>

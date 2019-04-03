@@ -339,6 +339,7 @@
         padding: 0;
         position: relative;
         top: 3px;
+        overflow: hidden;
 
         @media (max-width: $breakpoint-mobile) {
           margin-left: 0;
@@ -853,21 +854,21 @@
       }
       .btn-entity-adding {
         color: $color-home-banner-bg;
-        .fa {
-          background: linear-gradient(97deg, #98faac, #fae83e);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
+        // .fa {
+        //   background: linear-gradient(97deg, #98faac, #fae83e);
+        //   -webkit-background-clip: text;
+        //   -webkit-text-fill-color: transparent;
+        // }
         &:hover,
         &:focus:active,
         &:active {
           color: $color-home-banner-bg;
-          .fa {
-            background: linear-gradient(97deg, #fae83e, #98faac);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-          }
+        //   .fa {
+        //     background: linear-gradient(97deg, #fae83e, #98faac);
+        //     -webkit-background-clip: text;
+        //     -webkit-text-fill-color: transparent;
         }
+        // }
       }
     }
   }
