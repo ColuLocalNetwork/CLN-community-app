@@ -59,7 +59,6 @@ const handleEntityReplacedEvent = async (event) => {
 
   return Promise.resolve()
 }
-
 const eventsHandlers = {
   TokenCreated: handleTokenCreatedEvent,
   Transfer: handleTransferEvent,
@@ -69,7 +68,7 @@ const eventsHandlers = {
 }
 
 const handleEvent = function (event) {
-  const eventName = event.name
+  const eventName = event.event
   if (eventsHandlers.hasOwnProperty(eventName)) {
     return eventsHandlers[eventName](event).then(() => {
       const blockNumber = event.blockNumber
@@ -91,7 +90,7 @@ const handleReceipt = async (receipt) => {
         const eventPromisses = event.map((singleEvent) => handleEvent(singleEvent))
         promisses = [...promisses, ...eventPromisses]
       } else {
-        promisses.push(handleEvent(eventName, event))
+        promisses.push(handleEvent(event))
       }
     }
   }
