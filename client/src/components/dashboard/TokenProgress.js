@@ -5,6 +5,14 @@ import CommunityLogo from 'components/elements/CommunityLogo'
 import {fetchTokenProgress} from 'actions/token'
 import FontAwesome from 'react-fontawesome'
 
+const Step = ({done, text, handleClick}) => (
+  <div
+    className={done ? 'dashboard-progress-text text-positive' : 'dashboard-progress-text text-negative'}
+    onClick={done ? null : handleClick}
+  >
+    <FontAwesome name={done ? 'check' : 'minus'} /> <span className='progress-text-content'>{text}</span>
+  </div>)
+
 class TokenProgress extends Component {
   componentDidMount () {
     this.props.fetchTokenProgress(this.props.match.params.address)
@@ -21,9 +29,9 @@ class TokenProgress extends Component {
   }
   render () {
     const { token } = this.props
-    const steps = this.props.steps !== undefined ? this.props.steps : { tokenIssued: false, bridgeDeployed: false, detailsGiven: false }
-    const filteredSteps = Object.keys(steps).filter(step => steps[step])
-    const progressOverall = filteredSteps.length * 20
+    const steps = this.props.steps
+    const doneSteps = Object.values(steps).filter(step => step)
+    const progressOverall = doneSteps.length * 20
     return (
       <div className='dashboard-sidebar'>
         <CommunityLogo token={token} metadata={this.props.metadata[token.tokenURI] || {}} />
@@ -35,30 +43,16 @@ class TokenProgress extends Component {
             <div className='dashboard-progress-percent'>{progressOverall}%</div>
           </div>
         </div>
-        <div className={steps.tokenIssued ? 'dashboard-progress-text text-positive' : 'dashboard-progress-text text-negative'}>
-          <FontAwesome name={steps.tokenIssued ? 'check' : 'minus'} /> <span className='progress-text-content'>Community token deployed</span>
-        </div>
-        <div
-          className={steps.detailsGiven ? 'dashboard-progress-text text-positive' : 'dashboard-progress-text text-negative'}
-          onClick={() => this.loadPersonalDetailsModal(steps)}
-        >
-          <FontAwesome name={steps.detailsGiven ? 'check' : 'minus'} /> <span className='progress-text-content'>Admin personal name given</span>
-        </div>
-        <div
-          className={steps.bridgeDeployed ? 'dashboard-progress-text text-positive' : 'dashboard-progress-text text-negative'}
-          onClick={() => this.loadBridgeModal(steps)}
-        >
-          <FontAwesome name={steps.bridgeDeployed ? 'check' : 'minus'} /> <span className='progress-text-content'>Bridge to Fuse - chain deployed</span>
-        </div>
-        <div
-          className='dashboard-progress-text text-negative'
-          onClick={this.props.loadBusinessListPopup}
-        >
-          <FontAwesome name='minus' /> <span className='progress-text-content'>Business list deployed</span>
-        </div>
-        <div className='dashboard-progress-text text-negative'>
-          <FontAwesome name='minus' /> <span className='progress-text-content'>White label wallet paired</span>
-        </div>
+        <Step done={steps.tokenIssued}
+          text='Community token deployed' />
+        <Step done={steps.detailsGiven} handleClick={this.props.loadUserDataModal}
+          text='Admin personal name given' />
+        <Step done={steps.bridgeDeployed} handleClick={this.props.loadBridgePopup}
+          text='Bridge to Fuse - chain deployed' />
+        <Step done={steps.businessListDeployed} handleClick={this.props.loadBusinessListPopup}
+          text='Business list deployed' />
+        <Step done={false}
+          text='White label wallet paired' />
       </div>
     )
   }
@@ -66,6 +60,10 @@ class TokenProgress extends Component {
 
 TokenProgress.propTypes = {
   token: PropTypes.object.isRequired
+}
+
+TokenProgress.defaultProps = {
+  steps: {}
 }
 
 const mapDispatchToProps = {

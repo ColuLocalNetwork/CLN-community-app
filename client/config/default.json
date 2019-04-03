@@ -13,7 +13,11 @@
       },
       "fuse": {
         "ropsten": {
+<<<<<<< HEAD
           "SimpleListFactory": "0x93d274626C812EaA5fA93d81b05804bDc12e270e",
+=======
+          "SimpleListFactory": "0x9FA04c6fc70B0ae20dAD9D7b36161bf1EdcbA0E2",
+>>>>>>> add token progress
           "BridgeMapper": "0x9cb2820EA169D37aFa13C097776bDDB9b19d3C14"
         },
         "main": {

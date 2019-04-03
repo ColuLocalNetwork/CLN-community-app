@@ -5,6 +5,7 @@ import {getAddress} from 'selectors/network'
 import * as actions from 'actions/token'
 import {DEPLOY_BRIDGE} from 'actions/bridge'
 import {ADD_USER} from 'actions/user'
+import {CREATE_LIST} from 'actions/directory'
 import {createMetadata} from 'sagas/metadata'
 import {getAccountAddress} from 'selectors/accounts'
 import * as api from 'services/api/token'
@@ -111,6 +112,7 @@ export default function * tokenSaga () {
     tryTakeEvery(actions.FETCH_TOKEN_STATISTICS, fetchTokenStatistics, 1),
     tryTakeEvery(actions.FETCH_TOKEN_PROGRESS, fetchTokenProgress, 1),
     takeEvery(DEPLOY_BRIDGE.SUCCESS, fetchTokenProgress),
-    takeEvery(ADD_USER.SUCCESS, fetchTokenProgress)
+    takeEvery(ADD_USER.SUCCESS, fetchTokenProgress),
+    takeEvery(CREATE_LIST.SUCCESS, fetchTokenProgress)
   ])
 }

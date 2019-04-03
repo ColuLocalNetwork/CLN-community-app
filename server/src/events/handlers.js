@@ -1,6 +1,7 @@
 const tokenUtils = require('@utils/token')
 const eventUtils = require('@utils/event')
 const bridgeDeployed = require('@utils/tokenProgress').bridgeDeployed
+const businessListDeployed = require('@utils/tokenProgress').businessListDeployed
 const getMetadata = require('@utils/metadata').getMetadata
 const mongoose = require('mongoose')
 const Business = mongoose.model('Business')
@@ -59,12 +60,19 @@ const handleEntityReplacedEvent = async (event) => {
 
   return Promise.resolve()
 }
+
+const handleSimpleListCreatedEvent = async (event) => {
+  const tokenAddress = event.returnValues.token
+  return businessListDeployed(tokenAddress)
+}
+
 const eventsHandlers = {
   TokenCreated: handleTokenCreatedEvent,
   Transfer: handleTransferEvent,
   BridgeMappingUpdated: handleBridgeMappingUpdatedEvent,
   EntityAdded: handleEntityAddedEvent,
-  EntityReplaced: handleEntityReplacedEvent
+  EntityReplaced: handleEntityReplacedEvent,
+  SimpleListCreated: handleSimpleListCreatedEvent
 }
 
 const handleEvent = function (event) {
