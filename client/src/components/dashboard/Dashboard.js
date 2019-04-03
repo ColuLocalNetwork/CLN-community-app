@@ -44,7 +44,6 @@ UserDataModal.propTypes = {
 }
 
 class Dashboard extends Component {
-
   handleIntervalChange = (userType, intervalValue) => {
     this.props.fetchTokenStatistics(this.props.tokenAddress, userType, intervalValue)
   }
