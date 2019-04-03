@@ -10,10 +10,10 @@ class EntityForm extends Component {
     address: '',
     email: '',
     phone: '',
-    link: '',
+    websiteUrl: '',
     description: '',
     businessType: '',
-    businessAccount: ''
+    account: ''
   }
 
   handleSelectChange = (selectedBusinessType) => {
@@ -33,8 +33,8 @@ class EntityForm extends Component {
   handleAddressChange = (event, maxLength) => this.setState({address: event.target.value.slice(0, maxLength)})
   handleEmailChange = (event) => this.setState({email: event.target.value})
   handlePhoneChange = (event) => this.setState({phone: event.target.value})
-  handleLinkChange = (event) => this.setState({link: event.target.value})
-  handleAccountChange = (event) => this.setState({businessAccount: event.target.value})
+  handleWebsiteUrlChange = (event) => this.setState({websiteUrl: event.target.value})
+  handleAccountChange = (event) => this.setState({account: event.target.value})
   handleDescriptionChange = (event, maxLength) => this.setState({description: event.target.value.slice(0, maxLength)})
   setBusinessTypeChange = (type) => this.setState({businessType: type})
 
@@ -115,7 +115,7 @@ class EntityForm extends Component {
               <input
                 className='entity-modal-content-form-control'
                 placeholder='Type...'
-                value={this.state.businessAccount}
+                value={this.state.account}
                 onChange={(e) => this.handleAccountChange(e)}
               />
             </div>
@@ -131,7 +131,7 @@ class EntityForm extends Component {
                 className='entity-modal-content-form-control'
                 placeholder='Type...'
                 maxLength={MAX_LENGTH_OF_BUSINESS_ADDRESS}
-                value={this.state.businessAddress}
+                value={this.state.address}
                 onChange={(e) => this.handleAddressChange(e, MAX_LENGTH_OF_BUSINESS_ADDRESS)}
               />
             </div>
@@ -146,7 +146,7 @@ class EntityForm extends Component {
               <input
                 className='entity-modal-content-form-control'
                 placeholder='Type...'
-                value={this.state.businessEmail}
+                value={this.state.email}
                 onChange={this.handleEmailChange}
               />
             </div>
@@ -161,7 +161,7 @@ class EntityForm extends Component {
               <input
                 className='entity-modal-content-form-control'
                 placeholder='Type...'
-                value={this.state.businessPhone}
+                value={this.state.phone}
                 onChange={this.handlePhoneChange}
               />
             </div>
@@ -176,8 +176,8 @@ class EntityForm extends Component {
               <input
                 className='entity-modal-content-form-control'
                 placeholder='Type...'
-                value={this.state.businessLink}
-                onChange={this.handleLinkChange}
+                value={this.state.websiteUrl}
+                onChange={this.handleWebsiteUrlChange}
               />
             </div>
           </div>
