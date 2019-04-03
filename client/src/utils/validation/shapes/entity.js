@@ -1,16 +1,16 @@
 import { object, string } from 'yup'
 
 export default object().noUnknown(false).shape({
-  name: string().trim().ensure().label('Name').required(),
-  address: string().trim().ensure().length(90),
+  name: string().normalize().label('Name').required(),
+  address: string().normalize().required().max(90),
   email: string().email().required(),
-  phone: string(),
-  link: string().url(),
-  description: string().trim().ensure().label('Description').length(490).required(),
-  businessType: string().trim().ensure(),
-  businessAccount: string().trim().ensure(),
+  phone: string().normalize(),
+  websiteUrl: string().normalize().url(),
+  description: string().normalize().label('Description').max(490),
+  businessType: string().normalize(),
+  account: string().normalize(),
   selectedBusinessType: object().shape({
-    label: string().trim().ensure(),
-    value: string().trim().ensure()
+    label: string().normalize(),
+    value: string().normalize()
   })
 })
