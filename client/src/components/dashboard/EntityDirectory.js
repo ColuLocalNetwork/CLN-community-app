@@ -94,8 +94,8 @@ class EntityDirectory extends Component {
             key={index}
             index={index}
             entity={entity}
-            address={this.props.tokenAddress}
-            showProfile={() => this.showProfile(this.props.tokenAddress, this.props.listHashes[index])}
+            address={this.props.homeTokenAddress}
+            showProfile={() => this.showProfile(this.props.listAddress, this.props.listHashes[index])}
           />
         ))
     } else {
