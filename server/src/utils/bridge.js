@@ -6,6 +6,7 @@ const BridgeMapperABI = require('@constants/abi/BridgeMapper.js')
 const foreignAddressess = require('@utils/network').addresses
 const homeAddresses = config.get('web3.addresses.fuse')
 const bridgeDeployed = require('@utils/tokenProgress').bridgeDeployed
+const fetchGasPrice = require('@utils/network').fetchGasPrice
 
 const TOKEN_DECIMALS = 18
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
@@ -41,13 +42,17 @@ async function deployForeignBridge (token) {
 
   const method = foreignFactory.methods.deployForeignBridge(token.address)
 
-  const gas = await method.estimateGas({
-    from
-  })
+  const [gas, gasPrice] = await Promise.all([
+    method.estimateGas({
+      from
+    }),
+    fetchGasPrice('standard')
+  ])
 
   const p = method.send({
     gas,
-    from
+    from,
+    gasPrice: web3.utils.toWei(gasPrice.toString(), 'gwei')
   })
 
   const receipt = await p
