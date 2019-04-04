@@ -1,6 +1,7 @@
+import union from 'lodash/union'
 import {GET_LIST, CREATE_LIST, FETCH_BUSINESSES, ADD_ENTITY, EDIT_ENTITY} from 'actions/directory'
 import {REQUEST, SUCCESS, FAILURE} from 'actions/constants'
-import union from 'lodash/union'
+import {LOCATION_CHANGE} from 'connected-react-router'
 
 const initialState = {
   listHashes: [],
@@ -27,6 +28,12 @@ export default (state = initialState, action) => {
       return {...state, transactionStatus: SUCCESS}
     case EDIT_ENTITY.SUCCESS:
       return {...state, editEntityReceipt: action.response.receipt}
+    case LOCATION_CHANGE:
+      if (action.payload.location.pathname === '/') {
+        return initialState
+      } else {
+        return state
+      }
     default:
       return state
   }
