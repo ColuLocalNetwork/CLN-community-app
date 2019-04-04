@@ -26,7 +26,7 @@ class EntityForm extends Component {
       description: get(entity, 'description', ''),
       type: get(entity, 'type', '', ''),
       account: get(entity, 'account', ''),
-      selectedType: options().some(({value}) => value === get(entity, 'type', '')) ? {
+      selectedType: options().some(({ value }) => value === get(entity, 'type', '')) ? {
         value: get(entity, 'type', ''),
         label: capitalize(get(entity, 'type', ''))
       } : {}
@@ -41,7 +41,7 @@ class EntityForm extends Component {
     } = this.props
 
     const entity = omit(values, 'selectedType');
-    
+
     submitEntity(entity)
   }
 
@@ -63,9 +63,17 @@ class EntityForm extends Component {
               Logo&nbsp; <FontAwesome className='entity-modal-content-label-icon' name='info-circle' />
             </p>
             <div className='entity-modal-content-logo-rectangle'>
+
               <div className='entity-modal-content-upload-wrapper'>
-                <span className='entity-modal-content-upload-wrapper-icon'><FontAwesome name='file-upload' /></span>
-                <small>Upload</small>
+                <label  className='entity-modal-content-upload-label' htmlFor='logo' id='logo'>
+                  <input
+                    id='logo'
+                    type="file"
+                    accept="image/*"
+                  />
+                    <p><FontAwesome name='file-upload' /></p>
+                    <button className="upload-text" type="button">Upload</button>
+                </label>
               </div>
             </div>
 
@@ -77,8 +85,15 @@ class EntityForm extends Component {
             </p>
             <div className='entity-modal-content-picture-rectangle'>
               <div className='entity-modal-content-upload-wrapper'>
-                <span className='entity-modal-content-upload-wrapper-icon'><FontAwesome name='file-upload' /></span>
-                <small>Upload</small>
+                <label  className='entity-modal-content-upload-label' htmlFor='picture' id='picture'>
+                  <input
+                    id='picture'
+                    type="file"
+                    accept="image/*"
+                  />
+                    <p><FontAwesome name='file-upload' /></p>
+                    <button className="upload-text" type="button">Upload</button>
+                </label>
               </div>
             </div>
           </div>

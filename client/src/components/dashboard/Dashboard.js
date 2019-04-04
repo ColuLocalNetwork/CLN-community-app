@@ -166,14 +166,7 @@ class Dashboard extends Component {
               <div className='dashboard-information-footer'>
                 <div className='dashboard-information-small-text'>
                   <span className='text-asset'>Asset ID</span>
-                  <form>
-                    <textarea
-                      onClick={this.openBlockExplorer}
-                      ref={textarea => (this.textArea = textarea)}
-                      value={this.props.tokenAddress}
-                      readOnly
-                    />
-                  </form>
+                  <span className='id'>{this.props.tokenAddress}</span>
                 </div>
                 <CopyToClipboard text={this.props.tokenAddress}>
                   <p className='dashboard-information-period'>
