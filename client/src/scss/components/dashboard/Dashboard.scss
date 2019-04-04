@@ -837,21 +837,11 @@
       }
       .btn-entity-adding {
         color: $color-home-banner-bg;
-        // .fa {
-        //   background: linear-gradient(97deg, #98faac, #fae83e);
-        //   -webkit-background-clip: text;
-        //   -webkit-text-fill-color: transparent;
-        // }
         &:hover,
         &:focus:active,
         &:active {
           color: $color-home-banner-bg;
-        //   .fa {
-        //     background: linear-gradient(97deg, #fae83e, #98faac);
-        //     -webkit-background-clip: text;
-        //     -webkit-text-fill-color: transparent;
         }
-        // }
       }
     }
   }

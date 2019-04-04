@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import MediaMobile from 'images/issue-popup-mobile.svg'
 import FontAwesome from 'react-fontawesome'
-import TopNav from './../TopNav'
+import TopNav from 'components/TopNav'
 import CopyToClipboard from 'components/common/CopyToClipboard'
 import {loadModal} from 'actions/ui'
 import { getList, fetchBusinesses, fetchBusiness, activateBusiness, deactivateBusiness, editEntity } from 'actions/directory'
@@ -106,16 +106,6 @@ class EntityProfile extends Component {
                         )
                     }
                     </div>
-                    {/* {entity && entity.active
-                      ? <p className='entity-profile-link' onClick={this.handleDeactivate}>
-                        <FontAwesome name='signature' />
-                        Deactivate
-                      </p>
-                      : <p className='entity-profile-link' onClick={this.handleActivate}>
-                        <FontAwesome name='signature' />
-                        Activate
-                      </p>
-                    } */}
                   </div>
                 </div>
               </div>
@@ -157,13 +147,6 @@ class EntityProfile extends Component {
                   <div className='dashboard-information-small-text'>
                     <span>Account id</span>
                     <span className='id'>{this.props.hash}</span>
-                    {/* <form>
-                      <textarea
-                        ref={textarea => (this.textArea = textarea)}
-                        value={this.props.hash}
-                        readOnly
-                      />
-                    </form> */}
                   </div>
                   <CopyToClipboard text={this.props.hash}>
                     <p className='dashboard-information-period'>

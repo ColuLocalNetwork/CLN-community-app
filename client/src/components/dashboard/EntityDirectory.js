@@ -154,7 +154,9 @@ class EntityDirectory extends Component {
                             <a style={{ backgroundImage: `url(${plusIcon})` }}></a>
                           </span>
                         ) : (
-                          <FontAwesome name='plus-circle' />
+                          <span className='dashboard-entity-content-plus-icon'>
+                            <FontAwesome name='plus-circle' />
+                          </span>
                         )
                     } New Business
                   </button>
