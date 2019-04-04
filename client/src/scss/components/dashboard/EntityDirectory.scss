@@ -640,9 +640,13 @@
           align-items: center;
           width: 100%;
           height: 100%;
-          justify-content: space-evenly;
-          .fa {
-            font-size: 35px;
+
+          > p {
+            padding-top: 25px;
+            img {
+              width: 35px;
+              height: 35px;
+            }
           }
 
           .upload-text {

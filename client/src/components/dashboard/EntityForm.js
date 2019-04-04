@@ -9,6 +9,7 @@ import { Formik, Field } from 'formik'
 import entityShape from 'utils/validation/shapes/entity'
 import { businessTypes, options } from 'constants/dropdownOptions'
 import FontAwesome from 'react-fontawesome'
+import uploadIcon from 'images/upload.svg';
 
 class EntityForm extends Component {
 
@@ -71,7 +72,7 @@ class EntityForm extends Component {
                     type="file"
                     accept="image/*"
                   />
-                    <p><FontAwesome name='file-upload' /></p>
+                    <p><img alt='upload' src={uploadIcon} /></p>
                     <button className="upload-text" type="button">Upload</button>
                 </label>
               </div>
@@ -91,7 +92,7 @@ class EntityForm extends Component {
                     type="file"
                     accept="image/*"
                   />
-                    <p><FontAwesome name='file-upload' /></p>
+                    <p><img alt='upload' src={uploadIcon} /></p>
                     <button className="upload-text" type="button">Upload</button>
                 </label>
               </div>
