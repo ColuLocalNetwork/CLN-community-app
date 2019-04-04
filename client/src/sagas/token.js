@@ -111,8 +111,6 @@ export default function * tokenSaga () {
     tryTakeEvery(actions.CREATE_TOKEN_WITH_METADATA, createTokenWithMetadata, 1),
     tryTakeEvery(actions.FETCH_TOKEN_STATISTICS, fetchTokenStatistics, 1),
     tryTakeEvery(actions.FETCH_TOKEN_PROGRESS, fetchTokenProgress, 1),
-    takeEvery(DEPLOY_BRIDGE.SUCCESS, fetchTokenProgress),
-    takeEvery(ADD_USER.SUCCESS, fetchTokenProgress),
-    takeEvery(CREATE_LIST.SUCCESS, fetchTokenProgress)
+    takeEvery([DEPLOY_BRIDGE.SUCCESS, ADD_USER.SUCCESS, CREATE_LIST.SUCCESS], fetchTokenProgress)
   ])
 }

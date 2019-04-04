@@ -8,6 +8,7 @@ import {getAddress} from 'selectors/network'
 import {createMetadata} from 'sagas/metadata'
 import {isZeroAddress} from 'utils/web3'
 import {processReceipt} from 'services/api/misc'
+import {getHomeTokenAddress} from 'selectors/token'
 import * as api from 'services/api/business'
 
 function * createList ({tokenAddress}) {
@@ -16,8 +17,9 @@ function * createList ({tokenAddress}) {
   const SimpleListFactoryContract = getContract({abiName: 'SimpleListFactory',
     address: contractAddress
   })
+  const homeTokenAddress = yield select(getHomeTokenAddress, tokenAddress)
 
-  const method = SimpleListFactoryContract.methods.createSimpleList(tokenAddress)
+  const method = SimpleListFactoryContract.methods.createSimpleList(homeTokenAddress)
   const receipt = yield method.send({
     from: accountAddress
   })
