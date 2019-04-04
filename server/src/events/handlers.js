@@ -5,6 +5,7 @@ const businessListDeployed = require('@utils/tokenProgress').businessListDeploye
 const getMetadata = require('@utils/metadata').getMetadata
 const mongoose = require('mongoose')
 const Business = mongoose.model('Business')
+const BusinessList = mongoose.model('BusinessList')
 
 const handleTokenCreatedEvent = async (event) => {
   const blockNumber = event.blockNumber
@@ -51,7 +52,7 @@ const handleEntityReplacedEvent = async (event) => {
   const metadata = await getMetadata(hash)
   const {name} = metadata.data
   const {active} = metadata.data
-  new Business({
+  await new Business({
     hash,
     listAddress,
     name,
@@ -62,7 +63,16 @@ const handleEntityReplacedEvent = async (event) => {
 }
 
 const handleSimpleListCreatedEvent = async (event) => {
+  const listAddress = event.returnValues.list
   const tokenAddress = event.returnValues.token
+  const admin = event.returnValues.admin
+
+  await new BusinessList({
+    listAddress,
+    tokenAddress,
+    admin
+  }).save()
+
   return businessListDeployed(tokenAddress)
 }
 
