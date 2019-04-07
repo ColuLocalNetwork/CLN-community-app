@@ -4,13 +4,17 @@ import { connect } from 'react-redux'
 import CommunityLogo from 'components/elements/CommunityLogo'
 import {fetchTokenProgress} from 'actions/token'
 import FontAwesome from 'react-fontawesome'
+import classNames from 'classnames'
 
 const Step = ({done, text, handleClick}) => (
   <div
-    className={done ? 'dashboard-progress-text text-positive' : 'dashboard-progress-text text-negative'}
+    className={classNames('dashboard-progress-text', {
+      'text-positive': done,
+      'text-negative': !done
+    })}
     onClick={done ? null : handleClick}
   >
-    <FontAwesome name={done ? 'check' : 'minus'} /> <span className='progress-text-content'>{text}</span>
+    <FontAwesome name={classNames({'check': done, 'minus': !done})} /> <span className='progress-text-content'>{text}</span>
   </div>)
 
 class TokenProgress extends Component {
