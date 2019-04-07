@@ -94,7 +94,7 @@ class EntityProfile extends Component {
                     </p>&nbsp;&nbsp;|&nbsp;&nbsp;
                     <div className='entity-profile-actions-toggle'>
                       <input type='checkbox' value={entity && entity.active} checked={entity && entity.active} onChange={(e) => this.toggleHandler(e.target.checked)} />
-                      <span class="toogle"></span>
+                      <div className="toggle-wrapper"><span class="toggle"></span></div>
                     </div>
                     <div className='entity-profile-actions-status'>
                     {

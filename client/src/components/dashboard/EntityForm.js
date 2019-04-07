@@ -36,7 +36,7 @@ class EntityForm extends Component {
     this.validationSchema = entityShape
   }
 
-  onSubmit = (values, form) => {
+  onSubmit = (values) => {
     const {
       submitEntity
     } = this.props
@@ -46,7 +46,7 @@ class EntityForm extends Component {
     submitEntity(entity)
   }
 
-  renderForm = ({ errors, isSubmitting, isValidating, handleSubmit, setFieldValue, setFieldTouched, values }) => {
+  renderForm = ({ handleSubmit, setFieldValue, setFieldTouched, values }) => {
 
     return (
       <form className='entity-modal-content' onSubmit={handleSubmit}>
@@ -63,39 +63,33 @@ class EntityForm extends Component {
             <p className='entity-modal-content-label'>
               Logo&nbsp; <FontAwesome className='entity-modal-content-label-icon' name='info-circle' />
             </p>
-            <div className='entity-modal-content-logo-rectangle'>
-
-              <div className='entity-modal-content-upload-wrapper'>
-                <label  className='entity-modal-content-upload-label' htmlFor='logo' id='logo'>
-                  <input
-                    id='logo'
-                    type="file"
-                    accept="image/*"
-                  />
-                    <p><img alt='upload' src={uploadIcon} /></p>
-                    <button className="upload-text" type="button">Upload</button>
-                </label>
-              </div>
+            <div className='logo-rectangle'>
+              <label className='entity-modal-content-upload-label' htmlFor='logo' id='logo'>
+                <input
+                  id='logo'
+                  type="file"
+                  accept="image/*"
+                />
+                <p><img alt='upload' src={uploadIcon} /></p>
+                <button className="upload-text" type="button">Upload</button>
+              </label>
             </div>
-
           </div>
           <div className='col-5'>
             <p className='entity-modal-content-label'>
               Picture &nbsp;
             <FontAwesome className='entity-modal-content-label-icon' name='info-circle' />
             </p>
-            <div className='entity-modal-content-picture-rectangle'>
-              <div className='entity-modal-content-upload-wrapper'>
-                <label  className='entity-modal-content-upload-label' htmlFor='picture' id='picture'>
-                  <input
-                    id='picture'
-                    type="file"
-                    accept="image/*"
-                  />
-                    <p><img alt='upload' src={uploadIcon} /></p>
-                    <button className="upload-text" type="button">Upload</button>
-                </label>
-              </div>
+            <div className='picture-rectangle'>
+              <label className='entity-modal-content-upload-label' htmlFor='picture' id='picture'>
+                <input
+                  id='picture'
+                  type="file"
+                  accept="image/*"
+                />
+                <p><img alt='upload' src={uploadIcon} /></p>
+                <button className="upload-text" type="button">Upload</button>
+              </label>
             </div>
           </div>
           <div className='col-5'>
