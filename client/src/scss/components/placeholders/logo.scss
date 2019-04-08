@@ -1,0 +1,36 @@
+%logo-circle {
+	background: rgb(200,219,231);
+	border-radius: 50%;
+    height: 80px;
+    width: 80px;
+    min-height: 50px;
+    min-width: 50px;
+	position: relative;
+	border: 2px solid #1b3c50;
+}
+
+%inner-circle {
+    border: 2px solid #1b3c50;
+    position: absolute;
+    background: inherit;
+    border-radius: 50%;
+    height: 62px;
+    width: 62px;
+    top: 50%;
+    left: 50%;
+    margin: -31px 0px 0px -31px;
+}
+
+%logo-symbol {
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    margin-top: -7px;
+    text-transform: uppercase;
+    left: 0;
+    right: 0;
+    z-index: 3;
+}
