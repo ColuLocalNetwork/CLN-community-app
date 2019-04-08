@@ -201,8 +201,6 @@
 			&-field {
 				min-width: 300px;
 				max-width: 400px;
-				// margin-top: 20px;
-				// width: 100%;
 				border-radius: 5px;
 				font-size: 106px;
   			font-weight: bold;
@@ -220,16 +218,6 @@
 					width: 100%;
 					height: 100%;
 				}
-				// box-shadow: 0 0 6px 0 rgba(10, 117, 134, 0.44);
-				// &::after {
-				// 	content: '';
-				// 	position: absolute;
-				// 	top: 15px;
-			  //   right: 20px;
-			  //   left: 20px;
-			  //   bottom: 15px;
-				// background-color: rgba(147, 197, 255, 0.11);
-				// }
 				@media (max-width: $breakpoint-mobile) {
 					height: auto;
 				}
@@ -341,7 +329,6 @@
 		    flex-direction: column;
 		    width: 210px;
 		    align-items: center;
-				// margin-right: 20px;
 				font-size: 11px;
   			font-weight: 500;
 				color: $color-text-gray;
@@ -588,7 +575,6 @@
 	}
 	&-community-name {
 		input {
-			// box-shadow: 0 0 6px 0 rgba(10, 117, 134, 0.44);
   		background-color: $color-step-text;
   		border: solid 1px $color-step-title;
 			border-radius: 10px;

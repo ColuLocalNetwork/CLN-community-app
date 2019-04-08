@@ -1,24 +1,14 @@
-%logo-circle {
-	background: rgb(200,219,231);
+%outer-circle {
 	border-radius: 50%;
-    height: 80px;
-    width: 80px;
-    min-height: 50px;
-    min-width: 50px;
 	position: relative;
-	border: 2px solid #1b3c50;
 }
 
 %inner-circle {
-    border: 2px solid #1b3c50;
     position: absolute;
     background: inherit;
     border-radius: 50%;
-    height: 62px;
-    width: 62px;
     top: 50%;
     left: 50%;
-    margin: -31px 0px 0px -31px;
 }
 
 %logo-symbol {

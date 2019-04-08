@@ -74,7 +74,7 @@ export default class DetailsStep extends Component {
         </div>
         <div className='step-content-details-block'>
           <h3 className='step-content-details-title'>
-            Initail \ total supply
+            Initial / Total Supply
           </h3>
           <div className='step-content-details-container total-container'>
             <TextInput

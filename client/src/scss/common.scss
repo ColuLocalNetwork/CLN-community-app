@@ -4,8 +4,7 @@ $col-first-coin-border: #1b3c50;
 @include block(logo-circle) {
 	
 	@include element(outer) {
-		border-radius: 50%;
-		position: relative;
+		@extend %outer-circle;
 		border: 3px solid $col-first-coin-border;
 
 		@include modifier (small) {
@@ -75,12 +74,8 @@ $col-first-coin-border: #1b3c50;
 	}
 
 	@include element (inner){
+		@extend %inner-circle;
 		border: 3px solid $col-first-coin-border;
-		position: absolute;
-		background: inherit;
-		border-radius: 50%;
-		top: 50%;
-		left: 50%;
 
 		@include modifier (small) {
 			height: 100%;
@@ -114,20 +109,7 @@ $col-first-coin-border: #1b3c50;
 	}
 
 	@include element (name) {
-		font-size: 13px;
-		font-weight: bold;
-		text-align: center;
-		color: $color-step-text;
-		position: absolute;
-		top: 50%;
-		margin-top: -7px;
-		text-transform: uppercase;
-		left: 0;
-		right: 0;
-		z-index: 3;
-		@media (max-width: $breakpoint-mobile) {
-			font-size: 9px;
-		}
+		@extend %logo-symbol;
 	}
 }
 
@@ -215,12 +197,6 @@ $col-first-coin-border: #1b3c50;
 .coin-header {
 	@include flex-box();
 	padding:32px;
-
-	// .logo {
-	// 	width: 70px;
-	// 	height: 70px;
-	// 	min-width: 70px;
-	// }
 
 	.coin-details {
 		margin-left: 23px;

@@ -50,7 +50,7 @@ export default class SymbolStep extends Component {
             className='step-community-symbol'
             id='communitySymbol'
             type='text'
-            maxLength='3'
+            maxLength='4'
             defaultValue={this.state.customSymbol}
             onChange={this.handleChangeCustomSymbol}
           />
