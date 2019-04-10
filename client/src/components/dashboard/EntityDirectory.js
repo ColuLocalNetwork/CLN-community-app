@@ -87,7 +87,7 @@ class EntityDirectory extends Component {
         this.state.search.toLowerCase()) !== -1
     ) : entities
 
-  renderBusiness(entities) {
+  renderBusiness (entities) {
     if (entities.length) {
       return (
         entities.map((entity, index) =>
@@ -108,7 +108,7 @@ class EntityDirectory extends Component {
     isOwner(this.props.token, this.props.accountAddress) &&
     this.props.homeTokenAddress
 
-  render() {
+  render () {
     const { network: { networkType } } = this.props
 
     const business = this.props.entities
@@ -151,7 +151,7 @@ class EntityDirectory extends Component {
                       networkType === 'fuse'
                         ? (
                           <span className='dashboard-entity-content-plus-icon'>
-                            <a style={{ backgroundImage: `url(${plusIcon})` }}></a>
+                            <a style={{ backgroundImage: `url(${plusIcon})` }} />
                           </span>
                         ) : (
                           <span className='dashboard-entity-content-plus-icon'>
