@@ -25,8 +25,6 @@ export default (state = initialState, action) => {
       return {...state, transactionHash: action.response.transactionHash, signatureNeeded: false}
     case EDIT_ENTITY.PENDING:
       return {...state, editTransactionHash: action.response.transactionHash}
-    // case EDIT_ENTITY.SUCCESS:
-    //   return {...state, editEntityReceipt: action.response.receipt}
     case LOCATION_CHANGE:
       if (action.payload.location.pathname === '/') {
         return initialState
