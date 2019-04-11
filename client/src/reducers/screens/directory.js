@@ -22,10 +22,8 @@ export default (state = initialState, action) => {
         hasMore: action.response.metadata.has_more}
     case ADD_ENTITY.REQUEST:
       return {...state, transactionStatus: REQUEST}
-    case ADD_ENTITY.FAILURE:
-      return {...state, transactionStatus: FAILURE}
-    case ADD_ENTITY.SUCCESS:
-      return {...state, transactionStatus: SUCCESS}
+    case ADD_ENTITY.PENDING:
+      return {...state, ...action.response}
     case EDIT_ENTITY.SUCCESS:
       return {...state, editEntityReceipt: action.response.receipt}
     case LOCATION_CHANGE:
