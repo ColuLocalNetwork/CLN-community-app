@@ -9,6 +9,7 @@ import { getList, fetchBusinesses, fetchBusiness, activateBusiness, deactivateBu
 import { ADD_DIRECTORY_ENTITY, WRONG_NETWORK_MODAL } from 'constants/uiConstants'
 import ReactGA from 'services/ga'
 import {getBlockExplorerUrl} from 'utils/network'
+import {getTransaction} from 'selectors/transaction'
 
 class EntityProfile extends Component {
   componentDidMount () {
@@ -35,8 +36,8 @@ class EntityProfile extends Component {
   }
 
   componentDidUpdate (prevProps) {
-    if (this.props.editEntityReceipt && !prevProps.editEntityReceipt) {
-      const {newHash} = this.props.editEntityReceipt.events.EntityReplaced.returnValues
+    if (this.props.receipt && !prevProps.receipt) {
+      const {newHash} = this.props.receipt.events.EntityReplaced.returnValues
       this.showProfile(this.props.listAddress, newHash)
     }
 
@@ -166,7 +167,8 @@ const mapStateToProps = (state, {match}) => ({
   listAddress: match.params.listAddress,
   hash: match.params.hash,
   entity: state.entities.metadata[`ipfs://${match.params.hash}`],
-  editEntityReceipt: state.screens.directory.editEntityReceipt
+  editEntityReceipt: state.screens.directory.editEntityReceipt,
+  ...getTransaction(state, state.screens.directory.editTransactionHash)
 })
 
 const mapDispatchToProps = {

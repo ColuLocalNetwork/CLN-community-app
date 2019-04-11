@@ -93,19 +93,12 @@ function * editEntity ({listAddress, hash, data}) {
   const response = yield call(createMetadata, {metadata: data})
   const newHash = response.hash
 
-  const receipt = yield SimpleListContract.methods.replaceEntity(hash, newHash).send({
+  const transactionPromise = SimpleListContract.methods.replaceEntity(hash, newHash).send({
     from: accountAddress
   })
 
-  yield apiCall(processReceipt, {receipt})
-
-  yield put({type: actions.EDIT_ENTITY.SUCCESS,
-    response: {
-      receipt
-    }
-  })
-
-  return receipt
+  const action = actions.EDIT_ENTITY
+  return yield call(transactionFlow, {transactionPromise, action, sendReceipt: true})
 }
 
 export function * activateBusiness ({listAddress, hash}) {

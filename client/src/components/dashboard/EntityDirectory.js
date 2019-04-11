@@ -68,8 +68,8 @@ class EntityDirectory extends Component {
     submitEntity: (data) => this.props.addEntity(this.props.listAddress, { ...data, active: true })
   })
 
-  renderTransactionStatus = (transactionStatus) => {
-    if (transactionStatus === REQUEST || transactionStatus === PENDING) {
+  renderTransactionStatus = () => {
+    if (this.props.signatureNeeded || this.props.transactionStatus === PENDING) {
       return (
         <div className='dashboard-entity-loader'>
           <Loader color='#3a3269' className='loader' />
@@ -105,7 +105,7 @@ class EntityDirectory extends Component {
     }
   }
 
-  canDeployBusinessList = () => this.props.transactionStatus !== REQUEST &&
+  canDeployBusinessList = () => !this.props.signatureNeeded &&
     isOwner(this.props.token, this.props.accountAddress) &&
     this.props.homeTokenAddress
 
@@ -184,7 +184,7 @@ class EntityDirectory extends Component {
               }
             </React.Fragment>
           )}
-        {this.renderTransactionStatus(this.props.transactionStatus)}
+        {this.renderTransactionStatus()}
         {!this.props.listAddress && <div className='dashboard-empty-list'>
           <img src={EmptyBusinessList} />
         </div>}
