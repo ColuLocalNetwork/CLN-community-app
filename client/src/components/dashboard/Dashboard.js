@@ -1,35 +1,37 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import {fetchToken, fetchTokenStatistics} from 'actions/token'
-import {isUserExists} from 'actions/user'
-import FontAwesome from 'react-fontawesome'
-import {getClnBalance, getAccountAddress} from 'selectors/accounts'
-import {formatWei} from 'utils/format'
+import { fetchToken, fetchTokenStatistics } from 'actions/token'
+import { isUserExists } from 'actions/user'
+import { getClnBalance, getAccountAddress, getBalances } from 'selectors/accounts'
+import { formatWei } from 'utils/format'
 import { USER_DATA_MODAL, WRONG_NETWORK_MODAL, BUSINESS_LIST_MODAL, BRIDGE_MODAL } from 'constants/uiConstants'
-import {loadModal, hideModal} from 'actions/ui'
+import { loadModal, hideModal } from 'actions/ui'
 import { deployBridge } from 'actions/bridge'
 import { createList } from 'actions/directory'
+import { transferToken, mintToken, burnToken } from 'actions/token'
 import TokenProgress from './TokenProgress'
 import TopNav from 'components/TopNav'
 import Breadcrumbs from 'components/elements/Breadcrumbs'
 import ActivityContent from './ActivityContent'
 import Bridge from './Bridge'
 import EntityDirectory from './EntityDirectory'
-import {getBlockExplorerUrl} from 'utils/network'
-import {isOwner} from 'utils/token'
-import CopyToClipboard from 'components/common/CopyToClipboard'
+import { isOwner } from 'utils/token'
+import Tabs from 'components/common/Tabs'
+import classNames from 'classnames'
+import upperCase from 'lodash/upperCase'
+import web3 from 'web3'
 
 const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
 
 class UserDataModal extends React.Component {
-  componentDidMount (prevProps) {
+  componentDidMount(prevProps) {
     if (this.props.token.owner === this.props.accountAddress && !this.props.userExists) {
       this.timerId = setTimeout(this.props.loadUserDataModal, LOAD_USER_DATA_MODAL_TIMEOUT)
     }
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     clearTimeout(this.timerId)
   }
 
@@ -44,6 +46,25 @@ UserDataModal.propTypes = {
 }
 
 class Dashboard extends Component {
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      actionType: null,
+      transfer: {
+        toField: null,
+        amount: null
+      },
+      burn: {
+        amount: null
+      },
+      mint: {
+        amount: null
+      }
+    }
+  }
+
   handleIntervalChange = (userType, intervalValue) => {
     this.props.fetchTokenStatistics(this.props.tokenAddress, userType, intervalValue)
   }
@@ -99,8 +120,19 @@ class Dashboard extends Component {
     if (this.props.networkType === 'fuse') {
       successFunc()
     } else {
-      this.props.loadModal(WRONG_NETWORK_MODAL, {supportedNetworks: ['fuse']})
+      this.props.loadModal(WRONG_NETWORK_MODAL, { supportedNetworks: ['fuse'] })
     }
+  }
+
+  handleMintOrBurn = actionType =>
+    this.setState({ actionType })
+
+  onChange = (amount) => {
+    const {actionType} = this.state
+    if (!actionType) {
+      return;
+    }
+    this.setState({ [actionType]: { amount } })
   }
 
   loadBusinessListPopup = () => {
@@ -113,13 +145,42 @@ class Dashboard extends Component {
     })
   }
 
-  render () {
+  handleToField = toField => {
+    const {transfer: {...data}} = this.state    
+    this.setState({ transfer: { ...data, toField } })
+  }
+
+  handleAmountField = amount => {
+    const {transfer: {...data}} = this.state
+    this.setState({ transfer: { ...data, amount } })
+  }
+
+  handleMintOrBurnClick = () => {
+    const { burnToken, mintToken, tokenAddress } = this.props
+    const {actionType} = this.state
+
+    if (actionType === 'mint') {
+      mintToken(tokenAddress, web3.utils.toWei(String(this.state.mint.amount)))
+    } else {
+      burnToken(tokenAddress, web3.utils.toWei(String(this.state.burn.amount)))
+    }
+  }
+
+  handleTransper = () => {
+    const { transferToken, tokenAddress } = this.props
+    const { transfer: { toField, amount }} = this.state
+    transferToken(tokenAddress, toField, web3.utils.toWei(String(amount)))
+  }
+
+  render() {
     if (!this.props.token) {
       return null
     }
-
-    const { token, accountAddress } = this.props
-    const { admin, user, steps } = this.props.dashboard
+    const { actionType } = this.state
+    const { token, accountAddress, balances, tokenAddress, dashboard } = this.props
+    const { tokenType } = token
+    const balance = balances[tokenAddress]
+    const { admin, user, steps } = dashboard
     return [
       <TopNav
         key={0}
@@ -134,38 +195,77 @@ class Dashboard extends Component {
               token={token}
               metadata={this.props.metadata}
               steps={steps}
+              tokenAddress={this.props.tokenAddress}
+              tokenNetworkType={this.props.tokenNetworkType}
               match={this.props.match}
               loadBridgePopup={this.loadBridgePopup}
               loadUserDataModal={this.loadUserDataModal}
               loadBusinessListPopup={this.loadBusinessListPopup}
             />
-            <div className='dashboard-information'>
-              <div className='dashboard-information-header'>
-                <p className='dashboard-information-text'>Total supply</p>
-                <p className='dashboard-information-big-count'>
-                  {formatWei(token.totalSupply, 0)}
-                  <span>{token.symbol}</span>
-                </p>
-              </div>
-              <div className='dashboard-info' ref={content => (this.content = content)}>
-                <ActivityContent stats={user} userType='user' title='users' handleChange={this.handleIntervalChange} />
-                <ActivityContent stats={admin} userType='admin' handleChange={this.handleIntervalChange} />
-              </div>
-              <div className='dashboard-information-footer'>
-                <div className='dashboard-information-small-text'>
-                  <span className='text-asset'>Asset ID</span>
-                  <a href={`${getBlockExplorerUrl(this.props.tokenNetworkType)}/address/${this.props.tokenAddress}`}
-                    target='_blank'>
-                    <span className='id'>{this.props.tokenAddress}</span>
-                  </a>
+            <Tabs>
+              <div label='Stats' className='tab__item'>
+                <div className='transfer-tab__balance'>
+                  <span className='title'>Balance: </span>
+                  <span className='amount'>{balance ? formatWei(balance, 0) : 0}</span>
+                  <span className='symbol'>{token.symbol}</span>
                 </div>
-                <CopyToClipboard text={this.props.tokenAddress}>
-                  <p className='dashboard-information-period'>
-                    <FontAwesome name='clone' />
-                  </p>
-                </CopyToClipboard>
+                <hr className='transfer-tab__line' />
+                <div className='dashboard-info' ref={content => (this.content = content)}>
+                  <ActivityContent stats={user} userType='user' title='users' handleChange={this.handleIntervalChange} />
+                  <ActivityContent stats={admin} userType='admin' handleChange={this.handleIntervalChange} />
+                </div>
               </div>
-            </div>
+              <div label='Transfer' className='tab__item'>
+                <div className='transfer-tab'>
+                  <div className='transfer-tab__balance'>
+                    <span className='title'>Balance: </span>
+                    <span className='amount'>{balance ? formatWei(balance, 0) : 0}</span>
+                    <span className='symbol'>{token.symbol}</span>
+                  </div>
+                  <hr className='transfer-tab__line' />
+                  <div className='transfer-tab__to-field'>
+                    <span className='transfer-tab__to-field__text'>To</span>
+                    <input className='transfer-tab__to-field__input' onChange={(e) => this.handleToField(e.target.value)} />
+                  </div>
+                  <div className='transfer-tab__amount'>
+                    <span className='transfer-tab__amount__text'>Amount</span>
+                    <input className='transfer-tab__amount__field' placeholder='...' onChange={(e) => this.handleAmountField(e.target.value)} />
+
+                  </div>
+
+                  <div className='transfer-tab__button'>
+                    <button onClick={this.handleTransper}>SEND</button>
+                  </div>
+                </div>
+              </div>
+
+              {
+                token && tokenType && tokenType === 'mintableBurnable' &&
+                <div label='Mint \ Burn' className='tab__item'>
+                  <div className='transfer-tab'>
+                    <div className='transfer-tab__balance'>
+                      <span className='title'>Balance: </span>
+                      <span className='amount'>{balance ? formatWei(balance, 0) : 0}</span>
+                      <span className='symbol'>{token.symbol}</span>
+                    </div>
+                    <hr className='transfer-tab__line' />
+                    <div className='transfer-tab__actions'>
+                      <button disabled={!isOwner(token, accountAddress)} className={classNames('transfer-tab__actions__btn', { 'transfer-tab__actions__btn--active': actionType === 'mint' })} onClick={() => this.handleMintOrBurn('mint')}>Mint</button>
+                      <button disabled={!isOwner(token, accountAddress)} className={classNames('transfer-tab__actions__btn', { 'transfer-tab__actions__btn--active': actionType === 'burn' })} onClick={() => this.handleMintOrBurn('burn')}>Burn</button>
+                    </div>
+                    <div className='transfer-tab__amount'>
+                      <span className='transfer-tab__amount__text'>Amount</span>
+                      <input className='transfer-tab__amount__field' type='number' placeholder='...' onChange={(e) => this.onChange(e.target.value)} />
+                    </div>
+                    <div className='transfer-tab__button'>
+                      {
+                        actionType && <button onClick={this.handleMintOrBurnClick}>{upperCase(actionType)}</button>
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+            </Tabs>
           </div>
           <Bridge
             accountAddress={accountAddress}
@@ -187,19 +287,19 @@ class Dashboard extends Component {
         </div>
         {
           this.props.token && accountAddress && this.props.dashboard.hasOwnProperty('userExists') &&
-            <UserDataModal
-              token={this.props.token}
-              accountAddress={accountAddress}
-              userExists={this.props.dashboard.userExists}
-              loadUserDataModal={this.loadUserDataModal}
-            />
+          <UserDataModal
+            token={this.props.token}
+            accountAddress={accountAddress}
+            userExists={this.props.dashboard.userExists}
+            loadUserDataModal={this.loadUserDataModal}
+          />
         }
       </div>
     ]
   }
 }
 
-const mapStateToProps = (state, {match}) => ({
+const mapStateToProps = (state, { match }) => ({
   networkType: state.network.networkType,
   token: state.entities.tokens[match.params.address],
   tokenAddress: match.params.address,
@@ -208,6 +308,7 @@ const mapStateToProps = (state, {match}) => ({
   dashboard: state.screens.dashboard,
   accountAddress: getAccountAddress(state),
   clnBalance: getClnBalance(state),
+  balances: getBalances(state),
   homeTokenAddress: state.entities.bridges[match.params.address] && state.entities.bridges[match.params.address].homeTokenAddress
 })
 
@@ -218,7 +319,10 @@ const mapDispatchToProps = {
   loadModal,
   hideModal,
   deployBridge,
-  createList
+  createList,
+  transferToken,
+  mintToken,
+  burnToken
 }
 
 export default connect(
