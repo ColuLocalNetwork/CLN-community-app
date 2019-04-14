@@ -5,7 +5,11 @@ import classNames from 'classnames'
 import CommunityLogo from 'components/elements/CommunityLogo'
 
 export default class Community extends Component {
-  handleClick = () => this.props.showDashboard(this.props.token.address)
+  handleClick = () => {
+    if (typeof this.props.showDashboard === 'function') {
+      this.props.showDashboard(this.props.token.address)
+    }
+  }
 
   render () {
     return <div className={this.props.coinWrapperClassName} onClick={this.handleClick}>

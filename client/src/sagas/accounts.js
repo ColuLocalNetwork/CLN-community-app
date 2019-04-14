@@ -4,9 +4,11 @@ import * as actions from 'actions/accounts'
 import {tryTakeEvery} from './utils'
 import {getAddress, getNetworkType} from 'selectors/network'
 import {CHECK_ACCOUNT_CHANGED} from 'actions/network'
+import {TRANSFER_TOKEN, MINT_TOKEN, BURN_TOKEN} from 'actions/token'
 import {fetchTokensByAccount} from 'sagas/token'
 import web3 from 'services/web3'
 import {getContract} from 'services/contract'
+import {getAccountAddress} from 'selectors/accounts'
 
 function * balanceOfToken ({tokenAddress, accountAddress, options}) {
   const basicTokenContract = getContract({abiName: 'BasicToken', address: tokenAddress, options})
@@ -56,12 +58,30 @@ function * watchAccountChanged ({response}) {
   yield put(actions.balanceOfCln(response.accountAddress))
 }
 
+function * watchTransfers ({tokenAddress, response}) {
+  const accountAddress = yield select(getAccountAddress)
+  yield put(actions.balanceOfToken(tokenAddress, accountAddress))
+}
+
+function * watchBurn ({tokenAddress, response}) {
+  const accountAddress = yield select(getAccountAddress)
+  yield put(actions.balanceOfToken(tokenAddress, accountAddress))
+}
+
+function * watchMint ({tokenAddress, response}) {
+  const accountAddress = yield select(getAccountAddress)
+  yield put(actions.balanceOfToken(tokenAddress, accountAddress))
+}
+
 export default function * accountsSaga () {
   yield all([
     tryTakeEvery(actions.BALANCE_OF_TOKEN, balanceOfToken),
     tryTakeEvery(actions.BALANCE_OF_NATIVE, balanceOfNative),
     tryTakeEvery(actions.BALANCE_OF_CLN, balanceOfCln),
     takeEvery(CHECK_ACCOUNT_CHANGED.SUCCESS, watchAccountChanged),
+    takeEvery(TRANSFER_TOKEN.SUCCESS, watchTransfers),
+    takeEvery(BURN_TOKEN.SUCCESS, watchBurn),
+    takeEvery(MINT_TOKEN.SUCCESS, watchMint),
     tryTakeEvery(actions.FETCH_BALANCES, fetchBalances, 1),
     tryTakeEvery(actions.FETCH_TOKENS_WITH_BALANCES, fetchTokensWithBalances, 1)
   ])
