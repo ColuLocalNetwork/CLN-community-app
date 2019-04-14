@@ -135,13 +135,12 @@
 	}
 
 	@include element(content) {
-		height: 88%;
+		height: 90%;
 		padding: 25px;
 		background: $color-step-text;
 		border-radius: 10px 10px;
 		box-shadow: 0 0px 0 -2px rgba(0, 0, 0, 0.4);
     position: relative;
-    z-index: 2;
 	}
 
 }

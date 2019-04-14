@@ -177,7 +177,8 @@ class Dashboard extends Component {
       return null
     }
     const { actionType } = this.state
-    const { token, accountAddress, balances, tokenAddress, dashboard } = this.props
+    const { token, accountAddress, balances, tokenAddress, dashboard, mintBurnToken, transferTokenInProgress } = this.props
+    
     const { tokenType } = token
     const balance = balances[tokenAddress]
     const { admin, user, steps } = dashboard
@@ -237,6 +238,14 @@ class Dashboard extends Component {
                     <button onClick={this.handleTransper}>SEND</button>
                   </div>
                 </div>
+                {
+                  transferTokenInProgress ?
+                  (
+                    <div className='bridge-deploying'>
+                      <p className='bridge-deploying-text'>Pending<span>.</span><span>.</span><span>.</span></p>
+                    </div>
+                  ) :null
+                }
               </div>
 
               {
@@ -263,6 +272,14 @@ class Dashboard extends Component {
                       }
                     </div>
                   </div>
+                  {
+                    mintBurnToken ?
+                    (
+                      <div className='bridge-deploying'>
+                        <p className='bridge-deploying-text'>Pending<span>.</span><span>.</span><span>.</span></p>
+                      </div>
+                    ) :null
+                  }
                 </div>
               }
             </Tabs>
@@ -300,6 +317,7 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = (state, { match }) => ({
+  ...state.screens.token,
   networkType: state.network.networkType,
   token: state.entities.tokens[match.params.address],
   tokenAddress: match.params.address,
