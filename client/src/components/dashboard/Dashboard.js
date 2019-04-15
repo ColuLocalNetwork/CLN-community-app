@@ -21,8 +21,11 @@ import Tabs from 'components/common/Tabs'
 import classNames from 'classnames'
 import upperCase from 'lodash/upperCase'
 import web3 from 'web3'
+import {getTransaction} from 'selectors/transaction'
+import Message from './Message.jsx' 
 
 const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
+const ERROR_MESSAGE = 'Oops, something went wrong'
 
 class UserDataModal extends React.Component {
   componentDidMount(prevProps) {
@@ -61,7 +64,8 @@ class Dashboard extends Component {
       },
       mint: {
         amount: null
-      }
+      },
+      showMessage: null
     }
   }
 
@@ -157,12 +161,12 @@ class Dashboard extends Component {
 
   handleMintOrBurnClick = () => {
     const { burnToken, mintToken, tokenAddress } = this.props
-    const {actionType} = this.state
+    const {actionType, mint, burn} = this.state
 
     if (actionType === 'mint') {
-      mintToken(tokenAddress, web3.utils.toWei(String(this.state.mint.amount)))
+      mintToken(tokenAddress, web3.utils.toWei(String(mint.amount)))
     } else {
-      burnToken(tokenAddress, web3.utils.toWei(String(this.state.burn.amount)))
+      burnToken(tokenAddress, web3.utils.toWei(String(burn.amount)))
     }
   }
 
@@ -172,13 +176,27 @@ class Dashboard extends Component {
     transferToken(tokenAddress, toField, web3.utils.toWei(String(amount)))
   }
 
+  onTimeout = () => {
+    this.setState({ showMessage: false })
+  }
+
+  isShow = () => {
+    const { transactionStatus } = this.props
+    return transactionStatus && (transactionStatus === 'SUCCESS' || transactionStatus === 'CONFIRMATION') && this.state.showMessage !== false
+  }
+
+  isError = () => {
+    const { transactionStatus } = this.props
+    return transactionStatus && transactionStatus === 'FAILURE' && this.state.showMessage !== false
+  }
+
   render() {
     if (!this.props.token) {
       return null
     }
     const { actionType } = this.state
-    const { token, accountAddress, balances, tokenAddress, dashboard, mintBurnToken, transferTokenInProgress } = this.props
-    
+    const { token, accountAddress, balances, tokenAddress, dashboard, isTransfer, isMinting, isBurning } = this.props
+
     const { tokenType } = token
     const balance = balances[tokenAddress]
     const { admin, user, steps } = dashboard
@@ -211,7 +229,7 @@ class Dashboard extends Component {
                   <span className='symbol'>{token.symbol}</span>
                 </div>
                 <hr className='transfer-tab__line' />
-                <div className='dashboard-info' ref={content => (this.content = content)}>
+                <div className='transfer-tab__content' ref={content => (this.content = content)}>
                   <ActivityContent stats={user} userType='user' title='users' handleChange={this.handleIntervalChange} />
                   <ActivityContent stats={admin} userType='admin' handleChange={this.handleIntervalChange} />
                 </div>
@@ -224,25 +242,32 @@ class Dashboard extends Component {
                     <span className='symbol'>{token.symbol}</span>
                   </div>
                   <hr className='transfer-tab__line' />
-                  <div className='transfer-tab__to-field'>
-                    <span className='transfer-tab__to-field__text'>To</span>
-                    <input className='transfer-tab__to-field__input' onChange={(e) => this.handleToField(e.target.value)} />
-                  </div>
-                  <div className='transfer-tab__amount'>
-                    <span className='transfer-tab__amount__text'>Amount</span>
-                    <input className='transfer-tab__amount__field' placeholder='...' onChange={(e) => this.handleAmountField(e.target.value)} />
+                  <div className='transfer-tab__content'>
+                    
+                    <Message message={'Your money has been sent successfully'} isOpen={this.isShow()} onTimeout={this.onTimeout} timeout={2500} />
+                    <Message message={ERROR_MESSAGE} isOpen={this.isError()} onTimeout={this.onTimeout} timeout={2500} />
 
-                  </div>
+                    <div className='transfer-tab__content__to-field'>
+                      <span className='transfer-tab__content__to-field__text'>To</span>
+                      <input className='transfer-tab__content__to-field__input' onChange={(e) => this.handleToField(e.target.value)} />
+                    </div>
+                    <div className='transfer-tab__content__amount'>
+                      <span className='transfer-tab__content__amount__text'>Amount</span>
+                      <input className='transfer-tab__content__amount__field' placeholder='...' onChange={(e) => this.handleAmountField(e.target.value)} />
 
-                  <div className='transfer-tab__button'>
-                    <button onClick={this.handleTransper}>SEND</button>
+                    </div>
+
+                    <div className='transfer-tab__content__button'>
+                      <button onClick={this.handleTransper}>SEND</button>
+                    </div>
                   </div>
                 </div>
                 {
-                  transferTokenInProgress ?
+                  isTransfer ?
                   (
                     <div className='bridge-deploying'>
                       <p className='bridge-deploying-text'>Pending<span>.</span><span>.</span><span>.</span></p>
+                      <div className='bridge-deploying-confirmation'>Your money on it's way</div>
                     </div>
                   ) :null
                 }
@@ -258,22 +283,26 @@ class Dashboard extends Component {
                       <span className='symbol'>{token.symbol}</span>
                     </div>
                     <hr className='transfer-tab__line' />
-                    <div className='transfer-tab__actions'>
-                      <button disabled={!isOwner(token, accountAddress)} className={classNames('transfer-tab__actions__btn', { 'transfer-tab__actions__btn--active': actionType === 'mint' })} onClick={() => this.handleMintOrBurn('mint')}>Mint</button>
-                      <button disabled={!isOwner(token, accountAddress)} className={classNames('transfer-tab__actions__btn', { 'transfer-tab__actions__btn--active': actionType === 'burn' })} onClick={() => this.handleMintOrBurn('burn')}>Burn</button>
-                    </div>
-                    <div className='transfer-tab__amount'>
-                      <span className='transfer-tab__amount__text'>Amount</span>
-                      <input className='transfer-tab__amount__field' type='number' placeholder='...' onChange={(e) => this.onChange(e.target.value)} />
-                    </div>
-                    <div className='transfer-tab__button'>
-                      {
-                        actionType && <button onClick={this.handleMintOrBurnClick}>{upperCase(actionType)}</button>
-                      }
-                    </div>
+                    <div className='transfer-tab__content'>
+                      <Message message={'Your action has been sent successfully'} isOpen={this.isShow()} onTimeout={this.onTimeout} timeout={5000} />                      
+                      <Message message={ERROR_MESSAGE} isOpen={this.isError()} onTimeout={this.onTimeout} timeout={2500} />                      
+                      <div className='transfer-tab__actions'>
+                        <button disabled={!isOwner(token, accountAddress)} className={classNames('transfer-tab__actions__btn', { 'transfer-tab__actions__btn--active': actionType === 'mint' })} onClick={() => this.handleMintOrBurn('mint')}>Mint</button>
+                        <button disabled={!isOwner(token, accountAddress)} className={classNames('transfer-tab__actions__btn', { 'transfer-tab__actions__btn--active': actionType === 'burn' })} onClick={() => this.handleMintOrBurn('burn')}>Burn</button>
+                      </div>
+                      <div className='transfer-tab__content__amount'>
+                        <span className='transfer-tab__content__amount__text'>Amount</span>
+                        <input className='transfer-tab__content__amount__field' type='number' placeholder='...' onChange={(e) => this.onChange(e.target.value)} />
+                      </div>
+                      <div className='transfer-tab__content__button'>
+                        {
+                          actionType && <button onClick={this.handleMintOrBurnClick}>{upperCase(actionType)}</button>
+                        }
+                      </div>
+                    </div>                    
                   </div>
                   {
-                    mintBurnToken ?
+                    isBurning || isMinting ?
                     (
                       <div className='bridge-deploying'>
                         <p className='bridge-deploying-text'>Pending<span>.</span><span>.</span><span>.</span></p>
@@ -327,6 +356,7 @@ const mapStateToProps = (state, { match }) => ({
   accountAddress: getAccountAddress(state),
   clnBalance: getClnBalance(state),
   balances: getBalances(state),
+  ...getTransaction(state, state.screens.token.transactionHash),
   homeTokenAddress: state.entities.bridges[match.params.address] && state.entities.bridges[match.params.address].homeTokenAddress
 })
 

@@ -116,51 +116,40 @@ function * fetchTokenProgress ({tokenAddress}) {
   })
 }
 
-function * transferToken ({tokenAddress, to, value}) {
+function * transferToken ({tokenAddress, to, value, confirmationsLimit}) {
   const accountAddress = yield select(getAccountAddress)
   const contract = getContract({abiName: 'BasicToken', address: tokenAddress})
 
-  const response = yield contract.methods.transfer(to, value).send({
+  const transactionPromise = contract.methods.transfer(to, value).send({
     from: accountAddress
   })
 
-  yield put({
-    type: actions.TRANSFER_TOKEN.SUCCESS,
-    tokenAddress,
-    response
-  })
+  const action = actions.TRANSFER_TOKEN
+  yield call(transactionFlow, {transactionPromise, action, confirmationsLimit, sendReceipt: false, tokenAddress})
 }
 
-function * mintToken ({tokenAddress, value}) {
+function * mintToken ({tokenAddress, value, confirmationsLimit}) {
   const accountAddress = yield select(getAccountAddress)
   const contract = new web3.eth.Contract(MintableBurnableTokenAbi, tokenAddress)
 
-  const response = yield contract.methods.mint(accountAddress, value).send({
+  const transactionPromise = contract.methods.mint(accountAddress, value).send({
     from: accountAddress
   })
 
-  yield put({
-    type: actions.MINT_TOKEN.SUCCESS,
-    tokenAddress,
-    response
-  })
+  const action = actions.MINT_TOKEN
+  yield call(transactionFlow, {transactionPromise, action, confirmationsLimit, sendReceipt: false, tokenAddress})
 }
 
-function * burnToken ({tokenAddress, value}) {
+function * burnToken ({tokenAddress, value, confirmationsLimit}) {
   const accountAddress = yield select(getAccountAddress)
   const contract = new web3.eth.Contract(MintableBurnableTokenAbi, tokenAddress)
 
-  const receipt = yield contract.methods.burn(value).send({
+  const transactionPromise = contract.methods.burn(value).send({
     from: accountAddress
   })
 
-  yield put({
-    type: actions.BURN_TOKEN.SUCCESS,
-    tokenAddress,
-    response: {
-      receipt
-    }
-  })
+  const action = actions.BURN_TOKEN
+  yield call(transactionFlow, {transactionPromise, action, confirmationsLimit, sendReceipt: false, tokenAddress})
 }
 
 export default function * tokenSaga () {

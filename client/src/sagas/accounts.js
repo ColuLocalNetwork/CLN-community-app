@@ -58,19 +58,19 @@ function * watchAccountChanged ({response}) {
   yield put(actions.balanceOfCln(response.accountAddress))
 }
 
-function * watchTransfers ({tokenAddress, response}) {
+function * watchTransfers ({response}) {
   const accountAddress = yield select(getAccountAddress)
-  yield put(actions.balanceOfToken(tokenAddress, accountAddress))
+  yield put(actions.balanceOfToken(response.tokenAddress, accountAddress))
 }
 
-function * watchBurn ({tokenAddress, response}) {
+function * watchBurn ({response}) {
   const accountAddress = yield select(getAccountAddress)
-  yield put(actions.balanceOfToken(tokenAddress, accountAddress))
+  yield put(actions.balanceOfToken(response.tokenAddress, accountAddress))
 }
 
-function * watchMint ({tokenAddress, response}) {
+function * watchMint ({response}) {
   const accountAddress = yield select(getAccountAddress)
-  yield put(actions.balanceOfToken(tokenAddress, accountAddress))
+  yield put(actions.balanceOfToken(response.tokenAddress, accountAddress))
 }
 
 export default function * accountsSaga () {

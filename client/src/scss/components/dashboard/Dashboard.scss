@@ -923,9 +923,40 @@
   }
 }
 
+@include block(status) {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: $color-step-text;
+  z-index: 5;
+  font-family: $font-family;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  justify-content: center;
+
+  @include element(message) {
+    color: $color-filter-text;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.35;
+    letter-spacing: 0.5px;
+  }
+
+  @include element(icon) {
+    margin: 1em auto;
+    font-size: 20px;
+    color: $color-ropsten;
+  }
+}
+
 @include block(transfer-tab) {
   display: flex;
   flex-direction: column;
+  position: relative;
 
   @include element(balance) {
     @include block(title) {
@@ -962,95 +993,106 @@
     margin: 1em 0;
   }
 
-  @include element(to-field) {
+  @include element(content) {
+    padding: 1em;
+    position: relative;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 3em 0;
-    @include element(text) {
-      font-family: $font-family;
-      font-size: 14px;
-      min-width: 1em;
+    flex-direction: column;
 
-      font-weight: bold;
-      color: $color-home-banner-bg;
-    }
-
-    @include element(input) {
-      background: transparent;
-      border: none;
-      width: 96%;
-      border-bottom: 1px solid $color-brdr-issuance;
-    }
-
-    
-  }
-
-  @include element(amount) {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    @include element(text) {
-      font-family: $font-family;
-      font-size: 14px;
-      font-weight: bold;
-      min-width: 65px;
-      color: $color-home-banner-bg;
-    }
-
-    @include element(field) {
-      box-shadow: 0 0 6px 0 #cccccc;
-      border: solid 2px transparent;
-      background-color: #fff;
-      border-radius: 45px;
-      padding: 8px 16px;
-      color: $color-step-title;
-      min-height: 1.5em;
-      font-size: 20px;
-      width: 85%;
-      font-weight: bold;
-      &::placeholder {
-        color: rgba(0, 0, 0, 0.3);
+    @include element(to-field) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 2.4em 0;
+      height: 35px;
+      @include element(text) {
+        font-family: $font-family;
+        font-size: 14px;
+        min-width: 1em;
         font-weight: bold;
+        color: $color-home-banner-bg;
+      }
+  
+      @include element(input) {
+        background: transparent;
+        border: none;
+        width: 96%;
+        border-bottom: 1px solid $color-brdr-issuance;
+      }
+    }
+  
+    @include element(amount) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      @include element(text) {
+        font-family: $font-family;
+        font-size: 14px;
+        font-weight: bold;
+        min-width: 65px;
+        color: $color-home-banner-bg;
+      }
+  
+      @include element(field) {
+        box-shadow: 0 0 6px 0 #cccccc;
+        border: solid 2px transparent;
+        background-color: #fff;
+        border-radius: 45px;
+        padding: 8px 16px;
+        color: $color-step-title;
+        min-height: 1.5em;
+        font-size: 20px;
+        width: 85%;
+        font-weight: bold;
+        &::placeholder {
+          color: rgba(0, 0, 0, 0.3);
+          font-weight: bold;
+        }
+  
+        &:focus {
+          border: solid 2px $color-step-title;
+          box-shadow: none;
+        }
+      }
+    }
+  
+    @include element(button) {
+      align-self: flex-end;
+      margin: 40px 0 0px;
+  
+      > button {
+        display: inline-block;
+        border-radius: 30px;
+        background-color: $color-ropsten;
+        font-size: .8em;
+        color: $color-step-text;
+        // padding: 10px 30px;
+        width: 84px;
+        height: 32px;
+        text-transform: uppercase;
+        border: none;
+        font-weight: bold;
+        .symbol-icon {
+          margin-left: 5px;
+        }
+        &:focus,
+        &:active,
+        &:focus:active {
+          outline: none;
+        }
+        &:hover {
+          background-color: darken($color-ropsten, 10%);
+          cursor: pointer;
+        }
+        &[disabled] {
+          color: #fff;
+          cursor: not-allowed;
+          background-color: lighten($color-ropsten, 20%) !important;
+        }
       }
     }
   }
 
-  @include element(button) {
-    align-self: flex-end;
-    margin: 40px 0 0px;
-
-    > button {
-      display: inline-block;
-      border-radius: 30px;
-      background-color: $color-ropsten;
-      font-size: .8em;
-      color: $color-step-text;
-      // padding: 10px 30px;
-      width: 84px;
-      height: 32px;
-      text-transform: uppercase;
-      border: none;
-      font-weight: bold;
-      .symbol-icon {
-        margin-left: 5px;
-      }
-      &:focus,
-      &:active,
-      &:focus:active {
-        outline: none;
-      }
-      &:hover {
-        background-color: darken($color-ropsten, 10%);
-        cursor: pointer;
-      }
-      &[disabled] {
-        color: #fff;
-        cursor: not-allowed;
-        background-color: lighten($color-ropsten, 20%) !important;
-      }
-    }
-  }
 
   @include element(actions) {
     align-self: flex-start;
