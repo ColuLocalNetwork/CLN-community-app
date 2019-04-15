@@ -10,11 +10,13 @@ const Entity = ({entity, address, showProfile}) =>
     </div>
     <div className='entity-content'>
       <div className='entity-name' onClick={() => showProfile()}>{entity.name}</div>
-      {entity.businessType && <div className='entity-type'>{entity.businessType}</div>}
+      <div className='entity-type'>{entity.businessType}</div>
       <div className='entity-subtitle'>
-        <span className='text-asset'>Account ID</span> <a href={`${getBlockExplorerUrl('fuse')}/address/${address}`} target='_blank'><span className='id'>{address}</span></a>
+        Account ID <a href={`${getBlockExplorerUrl('fuse')}/address/${address}`} target='_blank'>{address}</a>
         <CopyToClipboard text={address}>
-          <FontAwesome name='clone' />
+          <p className='dashboard-information-period'>
+            <FontAwesome name='clone' />
+          </p>
         </CopyToClipboard>
       </div>
     </div>

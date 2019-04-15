@@ -13,8 +13,6 @@ import {processReceipt} from 'services/api/misc'
 import {transactionSucceeded} from 'actions/utils'
 import {apiCall, createEntityPut, tryTakeEvery, createEntitiesFetch} from './utils'
 import {transactionFlow} from './transaction'
-import MintableBurnableTokenAbi from 'constants/abi/MintableBurnableToken'
-import web3 from 'services/web3'
 
 const entityPut = createEntityPut(actions.entityName)
 
@@ -46,7 +44,7 @@ function * fetchClnToken () {
   })
 }
 
-export function * createToken ({name, symbol, totalSupply, tokenURI, tokenType}) {
+export function * createToken ({name, symbol, totalSupply, tokenURI}) {
   const tokenFactoryAddress = yield select(getAddress, 'TokenFactory')
 
   const TokenFactoryContract = getContract({abiName: 'TokenFactory',
@@ -54,37 +52,23 @@ export function * createToken ({name, symbol, totalSupply, tokenURI, tokenType})
   })
   const accountAddress = yield select(getAccountAddress)
 
-  if (tokenType === 'basic') {
-    const transactionPromise = TokenFactoryContract.methods.createBasicToken(
-      name,
-      symbol,
-      totalSupply.toFixed(),
-      tokenURI
-    ).send({
-      from: accountAddress
-    })
-    const receipt = yield transactionFlow({transactionPromise, action: actions.CREATE_TOKEN})
+  const transactionPromise = TokenFactoryContract.methods.createToken(
+    name,
+    symbol,
+    totalSupply.toFixed(),
+    tokenURI
+  ).send({
+    from: accountAddress
+  })
+  const receipt = yield transactionFlow({transactionPromise, action: actions.CREATE_TOKEN})
 
-    return receipt
-  } else if (tokenType === 'mintableBurnable') {
-    const transactionPromise = TokenFactoryContract.methods.createMintableBurnableToken(
-      name,
-      symbol,
-      totalSupply.toFixed(),
-      tokenURI
-    ).send({
-      from: accountAddress
-    })
-    const receipt = yield transactionFlow({transactionPromise, action: actions.CREATE_TOKEN})
-
-    return receipt
-  }
+  return receipt
 }
 
-function * createTokenWithMetadata ({tokenData, metadata, tokenType}) {
+function * createTokenWithMetadata ({tokenData, metadata}) {
   const {hash} = yield call(createMetadata, {metadata})
   const tokenURI = `ipfs://${hash}`
-  const receipt = yield call(createToken, {...tokenData, tokenURI, tokenType})
+  const receipt = yield call(createToken, {...tokenData, tokenURI})
 
   yield apiCall(processReceipt, {receipt})
 
@@ -116,47 +100,8 @@ function * fetchTokenProgress ({tokenAddress}) {
   })
 }
 
-function * transferToken ({tokenAddress, to, value}) {
-  const accountAddress = yield select(getAccountAddress)
-  const contract = getContract({abiName: 'BasicToken', address: tokenAddress})
-
-  const transactionPromise = contract.methods.transfer(to, value).send({
-    from: accountAddress
-  })
-
-  const action = actions.TRANSFER_TOKEN
-  yield call(transactionFlow, {transactionPromise, action, sendReceipt: true, tokenAddress})
-}
-
-function * mintToken ({tokenAddress, value}) {
-  const accountAddress = yield select(getAccountAddress)
-  const contract = new web3.eth.Contract(MintableBurnableTokenAbi, tokenAddress)
-
-  const transactionPromise = contract.methods.mint(accountAddress, value).send({
-    from: accountAddress
-  })
-
-  const action = actions.MINT_TOKEN
-  yield call(transactionFlow, {transactionPromise, action, sendReceipt: true, tokenAddress})
-}
-
-function * burnToken ({tokenAddress, value}) {
-  const accountAddress = yield select(getAccountAddress)
-  const contract = new web3.eth.Contract(MintableBurnableTokenAbi, tokenAddress)
-
-  const transactionPromise = contract.methods.burn(value).send({
-    from: accountAddress
-  })
-
-  const action = actions.BURN_TOKEN
-  yield call(transactionFlow, {transactionPromise, action, sendReceipt: true, tokenAddress})
-}
-
 export default function * tokenSaga () {
   yield all([
-    tryTakeEvery(actions.TRANSFER_TOKEN, transferToken, 1),
-    tryTakeEvery(actions.MINT_TOKEN, mintToken, 1),
-    tryTakeEvery(actions.BURN_TOKEN, burnToken, 1),
     tryTakeEvery(actions.FETCH_TOKENS, fetchTokens, 1),
     tryTakeEvery(actions.FETCH_TOKENS_BY_OWNER, fetchTokensByOwner, 1),
     tryTakeEvery(actions.FETCH_TOKENS_BY_ACCOUNT, fetchTokensByAccount, 1),

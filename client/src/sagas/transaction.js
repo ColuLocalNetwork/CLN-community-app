@@ -5,7 +5,7 @@ import {apiCall} from './utils'
 
 import {transactionPending, transactionConfirmed, transactionFailed, transactionSucceeded} from 'actions/transactions'
 
-export function * transactionFlow ({transactionPromise, action, confirmationsLimit, sendReceipt, tokenAddress}) {
+export function * transactionFlow ({transactionPromise, action, confirmationsLimit, sendReceipt}) {
   if (confirmationsLimit) {
     yield fork(transactionConfirmations, {transactionPromise, action, confirmationsLimit})
   }
@@ -32,7 +32,7 @@ export function * transactionFlow ({transactionPromise, action, confirmationsLim
     yield apiCall(processReceipt, {receipt})
   }
 
-  yield put(transactionSucceeded(action, receipt, {tokenAddress}))
+  yield put(transactionSucceeded(action, receipt))
 
   return receipt
 }

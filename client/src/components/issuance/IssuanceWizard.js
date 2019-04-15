@@ -70,8 +70,8 @@ class IssuanceWizard extends Component {
       symbol: this.state.communitySymbol,
       totalSupply: new BigNumber(this.state.totalSupply).multipliedBy(1e18)
     }
-    const metadata = {communityLogo: this.state.communityLogo.name}
-    this.props.createTokenWithMetadata(tokenData, metadata, this.state.communityType.value)
+    const metadata = {communityType: this.state.communityType.text, communityLogo: this.state.communityLogo.name}
+    this.props.createTokenWithMetadata(tokenData, metadata)
   }
 
   handleScroll = () => this.setState({scrollPosition: window.scrollY})

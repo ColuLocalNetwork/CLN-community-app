@@ -47,6 +47,7 @@
 		text-align: center;
 		border-radius: 16px;
 		&-plus {
+			margin-right: 5px
 		}
 		&:focus,
 		&:focus:active,
@@ -300,6 +301,11 @@
 				display: none;
 			}
 		}
+	}
+	img {
+		height: 40px;
+		width: 40px;
+		margin-top: 3px;
 	}
 
 	.mobile-menu-icon {

@@ -1,25 +1,14 @@
 const tokenUtils = require('@utils/token')
 
-const tokenTypeEnumToString = {
-  0: 'basic',
-  1: 'mintableBurnable'
-}
-
 const handleTokenCreatedEvent = async (event) => {
+  const blockNumber = event.blockNumber
   const eventArgs = event.returnValues
   const address = eventArgs.token
+  const owner = eventArgs.issuer
+  const factoryAddress = event.address
+  const tokenData = await tokenUtils.fetchTokenData(address)
 
-  const tokenData = {
-    address,
-    factoryAddress: event.address,
-    blockNumber: event.blockNumber,
-    owner: eventArgs.issuer,
-    tokenType: tokenTypeEnumToString[eventArgs.tokenType]
-  }
-
-  const fetchedTokenData = await tokenUtils.fetchTokenData(address)
-
-  return tokenUtils.createToken({...tokenData, ...fetchedTokenData})
+  return tokenUtils.createToken({owner, blockNumber, factoryAddress, ...tokenData})
 }
 
 const handleTransferEvent = (event) => {

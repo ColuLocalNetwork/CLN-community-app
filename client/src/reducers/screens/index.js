@@ -5,15 +5,13 @@ import issuance from './issuance'
 import dashboard from './dashboard'
 import directory from './directory'
 import bridge from './bridge'
-import token from './token'
 
 const screensReducer = combineReducers({
   bridge,
   oven,
   issuance,
   dashboard,
-  directory,
-  token
+  directory
 })
 
 export default screensReducer

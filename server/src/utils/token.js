@@ -13,7 +13,7 @@ const fetchTokenData = async (address) => {
     tokenContractInstance.methods.tokenURI().call()
   ])
 
-  return {name, symbol, totalSupply, tokenURI}
+  return {address, name, symbol, totalSupply, tokenURI}
 }
 
 const createToken = async (data) => {
