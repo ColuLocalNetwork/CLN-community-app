@@ -5,7 +5,7 @@ import { fetchToken, fetchTokenStatistics } from 'actions/token'
 import { isUserExists } from 'actions/user'
 import { getClnBalance, getAccountAddress, getBalances } from 'selectors/accounts'
 import { formatWei } from 'utils/format'
-import { USER_DATA_MODAL, WRONG_NETWORK_MODAL, BUSINESS_LIST_MODAL, BRIDGE_MODAL } from 'constants/uiConstants'
+import { USER_DATA_MODAL, WRONG_NETWORK_MODAL, BUSINESS_LIST_MODAL, BRIDGE_MODAL, NO_DATA } from 'constants/uiConstants'
 import { loadModal, hideModal } from 'actions/ui'
 import { deployBridge } from 'actions/bridge'
 import { createList } from 'actions/directory'
@@ -126,9 +126,13 @@ class Dashboard extends Component {
     this.props.history.push('/')
   }
 
-  loadUserDataModal = () => this.props.loadModal(USER_DATA_MODAL, {
-    tokenAddress: this.props.tokenAddress
-  })
+  loadUserDataModal = () => {
+    if (isOwner(this.props.token, this.props.accountAddress)) {
+      this.props.loadModal(USER_DATA_MODAL, { tokenAddress: this.props.tokenAddress })
+    } else {
+      this.props.loadModal(NO_DATA, { tokenAddress: this.props.tokenAddress })      
+    }
+  }
 
   loadBridgePopup = () => this.props.loadModal(BRIDGE_MODAL, {
     tokenAddress: this.props.tokenAddress,
