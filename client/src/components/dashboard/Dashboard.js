@@ -94,8 +94,24 @@ class Dashboard extends Component {
     if (this.props.accountAddress && !prevProps.accountAddress) {
       this.props.isUserExists(this.props.accountAddress)
     }
-  }
 
+    if (this.props.transactionStatus === 'SUCCESS' && (!prevProps.transactionStatus || prevProps.transactionStatus === 'PENDING')) {
+      this.setState({
+        ...this.state,
+        transfer: {
+          toField: null,
+          amount: null
+        },
+        burn: {
+          amount: null
+        },
+        mint: {
+          amount: null
+        },
+        actionType: null,
+      })
+    }
+  }
   componentWillUnmount () {
     window.removeEventListener('mousedown', this.handleClickOutside)
   }
@@ -194,7 +210,7 @@ class Dashboard extends Component {
     if (!this.props.token) {
       return null
     }
-    const { actionType } = this.state
+    const { actionType, burn, mint } = this.state
     const { token, accountAddress, balances, tokenAddress, dashboard, isTransfer, isMinting, isBurning } = this.props
 
     const { tokenType } = token
@@ -292,7 +308,7 @@ class Dashboard extends Component {
                       </div>
                       <div className='transfer-tab__content__amount'>
                         <span className='transfer-tab__content__amount__text'>Amount</span>
-                        <input className='transfer-tab__content__amount__field' type='number' placeholder='...' onChange={(e) => this.onChange(e.target.value)} />
+                        <input className='transfer-tab__content__amount__field' type='number' value={actionType === 'mint' ? mint.amount : actionType === 'burn' ? burn.amount : null} placeholder='...' onChange={(e) => this.onChange(e.target.value)} />
                       </div>
                       <div className='transfer-tab__content__button'>
                         {
