@@ -31,7 +31,7 @@ class Tabs extends Component {
       }
     } = this
 
-    const temp = children.filter(Boolean).length
+    const numberOfTabs = children.filter(Boolean).length
 
     return children.map((child) => {
       if (!child) {
@@ -44,7 +44,7 @@ class Tabs extends Component {
           activeTab={activeTab}
           key={label}
           label={label}
-          flexBasis={`${100 / temp}%`}
+          flexBasis={`${100 / numberOfTabs}%`}
           onClick={onClickTabItem}
         />
       )
