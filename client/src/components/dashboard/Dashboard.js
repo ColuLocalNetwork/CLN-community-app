@@ -59,12 +59,7 @@ class Dashboard extends Component {
         toField: null,
         amount: null
       },
-      burn: {
-        amount: null
-      },
-      mint: {
-        amount: null
-      },
+      mintBurnAmount: '',
       showMessage: null
     }
   }
@@ -102,12 +97,7 @@ class Dashboard extends Component {
           toField: null,
           amount: null
         },
-        burn: {
-          amount: null
-        },
-        mint: {
-          amount: null
-        },
+        mintBurnAmount: '',
         actionType: null,
       })
     }
@@ -151,12 +141,12 @@ class Dashboard extends Component {
   handleMintOrBurn = actionType =>
     this.setState({ actionType })
 
-  onChange = (amount) => {
+  onChange = (mintBurnAmount) => {
     const {actionType} = this.state
     if (!actionType) {
       return;
     }
-    this.setState({ [actionType]: { amount } })
+    this.setState({ mintBurnAmount })
   }
 
   loadBusinessListPopup = () => {
@@ -181,12 +171,12 @@ class Dashboard extends Component {
 
   handleMintOrBurnClick = () => {
     const { burnToken, mintToken, tokenAddress } = this.props
-    const {actionType, mint, burn} = this.state
+    const {actionType, mintBurnAmount} = this.state
 
     if (actionType === 'mint') {
-      mintToken(tokenAddress, web3.utils.toWei(String(mint.amount)))
+      mintToken(tokenAddress, web3.utils.toWei(String(mintBurnAmount)))
     } else {
-      burnToken(tokenAddress, web3.utils.toWei(String(burn.amount)))
+      burnToken(tokenAddress, web3.utils.toWei(String(mintBurnAmount)))
     }
   }
 
@@ -214,7 +204,7 @@ class Dashboard extends Component {
     if (!this.props.token) {
       return null
     }
-    const { actionType, burn, mint } = this.state
+    const { actionType, mintBurnAmount } = this.state
     const { token, accountAddress, balances, tokenAddress, dashboard, isTransfer, isMinting, isBurning } = this.props
 
     const { tokenType } = token
@@ -312,7 +302,7 @@ class Dashboard extends Component {
                       </div>
                       <div className='transfer-tab__content__amount'>
                         <span className='transfer-tab__content__amount__text'>Amount</span>
-                        <input className='transfer-tab__content__amount__field' type='number' placeholder='...' onChange={(e) => this.onChange(e.target.value)} />
+                        <input className='transfer-tab__content__amount__field' type='number' placeholder='...' value={mintBurnAmount} onChange={(e) => this.onChange(e.target.value)} />
                       </div>
                       <div className='transfer-tab__content__button'>
                         {

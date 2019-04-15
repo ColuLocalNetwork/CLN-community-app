@@ -125,7 +125,7 @@ function * transferToken ({tokenAddress, to, value}) {
   })
 
   const action = actions.TRANSFER_TOKEN
-  yield call(transactionFlow, {transactionPromise, action, tokenAddress})
+  yield call(transactionFlow, {transactionPromise, action, sendReceipt: true, tokenAddress})
 }
 
 function * mintToken ({tokenAddress, value}) {
@@ -137,7 +137,7 @@ function * mintToken ({tokenAddress, value}) {
   })
 
   const action = actions.MINT_TOKEN
-  yield call(transactionFlow, {transactionPromise, action, tokenAddress})
+  yield call(transactionFlow, {transactionPromise, action, sendReceipt: true, tokenAddress})
 }
 
 function * burnToken ({tokenAddress, value}) {
@@ -149,7 +149,7 @@ function * burnToken ({tokenAddress, value}) {
   })
 
   const action = actions.BURN_TOKEN
-  yield call(transactionFlow, {transactionPromise, action, tokenAddress})
+  yield call(transactionFlow, {transactionPromise, action, sendReceipt: true, tokenAddress})
 }
 
 export default function * tokenSaga () {
