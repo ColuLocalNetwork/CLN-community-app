@@ -33,9 +33,9 @@ export const fetchClnToken = () => tokenAction(FETCH_CLN_TOKEN.REQUEST)
 export const createToken = (tokenData) => requestAction(CREATE_TOKEN, tokenData)
 export const createTokenWithMetadata = (tokenData, metadata, tokenType) => requestAction(CREATE_TOKEN_WITH_METADATA, {tokenData, metadata, tokenType})
 
-export const transferToken = (tokenAddress, to, value) => requestAction(TRANSFER_TOKEN, { tokenAddress, to, value, confirmationsLimit: CONFIG.web3.bridge.confirmations.home })
-export const mintToken = (tokenAddress, value) => requestAction(MINT_TOKEN, { tokenAddress, value, confirmationsLimit: CONFIG.web3.bridge.confirmations.home })
-export const burnToken = (tokenAddress, value) => requestAction(BURN_TOKEN, { tokenAddress, value, confirmationsLimit: CONFIG.web3.bridge.confirmations.home })
+export const transferToken = (tokenAddress, to, value) => requestAction(TRANSFER_TOKEN, { tokenAddress, to, value })
+export const mintToken = (tokenAddress, value) => requestAction(MINT_TOKEN, { tokenAddress, value })
+export const burnToken = (tokenAddress, value) => requestAction(BURN_TOKEN, { tokenAddress, value })
 
 export const fetchTokenStatistics = (tokenAddress, activityType, interval) => requestAction(FETCH_TOKEN_STATISTICS,
   {tokenAddress, activityType, interval})

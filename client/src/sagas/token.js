@@ -116,7 +116,7 @@ function * fetchTokenProgress ({tokenAddress}) {
   })
 }
 
-function * transferToken ({tokenAddress, to, value, confirmationsLimit}) {
+function * transferToken ({tokenAddress, to, value}) {
   const accountAddress = yield select(getAccountAddress)
   const contract = getContract({abiName: 'BasicToken', address: tokenAddress})
 
@@ -125,10 +125,10 @@ function * transferToken ({tokenAddress, to, value, confirmationsLimit}) {
   })
 
   const action = actions.TRANSFER_TOKEN
-  yield call(transactionFlow, {transactionPromise, action, confirmationsLimit, sendReceipt: false, tokenAddress})
+  yield call(transactionFlow, {transactionPromise, action, tokenAddress})
 }
 
-function * mintToken ({tokenAddress, value, confirmationsLimit}) {
+function * mintToken ({tokenAddress, value}) {
   const accountAddress = yield select(getAccountAddress)
   const contract = new web3.eth.Contract(MintableBurnableTokenAbi, tokenAddress)
 
@@ -137,10 +137,10 @@ function * mintToken ({tokenAddress, value, confirmationsLimit}) {
   })
 
   const action = actions.MINT_TOKEN
-  yield call(transactionFlow, {transactionPromise, action, confirmationsLimit, sendReceipt: false, tokenAddress})
+  yield call(transactionFlow, {transactionPromise, action, tokenAddress})
 }
 
-function * burnToken ({tokenAddress, value, confirmationsLimit}) {
+function * burnToken ({tokenAddress, value}) {
   const accountAddress = yield select(getAccountAddress)
   const contract = new web3.eth.Contract(MintableBurnableTokenAbi, tokenAddress)
 
@@ -149,7 +149,7 @@ function * burnToken ({tokenAddress, value, confirmationsLimit}) {
   })
 
   const action = actions.BURN_TOKEN
-  yield call(transactionFlow, {transactionPromise, action, confirmationsLimit, sendReceipt: false, tokenAddress})
+  yield call(transactionFlow, {transactionPromise, action, tokenAddress})
 }
 
 export default function * tokenSaga () {

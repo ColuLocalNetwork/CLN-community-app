@@ -10,6 +10,8 @@ export default (state = {}, action) => {
       return { ...state, signatureNeeded: false, transactionHash: action.response.transactionHash, isTransfer: true }
     case TRANSFER_TOKEN.SUCCESS:
       return { ...state, ...action.response, signatureNeeded: false, isTransfer: false }
+    case TRANSFER_TOKEN.FAILURE:
+      return {...state, ...action.response}
     case MINT_TOKEN.REQUEST:
       return { ...state, signatureNeeded: true }
     case MINT_TOKEN.CONFIRMATION:
@@ -18,6 +20,8 @@ export default (state = {}, action) => {
       return { ...state, signatureNeeded: false, transactionHash: action.response.transactionHash, isMinting: true }
     case MINT_TOKEN.SUCCESS:
       return { ...state, ...action.response, isMinting: false }
+    case MINT_TOKEN.FAILURE:
+      return {...state, ...action.response}
     case BURN_TOKEN.REQUEST:
       return { ...state, signatureNeeded: true }
     case BURN_TOKEN.CONFIRMATION:
@@ -26,6 +30,8 @@ export default (state = {}, action) => {
       return { ...state, signatureNeeded: false, transactionHash: action.response.transactionHash, isBurning: true }
     case BURN_TOKEN.SUCCESS:
       return { ...state, ...action.response, isBurning: false }
+    case BURN_TOKEN.FAILURE:
+      return {...state, ...action.response}
     default:
       return state
   }

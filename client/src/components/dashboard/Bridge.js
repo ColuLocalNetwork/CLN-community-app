@@ -115,8 +115,10 @@ class Bridge extends Component {
     const {
       transferAmount
     } = this.state
-    const val =balances[homeNetwork === bridgeStatus.from.network ? homeTokenAddress : foreignTokenAddress]
-    
+
+    const balance = balances[homeNetwork === bridgeStatus.from.network ? homeTokenAddress : foreignTokenAddress]
+    const formatted = new BigNumber(balance).div(1e18).toFormat(2, 1)
+
     return (
       <div className='dashboard-bridge'>
         <div className='dashboard-network'>
@@ -139,10 +141,10 @@ class Bridge extends Component {
                 ? (
                   <div>
                     <div className='dashboard-transfer-form'>
-                      <input type='number' value={transferAmount} max={new BigNumber(balances[homeNetwork === bridgeStatus.from.network ? homeTokenAddress : foreignTokenAddress]).div(1e18).toFormat(2, 1)} placeholder='0' onChange={this.setTransferAmount} disabled={transferStatus} />
+                      <input type='number' value={transferAmount} max={formatted} placeholder='0' onChange={this.setTransferAmount} disabled={transferStatus} />
                       <div className='dashboard-transfer-form-currency'>{this.props.token.symbol}</div>
                     </div>
-                    <button disabled={transferStatus || !Number(transferAmount) || !accountAddress || new BigNumber(transferAmount).toFormat(2, 1) > new BigNumber(val).div(1e18).toFormat(2, 1)}
+                    <button disabled={transferStatus || !Number(transferAmount) || !accountAddress || new BigNumber(transferAmount).toFormat(2, 1) > formatted}
                       className='dashboard-transfer-btn' onClick={this.handleTransfer}>
                       {transferStatus || `Transfer to ${bridgeStatus.to.network}`}
                     </button>

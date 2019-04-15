@@ -58,7 +58,7 @@ function * watchAccountChanged ({response}) {
   yield put(actions.balanceOfCln(response.accountAddress))
 }
 
-function * watcBalanceOfToken ({response}) {
+function * watchBalanceOfToken ({response}) {
   const accountAddress = yield select(getAccountAddress)
   yield put(actions.balanceOfToken(response.tokenAddress, accountAddress))
 }
@@ -69,7 +69,7 @@ export default function * accountsSaga () {
     tryTakeEvery(actions.BALANCE_OF_NATIVE, balanceOfNative),
     tryTakeEvery(actions.BALANCE_OF_CLN, balanceOfCln),
     takeEvery(CHECK_ACCOUNT_CHANGED.SUCCESS, watchAccountChanged),
-    takeEvery([TRANSFER_TOKEN.SUCCESS, BURN_TOKEN.SUCCESS, MINT_TOKEN.SUCCESS], watcBalanceOfToken),
+    takeEvery([TRANSFER_TOKEN.SUCCESS, BURN_TOKEN.SUCCESS, MINT_TOKEN.SUCCESS], watchBalanceOfToken),
     tryTakeEvery(actions.FETCH_BALANCES, fetchBalances, 1),
     tryTakeEvery(actions.FETCH_TOKENS_WITH_BALANCES, fetchTokensWithBalances, 1)
   ])

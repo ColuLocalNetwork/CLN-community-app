@@ -5,7 +5,7 @@ import { fetchToken, fetchTokenStatistics } from 'actions/token'
 import { isUserExists } from 'actions/user'
 import { getClnBalance, getAccountAddress, getBalances } from 'selectors/accounts'
 import { formatWei } from 'utils/format'
-import { USER_DATA_MODAL, WRONG_NETWORK_MODAL, BUSINESS_LIST_MODAL, BRIDGE_MODAL, NO_DATA } from 'constants/uiConstants'
+import { USER_DATA_MODAL, WRONG_NETWORK_MODAL, BUSINESS_LIST_MODAL, BRIDGE_MODAL, NO_DATA_ABOUT_OWNER_MODAL } from 'constants/uiConstants'
 import { loadModal, hideModal } from 'actions/ui'
 import { deployBridge } from 'actions/bridge'
 import { createList } from 'actions/directory'
@@ -130,7 +130,7 @@ class Dashboard extends Component {
     if (isOwner(this.props.token, this.props.accountAddress)) {
       this.props.loadModal(USER_DATA_MODAL, { tokenAddress: this.props.tokenAddress })
     } else {
-      this.props.loadModal(NO_DATA, { tokenAddress: this.props.tokenAddress })      
+      this.props.loadModal(NO_DATA_ABOUT_OWNER_MODAL, { tokenAddress: this.props.tokenAddress })      
     }
   }
 
@@ -287,7 +287,7 @@ class Dashboard extends Component {
                   (
                     <div className='bridge-deploying'>
                       <p className='bridge-deploying-text'>Pending<span>.</span><span>.</span><span>.</span></p>
-                      <div className='bridge-deploying-confirmation'>Your money on it's way</div>
+                      <div className='bridge-deploying-confirmation'>{`Your money on it's way`}</div>
                     </div>
                   ) :null
                 }
@@ -312,7 +312,7 @@ class Dashboard extends Component {
                       </div>
                       <div className='transfer-tab__content__amount'>
                         <span className='transfer-tab__content__amount__text'>Amount</span>
-                        <input className='transfer-tab__content__amount__field' type='number' value={actionType === 'mint' ? mint.amount : actionType === 'burn' ? burn.amount : null} placeholder='...' onChange={(e) => this.onChange(e.target.value)} />
+                        <input className='transfer-tab__content__amount__field' type='number' placeholder='...' onChange={(e) => this.onChange(e.target.value)} />
                       </div>
                       <div className='transfer-tab__content__button'>
                         {

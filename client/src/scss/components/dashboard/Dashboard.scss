@@ -949,6 +949,11 @@
   @include element(icon) {
     margin: 1em auto;
     font-size: 20px;
+  }
+  .fa-close {
+    color: $color-red;
+  }
+  .fa-check {
     color: $color-ropsten;
   }
 }

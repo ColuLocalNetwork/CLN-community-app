@@ -20,7 +20,7 @@ import {
   ADD_DIRECTORY_ENTITY,
   BUSINESS_LIST_MODAL,
   BRIDGE_MODAL,
-  NO_DATA
+  NO_DATA_ABOUT_OWNER_MODAL
 } from 'constants/uiConstants'
 
 const renderModal = (modalComponent, props) =>
@@ -36,7 +36,7 @@ const MODAL_COMPONENTS = {
   [ADD_DIRECTORY_ENTITY]: AddEntityModal,
   [BUSINESS_LIST_MODAL]: BusinessListModal,
   [BRIDGE_MODAL]: BridgeModal,
-  [NO_DATA]: NoDataAboutOwnerModal
+  [NO_DATA_ABOUT_OWNER_MODAL]: NoDataAboutOwnerModal
 }
 
 const ModalContainer = (props) => {
