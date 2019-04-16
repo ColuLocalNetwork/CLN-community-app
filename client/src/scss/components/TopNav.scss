@@ -16,7 +16,7 @@
 		background: $color-home-banner-bg;
 	}
 	.top-nav-logo {
-		color: $color-step-text;
+		color: $color-white;
     font-size: 32px;
     font-weight: 500;
     display: flex;
@@ -41,7 +41,7 @@
 	  border: none;
 		font-size: 12px;
 		text-transform: uppercase;
-		color: $color-step-text;
+		color: $color-white;
 		margin-left: 30px;
 		font-weight: bold;
 		text-align: center;
@@ -68,7 +68,7 @@
 			float: right;
 			margin-top: 10px;
 			font-size: 16px;
-			color: $color-step-text;
+			color: $color-white;
 			&:hover {
 				cursor: pointer;
 			}
@@ -105,13 +105,13 @@
 		.separator-vertical {
 			width: 2px;
 			height: 44px;
-			background-color: $color-step-text;
+			background-color: $color-white;
 			margin: 0 10px;
 		}
 		.top-nav-text {
 			@include flex-box();
 			align-items: center;
-			color: $color-step-text;
+			color: $color-white;
 			font-size: 12px;
 			font-weight: 400;
 			line-height: 25px;
@@ -141,11 +141,11 @@
 						position: relative;
 						&::before {
 							content: '?';
-							color: $color-step-text;
+							color: $color-white;
 							width: 12px;
 							height: 12px;
 							background: $color-home-banner-bg;
-							border: 1px solid $color-step-text;
+							border: 1px solid $color-white;
 							text-align: center;
 							line-height: 12px;
 							position: absolute;
@@ -164,22 +164,22 @@
 
 				&-balance {
 					margin-left: 10px;
-					color: $color-step-text;
+					color: $color-white;
 					@media (max-width: $breakpoint-tablet) {
 						margin-left: 0;
 					}
 				}
 			}
 			&.profile {
-				color: $color-step-text;
+				color: $color-white;
 				padding: 6px 22px;
 				border-radius: 29px;
   			border: solid 2px #083a5a;
 				width: 200px;
 				&--open {
-					border-color: $color-step-text;
+					border-color: $color-white;
 					&:hover {
-						border-color: $color-step-text !important;
+						border-color: $color-white !important;
 					}
 				}
 				&:after {
@@ -229,7 +229,7 @@
 			.balance-text {
 				font-size: 11px;
 				font-weight: normal;
-				color: $color-step-text;
+				color: $color-white;
 			}
 			.balance-number {
 				font-size: 12px;
@@ -286,7 +286,7 @@
 					content: '';
 					width: 100px;
 				  height: 1px;
-				  background: $color-step-text;
+				  background: $color-white;
 					bottom: 10px;
 			    left: 50%;
 			    margin-left: -50px;
