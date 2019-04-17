@@ -20,7 +20,7 @@ import Tabs from 'components/common/Tabs'
 import classNames from 'classnames'
 import upperCase from 'lodash/upperCase'
 import web3 from 'web3'
-import { getTransaction } from 'selectors/transaction'
+import {getTransaction} from 'selectors/transaction'
 import Message from './Message.jsx'
 
 const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
@@ -75,7 +75,7 @@ class Dashboard extends Component {
       this.props.isUserExists(this.props.accountAddress)
     }
     if (this.props.networkType !== 'fuse' && this.props.tokenNetworkType !== this.props.networkType) {
-      this.props.loadModal(WRONG_NETWORK_MODAL, { supportedNetworks: [this.props.tokenNetworkType], handleClose: this.showHomePage })
+      this.props.loadModal(WRONG_NETWORK_MODAL, {supportedNetworks: [this.props.tokenNetworkType], handleClose: this.showHomePage})
     }
     document.addEventListener('mousedown', this.handleClickOutside)
   }
@@ -107,7 +107,7 @@ class Dashboard extends Component {
 
   handleClickOutside = (event) => {
     if (this.content && !this.content.contains(event.target)) {
-      this.setState({ dropdownOpen: '' })
+      this.setState({dropdownOpen: ''})
     }
   }
 
@@ -141,7 +141,7 @@ class Dashboard extends Component {
     this.setState({ actionType })
 
   onChange = (mintBurnAmount) => {
-    const { actionType } = this.state
+    const {actionType} = this.state
     if (!actionType) {
       return
     }
@@ -159,18 +159,18 @@ class Dashboard extends Component {
   }
 
   handleToField = toField => {
-    const { transfer: { ...data } } = this.state
+    const {transfer: {...data}} = this.state
     this.setState({ transfer: { ...data, toField } })
   }
 
   handleAmountField = amount => {
-    const { transfer: { ...data } } = this.state
+    const {transfer: {...data}} = this.state
     this.setState({ transfer: { ...data, amount } })
   }
 
   handleMintOrBurnClick = () => {
     const { burnToken, mintToken, tokenAddress } = this.props
-    const { actionType, mintBurnAmount } = this.state
+    const {actionType, mintBurnAmount} = this.state
 
     if (actionType === 'mint') {
       mintToken(tokenAddress, web3.utils.toWei(String(mintBurnAmount)))
