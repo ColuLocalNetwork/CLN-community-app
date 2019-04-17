@@ -3,25 +3,25 @@
 $themes: (
   ropsten: (
     primaty: #207b5d,
-    dark: #05283e,
+    dark: $color-primary-dark,
     secondary: #34d080,
     hover: #2eba72
   ),
   main: (
     primaty: #005d90,
-    dark: #05283e,
-    secondary: #00a5ff,
+    dark: $color-primary-dark,
+    secondary: $color-mainnet,
     hover: #0083ca
   ),
   fuse: (
     primaty: #99faab,
-    dark: #05283e,
+    dark: $color-primary-dark,
     secondary: #f6e943,
     hover: #f6e943
   )
 ) !default;
 
-@mixin theme($name, $colorsList) {
+@mixin dashboardTheme($name, $colorsList) {
   $primary: map-get($colorsList, 'primary');
   $secondary: map-get($colorsList, 'secondary');
   $dark: map-get($colorsList, 'dark');
@@ -135,9 +135,21 @@ $themes: (
         }
       }
     }
+    .transfer-tab__actions__btn--active {
+      @if $name == 'fuse' {
+        background: linear-gradient(97deg, #98faac, #fae83e);
+        color: $dark;
+      } @else {
+        background: $secondary;
+      }
+
+      &:hover {
+        background: $hover;
+      }
+    }
   }
 }
 
 @each $theme, $list in $themes {
-  @include theme($theme, $list);
+  @include dashboardTheme($theme, $list);
 }

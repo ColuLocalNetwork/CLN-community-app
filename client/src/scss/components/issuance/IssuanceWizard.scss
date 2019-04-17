@@ -144,8 +144,7 @@
 					}
 					&.active-step {
 						&::after {
-							background-color: $color-home-banner-bg;
-							box-shadow: 0 0 3px 0 #c095ff;
+							background-color: $color-primary-dark;
 						}
 					}
 				}

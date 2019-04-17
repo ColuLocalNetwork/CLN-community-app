@@ -8,12 +8,12 @@
 	padding: 10px 30px;
 	position: fixed;
 	z-index: 200;
-	background: $color-home-banner-bg;
+	background: $color-primary-dark;
 	@media (max-width: $breakpoint-tablet) {
 		height: $nav-height-mobile;
 		padding: 10px 28px;
 		position: fixed;
-		background: $color-home-banner-bg;
+		background: $color-primary-dark;
 	}
 	.top-nav-logo {
 		color: $color-white;
@@ -81,7 +81,7 @@
     align-items: center;
 		@media (max-width: $breakpoint-tablet) {
 		 flex-direction: column;
-		 background: darken($color-home-banner-bg, 5%);
+		 background: darken($color-primary-dark, 5%);
 		 padding: 20px 28px;
 		 align-items: center;
 		 width: 100%;
@@ -144,7 +144,7 @@
 							color: $color-white;
 							width: 12px;
 							height: 12px;
-							background: $color-home-banner-bg;
+							background: $color-primary-dark;
 							border: 1px solid $color-white;
 							text-align: center;
 							line-height: 12px;
@@ -241,7 +241,7 @@
 		@media (max-width: $breakpoint-tablet) {
 			@include flex-direction(column);
 			position: absolute;
-			background: $color-home-banner-bg;
+			background: $color-primary-dark;
 			top: $nav-height-mobile;
 			right: 0;
 			width:100%;
@@ -342,7 +342,7 @@
 	&.fuse {
 		.top-nav-issuance {
 			background-image: linear-gradient(97deg, #98faac, #fae83e);
-			color: $color-bg-gray;
+			color: $color-primary-dark;
 		}
 		.top-nav-links .top-nav-balance .balance-number {
 			color: $color-fuse;

@@ -39,13 +39,13 @@
 		@include modifier(CoinIcon1\.svg) {
 			@include modifier(ropsten) {
 				> span {
-					color: $color-home-banner-bg;
+					color: $color-primary-dark;
 				}
 			}
 
 			@include modifier(main) {
 				> span {
-					color: $color-home-banner-bg;
+					color: $color-primary-dark;
 				}
 			}
 		}

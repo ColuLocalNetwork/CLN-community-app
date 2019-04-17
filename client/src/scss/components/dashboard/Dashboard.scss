@@ -83,12 +83,12 @@
         line-height: 2.7;
         letter-spacing: normal;
         text-align: center;
-        color: $color-home-banner-bg;
+        color: $color-primary-dark;
       }
 
       &__total {
         font-weight: normal;
-        color: $color-home-banner-bg;
+        color: $color-primary-dark;
         text-align: center;
 
         >span:first-child {
@@ -106,7 +106,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: $color-home-banner-bg;
+      color: $color-primary-dark;
       font-family: $font-family;
       .text {
         font-size: 10px;
@@ -765,7 +765,7 @@
         font-size: 14px;
         min-width: 1em;
         font-weight: bold;
-        color: $color-home-banner-bg;
+        color: $color-primary-dark;
       }
   
       @include element(input) {
@@ -785,7 +785,7 @@
         font-size: 14px;
         font-weight: bold;
         min-width: 65px;
-        color: $color-home-banner-bg;
+        color: $color-primary-dark;
       }
   
       @include element(field) {

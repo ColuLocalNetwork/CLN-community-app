@@ -77,7 +77,7 @@
 		position: absolute;
 		right: 16px;
 		top: 16px;
-		color: #3d3d3d;
+		color: $color-primary-dark;
 		cursor: pointer;
 		z-index: 12;
 		&:hover {
@@ -91,7 +91,7 @@
 		position: relative;
 		padding: 40px 30px;
 		width: 350px;
-		background-color: $color-bg-gray;
+		background-color: $color-primary-dark;
 		@media (max-width: $breakpoint-tablet) {
 			padding: 20px 20px 100px;
 			width: auto;
