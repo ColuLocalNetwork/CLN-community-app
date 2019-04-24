@@ -27,7 +27,7 @@ router.get('/:listAddress', async (req, res, next) => {
 
   if (withMetadata) {
     const metadatas = await Promise.all(results.map(result => getMetadata(result.hash).catch(console.error)))
-    results = results.map((result, index) => ({...result, metadata: metadatas[index]}))
+    results = results.map((result, index) => ({...result, metadata: metadatas[index] && metadatas[index].data}))
   }
 
   res.json({
@@ -43,8 +43,8 @@ router.get('/:listAddress/:hash', async (req, res, next) => {
   const business = await Business.findOne({ listAddress, hash }).lean()
 
   if (withMetadata) {
-    const metadata = await getMetadata(hash).catch(console.error)
-    return res.json({data: {...business, metadata}})
+    const metadata = await getMetadata(business.hash).catch(console.error)
+    return res.json({data: {...business, metadata: metadata && metadata.data}})
   } else {
     return res.json({ data: business })
   }
