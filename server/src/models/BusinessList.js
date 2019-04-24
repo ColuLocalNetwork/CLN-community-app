@@ -13,7 +13,7 @@ module.exports = (mongoose) => {
   BusinessListSchema.index({tokenAddress: 1}, {unique: true})
 
   BusinessListSchema.post('save', businessList => {
-    const businessListDeployed = require('@utils/tokenProgress').businessListDeployed
+    const {businessListDeployed} = require('@utils/tokenProgress')
     businessListDeployed(businessList.tokenAddress)
   })
 

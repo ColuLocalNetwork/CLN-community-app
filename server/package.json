@@ -64,8 +64,8 @@
     "web3": "^1.0.0-beta.37"
   },
   "devDependencies": {
-    "nodemon": "^1.18.3",
-    "standard": "^11.0.1",
+    "nodemon": "^1.18.11",
+    "standard": "^12.0.1",
     "truffle": "^4.1.14"
   }
 }
