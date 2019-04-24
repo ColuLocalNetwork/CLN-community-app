@@ -1,5 +1,5 @@
 {
-  "name": "CLN-community-server",
+  "name": "cln-community-server",
   "version": "0.1.0",
   "description": "backend for the CLN community DApp",
   "main": "app.js",
