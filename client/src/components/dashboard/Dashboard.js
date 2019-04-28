@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import classNames from 'classnames'
+import upperCase from 'lodash/upperCase'
+import isEmpty from 'lodash/isEmpty'
+import web3 from 'web3'
 import { fetchToken, fetchTokenStatistics, transferToken, mintToken, burnToken } from 'actions/token'
 import { isUserExists } from 'actions/user'
 import { getClnBalance, getAccountAddress, getBalances } from 'selectors/accounts'
@@ -17,11 +21,9 @@ import Bridge from './Bridge'
 import EntityDirectory from './EntityDirectory'
 import { isOwner } from 'utils/token'
 import Tabs from 'components/common/Tabs'
-import classNames from 'classnames'
-import upperCase from 'lodash/upperCase'
-import web3 from 'web3'
-import {getTransaction} from 'selectors/transaction'
-import Message from './Message.jsx'
+import Message from 'components/common/Message'
+import { getTransaction } from 'selectors/transaction'
+import TransactionButton from 'components/common/TransactionButton'
 
 const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
 const ERROR_MESSAGE = 'Oops, something went wrong'
@@ -75,7 +77,7 @@ class Dashboard extends Component {
       this.props.isUserExists(this.props.accountAddress)
     }
     if (this.props.networkType !== 'fuse' && this.props.tokenNetworkType !== this.props.networkType) {
-      this.props.loadModal(WRONG_NETWORK_MODAL, {supportedNetworks: [this.props.tokenNetworkType], handleClose: this.showHomePage})
+      this.props.loadModal(WRONG_NETWORK_MODAL, { supportedNetworks: [this.props.tokenNetworkType], handleClose: this.showHomePage })
     }
     document.addEventListener('mousedown', this.handleClickOutside)
   }
@@ -107,7 +109,7 @@ class Dashboard extends Component {
 
   handleClickOutside = (event) => {
     if (this.content && !this.content.contains(event.target)) {
-      this.setState({dropdownOpen: ''})
+      this.setState({ dropdownOpen: '' })
     }
   }
 
@@ -141,7 +143,7 @@ class Dashboard extends Component {
     this.setState({ actionType })
 
   onChange = (mintBurnAmount) => {
-    const {actionType} = this.state
+    const { actionType } = this.state
     if (!actionType) {
       return
     }
@@ -159,18 +161,18 @@ class Dashboard extends Component {
   }
 
   handleToField = toField => {
-    const {transfer: {...data}} = this.state
+    const { transfer: { ...data } } = this.state
     this.setState({ transfer: { ...data, toField } })
   }
 
   handleAmountField = amount => {
-    const {transfer: {...data}} = this.state
+    const { transfer: { ...data } } = this.state
     this.setState({ transfer: { ...data, amount } })
   }
 
   handleMintOrBurnClick = () => {
     const { burnToken, mintToken, tokenAddress } = this.props
-    const {actionType, mintBurnAmount} = this.state
+    const { actionType, mintBurnAmount } = this.state
 
     if (actionType === 'mint') {
       mintToken(tokenAddress, web3.utils.toWei(String(mintBurnAmount)))
@@ -205,9 +207,9 @@ class Dashboard extends Component {
     if (!this.props.token) {
       return null
     }
-    const { actionType, mintBurnAmount, lastAction } = this.state
+    const { actionType, mintBurnAmount, lastAction, transfer } = this.state
     const { token, accountAddress, balances, tokenAddress, dashboard, isTransfer, isMinting, isBurning, networkType, tokenNetworkType, signatureNeeded } = this.props
-
+    
     const { tokenType } = token
     const balance = balances[tokenAddress]
     const { admin, user, steps } = dashboard
@@ -256,8 +258,8 @@ class Dashboard extends Component {
                   <hr className='transfer-tab__line' />
                   <div className='transfer-tab__content'>
 
-                    <Message message={'Your money has been sent successfully'} isOpen={this.isShow()} clickHandler={this.closeMessage} timeout={2500} />
-                    <Message message={ERROR_MESSAGE} isOpen={this.isError()} clickHandler={this.closeMessage} timeout={2500} />
+                    <Message message={'Your money has been sent successfully'} isOpen={this.isShow()} clickHandler={this.closeMessage} subTitle='' />
+                    <Message message={ERROR_MESSAGE} isOpen={this.isError()} clickHandler={this.closeMessage} />
 
                     <div className='transfer-tab__content__to-field'>
                       <span className='transfer-tab__content__to-field__text'>To</span>
@@ -266,32 +268,15 @@ class Dashboard extends Component {
                     <div className='transfer-tab__content__amount'>
                       <span className='transfer-tab__content__amount__text'>Amount</span>
                       <input className='transfer-tab__content__amount__field' placeholder='...' onChange={(e) => this.handleAmountField(e.target.value)} />
-
                     </div>
 
                     <div className='transfer-tab__content__button'>
-                      <button onClick={this.handleTransper}>SEND</button>
+                      <TransactionButton clickHandler={this.handleTransper} disabled={isEmpty(transfer.amount)} />
                     </div>
                   </div>
                 </div>
-                {
-                  isTransfer
-                    ? (
-                      <div className='bridge-deploying'>
-                        <p className='bridge-deploying-text'>Pending<span>.</span><span>.</span><span>.</span></p>
-                        <div className='bridge-deploying-confirmation'>{`Your money on it's way`}</div>
-                      </div>
-                    ) : null
-                }
-                {
-                  signatureNeeded
-                    ? (
-                      <div className='bridge-deploying'>
-                        <p className='bridge-deploying-text'>Pending<span>.</span><span>.</span><span>.</span></p>
-                        <div className='bridge-deploying-confirmation'>{`Waiting for signing`}</div>
-                      </div>
-                    ) : null
-                }
+                <Message message={'Pending'} isOpen={isTransfer} isDark subTitle={`Your money on it's way`} />
+                <Message message={'Pending'} isOpen={signatureNeeded} isDark />
               </div>
 
               {
@@ -305,7 +290,7 @@ class Dashboard extends Component {
                     </div>
                     <hr className='transfer-tab__line' />
                     <div className='transfer-tab__content'>
-                      <Message message={`Your just ${lastAction.actionType}ed ${lastAction.mintBurnAmount} ${token.symbol} on ${tokenNetworkType} network`} isOpen={this.isShow()} clickHandler={this.closeMessage} />
+                      <Message message={`Your just ${lastAction.actionType}ed ${lastAction.mintBurnAmount} ${token.symbol} on ${tokenNetworkType} network`} isOpen={this.isShow()} subTitle='' clickHandler={this.closeMessage} />
                       <Message message={ERROR_MESSAGE} isOpen={this.isError()} clickHandler={this.closeMessage} />
                       <div className='transfer-tab__actions'>
                         <button disabled={!isOwner(token, accountAddress)} className={classNames('transfer-tab__actions__btn', { 'transfer-tab__actions__btn--active': actionType === 'mint' })} onClick={() => this.handleMintOrBurn('mint')}>Mint</button>
@@ -317,28 +302,13 @@ class Dashboard extends Component {
                       </div>
                       <div className='transfer-tab__content__button'>
                         {
-                          actionType && <button onClick={this.handleMintOrBurnClick}>{upperCase(actionType)}</button>
+                          actionType && <TransactionButton disabled={isEmpty(mintBurnAmount)} clickHandler={this.handleMintOrBurnClick} frontText={upperCase(actionType)} />
                         }
                       </div>
                     </div>
                   </div>
-                  {
-                    isBurning || isMinting
-                      ? (
-                        <div className='bridge-deploying'>
-                          <p className='bridge-deploying-text'>Pending<span>.</span><span>.</span><span>.</span></p>
-                        </div>
-                      ) : null
-                  }
-                  {
-                    signatureNeeded
-                      ? (
-                        <div className='bridge-deploying'>
-                          <p className='bridge-deploying-text'>Pending<span>.</span><span>.</span><span>.</span></p>
-                          <div className='bridge-deploying-confirmation'>{`Waiting for signing`}</div>
-                        </div>
-                      ) : null
-                  }
+                  <Message message={'Pending'} isOpen={isBurning || isMinting} isDark subTitle='' />
+                  <Message message={'Pending'} isOpen={signatureNeeded} isDark />
                 </div>
               }
             </Tabs>

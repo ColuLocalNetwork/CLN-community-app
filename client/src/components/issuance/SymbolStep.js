@@ -23,12 +23,11 @@ export default class SymbolStep extends Component {
 
   render () {
     return (
-      <div className='step-content-symbol'>
-        <h2 className='step-symbol-title'>{'\'' + this.props.communityName + '\''}</h2>
-        <h2 className='step-content-title'>Currency Symbol</h2>
-        <div className='step-content-symbol-field'>
+      <div className='symbol'>
+        <h2 className='symbol__title'>Currency Symbol</h2>
+        <h2 className='symbol__title symbol__title--name'>{this.props.communityName}</h2>
+        <div className='symbol__field'>
           <TextInput
-            className='step-community-symbol'
             id='communitySymbol'
             type='text'
             autoFocus
