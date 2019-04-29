@@ -5,7 +5,7 @@ import CommunityLogo from 'components/elements/CommunityLogo'
 
 const logos = ['CoinIcon1.svg', 'CoinIcon2.svg', 'CoinIcon3.svg']
 
-const LogosOptions = ({ communityLogo, setCommunityLogo, communitySymbol, nextAttribute }) => {
+const LogosOptions = ({ communityLogo, setCommunityLogo, communitySymbol, nextAttribute, networkType }) => {
   const handleClick = (logo, key) => {
     setCommunityLogo({ name: logo, icon: logos[key] })
     if (isMobileOnly) {
@@ -26,7 +26,7 @@ const LogosOptions = ({ communityLogo, setCommunityLogo, communitySymbol, nextAt
             })
             return (
               <div className={totalSupplyClass} key={key} onClick={() => handleClick(logo, key)}>
-                <CommunityLogo token={{ symbol: communitySymbol }} metadata={{ communityLogo: logos[key] }} />
+                <CommunityLogo networkType={networkType} token={{ symbol: communitySymbol }} metadata={{ communityLogo: logos[key] }} />
               </div>
             )
           })

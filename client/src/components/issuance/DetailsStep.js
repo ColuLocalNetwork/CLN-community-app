@@ -37,7 +37,8 @@ export default class DetailsStep extends Component {
       communitySymbol,
       setTotalSupply,
       setNextStep,
-      totalSupply
+      totalSupply,
+      networkType
     } = this.props
 
     const { currentStep } = this.state
@@ -49,7 +50,7 @@ export default class DetailsStep extends Component {
         )
       case 1:
         return (
-          <LogosOptions nextAttribute={this.nextAttribute} communityLogo={communityLogo} setCommunityLogo={setCommunityLogo} communitySymbol={communitySymbol} />
+          <LogosOptions networkType={networkType} nextAttribute={this.nextAttribute} communityLogo={communityLogo} setCommunityLogo={setCommunityLogo} communitySymbol={communitySymbol} />
         )
       case 2:
         return (
@@ -88,7 +89,8 @@ export default class DetailsStep extends Component {
       communitySymbol,
       setTotalSupply,
       setNextStep,
-      totalSupply
+      totalSupply,
+      networkType
     } = this.props
 
     return (
@@ -98,6 +100,7 @@ export default class DetailsStep extends Component {
           communityType={communityType}
         />
         <LogosOptions
+          networkType={networkType}
           communityLogo={communityLogo}
           setCommunityLogo={setCommunityLogo}
           communitySymbol={communitySymbol}

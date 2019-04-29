@@ -57,7 +57,7 @@ export default class SummaryStep extends Component {
   }
   
   render() {
-    const { communitySymbol, communityLogo, totalSupply, communityName, contracts, createTokenSignature, transactionStatus, setNextStep } = this.props
+    const { networkType, communitySymbol, communityLogo, totalSupply, communityName, contracts, createTokenSignature, transactionStatus, setNextStep } = this.props
 
     const { showError } = this.state
 
@@ -74,7 +74,7 @@ export default class SummaryStep extends Component {
       <div className='summary-step'>
         <div className='summary-step__wrapper'>
           <div className='summary-step__logo'>
-            <CommunityLogo token={{ symbol: communitySymbol }} metadata={{ communityLogo }} />
+            <CommunityLogo networkType={networkType} token={{ symbol: communitySymbol }} metadata={{ communityLogo }} />
             <span>{communityName} coin</span>
           </div>
           <hr className='summary-step__line' />
