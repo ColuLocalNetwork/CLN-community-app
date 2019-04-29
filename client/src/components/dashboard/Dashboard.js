@@ -24,6 +24,7 @@ import Tabs from 'components/common/Tabs'
 import Message from 'components/common/Message'
 import { getTransaction } from 'selectors/transaction'
 import TransactionButton from 'components/common/TransactionButton'
+import {FAILURE, SUCCESS, CONFIRMATION} from 'actions/constants'
 
 const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
 const ERROR_MESSAGE = 'Oops, something went wrong'
@@ -60,7 +61,9 @@ class Dashboard extends Component {
         amount: null
       },
       mintBurnAmount: '',
-      showMessage: null,
+      transferMessage: false,
+      burnMessage: false,
+      mintMessage: false,
       lastAction: {}
     }
   }
@@ -101,6 +104,16 @@ class Dashboard extends Component {
         mintBurnAmount: '',
         actionType: null
       })
+    }
+
+    if (this.props.transactionStatus === FAILURE && (!prevProps.transactionStatus || prevProps.transactionStatus === 'PENDING')) {
+      if (this.props.transferError) {
+        this.setState({ ...this.state, transferMessage: true })
+      } else if (this.props.burnError) {
+        this.setState({ ...this.state, burnMessage: true })
+      } else if (this.props.mintError) {
+        this.setState({ ...this.state, mintMessage: true })
+      }
     }
   }
   componentWillUnmount () {
@@ -194,21 +207,55 @@ class Dashboard extends Component {
   }
 
   isShow = () => {
+    const { mintMessage, burnMessage, actionType } = this.state
     const { transactionStatus } = this.props
-    return transactionStatus && (transactionStatus === 'SUCCESS' || transactionStatus === 'CONFIRMATION') && this.state.showMessage !== false
+    const sharedCondition = transactionStatus && (transactionStatus === SUCCESS || transactionStatus === CONFIRMATION)
+    if (actionType === 'mint') {
+      return sharedCondition && mintMessage
+    } else {
+      return sharedCondition && burnMessage
+    }
   }
 
   isError = () => {
+    const { mintMessage, burnMessage, actionType } = this.state
     const { transactionStatus } = this.props
-    return transactionStatus && transactionStatus === 'FAILURE' && this.state.showMessage !== false
+    if (actionType === 'mint') {
+      return transactionStatus && transactionStatus === FAILURE && mintMessage
+    } else {
+      return transactionStatus && transactionStatus === FAILURE && burnMessage
+    }
   }
 
   render () {
     if (!this.props.token) {
       return null
     }
-    const { actionType, mintBurnAmount, lastAction, transfer } = this.state
-    const { token, accountAddress, balances, tokenAddress, dashboard, isTransfer, isMinting, isBurning, networkType, tokenNetworkType, signatureNeeded } = this.props
+    const {
+      actionType,
+      mintBurnAmount,
+      lastAction,
+      transfer,
+      transferMessage
+    } = this.state
+
+    const {
+      token,
+      accountAddress,
+      transactionStatus,
+      balances,
+      tokenAddress,
+      dashboard,
+      isTransfer,
+      isMinting,
+      isBurning,
+      networkType,
+      tokenNetworkType,
+      signatureNeeded,
+      metadata,
+      history,
+      match
+    } = this.props    
     
     const { tokenType } = token
     const balance = balances[tokenAddress]
@@ -217,7 +264,7 @@ class Dashboard extends Component {
       <TopNav
         key={0}
         active
-        history={this.props.history}
+        history={history}
       />,
       <div key={1} className='dashboard-content'>
         <Breadcrumbs breadCrumbsText={token.name} setToHomepage={this.showHomePage} />
@@ -226,11 +273,11 @@ class Dashboard extends Component {
             <TokenProgress
               token={token}
               networkType={tokenNetworkType}
-              metadata={this.props.metadata}
+              metadata={metadata}
               steps={steps}
-              tokenAddress={this.props.tokenAddress}
-              tokenNetworkType={this.props.tokenNetworkType}
-              match={this.props.match}
+              tokenAddress={tokenAddress}
+              tokenNetworkType={tokenNetworkType}
+              match={match}
               loadBridgePopup={this.loadBridgePopup}
               loadUserDataModal={this.loadUserDataModal}
               loadBusinessListPopup={this.loadBusinessListPopup}
@@ -258,8 +305,17 @@ class Dashboard extends Component {
                   <hr className='transfer-tab__line' />
                   <div className='transfer-tab__content'>
 
-                    <Message message={'Your money has been sent successfully'} isOpen={this.isShow()} clickHandler={this.closeMessage} subTitle='' />
-                    <Message message={ERROR_MESSAGE} isOpen={this.isError()} clickHandler={this.closeMessage} />
+                    <Message
+                      message={'Your money has been sent successfully'}
+                      isOpen={transactionStatus && (transactionStatus === 'SUCCESS' || transactionStatus === 'CONFIRMATION') && transferMessage}
+                      clickHandler={() => this.setState({ transferMessage: false })}
+                      subTitle=''
+                    />
+                    <Message
+                      message={ERROR_MESSAGE}
+                      isOpen={transactionStatus && transactionStatus === FAILURE && transferMessage}
+                      clickHandler={() => this.setState({ transferMessage: false })}
+                    />
 
                     <div className='transfer-tab__content__to-field'>
                       <span className='transfer-tab__content__to-field__text'>To</span>
@@ -280,7 +336,10 @@ class Dashboard extends Component {
               </div>
 
               {
-                token && tokenType && tokenType === 'mintableBurnable' &&
+                token &&
+                tokenType &&
+                tokenType === 'mintableBurnable' &&
+                networkType !== 'fuse' &&
                 <div label='Mint \ Burn' className='tab__item'>
                   <div className='transfer-tab'>
                     <div className='transfer-tab__balance'>
@@ -290,8 +349,20 @@ class Dashboard extends Component {
                     </div>
                     <hr className='transfer-tab__line' />
                     <div className='transfer-tab__content'>
-                      <Message message={`Your just ${lastAction.actionType}ed ${lastAction.mintBurnAmount} ${token.symbol} on ${tokenNetworkType} network`} isOpen={this.isShow()} subTitle='' clickHandler={this.closeMessage} />
-                      <Message message={ERROR_MESSAGE} isOpen={this.isError()} clickHandler={this.closeMessage} />
+                      <Message
+                        message={`Your just ${lastAction.actionType}ed ${lastAction.mintBurnAmount} ${token.symbol} on ${tokenNetworkType} network`}
+                        isOpen={this.isShow()}
+                        subTitle=''clickHandler={this.closeMessage}
+                      />
+                      <Message
+                        message={ERROR_MESSAGE}
+                        isOpen={this.isError()}
+                        clickHandler={
+                          actionType === 'mint'
+                            ? () => this.setState({ mintMessage: false })
+                            : () => this.setState({ burnMessage: false })
+                        }
+                      />
                       <div className='transfer-tab__actions'>
                         <button disabled={!isOwner(token, accountAddress)} className={classNames('transfer-tab__actions__btn', { 'transfer-tab__actions__btn--active': actionType === 'mint' })} onClick={() => this.handleMintOrBurn('mint')}>Mint</button>
                         <button disabled={!isOwner(token, accountAddress)} className={classNames('transfer-tab__actions__btn', { 'transfer-tab__actions__btn--active': actionType === 'burn' })} onClick={() => this.handleMintOrBurn('burn')}>Burn</button>

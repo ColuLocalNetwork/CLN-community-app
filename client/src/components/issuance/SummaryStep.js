@@ -14,8 +14,6 @@ export default class SummaryStep extends Component {
   }
 
   renderTransactionStatus = (transactionStatus) => {
-    console.log({renderTransactionStatus:transactionStatus });
-    
     switch (transactionStatus) {
       case REQUEST:
         return (<button className='button button--normal' disabled>

@@ -1,4 +1,5 @@
 import { TRANSFER_TOKEN, MINT_TOKEN, BURN_TOKEN } from 'actions/token'
+import {FAILURE} from 'actions/constants'
 
 export default (state = {}, action) => {
   switch (action.type) {
@@ -11,7 +12,7 @@ export default (state = {}, action) => {
     case TRANSFER_TOKEN.SUCCESS:
       return { ...state, ...action.response, signatureNeeded: false, isTransfer: false }
     case TRANSFER_TOKEN.FAILURE:
-      return {...state, ...action.response, signatureNeeded: false}
+      return {...state, ...action.response, signatureNeeded: false, transactionStatus: FAILURE, transferError: true}
     case MINT_TOKEN.REQUEST:
       return { ...state, signatureNeeded: true }
     case MINT_TOKEN.CONFIRMATION:
@@ -21,7 +22,7 @@ export default (state = {}, action) => {
     case MINT_TOKEN.SUCCESS:
       return { ...state, ...action.response, isMinting: false }
     case MINT_TOKEN.FAILURE:
-      return {...state, ...action.response, signatureNeeded: false}
+      return {...state, ...action.response, signatureNeeded: false, transactionStatus: FAILURE, burnError: true}
     case BURN_TOKEN.REQUEST:
       return { ...state, signatureNeeded: true }
     case BURN_TOKEN.CONFIRMATION:
@@ -31,7 +32,7 @@ export default (state = {}, action) => {
     case BURN_TOKEN.SUCCESS:
       return { ...state, ...action.response, isBurning: false }
     case BURN_TOKEN.FAILURE:
-      return {...state, ...action.response, signatureNeeded: false}
+      return {...state, ...action.response, transactionStatus: FAILURE, mintError: true, signatureNeeded: false}
     default:
       return state
   }

@@ -12,7 +12,7 @@ import DetailsStep from './DetailsStep'
 import SummaryStep from './SummaryStep'
 import DeployProgress from './DeployProgress'
 import Contracts from './Contracts'
-import { createTokenWithMetadata } from 'actions/token'
+import { createTokenWithMetadata, fetchDeployProgress } from 'actions/token'
 import { PENDING } from 'actions/constants'
 import ReactGA from 'services/ga'
 import Logo from 'components/Logo'
@@ -31,13 +31,16 @@ class IssuanceWizard extends Component {
     contracts: {
       bridge: {
         label: 'Bridge to fuse',
-        checked: true
+        checked: true,
+        key: 'bridge'
       },
       membersList: {
         label: 'Members list',
-        checked: false
+        checked: false,
+        key: 'membersList'
       },
-    }
+    },
+    currentDeploy: 'tokenIssued'
   }
 
   componentDidMount() {
@@ -53,9 +56,35 @@ class IssuanceWizard extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.receipt !== prevProps.receipt) {
-      const tokenAddress = this.props.receipt.events[0].address
-      this.props.history.push(`/view/dashboard/${this.props.foreignNetwork}/${tokenAddress}`)
+    // if (this.props.receipt !== prevProps.receipt) {
+      // const { fetchDeployProgress, steps } = this.props
+      // const tokenAddress = this.props.receipt.events[0].address
+      // const { bridge, membersList } = steps
+      // this.timer = setInterval(()=> fetchDeployProgress({tokenAddress}), 5000);
+      // if (bridge && membersList) {
+      //   this.props.history.push(`/view/dashboard/${this.props.foreignNetwork}/${tokenAddress}`)
+      //   clearInterval(this.timer)
+      // } else {
+        // const keys = Object.keys(steps)
+        // const currentDeploy = Object.keys(keys.find((step) => steps[step]))
+        // console.log({currentDeploy})
+        
+      // this.props.history.push(`/view/dashboard/${this.props.foreignNetwork}/${tokenAddress}`)
+      // }
+    // }
+
+    if (this.props.steps !== prevProps.steps) {
+      const { steps, tokenAddress, foreignNetwork, stepErrors } = this.props
+
+      const values = Object.values(steps).every(val => val)
+
+      // if (!isEmpty(stepErrors) && (stepErrors.bridge || stepErrors.membersList)) {
+      //   this.props.history.push(`/view/dashboard/${foreignNetwork}/${tokenAddress}`)
+      // }
+
+      // if (values) {
+      //   this.props.history.push(`/view/dashboard/${foreignNetwork}/${tokenAddress}`)
+      // }
     }
   }
 
@@ -82,8 +111,19 @@ class IssuanceWizard extends Component {
       symbol: this.state.communitySymbol,
       totalSupply: new BigNumber(this.state.totalSupply).multipliedBy(1e18)
     }
+    const {contracts} = this.state
+    const steps = Object.keys(contracts)
+      .filter((contractName) => contracts[contractName].checked)
+      .reduce((steps, contractName) => {
+        steps = {
+          ...steps,
+          [contracts[contractName].key]: true
+        }
+        return steps
+      },{})
+
     const metadata = { communityLogo: this.state.communityLogo.name }
-    this.props.createTokenWithMetadata(tokenData, metadata, this.state.communityType.value)
+    this.props.createTokenWithMetadata(tokenData, metadata, this.state.communityType.value, steps)
   }
 
   handleScroll = () => this.setState({ scrollPosition: window.scrollY })
@@ -132,7 +172,8 @@ class IssuanceWizard extends Component {
     const {
       transactionStatus,
       createTokenSignature,
-      currentDeploy
+      foreignNetwork,
+      history
     } = this.props
 
     const {
@@ -142,7 +183,8 @@ class IssuanceWizard extends Component {
       activeStep,
       communitySymbol,
       totalSupply,
-      contracts
+      contracts,
+      currentDeploy
     } = this.state
 
     switch (activeStep) {
@@ -166,6 +208,7 @@ class IssuanceWizard extends Component {
       case 2:
         return (
           <DetailsStep
+            networkType={foreignNetwork}
             communityType={communityType}
             setCommunityType={this.setCommunityType}
             totalSupply={totalSupply}
@@ -187,6 +230,7 @@ class IssuanceWizard extends Component {
       case 4:
         return (
           <SummaryStep
+            networkType={foreignNetwork}
             createTokenSignature={createTokenSignature}
             contracts={contracts}
             communityName={name}
@@ -201,6 +245,8 @@ class IssuanceWizard extends Component {
       case 5:
         return (
           <DeployProgress
+            history={history}
+            contracts={contracts}
             currentDeploy={currentDeploy}
           />
         )
@@ -210,7 +256,7 @@ class IssuanceWizard extends Component {
   render() {
     const { history, foreignNetwork } = this.props
     const steps = ['Name', 'Symbol', 'Attributes', 'Contracts', 'Summary']
-    classNames(`issuance-${foreignNetwork}`)
+        
     return (
       <div className={classNames(`issuance-${foreignNetwork}__wrapper`)}>
         <div className={classNames(`issuance-${foreignNetwork}__header grid-x align-middle align-justify`)}>
@@ -219,7 +265,7 @@ class IssuanceWizard extends Component {
           </div>
           <div className={classNames(`issuance-${foreignNetwork}__header__indicators grid-x cell align-center`)} ref={stepIndicator => (this.stepIndicator = stepIndicator)}>
             <div className='grid-y cell auto'>
-              <h4 className={classNames(`issuance-${foreignNetwork}__header__current`)}>{steps[this.state.activeStep]}</h4>
+              <h4 className={classNames(`issuance-${foreignNetwork}__header__current`)}>{steps[this.state.activeStep] || steps[this.state.activeStep - 1]}</h4>
               <div className='grid-x align-center'>
                 <StepsIndicator
                   network={foreignNetwork}
@@ -263,7 +309,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-  createTokenWithMetadata
+  createTokenWithMetadata,
+  fetchDeployProgress
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(IssuanceWizard)

@@ -274,6 +274,7 @@ $themes: (
         color: $secondary;
     
         @include breakpoint(medium up) {
+          min-height: 27px;
           margin: .5em 0 1em 0;
         }
   
@@ -938,7 +939,7 @@ $themes: (
             width: 611px;
             @include xy-grid(vertical);
             @include flex-align(center, middle);
-            padding: 20px;          
+            padding: 20px 50px;          
           }
     
           @include breakpoint(small) {
@@ -969,6 +970,12 @@ $themes: (
   
           @include element(label) {
             font-weight: bold;
+
+            .fa {
+              color: $color-ropsten;
+              font-size: 12px;
+              padding: 0 20px;
+            }
           }
   
           @include element(loaderText) {

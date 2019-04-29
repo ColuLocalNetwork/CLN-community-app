@@ -1,6 +1,10 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import FuseLoader from 'images/loader-fuse.gif'
 import classNames from 'classnames'
+import { connect } from 'react-redux'
+import { fetchDeployProgress } from 'actions/token'
+import isEmpty from 'lodash/isEmpty'
+import FontAwesome from 'react-fontawesome'
 
 const deployProgress = [
   {
@@ -11,7 +15,7 @@ const deployProgress = [
   {
     label: 'Deploying bridge contract',
     loaderText: 'A bridge contract is being deployed for the community currency on mainnet and the Fuse sidechain',
-    key: 'bridgeDeployed'
+    key: 'bridge'
   },
   {
     label: 'Deploying member list contract',
@@ -20,28 +24,85 @@ const deployProgress = [
   }
 ]
 
-export default class DeployProgress extends PureComponent {
+class DeployProgress extends Component {
+  componentDidUpdate(prevProps) {
+    
+    if ((this.props.receipt !== prevProps.receipt) && this.props.receipt) {
+      const { fetchDeployProgress, receipt } = this.props
+      const tokenAddress = receipt.events[0].address
+      fetchDeployProgress({tokenAddress})
+      this.getProgress()
+    }
+
+    if (this.props.steps !== prevProps.steps) {
+      const { steps, tokenAddress, foreignNetwork, stepErrors } = this.props
+      const values = Object.values(steps).every(val => val)
+
+      if ((!isEmpty(stepErrors) && (stepErrors.bridge || stepErrors.membersList) || values)) {
+        clearInterval(this.interval)
+        this.props.history.push(`/view/dashboard/${foreignNetwork}/${tokenAddress}`)
+      }
+    }
+  }
+
+  getProgress = async () => {
+    const { fetchDeployProgress, receipt } = this.props
+    const tokenAddress = receipt.events[0].address
+
+    this.interval = setInterval(()=> fetchDeployProgress({tokenAddress}), 5000);
+  }
+
   render () {
     const {
-      currentDeploy
+      contracts,
+      steps
     } = this.props
 
+    let currentStep = null
+    
+    const isFalsy = Object.values(steps).every(val => !val)
+  
+    if (isFalsy) {
+      currentStep = 'tokenIssued'
+    } else {
+      currentStep =  Object.keys(steps)
+      .filter((contractName) => !Boolean(steps[contractName]))[0]
+    }
+    
     return (
       <div className='progress__wrapper'>
         <div className='progress__img'>
           <img src={FuseLoader} alt='Fuse loader' />
         </div>
         {
-          deployProgress.map(({ label, loaderText, key }) => {
-            return (
-              <div key={key} className={classNames('progress__item', { 'progress__item--active': currentDeploy === key })}>
-                <div className={classNames('progress__item__label')}>{label}</div>
-                <div className='progress__item__loaderText'>{loaderText}</div>
-              </div>
-            )
-          })
+          deployProgress
+            .filter(({ key }) => key === 'tokenIssued' || contracts[key].checked)
+            .map(({ label, loaderText, key }) => {
+              return (
+                <div key={key} className={classNames('progress__item', { 'progress__item--active': currentStep === key })}>
+                  <div className={classNames('progress__item__label')}>
+                    { steps[key] && <FontAwesome name='check' /> }
+                    {label}
+                  </div>
+                  {
+                    currentStep === key && <div className='progress__item__loaderText'>{loaderText}</div>
+                  }
+                </div>
+              )
+            })
         }
       </div>
     )
   }
 }
+
+const mapStateToProps = (state) => ({
+  ...state.screens.issuance,
+  foreignNetwork: state.network.foreignNetwork
+})
+
+const mapDispatchToProps = {
+  fetchDeployProgress
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DeployProgress)
