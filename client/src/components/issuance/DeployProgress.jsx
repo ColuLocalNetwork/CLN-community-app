@@ -29,7 +29,7 @@ class DeployProgress extends Component {
       const { fetchDeployProgress, receipt } = this.props
       const tokenAddress = receipt.events[0].address
       fetchDeployProgress({tokenAddress})
-      this.getProgress()
+      this.interval = setInterval(() => fetchDeployProgress({tokenAddress}), 5000)
     }
 
     if (this.props.steps !== prevProps.steps) {
@@ -41,13 +41,6 @@ class DeployProgress extends Component {
         this.props.history.push(`/view/dashboard/${foreignNetwork}/${tokenAddress}`)
       }
     }
-  }
-
-  getProgress = async () => {
-    const { fetchDeployProgress, receipt } = this.props
-    const tokenAddress = receipt.events[0].address
-
-    this.interval = setInterval(() => fetchDeployProgress({tokenAddress}), 5000)
   }
 
   render () {
@@ -71,7 +64,6 @@ class DeployProgress extends Component {
       <div className='progress__wrapper'>
         <div className='progress__img'>
           <div className='progress__loader'><div /></div>
-          {/* <img src={FuseLoader} alt='Fuse loader' /> */}
         </div>
         {
           deployProgress

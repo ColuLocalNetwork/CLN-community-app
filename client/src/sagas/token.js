@@ -1,5 +1,4 @@
 import { all, call, put, select, takeEvery } from 'redux-saga/effects'
-// import { delay } from 'redux-saga'
 import {getContract} from 'services/contract'
 import {getAddress} from 'selectors/network'
 import * as actions from 'actions/token'
@@ -15,7 +14,6 @@ import {apiCall, createEntityPut, tryTakeEvery, createEntitiesFetch} from './uti
 import {transactionFlow} from './transaction'
 import MintableBurnableTokenAbi from 'constants/abi/MintableBurnableToken'
 import web3 from 'services/web3'
-// import { SUCCESS, FAILURE } from 'actions/constants'
 
 const entityPut = createEntityPut(actions.entityName)
 

@@ -1,6 +1,5 @@
 import React from 'react'
 import classNames from 'classnames'
-// import FontAwesome from 'react-fontawesome'
 
 const StepsIndicator = ({steps, activeStep, network}) => {
   return steps.map((item, key) => {
