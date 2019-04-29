@@ -6,32 +6,23 @@ const foreignAddressess = require('@utils/network').addresses
 const homeAddresses = config.get('web3.addresses.fuse')
 const {fetchGasPrice, isZeroAddress} = require('@utils/network')
 const {handleReceipt} = require('@events/handlers')
-const homeWeb3 = require('@services/web3/home').web3
-const homeFrom = require('@services/web3/home').from
-const foreignWeb3 = require('@services/web3/foreign').web3
-const foreignFrom = require('@services/web3/foreign').from
+const home = require('@services/web3/home')
+const foreign = require('@services/web3/foreign')
+
 const TOKEN_DECIMALS = 18
 
-async function deployForeignBridge (token, web3, from) {
+async function deployForeignBridge (token, {web3, from, send}) {
   console.log('Deploying foreign bridge using factory')
   const foreignFactory = new web3.eth.Contract(ForeignBridgeFactoryABI, foreignAddressess.ForeignBridgeFactory)
 
   const method = foreignFactory.methods.deployForeignBridge(token.address)
 
-  const [gas, gasPrice] = await Promise.all([
-    method.estimateGas({
-      from
-    }),
-    fetchGasPrice('standard')
-  ])
+  const gasPrice = await fetchGasPrice('standard')
 
-  const p = method.send({
-    gas,
+  const receipt = await send(method, {
     from,
     gasPrice: web3.utils.toWei(gasPrice.toString(), 'gwei')
   })
-
-  const receipt = await p
 
   const event = receipt.events.ForeignBridgeDeployed
   const result = {
@@ -44,7 +35,7 @@ async function deployForeignBridge (token, web3, from) {
   return result
 }
 
-async function deployHomeBridge (token, web3, from) {
+async function deployHomeBridge (token, {web3, from, send}) {
   console.log('Deploying home bridge using factory')
 
   const homeFactory = new web3.eth.Contract(HomeBridgeFactoryABI, homeAddresses.HomeBridgeFactory, {
@@ -52,11 +43,9 @@ async function deployHomeBridge (token, web3, from) {
   })
 
   const method = homeFactory.methods.deployHomeBridge(token.name, token.symbol, TOKEN_DECIMALS)
-  const gas = await method.estimateGas()
 
-  const receipt = await method.send({
+  const receipt = await send(method, {
     from,
-    gas,
     gasPrice: '1000000000'
   })
 
@@ -80,11 +69,10 @@ async function addBridgeMapping (
   homeBridge,
   foreignBlockNumber,
   homeBlockNumber,
-  web3,
-  from) {
+  {web3, from, send}) {
   console.log('Add bridge mapping')
 
-  const mapper = new homeWeb3.eth.Contract(BridgeMapperABI, homeAddresses.BridgeMapper, {
+  const mapper = new web3.eth.Contract(BridgeMapperABI, homeAddresses.BridgeMapper, {
     from
   })
 
@@ -97,11 +85,8 @@ async function addBridgeMapping (
     homeBlockNumber
   )
 
-  const gas = await method.estimateGas()
-
-  const receipt = await method.send({
+  const receipt = await send(method, {
     from,
-    gas,
     gasPrice: '1000000000'
   })
 
@@ -111,11 +96,10 @@ async function addBridgeMapping (
 
 async function deployBridge (token) {
   const [deployForeignBridgeResponse, deployHomeBridgeResponse] = await Promise.all([
-    deployForeignBridge(token, foreignWeb3, foreignFrom),
+    deployForeignBridge(token, foreign),
     deployHomeBridge(
       token,
-      homeWeb3,
-      homeFrom
+      home
     )
   ])
 
@@ -130,8 +114,7 @@ async function deployBridge (token) {
     homeBridgeAddress,
     foreignBridgeBlockNumber,
     homeBridgeBlockNumber,
-    homeWeb3,
-    homeFrom
+    home
   )
 
   await handleReceipt(receipt)
@@ -147,7 +130,7 @@ async function deployBridge (token) {
 }
 
 async function bridgeMappingExists (tokenAddress) {
-  const mapper = new homeWeb3.eth.Contract(BridgeMapperABI, homeAddresses.BridgeMapper)
+  const mapper = new home.web3.eth.Contract(BridgeMapperABI, homeAddresses.BridgeMapper)
   const homeAddress = await mapper.methods.homeTokenByForeignToken(tokenAddress).call()
   return homeAddress && !isZeroAddress(homeAddress)
 }
