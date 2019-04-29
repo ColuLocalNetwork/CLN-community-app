@@ -251,7 +251,9 @@ class Dashboard extends Component {
       isBurning,
       networkType,
       tokenNetworkType,
-      signatureNeeded,
+      burnSignature,
+      mintSignature,
+      transferSignature,
       metadata,
       history,
       match
@@ -295,7 +297,7 @@ class Dashboard extends Component {
                   <ActivityContent stats={admin} userType='admin' handleChange={this.handleIntervalChange} />
                 </div>
               </div>
-              <div label='Transfer' className={classNames({ 'tab__item--loader': isTransfer || signatureNeeded })}>
+              <div label='Transfer' className={classNames({ 'tab__item--loader': isTransfer || transferSignature })}>
                 <div className='transfer-tab'>
                   <div className='transfer-tab__balance'>
                     <span className='title'>Balance: </span>
@@ -332,7 +334,7 @@ class Dashboard extends Component {
                   </div>
                 </div>
                 <Message message={'Pending'} isOpen={isTransfer} isDark subTitle={`Your money on it's way`} />
-                <Message message={'Pending'} isOpen={signatureNeeded} isDark />
+                <Message message={'Pending'} isOpen={transferSignature} isDark />
               </div>
 
               {
@@ -340,7 +342,7 @@ class Dashboard extends Component {
                 tokenType &&
                 tokenType === 'mintableBurnable' &&
                 networkType !== 'fuse' &&
-                <div label='Mint \ Burn'>
+                <div label='Mint \ Burn' className={classNames({ 'tab__item--loader': (mintSignature || burnSignature) || (isBurning || isMinting) })}>
                   <div className='transfer-tab'>
                     <div className='transfer-tab__balance'>
                       <span className='title'>Balance: </span>
@@ -379,7 +381,7 @@ class Dashboard extends Component {
                     </div>
                   </div>
                   <Message message={'Pending'} isOpen={isBurning || isMinting} isDark subTitle='' />
-                  <Message message={'Pending'} isOpen={signatureNeeded} isDark />
+                  <Message message={'Pending'} isOpen={mintSignature || burnSignature} isDark />
                 </div>
               }
             </Tabs>
