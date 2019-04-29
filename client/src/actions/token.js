@@ -1,4 +1,4 @@
-import {createRequestTypes, createEntityAction, createTransactionRequestTypes, requestAction, action} from './utils'
+import {createRequestTypes, createEntityAction, createTransactionRequestTypes, requestAction} from './utils'
 
 export const entityName = 'tokens'
 const tokenAction = createEntityAction(entityName)

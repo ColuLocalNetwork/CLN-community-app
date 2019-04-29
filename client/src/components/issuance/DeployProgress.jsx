@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import FuseLoader from 'images/loader-fuse.gif'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
 import { fetchDeployProgress } from 'actions/token'
@@ -25,8 +24,7 @@ const deployProgress = [
 ]
 
 class DeployProgress extends Component {
-  componentDidUpdate(prevProps) {
-    
+  componentDidUpdate (prevProps) {
     if ((this.props.receipt !== prevProps.receipt) && this.props.receipt) {
       const { fetchDeployProgress, receipt } = this.props
       const tokenAddress = receipt.events[0].address
@@ -38,10 +36,10 @@ class DeployProgress extends Component {
       const { steps, tokenAddress, foreignNetwork, stepErrors } = this.props
       const values = Object.values(steps).every(val => val)
 
-      // if ((!isEmpty(stepErrors) && (stepErrors.bridge || stepErrors.membersList) || values)) {
-      //   clearInterval(this.interval)
-      //   this.props.history.push(`/view/dashboard/${foreignNetwork}/${tokenAddress}`)
-      // }
+      if (((!isEmpty(stepErrors)) && ((stepErrors.bridge || stepErrors.membersList) || values))) {
+        clearInterval(this.interval)
+        this.props.history.push(`/view/dashboard/${foreignNetwork}/${tokenAddress}`)
+      }
     }
   }
 
@@ -49,7 +47,7 @@ class DeployProgress extends Component {
     const { fetchDeployProgress, receipt } = this.props
     const tokenAddress = receipt.events[0].address
 
-    this.interval = setInterval(()=> fetchDeployProgress({tokenAddress}), 5000);
+    this.interval = setInterval(() => fetchDeployProgress({tokenAddress}), 5000)
   }
 
   render () {
@@ -59,16 +57,16 @@ class DeployProgress extends Component {
     } = this.props
 
     let currentStep = null
-    
+
     const isFalsy = Object.values(steps).every(val => !val)
-  
+
     if (isFalsy) {
       currentStep = 'tokenIssued'
     } else {
-      currentStep =  Object.keys(steps)
-      .filter((contractName) => !Boolean(steps[contractName]))[0]
+      currentStep = Object.keys(steps)
+        .filter((contractName) => !steps[contractName])[0]
     }
-    
+
     return (
       <div className='progress__wrapper'>
         <div className='progress__img'>

@@ -7,8 +7,7 @@ import LogosOptions from './LogosOptions'
 import CurrencyType from './CurrencyType'
 
 export default class DetailsStep extends Component {
-
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -117,8 +116,7 @@ export default class DetailsStep extends Component {
     )
   }
 
-  render() {
-
+  render () {
     return (
       <div className='attributes'>
         {

@@ -255,8 +255,8 @@ class Dashboard extends Component {
       metadata,
       history,
       match
-    } = this.props    
-    
+    } = this.props
+
     const { tokenType } = token
     const balance = balances[tokenAddress]
     const { admin, user, steps } = dashboard

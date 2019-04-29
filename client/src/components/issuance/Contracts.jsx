@@ -3,7 +3,6 @@ import FontAwesome from 'react-fontawesome'
 import ContractsType from 'constants/contractsType'
 
 export default class Contracts extends PureComponent {
-
   handleChange = ({ key, readOnly }, value) => {
     if (readOnly) return
     const { setContracts } = this.props
@@ -13,7 +12,7 @@ export default class Contracts extends PureComponent {
 
   render () {
     const { setNextStep, contracts } = this.props
-    
+
     return (
       <div className='contracts__wrapper'>
         <h3 className='contracts__title'>

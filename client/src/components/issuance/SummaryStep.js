@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import BigNumber from 'bignumber.js'
 import Loader from 'components/Loader'
-import { REQUEST, PENDING, SUCCESS, FAILURE, CONFIRMATION } from 'actions/constants'
+import { REQUEST, PENDING, SUCCESS, FAILURE } from 'actions/constants'
 import ReactGA from 'services/ga'
 import CommunityLogo from 'components/elements/CommunityLogo'
 import TransactionButton from 'components/common/TransactionButton'
@@ -36,7 +36,7 @@ export default class SummaryStep extends Component {
     totalSupply: new BigNumber(this.props.totalSupply.toString()).multipliedBy(1e18)
   })
 
-  componentDidMount() {
+  componentDidMount () {
     ReactGA.event({
       category: 'Issuance',
       action: 'Load',
@@ -44,7 +44,7 @@ export default class SummaryStep extends Component {
     })
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate (prevProps) {
     if (this.transactionStatus === SUCCESS && prevProps.transactionStatus !== SUCCESS) {
       ReactGA.event({
         category: 'Issuance',
@@ -53,8 +53,8 @@ export default class SummaryStep extends Component {
       })
     }
   }
-  
-  render() {
+
+  render () {
     const { networkType, communitySymbol, communityLogo, totalSupply, communityName, contracts, createTokenSignature, transactionStatus, setNextStep } = this.props
 
     const { showError } = this.state
@@ -62,7 +62,7 @@ export default class SummaryStep extends Component {
     const contractsItems = Object.keys(contracts)
       .filter((contractName) => contracts[contractName].checked)
       .map((contractName) => contracts[contractName].label)
-    
+
     if (transactionStatus === PENDING) {
       setNextStep()
       return ''

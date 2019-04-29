@@ -13,7 +13,6 @@ import SummaryStep from './SummaryStep'
 import DeployProgress from './DeployProgress'
 import Contracts from './Contracts'
 import { createTokenWithMetadata, fetchDeployProgress } from 'actions/token'
-import { PENDING } from 'actions/constants'
 import ReactGA from 'services/ga'
 import Logo from 'components/Logo'
 
@@ -38,12 +37,12 @@ class IssuanceWizard extends Component {
         label: 'Members list',
         checked: false,
         key: 'membersList'
-      },
+      }
     },
     currentDeploy: 'tokenIssued'
   }
 
-  componentDidMount() {
+  componentDidMount () {
     window.addEventListener('scroll', this.handleScroll)
     window.addEventListener('keypress', this.handleKeyPress)
     this.setState({ stepPosition: this.stepIndicator.getBoundingClientRect().top })
@@ -67,7 +66,7 @@ class IssuanceWizard extends Component {
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     window.removeEventListener('scroll', this.handleScroll)
     window.removeEventListener('keypress', this.handleKeyPress)
   }
@@ -87,7 +86,7 @@ class IssuanceWizard extends Component {
           [contracts[contractName].key]: true
         }
         return steps
-      },{})
+      }, {})
 
     const metadata = { communityLogo: this.state.communityLogo.name }
     this.props.createTokenWithMetadata(tokenData, metadata, this.state.communityType.value, steps)
@@ -128,7 +127,7 @@ class IssuanceWizard extends Component {
     this.setState({ communityLogo: logo })
 
   setContracts = ({ key, value, label }) => {
-    const { 
+    const {
       contracts
     } = this.state
 
@@ -200,7 +199,7 @@ class IssuanceWizard extends Component {
             networkType={foreignNetwork}
             createTokenSignature={createTokenSignature}
             contracts={contracts}
-            communityName={name}
+            communityName={communityName}
             communityLogo={communityLogo.name}
             totalSupply={totalSupply}
             communitySymbol={communitySymbol}
@@ -220,10 +219,10 @@ class IssuanceWizard extends Component {
     }
   }
 
-  render() {
+  render () {
     const { history, foreignNetwork } = this.props
     const steps = ['Name', 'Symbol', 'Attributes', 'Contracts', 'Summary']
-        
+
     return (
       <div className={classNames(`issuance-${foreignNetwork}__wrapper`)}>
         <div className={classNames(`issuance-${foreignNetwork}__header grid-x align-middle align-justify`)}>
@@ -254,7 +253,7 @@ class IssuanceWizard extends Component {
                 <button
                   className={classNames(`issuance-${foreignNetwork}__wizard__back`)}
                   onClick={this.setPreviousStep}>Back
-                  </button>
+                </button>
               </div>
             )
           }
