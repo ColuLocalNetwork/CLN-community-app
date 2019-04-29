@@ -192,7 +192,7 @@ export default function * tokenSaga () {
     tryTakeEvery(actions.FETCH_TOKEN_PROGRESS, fetchTokenProgress, 1),
     takeEvery([DEPLOY_BRIDGE.SUCCESS, ADD_USER.SUCCESS, CREATE_LIST.SUCCESS], fetchTokenProgress),
     takeEvery([actions.MINT_TOKEN.SUCCESS, actions.BURN_TOKEN.SUCCESS], watchTokenChanges),
-    takeEvery([actions.CREATE_TOKEN_WITH_METADATA.SUCCESS], deployChosenContracts),
+    takeEvery(actions.CREATE_TOKEN_WITH_METADATA.SUCCESS, deployChosenContracts),
     tryTakeEvery(actions.FETCH_DEPLOY_PROGRESS, fetchDeployProgress)
   ])
 }

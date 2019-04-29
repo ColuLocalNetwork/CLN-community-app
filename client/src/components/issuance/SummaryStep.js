@@ -58,15 +58,14 @@ export default class SummaryStep extends Component {
     const { networkType, communitySymbol, communityLogo, totalSupply, communityName, contracts, createTokenSignature, transactionStatus, setNextStep } = this.props
 
     const { showError } = this.state
-
-    const contractsItems = Object.keys(contracts)
-      .filter((contractName) => contracts[contractName].checked)
-      .map((contractName) => contracts[contractName].label)
-
     if (transactionStatus === PENDING) {
       setNextStep()
       return ''
     }
+    
+    const contractsItems = Object.values(contracts)
+      .filter((contract) => contract.checked)
+      .map((contract) => contract.label)
 
     return (
       <div className='summary-step'>
