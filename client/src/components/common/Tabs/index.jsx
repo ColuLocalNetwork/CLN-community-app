@@ -38,7 +38,7 @@ class Tabs extends Component {
         return
       }
       const { label, className } = child.props
-        
+
       return (
         <Tab
           className={className}
