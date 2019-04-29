@@ -84,7 +84,7 @@ async function addBridgeMapping (
   from) {
   console.log('Add bridge mapping')
 
-  const mapper = new homeWeb3.eth.Contract(BridgeMapperABI, homeAddresses.BridgeMapper, {
+  const mapper = new web3.eth.Contract(BridgeMapperABI, homeAddresses.BridgeMapper, {
     from
   })
 

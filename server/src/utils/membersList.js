@@ -1,5 +1,4 @@
 const config = require('config')
-// const createWeb3 = require('@utils/web3').createWeb3
 const SimpleListFactoryABI = require('@constants/abi/SimpleListFactory.json')
 const SimpleListABI = require('@constants/abi/SimpleList.json')
 const homeAddresses = config.get('web3.addresses.fuse')
@@ -37,7 +36,7 @@ const deployMembersList = async (token) => {
     gas: await addAdminMethod.estimateGas({from}),
     gasPrice: '1000000000'
   })
-
+  console.log('new admin added')
   const removeAdminMethod = simpleListContract.methods.removeAdmin(from)
   await removeAdminMethod.send({
     from,
