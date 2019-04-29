@@ -25,9 +25,6 @@ class Tab extends Component {
       }
     } = this
 
-    console.log({className})
-    
-
     return (
       <li
         style={{ flexBasis }}

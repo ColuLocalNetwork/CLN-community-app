@@ -38,7 +38,6 @@ class Tabs extends Component {
         return
       }
       const { label, className } = child.props
-      console.log({...child.props})
         
       return (
         <Tab
