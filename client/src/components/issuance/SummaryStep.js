@@ -62,7 +62,7 @@ export default class SummaryStep extends Component {
       setNextStep()
       return ''
     }
-    
+
     const contractsItems = Object.values(contracts)
       .filter((contract) => contract.checked)
       .map((contract) => contract.label)
