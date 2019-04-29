@@ -133,9 +133,16 @@
 			z-index: 2;
 			> span {
 				background: $color-white;
-				color: $color-filter-text;
+				color: $color-primary-dark;
 				box-shadow: 0px -7px 10px -6.3px rgba(0, 0, 0, 0.2);
+			}
+		}
 
+		@include modifier(loader) {
+			z-index: 2;
+			> span {
+				background: rgba(5, 40, 62, 0.97);
+				color: $color-white;
 			}
 		}
 	}
@@ -275,10 +282,10 @@
   background-color: $color-white;
   z-index: 5;
   font-family: $font-family;
-	border-radius: 10px;
+	border-radius: 0 0 10px 10px;
 
 	@include modifier(dark) {
-		background-color: rgba(5, 40, 62, 0.8);
+		background-color: rgba(5, 40, 62, 0.97);
 	}
 
   @include element(title) {
@@ -292,7 +299,7 @@
 		}
 
 		@include element(dark) {
-			color: $color-filter-text;
+			color: $color-primary-dark;
 		}
 	}
 
@@ -306,7 +313,7 @@
 		}
 
 		@include element(dark) {
-			color: $color-filter-text;
+			color: $color-primary-dark;
 		}
 	}
 

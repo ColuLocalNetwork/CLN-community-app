@@ -86,7 +86,7 @@
 			font-size: 2em;
  			letter-spacing: -0.7px;
 			font-weight: bold;
-			color: $color-filter-text;
+			color: $color-primary-dark;
 
 			@include breakpoint(medium down) {
 				font-size: 1.5em;

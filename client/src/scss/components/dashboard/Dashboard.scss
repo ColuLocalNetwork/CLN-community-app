@@ -204,7 +204,7 @@
     &-percent {
       line-height: 16px;
       font-size: 16px;
-      color: $color-filter-text;
+      color: $color-primary-dark;
     }
     &-text {
       display: flex;
@@ -284,7 +284,7 @@
     }
     &-big-count {
       font-size: 35px;
-      color: $color-filter-text;
+      color: $color-primary-dark;
       font-weight: bold;
       margin-top: 10px;
       span {
@@ -470,7 +470,7 @@
     &-title {
       text-transform: capitalize;
       font-size: 15px;
-      color: $color-filter-text;
+      color: $color-primary-dark;
       text-align: center;
       text-transform: capitalize;
       margin-bottom: 10px;
@@ -521,7 +521,7 @@
       }
     }
     &-btn {
-      color: $color-filter-text;
+      color: $color-primary-dark;
       font-size: 10px;
       // background-color: #f3f3f3;
       font-weight: 500;
@@ -592,7 +592,7 @@
     }
 
     &-title {
-      color: $color-filter-text;
+      color: $color-primary-dark;
       font-size: 12px;
       font-weight: 500;
       line-height: 2.17;
@@ -634,7 +634,7 @@
       font-stretch: normal;
       line-height: normal;
       letter-spacing: normal;
-      color: $color-filter-text;
+      color: $color-primary-dark;
     }
 
     @include block(amount) {

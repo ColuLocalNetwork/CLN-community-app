@@ -283,7 +283,7 @@ class Dashboard extends Component {
               loadBusinessListPopup={this.loadBusinessListPopup}
             />
             <Tabs>
-              <div label='Stats' className='tab__item'>
+              <div label='Stats'>
                 <div className='transfer-tab__balance'>
                   <span className='title'>Balance: </span>
                   <span className='amount'>{balance ? formatWei(balance, 0) : 0}</span>
@@ -295,7 +295,7 @@ class Dashboard extends Component {
                   <ActivityContent stats={admin} userType='admin' handleChange={this.handleIntervalChange} />
                 </div>
               </div>
-              <div label='Transfer' className='tab__item'>
+              <div label='Transfer' className={classNames({ 'tab__item--loader': isTransfer || signatureNeeded })}>
                 <div className='transfer-tab'>
                   <div className='transfer-tab__balance'>
                     <span className='title'>Balance: </span>
@@ -323,7 +323,7 @@ class Dashboard extends Component {
                     </div>
                     <div className='transfer-tab__content__amount'>
                       <span className='transfer-tab__content__amount__text'>Amount</span>
-                      <input className='transfer-tab__content__amount__field' placeholder='...' onChange={(e) => this.handleAmountField(e.target.value)} />
+                      <input className='transfer-tab__content__amount__field' type='number' placeholder='...' onChange={(e) => this.handleAmountField(e.target.value)} />
                     </div>
 
                     <div className='transfer-tab__content__button'>
@@ -340,7 +340,7 @@ class Dashboard extends Component {
                 tokenType &&
                 tokenType === 'mintableBurnable' &&
                 networkType !== 'fuse' &&
-                <div label='Mint \ Burn' className='tab__item'>
+                <div label='Mint \ Burn'>
                   <div className='transfer-tab'>
                     <div className='transfer-tab__balance'>
                       <span className='title'>Balance: </span>
@@ -369,7 +369,7 @@ class Dashboard extends Component {
                       </div>
                       <div className='transfer-tab__content__amount'>
                         <span className='transfer-tab__content__amount__text'>Amount</span>
-                        <input className='transfer-tab__content__amount__field' type='number' placeholder='...' value={mintBurnAmount} onChange={(e) => this.onChange(e.target.value)} />
+                        <input className='transfer-tab__content__amount__field' type='number' disabled={isEmpty(actionType)} placeholder='...' value={mintBurnAmount} onChange={(e) => this.onChange(e.target.value)} />
                       </div>
                       <div className='transfer-tab__content__button'>
                         {
