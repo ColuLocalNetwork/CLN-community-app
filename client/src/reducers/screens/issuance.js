@@ -21,8 +21,6 @@ export default (state = initialState, action) => {
     case CREATE_TOKEN_WITH_METADATA.FAILURE:
       return {...state, transactionStatus: FAILURE, createTokenSignature: false}
     case CREATE_TOKEN_WITH_METADATA.SUCCESS:
-      console.log(Object.keys(action.response.steps))
-      console.log({ ...pick(state.steps, Object.keys(action.response.steps)), tokenIssued: true })
       return {...state, ...action.response, steps: { ...pick(state.steps, Object.keys(action.response.steps)), tokenIssued: true }}
     case CREATE_TOKEN.REQUEST:
       return {...state, ...action.response}

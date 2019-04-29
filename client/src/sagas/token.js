@@ -126,8 +126,6 @@ function * fetchDeployProgress ({tokenAddress}) {
   const response = yield apiCall(api.fetchTokenProgress, {tokenAddress: tokenAddress.tokenAddress})
 
   const { data } = response
-  console.log({...data})
-
   const { steps, stepErrors } = data
 
   yield put({

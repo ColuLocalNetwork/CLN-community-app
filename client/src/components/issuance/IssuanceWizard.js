@@ -55,39 +55,6 @@ class IssuanceWizard extends Component {
     })
   }
 
-  componentDidUpdate(prevProps) {
-    // if (this.props.receipt !== prevProps.receipt) {
-      // const { fetchDeployProgress, steps } = this.props
-      // const tokenAddress = this.props.receipt.events[0].address
-      // const { bridge, membersList } = steps
-      // this.timer = setInterval(()=> fetchDeployProgress({tokenAddress}), 5000);
-      // if (bridge && membersList) {
-      //   this.props.history.push(`/view/dashboard/${this.props.foreignNetwork}/${tokenAddress}`)
-      //   clearInterval(this.timer)
-      // } else {
-        // const keys = Object.keys(steps)
-        // const currentDeploy = Object.keys(keys.find((step) => steps[step]))
-        // console.log({currentDeploy})
-        
-      // this.props.history.push(`/view/dashboard/${this.props.foreignNetwork}/${tokenAddress}`)
-      // }
-    // }
-
-    if (this.props.steps !== prevProps.steps) {
-      const { steps, tokenAddress, foreignNetwork, stepErrors } = this.props
-
-      const values = Object.values(steps).every(val => val)
-
-      // if (!isEmpty(stepErrors) && (stepErrors.bridge || stepErrors.membersList)) {
-      //   this.props.history.push(`/view/dashboard/${foreignNetwork}/${tokenAddress}`)
-      // }
-
-      // if (values) {
-      //   this.props.history.push(`/view/dashboard/${foreignNetwork}/${tokenAddress}`)
-      // }
-    }
-  }
-
   handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       switch (this.state.activeStep) {

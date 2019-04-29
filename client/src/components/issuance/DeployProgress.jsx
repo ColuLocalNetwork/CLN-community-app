@@ -38,10 +38,10 @@ class DeployProgress extends Component {
       const { steps, tokenAddress, foreignNetwork, stepErrors } = this.props
       const values = Object.values(steps).every(val => val)
 
-      if ((!isEmpty(stepErrors) && (stepErrors.bridge || stepErrors.membersList) || values)) {
-        clearInterval(this.interval)
-        this.props.history.push(`/view/dashboard/${foreignNetwork}/${tokenAddress}`)
-      }
+      // if ((!isEmpty(stepErrors) && (stepErrors.bridge || stepErrors.membersList) || values)) {
+      //   clearInterval(this.interval)
+      //   this.props.history.push(`/view/dashboard/${foreignNetwork}/${tokenAddress}`)
+      // }
     }
   }
 
@@ -72,7 +72,8 @@ class DeployProgress extends Component {
     return (
       <div className='progress__wrapper'>
         <div className='progress__img'>
-          <img src={FuseLoader} alt='Fuse loader' />
+          <div className='progress__loader'><div /></div>
+          {/* <img src={FuseLoader} alt='Fuse loader' /> */}
         </div>
         {
           deployProgress

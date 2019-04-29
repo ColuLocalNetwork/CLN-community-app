@@ -943,8 +943,11 @@ $themes: (
           }
     
           @include breakpoint(small) {
+            @include xy-grid(vertical);
+            @include flex-align(justify, middle);
             width: 90%;
             padding: 20px;
+            min-height: 60vh;
           }
         }
         @include element(img) {
@@ -974,12 +977,41 @@ $themes: (
             .fa {
               color: $color-ropsten;
               font-size: 12px;
-              padding: 0 20px;
+              margin-right: 5px;
             }
           }
   
           @include element(loaderText) {
   
+          }
+        }
+
+        @include element(loader) {
+          position: relative;
+          width: 80px !important;
+          height: 80px !important;
+          -webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+          transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+          
+          div , &:after {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 6px solid $color-ropsten;
+            border-top-color: transparent;
+            border-radius: 50%;
+          }
+        
+          div {
+            -webkit-animation: lds-rolling 1.3s linear infinite;
+            animation: lds-rolling 1.3s linear infinite;
+            top: 50%;
+            left: 50%;
+          }
+        
+          &:after {
+            -webkit-transform: rotate(90deg);
+            transform: rotate(90deg);
           }
         }
       }
