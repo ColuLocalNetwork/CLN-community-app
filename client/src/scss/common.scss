@@ -284,6 +284,10 @@
   font-family: $font-family;
 	border-radius: 0 0 10px 10px;
 
+	@include modifier(radius-all) {
+		border-radius: 10px;		
+	}
+
 	@include modifier(dark) {
 		background-color: rgba(5, 40, 62, 0.97);
 	}
@@ -340,6 +344,7 @@
 		@include element(img) {
 			width: 40px;
 			height: 40px;
+			margin-top: 15px;
 
 			> img {
 				background-position: center;
@@ -468,6 +473,25 @@
     -webkit-transform: translate(-50%, -50%) rotate(360deg);
     transform: translate(-50%, -50%) rotate(360deg);
   }
+}
+
+@include block(input-error) {
+	display: block;
+	color: $color-red;
+	font-size: 1rem;
+	line-height: 1.25;
+
+	@include modifier(bold) {
+			font-weight: bold;
+	}
+
+	&:not(:first-child) {
+			margin-top: 5px;
+	}
+
+	&:not(:last-child) {
+			margin-bottom: 5px;
+	}
 }
 
 .flex {

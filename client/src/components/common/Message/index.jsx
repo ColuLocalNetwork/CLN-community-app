@@ -2,13 +2,13 @@ import React, { Fragment } from 'react'
 import classNames from 'classnames'
 import FuseLoader from 'images/loader-fuse.gif'
 
-export default ({ message, clickHandler, isOpen, isDark = false, subTitle = 'Waiting for signing' }) => {
+export default ({ message, clickHandler, isOpen, isDark = false, subTitle = 'Waiting for signing', radiusAll = false }) => {
   if (!isOpen) {
     return null
   }
 
   return (
-    <div className={classNames('status', { 'status--dark': isDark })}>
+    <div className={classNames('status', { 'status--dark': isDark }, { 'status--radius-all': radiusAll })}>
       {
         !isDark ? (
           <Fragment>

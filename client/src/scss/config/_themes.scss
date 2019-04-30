@@ -938,11 +938,11 @@ $themes: (
           @include breakpoint(medium) {
             width: 611px;
             @include xy-grid(vertical);
-            @include flex-align(center, middle);
+            @include flex-align(justify, middle);
             padding: 20px 50px;          
           }
     
-          @include breakpoint(small) {
+          @include breakpoint(small only) {
             @include xy-grid(vertical);
             @include flex-align(justify, middle);
             width: 90%;

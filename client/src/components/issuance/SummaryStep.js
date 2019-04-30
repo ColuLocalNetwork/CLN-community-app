@@ -94,11 +94,13 @@ export default class SummaryStep extends Component {
             </div>
           </div>
           <Message
+            radiusAll
             isOpen={createTokenSignature}
             message='Pending'
             isDark
           />
           <Message
+            radiusAll
             isOpen={transactionStatus === FAILURE && showError}
             message='Something went wrong'
             clickHandler={() => this.setState({showError: false})}

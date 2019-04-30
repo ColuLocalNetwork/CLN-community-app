@@ -36,7 +36,7 @@ class DeployProgress extends Component {
       const { steps, tokenAddress, foreignNetwork, stepErrors } = this.props
       const values = Object.values(steps).every(val => val)
 
-      if (((!isEmpty(stepErrors)) && ((stepErrors.bridge || stepErrors.membersList) || values))) {
+      if (((isEmpty(stepErrors) && values) || (!isEmpty(stepErrors) && (stepErrors.bridge || stepErrors.membersList)))) {
         clearInterval(this.interval)
         this.props.history.push(`/view/dashboard/${foreignNetwork}/${tokenAddress}`)
       }
