@@ -1,4 +1,4 @@
-import { TRANSFER_TOKEN, MINT_TOKEN, BURN_TOKEN } from 'actions/token'
+import { TRANSFER_TOKEN, MINT_TOKEN, BURN_TOKEN, CLEAR_TRANSACTION_STATUS } from 'actions/token'
 import {FAILURE} from 'actions/constants'
 
 export default (state = {}, action) => {
@@ -10,9 +10,9 @@ export default (state = {}, action) => {
     case TRANSFER_TOKEN.PENDING:
       return { ...state, transferSignature: false, transactionHash: action.response.transactionHash, isTransfer: true }
     case TRANSFER_TOKEN.SUCCESS:
-      return { ...state, ...action.response, transferSignature: false, isTransfer: false }
+      return { ...state, ...action.response, transferSignature: false, isTransfer: false, transferSuccess: true }
     case TRANSFER_TOKEN.FAILURE:
-      return {...state, ...action.response, transferSignature: false, transactionStatus: FAILURE, transferError: true}
+      return {...state, ...action.response, transferSignature: false, transactionStatus: FAILURE, transferSuccess: false}
     case MINT_TOKEN.REQUEST:
       return { ...state, mintSignature: true }
     case MINT_TOKEN.CONFIRMATION:
@@ -20,9 +20,9 @@ export default (state = {}, action) => {
     case MINT_TOKEN.PENDING:
       return { ...state, mintSignature: false, transactionHash: action.response.transactionHash, isMinting: true }
     case MINT_TOKEN.SUCCESS:
-      return { ...state, ...action.response, isMinting: false }
+      return { ...state, ...action.response, isMinting: false, mintSuccess: true }
     case MINT_TOKEN.FAILURE:
-      return {...state, ...action.response, mintSignature: false, transactionStatus: FAILURE, burnError: true}
+      return {...state, ...action.response, mintSignature: false, transactionStatus: FAILURE, mintSuccess: false}
     case BURN_TOKEN.REQUEST:
       return { ...state, burnSignature: true }
     case BURN_TOKEN.CONFIRMATION:
@@ -30,9 +30,11 @@ export default (state = {}, action) => {
     case BURN_TOKEN.PENDING:
       return { ...state, burnSignature: false, transactionHash: action.response.transactionHash, isBurning: true }
     case BURN_TOKEN.SUCCESS:
-      return { ...state, ...action.response, isBurning: false }
+      return { ...state, ...action.response, isBurning: false, burnSuccess: true }
     case BURN_TOKEN.FAILURE:
-      return {...state, ...action.response, transactionStatus: FAILURE, mintError: true, burnSignature: false}
+      return {...state, ...action.response, transactionStatus: FAILURE, burnSuccess: false, burnSignature: false}
+    case CLEAR_TRANSACTION_STATUS.REQUEST:
+      return {...state, transactionStatus: null}
     default:
       return state
   }

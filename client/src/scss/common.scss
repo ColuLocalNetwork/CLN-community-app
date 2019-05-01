@@ -249,6 +249,10 @@
 			color: $color-white;
 			cursor: not-allowed;
 		}
+
+		&:hover {
+			background-color: darken($color-ropsten, 10%);
+		}
 	}
 
 	@include element(back) {
@@ -267,6 +271,55 @@
 			background-position: center;
 			background-size: contain;
 			background-repeat: no-repeat;
+		}
+	}
+}
+
+@include block(congratulation) {
+	@include xy-grid(vertical, false);
+	@include flex-align(center, middle);
+	position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: $color-white;
+  z-index: 5;
+  font-family: $font-family;
+	border-radius: 10px;
+	color: $color-primary-dark;
+	text-align: center;
+	padding: 20px 70px;
+
+	@include element(title) {
+		font-size: 1.250em;
+		font-weight: bold;
+		line-height: 1.25;
+	}
+
+	@include element(sub-title) {
+		font-size: 1.250em;
+		font-weight: 500;
+		line-height: 1.65;
+	}
+
+	@include element(what) {
+		font-size: 1em;
+    line-height: 1.25;
+		margin: 1em 0;
+	}
+
+	@include element(text) {
+		font-size: 0.813em;
+    line-height: 1.35;
+	}
+
+	@include element(btn) {
+		margin-top: 1.5em;
+		> button {
+			font-size: 0.875em;
+			text-transform: uppercase;
+			padding: 0 1em;
 		}
 	}
 }
@@ -477,8 +530,10 @@
 
 @include block(input-error) {
 	display: block;
+	position: absolute;
+	bottom: -1em;
 	color: $color-red;
-	font-size: 1rem;
+	font-size: 0.7em;
 	line-height: 1.25;
 
 	@include modifier(bold) {

@@ -2,10 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import classNames from 'classnames'
-import upperCase from 'lodash/upperCase'
-import isEmpty from 'lodash/isEmpty'
 import web3 from 'web3'
-import { fetchToken, fetchTokenStatistics, transferToken, mintToken, burnToken } from 'actions/token'
+import { fetchToken, fetchTokenStatistics, transferToken, mintToken, burnToken, clearTransactionStatus } from 'actions/token'
 import { isUserExists } from 'actions/user'
 import { getClnBalance, getAccountAddress, getBalances } from 'selectors/accounts'
 import { formatWei } from 'utils/format'
@@ -23,8 +21,9 @@ import { isOwner } from 'utils/token'
 import Tabs from 'components/common/Tabs'
 import Message from 'components/common/Message'
 import { getTransaction } from 'selectors/transaction'
-import TransactionButton from 'components/common/TransactionButton'
-import {FAILURE, SUCCESS, CONFIRMATION} from 'actions/constants'
+import {FAILURE, SUCCESS, PENDING} from 'actions/constants'
+import TransferForm from './TransferForm'
+import MintBurnForm from './MintBurnForm'
 
 const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
 const ERROR_MESSAGE = 'Oops, something went wrong'
@@ -55,12 +54,6 @@ class Dashboard extends Component {
     super(props)
 
     this.state = {
-      actionType: null,
-      transfer: {
-        toField: null,
-        amount: null
-      },
-      mintBurnAmount: '',
       transferMessage: false,
       burnMessage: false,
       mintMessage: false,
@@ -94,28 +87,34 @@ class Dashboard extends Component {
       this.props.isUserExists(this.props.accountAddress)
     }
 
-    if (this.props.transactionStatus === 'SUCCESS' && (!prevProps.transactionStatus || prevProps.transactionStatus === 'PENDING')) {
+    if (this.props.transactionStatus === SUCCESS && (!prevProps.transactionStatus || prevProps.transactionStatus === PENDING)) {
       this.setState({
         ...this.state,
-        transfer: {
-          toField: null,
-          amount: null
-        },
-        mintBurnAmount: '',
-        actionType: null
       })
     }
 
-    if (this.props.transactionStatus === FAILURE && (!prevProps.transactionStatus || prevProps.transactionStatus === 'PENDING')) {
-      if (this.props.transferError) {
+    if (this.props.transactionStatus === SUCCESS && (!prevProps.transactionStatus || prevProps.transactionStatus === PENDING)) {
+      if (this.props.transferSuccess) {
         this.setState({ ...this.state, transferMessage: true })
-      } else if (this.props.burnError) {
+      } else if (this.props.burnSuccess) {
         this.setState({ ...this.state, burnMessage: true })
-      } else if (this.props.mintError) {
+      } else if (this.props.mintSuccess) {
+        this.setState({ ...this.state, mintMessage: true })
+      }
+    }
+
+
+    if (this.props.transactionStatus === FAILURE && (!prevProps.transactionStatus || prevProps.transactionStatus === PENDING)) {
+      if (this.props.transferSuccess === false) {
+        this.setState({ ...this.state, transferMessage: true })
+      } else if (this.props.burnSuccess === false) {
+        this.setState({ ...this.state, burnMessage: true })
+      } else if (this.props.mintSuccess === false) {
         this.setState({ ...this.state, mintMessage: true })
       }
     }
   }
+  
   componentWillUnmount () {
     window.removeEventListener('mousedown', this.handleClickOutside)
   }
@@ -152,17 +151,6 @@ class Dashboard extends Component {
     }
   }
 
-  handleMintOrBurn = actionType =>
-    this.setState({ actionType })
-
-  onChange = (mintBurnAmount) => {
-    const { actionType } = this.state
-    if (!actionType) {
-      return
-    }
-    this.setState({ mintBurnAmount })
-  }
-
   loadBusinessListPopup = () => {
     this.onlyOnFuse(() => {
       this.props.loadModal(BUSINESS_LIST_MODAL, {
@@ -173,58 +161,20 @@ class Dashboard extends Component {
     })
   }
 
-  handleToField = toField => {
-    const { transfer: { ...data } } = this.state
-    this.setState({ transfer: { ...data, toField } })
-  }
-
-  handleAmountField = amount => {
-    const { transfer: { ...data } } = this.state
-    this.setState({ transfer: { ...data, amount } })
-  }
-
-  handleMintOrBurnClick = () => {
+  handleMintOrBurnClick = (actionType, amount) => {
     const { burnToken, mintToken, tokenAddress } = this.props
-    const { actionType, mintBurnAmount } = this.state
-
     if (actionType === 'mint') {
-      mintToken(tokenAddress, web3.utils.toWei(String(mintBurnAmount)))
+      mintToken(tokenAddress, web3.utils.toWei(String(amount)))
     } else {
-      burnToken(tokenAddress, web3.utils.toWei(String(mintBurnAmount)))
+      burnToken(tokenAddress, web3.utils.toWei(String(amount)))
     }
 
-    this.setState({ ...this.state, lastAction: { actionType, mintBurnAmount } })
+    this.setState({ ...this.state, lastAction: { actionType, mintBurnAmount: amount } })
   }
 
-  handleTransper = () => {
+  handleTransper = ({ to: toField, amount }) => {
     const { transferToken, tokenAddress } = this.props
-    const { transfer: { toField, amount } } = this.state
     transferToken(tokenAddress, toField, web3.utils.toWei(String(amount)))
-  }
-
-  closeMessage = () => {
-    this.setState({ showMessage: false })
-  }
-
-  isShow = () => {
-    const { mintMessage, burnMessage, actionType } = this.state
-    const { transactionStatus } = this.props
-    const sharedCondition = transactionStatus && (transactionStatus === SUCCESS || transactionStatus === CONFIRMATION)
-    if (actionType === 'mint') {
-      return sharedCondition && mintMessage
-    } else {
-      return sharedCondition && burnMessage
-    }
-  }
-
-  isError = () => {
-    const { mintMessage, burnMessage, actionType } = this.state
-    const { transactionStatus } = this.props
-    if (actionType === 'mint') {
-      return transactionStatus && transactionStatus === FAILURE && mintMessage
-    } else {
-      return transactionStatus && transactionStatus === FAILURE && burnMessage
-    }
   }
 
   render () {
@@ -232,10 +182,9 @@ class Dashboard extends Component {
       return null
     }
     const {
-      actionType,
-      mintBurnAmount,
       lastAction,
-      transfer,
+      burnMessage,
+      mintMessage,
       transferMessage
     } = this.state
 
@@ -256,7 +205,8 @@ class Dashboard extends Component {
       transferSignature,
       metadata,
       history,
-      match
+      match,
+      clearTransactionStatus
     } = this.props
 
     const { tokenType } = token
@@ -305,33 +255,15 @@ class Dashboard extends Component {
                     <span className='symbol'>{token.symbol}</span>
                   </div>
                   <hr className='transfer-tab__line' />
-                  <div className='transfer-tab__content'>
-
-                    <Message
-                      message={'Your money has been sent successfully'}
-                      isOpen={transactionStatus && (transactionStatus === 'SUCCESS' || transactionStatus === 'CONFIRMATION') && transferMessage}
-                      clickHandler={() => this.setState({ transferMessage: false })}
-                      subTitle=''
-                    />
-                    <Message
-                      message={ERROR_MESSAGE}
-                      isOpen={transactionStatus && transactionStatus === FAILURE && transferMessage}
-                      clickHandler={() => this.setState({ transferMessage: false })}
-                    />
-
-                    <div className='transfer-tab__content__to-field'>
-                      <span className='transfer-tab__content__to-field__text'>To</span>
-                      <input className='transfer-tab__content__to-field__input' onChange={(e) => this.handleToField(e.target.value)} />
-                    </div>
-                    <div className='transfer-tab__content__amount'>
-                      <span className='transfer-tab__content__amount__text'>Amount</span>
-                      <input className='transfer-tab__content__amount__field' type='number' placeholder='...' onChange={(e) => this.handleAmountField(e.target.value)} />
-                    </div>
-
-                    <div className='transfer-tab__content__button'>
-                      <TransactionButton clickHandler={this.handleTransper} disabled={isEmpty(transfer.amount)} />
-                    </div>
-                  </div>
+                  <TransferForm
+                    transactionStatus={transactionStatus}
+                    transferMessage={transferMessage}
+                    closeMessage={() => {
+                      this.setState({ transferMessage: false })
+                      clearTransactionStatus(null)
+                    }}
+                    handleTransper={this.handleTransper}
+                  />
                 </div>
                 <Message message={'Pending'} isOpen={isTransfer} isDark subTitle={`Your money on it's way`} />
                 <Message message={'Pending'} isOpen={transferSignature} isDark />
@@ -350,35 +282,24 @@ class Dashboard extends Component {
                       <span className='symbol'>{token.symbol}</span>
                     </div>
                     <hr className='transfer-tab__line' />
-                    <div className='transfer-tab__content'>
-                      <Message
-                        message={`Your just ${lastAction.actionType}ed ${lastAction.mintBurnAmount} ${token.symbol} on ${tokenNetworkType} network`}
-                        isOpen={this.isShow()}
-                        subTitle=''clickHandler={this.closeMessage}
-                      />
-                      <Message
-                        message={ERROR_MESSAGE}
-                        isOpen={this.isError()}
-                        clickHandler={
-                          actionType === 'mint'
-                            ? () => this.setState({ mintMessage: false })
-                            : () => this.setState({ burnMessage: false })
-                        }
-                      />
-                      <div className='transfer-tab__actions'>
-                        <button disabled={!isOwner(token, accountAddress)} className={classNames('transfer-tab__actions__btn', { 'transfer-tab__actions__btn--active': actionType === 'mint' })} onClick={() => this.handleMintOrBurn('mint')}>Mint</button>
-                        <button disabled={!isOwner(token, accountAddress)} className={classNames('transfer-tab__actions__btn', { 'transfer-tab__actions__btn--active': actionType === 'burn' })} onClick={() => this.handleMintOrBurn('burn')}>Burn</button>
-                      </div>
-                      <div className='transfer-tab__content__amount'>
-                        <span className='transfer-tab__content__amount__text'>Amount</span>
-                        <input className='transfer-tab__content__amount__field' type='number' disabled={isEmpty(actionType)} placeholder='...' value={mintBurnAmount} onChange={(e) => this.onChange(e.target.value)} />
-                      </div>
-                      <div className='transfer-tab__content__button'>
-                        {
-                          actionType && <TransactionButton disabled={isEmpty(mintBurnAmount)} clickHandler={this.handleMintOrBurnClick} frontText={upperCase(actionType)} />
-                        }
-                      </div>
-                    </div>
+                    <MintBurnForm 
+                      handleMintOrBurnClick={this.handleMintOrBurnClick}
+                      tokenNetworkType={tokenNetworkType}
+                      token={token}
+                      lastAction={lastAction}
+                      accountAddress={accountAddress}
+                      mintMessage={mintMessage}
+                      burnMessage={burnMessage}
+                      transactionStatus={transactionStatus}
+                      closeMintMessage={() => {
+                        this.setState({ mintMessage: false })
+                        clearTransactionStatus(null)
+                      }}
+                      closeBurnMessage={() => {
+                        this.setState({ burnMessage: false })
+                        clearTransactionStatus(null)
+                      }}
+                    />
                   </div>
                   <Message message={'Pending'} isOpen={isBurning || isMinting} isDark subTitle='' />
                   <Message message={'Pending'} isOpen={mintSignature || burnSignature} isDark />
@@ -443,7 +364,8 @@ const mapDispatchToProps = {
   createList,
   transferToken,
   mintToken,
-  burnToken
+  burnToken,
+  clearTransactionStatus
 }
 
 export default connect(

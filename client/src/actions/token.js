@@ -1,7 +1,9 @@
-import {createRequestTypes, createEntityAction, createTransactionRequestTypes, requestAction} from './utils'
+import {createRequestTypes, createEntityAction, createTransactionRequestTypes, requestAction, action} from './utils'
 
 export const entityName = 'tokens'
 const tokenAction = createEntityAction(entityName)
+
+export const CLEAR_TRANSACTION_STATUS = createRequestTypes('CLEAR_TRANSACTION_STATUS')
 
 export const FETCH_TOKENS = createRequestTypes('FETCH_TOKENS')
 export const FETCH_TOKENS_BY_OWNER = createRequestTypes('FETCH_TOKENS_BY_OWNER')
@@ -43,3 +45,5 @@ export const fetchTokenStatistics = (tokenAddress, activityType, interval) => re
 
 export const fetchTokenProgress = (tokenAddress) => requestAction(FETCH_TOKEN_PROGRESS, {tokenAddress})
 export const fetchDeployProgress = (tokenAddress) => requestAction(FETCH_DEPLOY_PROGRESS, {tokenAddress})
+
+export const clearTransactionStatus = (transactionStatus) => action(CLEAR_TRANSACTION_STATUS.REQUEST, { transactionStatus })

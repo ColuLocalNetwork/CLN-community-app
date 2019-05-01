@@ -10,6 +10,7 @@ const NameStep = ({ communityName, handleChangeCommunityName, setNextStep }) => 
         className='name__field'
         id='communityName'
         type='text'
+        autoComplete='off'
         placeholder='Type your community name...'
         value={communityName}
         maxLength='30'

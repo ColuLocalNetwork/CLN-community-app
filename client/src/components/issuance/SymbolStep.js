@@ -32,13 +32,14 @@ export default class SymbolStep extends Component {
             type='text'
             autoFocus
             maxLength='4'
+            minLength='2'
             defaultValue={this.state.customSymbol}
             onChange={this.handleChangeCustomSymbol}
           />
         </div>
         <button
           className='button button--big'
-          disabled={this.props.communitySymbol.length < 3 || this.state.customSymbol.length < 3}
+          disabled={this.props.communitySymbol.length < 2 || this.state.customSymbol.length < 2}
           onClick={this.setNextStep}
         >
           NEXT<FontAwesome name='angle-right' className='symbol-icon' />

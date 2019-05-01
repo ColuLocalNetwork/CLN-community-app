@@ -14,7 +14,8 @@ const TotalSupply = ({ checkCondition, totalSupply, setTotalSupply, communityTyp
             className='attributes__supply__input'
             id='communityName'
             type='number'
-            placeholder='22,000'
+            placeholder='21,000,000'
+            autoComplete='off'
             value={totalSupply}
             onKeyDown={(evt) => checkCondition(evt, (evt.key === 'e' || evt.key === '-'))}
             onChange={(event) => setTotalSupply(event.target.value)}

@@ -670,6 +670,7 @@
       justify-content: space-between;
       margin: 2.4em 0;
       height: 35px;
+      position: relative;
       @include element(text) {
         font-family: $font-family;
         font-size: 14px;
@@ -690,6 +691,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      position: relative;
       @include element(text) {
         font-family: $font-family;
         font-size: 14px;

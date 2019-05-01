@@ -23,7 +23,27 @@ const deployProgress = [
   }
 ]
 
+const Congratulations = ({ goToDashboard }) => {
+  return (
+    <div className='congratulation'>
+      <div className='congratulation__title'>
+        Congratulations!
+      </div>
+      <div className='congratulation__sub-title'>Your community is ready to be burn!</div>
+      <div className='congratulation__what'>What should i do next?</div>
+      <div className='congratulation__text'>to start building your community. Your community will now show on the homepage of the Fuse Studio. Go to your community page to start adding businesses and users.</div>
+      <div className='congratulation__btn'>
+        <button className='button button--big' onClick={goToDashboard}>Go to the community page</button>
+      </div>
+    </div>
+  )
+}
+
 class DeployProgress extends Component {
+  state = {
+    isReady: false
+  }
+
   componentDidUpdate (prevProps) {
     if ((this.props.receipt !== prevProps.receipt) && this.props.receipt) {
       const { fetchDeployProgress, receipt } = this.props
@@ -33,12 +53,12 @@ class DeployProgress extends Component {
     }
 
     if (this.props.steps !== prevProps.steps) {
-      const { steps, tokenAddress, foreignNetwork, stepErrors } = this.props
+      const { steps, stepErrors } = this.props
       const values = Object.values(steps).every(val => val)
 
       if (((isEmpty(stepErrors) && values) || (!isEmpty(stepErrors) && (stepErrors.bridge || stepErrors.membersList)))) {
         clearInterval(this.interval)
-        this.props.history.push(`/view/dashboard/${foreignNetwork}/${tokenAddress}`)
+        this.setState({ isReady: true })
       }
     }
   }
@@ -46,8 +66,15 @@ class DeployProgress extends Component {
   render () {
     const {
       contracts,
-      steps
+      steps,
+      tokenAddress,
+      foreignNetwork,
+      // stepErrors
     } = this.props
+
+    const {
+      isReady
+    } = this.state
 
     let currentStep = null
 
@@ -72,7 +99,9 @@ class DeployProgress extends Component {
               return (
                 <div key={key} className={classNames('progress__item', { 'progress__item--active': currentStep === key })}>
                   <div className={classNames('progress__item__label')}>
-                    { steps[key] && <FontAwesome name='check' /> }
+                    { steps && steps[key] && <FontAwesome name='check' /> }
+                    {/* TODO */}
+                    {/* { stepErrors && stepErrors[key] && <FontAwesome name='times' /> } */}
                     {label}
                   </div>
                   {
@@ -82,6 +111,7 @@ class DeployProgress extends Component {
               )
             })
         }
+        {isReady && <Congratulations goToDashboard={() => this.props.history.push(`/view/dashboard/${foreignNetwork}/${tokenAddress}`)} />}
       </div>
     )
   }

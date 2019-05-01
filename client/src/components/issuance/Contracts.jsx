@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import FontAwesome from 'react-fontawesome'
 import ContractsType from 'constants/contractsType'
+import classNames from 'classnames'
 
 export default class Contracts extends PureComponent {
   handleChange = ({ key, readOnly }, value) => {
@@ -20,11 +21,11 @@ export default class Contracts extends PureComponent {
         </h3>
         <div className='contracts__options'>
           {
-            ContractsType.map(({ label, value, text, key, readOnly }) => {
+            ContractsType.map(({ label, value, text, key, readOnly, disabled }) => {
               return (
                 <div key={label} className='contracts__checkbox'>
                   <input type='checkbox' className='input' id={key} checked={key && contracts[key] && contracts[key].checked} onChange={(e) => this.handleChange({ key, readOnly }, e.target.checked)} readOnly={readOnly} />
-                  <label className='indicator' htmlFor={key} />
+                  <label className={classNames('indicator', { 'indicator--disabled': disabled }, { 'indicator--read-only': readOnly })} htmlFor={key} />
                   <div className='content'>
                     <div className='content__title'>{label}</div>
                     <div className='content__text'>{text}</div>

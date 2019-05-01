@@ -94,8 +94,6 @@ class IssuanceWizard extends Component {
 
   handleScroll = () => this.setState({ scrollPosition: window.scrollY })
 
-  setQuitIssuance = () => this.props.history.goBack()
-
   handleChangeCommunityName = (event) => {
     this.setState({ communityName: event.target.value })
     this.setState({ communitySymbol: nameToSymbol(event.target.value) })
@@ -241,14 +239,14 @@ class IssuanceWizard extends Component {
               </div>
             </div>
           </div>
-          <div onClick={this.setQuitIssuance} className={classNames(`issuance-${foreignNetwork}__header__close grid-x align-middle align-right`)}>
+          <div onClick={() => history.push('/')} className={classNames(`issuance-${foreignNetwork}__header__close grid-x align-middle align-right`)}>
             <FontAwesome name='times' />
           </div>
         </div>
         <div className={classNames(`issuance-${foreignNetwork}__wizard`)}>
           {this.renderStepContent()}
           {
-            this.state.activeStep > 0 && this.state.activeStep < 4 && (
+            this.state.activeStep > 0 && this.state.activeStep < 5 && (
               <div className='text-center'>
                 <button
                   className={classNames(`issuance-${foreignNetwork}__wizard__back`)}

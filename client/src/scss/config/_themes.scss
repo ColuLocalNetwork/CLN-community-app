@@ -191,9 +191,9 @@ $themes: (
       border: 2px solid $color-author;
   
       @include breakpoint(small only) {
-        width: 13px;
-        height: 13px;
-        top: -27px;
+        width: 15px;
+        height: 15px;
+        top: -28px;
       }
     }
   
@@ -203,7 +203,7 @@ $themes: (
         border: solid 2px $secondary;
         background-color: $secondary;
         box-shadow: 0 0 0 0 $secondary,
-                    inset $color-issuance-bg 0 0 1px 4px,
+                    inset $color-issuance-bg 0 0 1px 2.5px,
       }
       &:before {
         background-color: $color-author;
@@ -733,6 +733,11 @@ $themes: (
                 background: $secondary;
                 // border: 1px solid $color-green;
             }
+            &:checked + .indicator--read-only {
+              background: $secondary;
+              opacity: .5;
+              // border: 1px solid $color-green;
+            }
             &:checked + .indicator:after {
                 opacity: 1;
                 // border: 1px solid $color-green;
@@ -753,7 +758,12 @@ $themes: (
             border: 1px solid $color-author;
             border-radius: 5px;
             cursor: pointer;
-    
+
+            @include modifier(disabled) {
+              background-color: #d8d8d8 !important;
+              opacity: .5 !important;
+            }
+
             &:after {
               content: '';
               display: block;
@@ -812,23 +822,41 @@ $themes: (
       }
   
       @include block(summary-step) {
-      
+        
         @include element(wrapper) {
           box-shadow: 0 0 11px 0 rgba(0, 0, 0, 0.25);
-          border-radius: 10px;
-          margin: auto;
           position: relative;
+          margin: auto;
+          border-radius: 10px;
           @include breakpoint(medium) {
+            padding: 20px;
             width: 559px;
-            height: 344px;
+            // height: 344px;
+            @include xy-grid(vertical);
+            @include flex-align(spaced, middle);
+          }
+        }
+
+        @include element(inner) {
+          @include breakpoint(medium) {
+            width: 100%;
+            height: 100%;
             @include xy-grid();
             @include flex-align(left, middle);
           }
     
           @include breakpoint(small) {
             width: 90%;
-            padding: 20px;
           }
+        }
+
+        @include element(text) {
+          height: 34px;
+          font-size: 11px;
+          line-height: 1.45;
+          color: rgba(5, 40, 62, 0.6);
+          text-align: center;
+          margin-top: 1em;
         }
   
         @include element(logo) {
@@ -934,9 +962,11 @@ $themes: (
           box-shadow: 0 0 11px 0 rgba(0, 0, 0, 0.25);
           border-radius: 10px;
           margin: 0 auto;
+          position: relative;
   
           @include breakpoint(medium) {
             width: 611px;
+            min-height: 406px;
             @include xy-grid(vertical);
             @include flex-align(justify, middle);
             padding: 20px 50px;          
@@ -975,9 +1005,16 @@ $themes: (
             font-weight: bold;
 
             .fa {
-              color: $color-ropsten;
               font-size: 12px;
               margin-right: 5px;
+            }
+
+            .fa-check {
+              color: $color-ropsten;
+            }
+
+            .fa-times {
+              color: $color-red;
             }
           }
   

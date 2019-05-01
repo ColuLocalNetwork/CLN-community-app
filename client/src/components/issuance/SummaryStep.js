@@ -70,29 +70,38 @@ export default class SummaryStep extends Component {
     return (
       <div className='summary-step'>
         <div className='summary-step__wrapper'>
-          <div className='summary-step__logo'>
-            <CommunityLogo networkType={networkType} token={{ symbol: communitySymbol }} metadata={{ communityLogo }} />
-            <span>{communityName} coin</span>
-          </div>
-          <hr className='summary-step__line' />
-          <div className='summary-step__content'>
-            <div className='summary-step__content__item'>
-              <h4 className='summary-step__content__title'>Currency type</h4>
-              <p>Mintable burnable token</p>
+          <div className='summary-step__inner'>
+            <div className='summary-step__logo'>
+              <CommunityLogo networkType={networkType} token={{ symbol: communitySymbol }} metadata={{ communityLogo }} />
+              <span>{communityName} coin</span>
             </div>
-            <div className='summary-step__content__item'>
-              <h4 className='summary-step__content__title'>Total supply</h4>
-              <p>{totalSupply}</p>
-            </div>
-            <div className='summary-step__content__item'>
-              <h4 className='summary-step__content__title'>Contracts</h4>
-              <div>
-                <ul>
-                  {contractsItems.map(item => <li key={item}>{item}</li>)}
-                </ul>
+            <hr className='summary-step__line' />
+            <div className='summary-step__content'>
+              <div className='summary-step__content__item'>
+                <h4 className='summary-step__content__title'>Currency type</h4>
+                <p>Mintable burnable token</p>
               </div>
-            </div>
+              <div className='summary-step__content__item'>
+                <h4 className='summary-step__content__title'>Total supply</h4>
+                <p>{totalSupply}</p>
+              </div>
+              <div className='summary-step__content__item'>
+                <h4 className='summary-step__content__title'>Contracts</h4>
+                <div>
+                  <ul>
+                    {contractsItems.map(item => <li key={item}>{item}</li>)}
+                  </ul>
+                </div>
+              </div>
           </div>
+          </div>
+          
+          <div className='summary-step__text'>
+            <span>Your coin will be issued on the Ethereum {networkType}</span>
+            <br />
+            <span>After published a bridge will allow you to start using your coin on the Fuse-chain!</span>
+          </div>
+
           <Message
             radiusAll
             isOpen={createTokenSignature}
