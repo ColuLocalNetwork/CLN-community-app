@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react'
 import { Formik, Field } from 'formik'
-import { object, string, number } from 'yup'
+import { object, string } from 'yup'
 import TransactionButton from 'components/common/TransactionButton'
 import Message from 'components/common/Message'
 import {FAILURE, SUCCESS, CONFIRMATION} from 'actions/constants'
@@ -9,8 +9,7 @@ import upperCase from 'lodash/upperCase'
 import classNames from 'classnames'
 
 export default class MintBurnForm extends PureComponent {
-
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -34,9 +33,9 @@ export default class MintBurnForm extends PureComponent {
   onSubmit = async (values, { setFieldError, resetForm }) => {
     const { handleMintOrBurnClick } = this.props
     const {
-      actionType,
+      actionType
     } = this.state
-    
+
     if (actionType === 'mint') {
       if (!values.mintAmount) {
         setFieldError('mintAmount', 'Amount is a required field')
@@ -76,7 +75,7 @@ export default class MintBurnForm extends PureComponent {
     }
   }
 
-  renderForm = ({ handleSubmit, setFieldValue, setFieldError, setFieldTouched, values, errors, isSubmitting }) => {    
+  renderForm = ({ handleSubmit, setFieldValue, setFieldError, setFieldTouched, values, errors, isSubmitting }) => {
     const {
       tokenNetworkType,
       token,
@@ -87,7 +86,7 @@ export default class MintBurnForm extends PureComponent {
     } = this.props
 
     const {
-      actionType,
+      actionType
     } = this.state
 
     return (
@@ -134,8 +133,8 @@ export default class MintBurnForm extends PureComponent {
             actionType === 'mint'
               ? (
                 <Fragment>
-                  <Field 
-                    onFocus={() => setFieldTouched('mintAmount', true)} 
+                  <Field
+                    onFocus={() => setFieldTouched('mintAmount', true)}
                     className='transfer-tab__content__amount__field'
                     name='mintAmount'
                     placeholder='...'
@@ -145,7 +144,7 @@ export default class MintBurnForm extends PureComponent {
               ) : (
                 <Fragment>
                   <Field
-                    onFocus={() => setFieldTouched('burnAmount', true)} 
+                    onFocus={() => setFieldTouched('burnAmount', true)}
                     className='transfer-tab__content__amount__field'
                     name='burnAmount'
                     placeholder='...'

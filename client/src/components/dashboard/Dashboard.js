@@ -26,7 +26,6 @@ import TransferForm from './TransferForm'
 import MintBurnForm from './MintBurnForm'
 
 const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
-const ERROR_MESSAGE = 'Oops, something went wrong'
 
 class UserDataModal extends React.Component {
   componentDidMount (prevProps) {
@@ -89,7 +88,7 @@ class Dashboard extends Component {
 
     if (this.props.transactionStatus === SUCCESS && (!prevProps.transactionStatus || prevProps.transactionStatus === PENDING)) {
       this.setState({
-        ...this.state,
+        ...this.state
       })
     }
 
@@ -103,7 +102,6 @@ class Dashboard extends Component {
       }
     }
 
-
     if (this.props.transactionStatus === FAILURE && (!prevProps.transactionStatus || prevProps.transactionStatus === PENDING)) {
       if (this.props.transferSuccess === false) {
         this.setState({ ...this.state, transferMessage: true })
@@ -114,7 +112,7 @@ class Dashboard extends Component {
       }
     }
   }
-  
+
   componentWillUnmount () {
     window.removeEventListener('mousedown', this.handleClickOutside)
   }
@@ -282,7 +280,7 @@ class Dashboard extends Component {
                       <span className='symbol'>{token.symbol}</span>
                     </div>
                     <hr className='transfer-tab__line' />
-                    <MintBurnForm 
+                    <MintBurnForm
                       handleMintOrBurnClick={this.handleMintOrBurnClick}
                       tokenNetworkType={tokenNetworkType}
                       token={token}

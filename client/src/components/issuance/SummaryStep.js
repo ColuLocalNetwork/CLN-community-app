@@ -93,9 +93,9 @@ export default class SummaryStep extends Component {
                   </ul>
                 </div>
               </div>
+            </div>
           </div>
-          </div>
-          
+
           <div className='summary-step__text'>
             <span>Your coin will be issued on the Ethereum {networkType}</span>
             <br />

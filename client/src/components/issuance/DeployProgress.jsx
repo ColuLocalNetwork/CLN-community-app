@@ -68,7 +68,7 @@ class DeployProgress extends Component {
       contracts,
       steps,
       tokenAddress,
-      foreignNetwork,
+      foreignNetwork
       // stepErrors
     } = this.props
 

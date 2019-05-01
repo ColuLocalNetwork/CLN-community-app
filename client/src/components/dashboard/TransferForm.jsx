@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { Formik, Field } from 'formik'
-import { object, string, number } from 'yup'
+import { object, string } from 'yup'
 import TransactionButton from 'components/common/TransactionButton'
 import Message from 'components/common/Message'
 
@@ -53,7 +53,7 @@ export default class TransferForm extends PureComponent {
 
         <div className='transfer-tab__content__to-field'>
           <span className='transfer-tab__content__to-field__text'>To</span>
-          <Field 
+          <Field
             onFocus={() => setFieldTouched('to', true)}
             name='to'
             className='transfer-tab__content__to-field__input'
