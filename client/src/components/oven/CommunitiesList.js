@@ -26,7 +26,7 @@ class CommunitiesList extends Component {
     })
   }
 
-  componentDidMount() {
+  componentDidMount () {
     if (this.props.addresses.length < PAGE_SIZE) {
       this.props.fetchTokens(PAGE_START)
     }
@@ -38,25 +38,25 @@ class CommunitiesList extends Component {
     const { addresses, tokens, metadata, networkType } = this.props
     return (
       <div className={`communities-list ${this.props.networkType}`} ref={this.myRef}>
-      <div className='grid-container full communities-banner-wrapper'>
-        <div className='communities-banner grid-container' >
-          <div className='communities-banner-content grid-x grid-padding-x' >
-            <h2 className='communities-banner-title cell'>
-              Launch your<br /> community on Fuse
-          </h2>
-            <p className='communities-banner-text cell'>
-              Fuse is intended for community currencies operated by companies and entrepreneurs. It streamlines the process of launching your community currency and provide battle-tested and customizable tools to get it off the ground
-          </p>
-            {/* TODO - MAKE IT STICKY */}
-            {/* <button onClick={this.showIssuance} className='communities-banner-issuance cell small-6'>
-              <FontAwesome name='plus' className='top-nav-issuance-plus' /> Currency issuer
-            </button>  */}
-          </div>
-          <div className='communities-banner-img'>
-            <img src={Banner} />
+        <div className='grid-container full communities-banner-wrapper'>
+          <div className='communities-banner grid-container' >
+            <div className='communities-banner-content grid-x grid-padding-x' >
+              <h2 className='communities-banner-title cell'>
+                Launch your<br /> community on Fuse
+              </h2>
+              <p className='communities-banner-text cell'>
+                Fuse is intended for community currencies operated by companies and entrepreneurs. It streamlines the process of launching your community currency and provide battle-tested and customizable tools to get it off the ground
+              </p>
+              {/* TODO - MAKE IT STICKY */}
+              {/* <button onClick={this.showIssuance} className='communities-banner-issuance cell small-6'>
+                <FontAwesome name='plus' className='top-nav-issuance-plus' /> Currency issuer
+              </button>  */}
+            </div>
+            <div className='communities-banner-img'>
+              <img src={Banner} />
+            </div>
           </div>
         </div>
-      </div>
         <div className='grid-container communities-list-container'>
           <div className='grid-y'>
             <div className='grid-x grid-padding-x grid-padding-y communities-list-content'>

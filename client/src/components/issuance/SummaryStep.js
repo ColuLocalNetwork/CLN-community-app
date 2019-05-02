@@ -62,10 +62,10 @@ export default class SummaryStep extends Component {
       communityLogo,
       totalSupply,
       communityName,
-      contracts, 
+      contracts,
       createTokenSignature,
       transactionStatus,
-      setNextStep 
+      setNextStep
     } = this.props
 
     const { showError } = this.state
