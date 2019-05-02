@@ -254,6 +254,7 @@ class Dashboard extends Component {
                   </div>
                   <hr className='transfer-tab__line' />
                   <TransferForm
+                    balance={balance ? formatWei(balance, 0) : 0}
                     transactionStatus={transactionStatus}
                     transferMessage={transferMessage}
                     closeMessage={() => {

@@ -35,7 +35,7 @@
     "classnames": "^2.2.5",
     "config": "^1.30.0",
     "connected-react-router": "^6.2.2",
-    "css-loader": "^0.28.11",
+    "css-loader": "^2.1.1",
     "file-loader": "^1.1.11",
     "formik": "^1.5.1",
     "foundation-sites": "^6.5.3",

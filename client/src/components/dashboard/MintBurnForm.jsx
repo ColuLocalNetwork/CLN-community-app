@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react'
-import { Formik, Field } from 'formik'
-import { object, string } from 'yup'
+import { Formik, Field, ErrorMessage } from 'formik'
+import { object, string, mixed } from 'yup'
 import TransactionButton from 'components/common/TransactionButton'
 import Message from 'components/common/Message'
 import {FAILURE, SUCCESS, CONFIRMATION} from 'actions/constants'
@@ -11,50 +11,41 @@ import classNames from 'classnames'
 export default class MintBurnForm extends PureComponent {
   constructor (props) {
     super(props)
-
+    console.log({props})
+    
     this.state = {
       actionType: 'mint'
     }
 
     this.initialValues = {
+      actionType: '',
       mintAmount: '',
       burnAmount: ''
     }
 
     this.validationSchema = object().shape({
-      mintAmount: string().matches(/^\d+$/, 'Only numbers allowed').label('Amount'),
-      burnAmount: string().matches(/^\d+$/, 'Only numbers allowed').label('Amount')
+      actionType: mixed().oneOf(['mint', 'burn']),
+      mintAmount: string().matches(/^\d+$/, 'Only numbers allowed').label('Amount').when('actionType', (actionType, schema) => {
+        return actionType === 'mint' ? schema.required() : schema.notRequired();
+      }),
+      burnAmount: string().matches(/^\d+$/, 'Only numbers allowed').label('Amount').when('actionType', (actionType, schema) => {
+        return actionType === 'burn' ? schema.required() : schema.notRequired();
+      }),
     })
   }
-
-  handleMintOrBurn = actionType =>
-    this.setState({ actionType })
 
   onSubmit = async (values, { setFieldError, resetForm }) => {
     const { handleMintOrBurnClick } = this.props
     const {
       actionType
-    } = this.state
-
-    if (actionType === 'mint') {
-      if (!values.mintAmount) {
-        setFieldError('mintAmount', 'Amount is a required field')
-        return
-      }
-    } else if (actionType === 'burn') {
-      if (!values.burnAmount) {
-        setFieldError('burnAmount', 'Amount is a required field')
-        return
-      }
-    }
+    } = values
 
     const amount = actionType === 'mint' ? values.mintAmount : values.burnAmount
     await handleMintOrBurnClick(actionType, amount)
     resetForm()
   }
 
-  actionSuccess = () => {
-    const { actionType } = this.state
+  actionSuccess = (actionType) => {
     const { transactionStatus, mintMessage, burnMessage } = this.props
     const sharedCondition = transactionStatus && (transactionStatus === SUCCESS || transactionStatus === CONFIRMATION)
     if (actionType === 'mint') {
@@ -64,8 +55,7 @@ export default class MintBurnForm extends PureComponent {
     }
   }
 
-  actionFailed = () => {
-    const { actionType } = this.state
+  actionFailed = (actionType) => {
     const { transactionStatus, mintMessage, burnMessage } = this.props
     const sharedCondition = transactionStatus && transactionStatus === FAILURE
     if (actionType === 'mint') {
@@ -75,7 +65,7 @@ export default class MintBurnForm extends PureComponent {
     }
   }
 
-  renderForm = ({ handleSubmit, setFieldValue, setFieldError, setFieldTouched, values, errors, isSubmitting }) => {
+  renderForm = ({ handleSubmit, setFieldValue, setFieldError, setFieldTouched, values, errors, isSubmitting, touched }) => {
     const {
       tokenNetworkType,
       token,
@@ -87,13 +77,13 @@ export default class MintBurnForm extends PureComponent {
 
     const {
       actionType
-    } = this.state
+    } = values
 
     return (
       <form className='transfer-tab__content' onSubmit={handleSubmit}>
         <Message
           message={`Your just ${lastAction && lastAction.actionType}ed ${lastAction && lastAction.mintBurnAmount} ${token.symbol} on ${tokenNetworkType} network`}
-          isOpen={this.actionSuccess()}
+          isOpen={this.actionSuccess(actionType)}
           subTitle=''
           clickHandler={
             actionType === 'mint'
@@ -103,7 +93,7 @@ export default class MintBurnForm extends PureComponent {
         />
         <Message
           message={'Oops, something went wrong'}
-          isOpen={this.actionFailed()}
+          isOpen={this.actionFailed(actionType)}
           subTitle=''
           clickHandler={
             actionType === 'mint'
@@ -115,14 +105,20 @@ export default class MintBurnForm extends PureComponent {
           <button
             disabled={!isOwner(token, accountAddress)}
             className={classNames('transfer-tab__actions__btn', { 'transfer-tab__actions__btn--active': actionType === 'mint' })}
-            onClick={() => this.handleMintOrBurn('mint')}
+            onClick={(e) => {
+              e.preventDefault()
+              setFieldValue('actionType', 'mint')
+            }}
           >
           Mint
           </button>
           <button
             disabled={!isOwner(token, accountAddress)}
             className={classNames('transfer-tab__actions__btn', { 'transfer-tab__actions__btn--active': actionType === 'burn' })}
-            onClick={() => this.handleMintOrBurn('burn')}
+            onClick={(e) => {
+              e.preventDefault()
+              setFieldValue('actionType', 'burn')
+            }}
           >
           Burn
           </button>
@@ -134,22 +130,20 @@ export default class MintBurnForm extends PureComponent {
               ? (
                 <Fragment>
                   <Field
-                    onFocus={() => setFieldTouched('mintAmount', true)}
                     className='transfer-tab__content__amount__field'
                     name='mintAmount'
                     placeholder='...'
                   />
-                  { actionType === 'mint' && errors && errors.mintAmount && <span className='input-error'>{errors.mintAmount}</span> }
+                  <ErrorMessage name="mintAmount" render={msg => <div className='input-error'>{msg}</div>} />
                 </Fragment>
               ) : (
                 <Fragment>
                   <Field
-                    onFocus={() => setFieldTouched('burnAmount', true)}
                     className='transfer-tab__content__amount__field'
                     name='burnAmount'
                     placeholder='...'
                   />
-                  { actionType === 'burn' && errors && errors.burnAmount && <span className='input-error'>{errors.burnAmount}</span> }
+                  <ErrorMessage name="burnAmount" render={msg => <div className='input-error'>{msg}</div>} />
                 </Fragment>
               )
           }

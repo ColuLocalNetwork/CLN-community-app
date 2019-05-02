@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
-import { Formik, Field } from 'formik'
-import { object, string } from 'yup'
+import { Formik, Field, ErrorMessage } from 'formik'
+import { object, string, number } from 'yup'
 import TransactionButton from 'components/common/TransactionButton'
 import Message from 'components/common/Message'
 
@@ -15,7 +15,7 @@ export default class TransferForm extends PureComponent {
 
     this.validationSchema = object().shape({
       to: string().normalize().label('To').required(),
-      amount: string().matches(/^\d+$/, 'Only numbers').label('Amount').required()
+      amount: string().matches(/^\d+$/, 'Only numbers allowed').label('Amount').required()
     })
   }
 
@@ -28,7 +28,7 @@ export default class TransferForm extends PureComponent {
     resetForm()
   }
 
-  renderForm = ({ handleSubmit, setFieldValue, setFieldTouched, values, errors }) => {
+  renderForm = ({ handleSubmit }) => {
     const {
       transactionStatus,
       transferMessage,
@@ -54,20 +54,18 @@ export default class TransferForm extends PureComponent {
         <div className='transfer-tab__content__to-field'>
           <span className='transfer-tab__content__to-field__text'>To</span>
           <Field
-            onFocus={() => setFieldTouched('to', true)}
             name='to'
             className='transfer-tab__content__to-field__input'
           />
-          { errors && errors.to && <span className='input-error'>{errors.to}</span> }
+          <ErrorMessage name="to" render={msg => <div className='input-error'>{msg}</div>} />
         </div>
         <div className='transfer-tab__content__amount'>
           <span className='transfer-tab__content__amount__text'>Amount</span>
           <Field
-            onFocus={() => setFieldTouched('amount', true)}
             name='amount'
             className='transfer-tab__content__amount__field'
           />
-          { errors && errors.amount && <span className='input-error'>{errors.amount}</span> }
+          <ErrorMessage name="amount" render={msg => <div className='input-error'>{msg}</div>} />
         </div>
 
         <div className='transfer-tab__content__button'>

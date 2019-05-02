@@ -21,7 +21,7 @@ export default class Contracts extends PureComponent {
         </h3>
         <div className='contracts__options'>
           {
-            ContractsType.map(({ label, value, text, key, readOnly, disabled }) => {
+            ContractsType.map(({ label, text, key, readOnly, disabled }) => {
               return (
                 <div key={label} className='contracts__checkbox'>
                   <input type='checkbox' className='input' id={key} checked={key && contracts[key] && contracts[key].checked} onChange={(e) => this.handleChange({ key, readOnly }, e.target.checked)} readOnly={readOnly} />
