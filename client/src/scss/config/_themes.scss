@@ -835,6 +835,12 @@ $themes: (
             @include xy-grid(vertical);
             @include flex-align(spaced, middle);
           }
+
+          @include breakpoint(small) {
+            width: 90%;
+            padding: 20px;
+          }
+
         }
 
         @include element(inner) {
@@ -844,19 +850,19 @@ $themes: (
             @include xy-grid();
             @include flex-align(left, middle);
           }
-    
-          @include breakpoint(small) {
-            width: 90%;
-          }
+  
         }
 
         @include element(text) {
-          height: 34px;
           font-size: 11px;
           line-height: 1.45;
           color: rgba(5, 40, 62, 0.6);
           text-align: center;
           margin-top: 1em;
+
+          @include breakpoint(medium up) {
+            height: 34px;
+          }
         }
   
         @include element(logo) {
