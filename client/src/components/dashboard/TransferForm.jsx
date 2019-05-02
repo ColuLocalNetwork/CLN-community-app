@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { Formik, Field, ErrorMessage } from 'formik'
-import { object, string, number } from 'yup'
+import { object, string } from 'yup'
 import TransactionButton from 'components/common/TransactionButton'
 import Message from 'components/common/Message'
 
@@ -57,7 +57,7 @@ export default class TransferForm extends PureComponent {
             name='to'
             className='transfer-tab__content__to-field__input'
           />
-          <ErrorMessage name="to" render={msg => <div className='input-error'>{msg}</div>} />
+          <ErrorMessage name='to' render={msg => <div className='input-error'>{msg}</div>} />
         </div>
         <div className='transfer-tab__content__amount'>
           <span className='transfer-tab__content__amount__text'>Amount</span>
@@ -65,7 +65,7 @@ export default class TransferForm extends PureComponent {
             name='amount'
             className='transfer-tab__content__amount__field'
           />
-          <ErrorMessage name="amount" render={msg => <div className='input-error'>{msg}</div>} />
+          <ErrorMessage name='amount' render={msg => <div className='input-error'>{msg}</div>} />
         </div>
 
         <div className='transfer-tab__content__button'>

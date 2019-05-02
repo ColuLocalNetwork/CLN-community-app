@@ -11,8 +11,7 @@ import classNames from 'classnames'
 export default class MintBurnForm extends PureComponent {
   constructor (props) {
     super(props)
-    console.log({props})
-    
+
     this.state = {
       actionType: 'mint'
     }
@@ -26,11 +25,11 @@ export default class MintBurnForm extends PureComponent {
     this.validationSchema = object().shape({
       actionType: mixed().oneOf(['mint', 'burn']),
       mintAmount: string().matches(/^\d+$/, 'Only numbers allowed').label('Amount').when('actionType', (actionType, schema) => {
-        return actionType === 'mint' ? schema.required() : schema.notRequired();
+        return actionType === 'mint' ? schema.required() : schema.notRequired()
       }),
       burnAmount: string().matches(/^\d+$/, 'Only numbers allowed').label('Amount').when('actionType', (actionType, schema) => {
-        return actionType === 'burn' ? schema.required() : schema.notRequired();
-      }),
+        return actionType === 'burn' ? schema.required() : schema.notRequired()
+      })
     })
   }
 
@@ -134,7 +133,7 @@ export default class MintBurnForm extends PureComponent {
                     name='mintAmount'
                     placeholder='...'
                   />
-                  <ErrorMessage name="mintAmount" render={msg => <div className='input-error'>{msg}</div>} />
+                  <ErrorMessage name='mintAmount' render={msg => <div className='input-error'>{msg}</div>} />
                 </Fragment>
               ) : (
                 <Fragment>
@@ -143,7 +142,7 @@ export default class MintBurnForm extends PureComponent {
                     name='burnAmount'
                     placeholder='...'
                   />
-                  <ErrorMessage name="burnAmount" render={msg => <div className='input-error'>{msg}</div>} />
+                  <ErrorMessage name='burnAmount' render={msg => <div className='input-error'>{msg}</div>} />
                 </Fragment>
               )
           }
