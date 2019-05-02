@@ -317,6 +317,7 @@
 	@include element(btn) {
 		margin-top: 1.5em;
 		> button {
+			width: auto;
 			font-size: 0.875em;
 			text-transform: uppercase;
 			padding: 0 1em;

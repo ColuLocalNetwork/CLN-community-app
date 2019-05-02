@@ -372,7 +372,6 @@ $themes: (
         align-items: center;
   
         @include element(title) {
-          // font-size: 30px;
           color: $dark;
           text-transform: capitalize;
           line-height: 1.29;
@@ -728,19 +727,14 @@ $themes: (
             width: 1px;
             height: 1px;
             opacity: 0;
-  
-            &:checked + .indicator {
-                background: $secondary;
-                // border: 1px solid $color-green;
-            }
+
             &:checked + .indicator--read-only {
-              background: $secondary;
+              background: $secondary url(/assets/images/checkbox_valid.svg) center;
               opacity: .5;
-              // border: 1px solid $color-green;
             }
             &:checked + .indicator:after {
-                opacity: 1;
-                // border: 1px solid $color-green;
+              background: $secondary url(/assets/images/checkbox_valid.svg) center;
+              opacity: 1;
             }
           }
   
@@ -770,7 +764,6 @@ $themes: (
               flex: 0 0 auto;
               width: 100%;
               height: 100%;
-              background-color: $secondary;
               opacity: 0;
             }
           }
@@ -831,7 +824,6 @@ $themes: (
           @include breakpoint(medium) {
             padding: 20px;
             width: 559px;
-            // height: 344px;
             @include xy-grid(vertical);
             @include flex-align(spaced, middle);
           }
@@ -859,6 +851,10 @@ $themes: (
           color: rgba(5, 40, 62, 0.6);
           text-align: center;
           margin-top: 1em;
+
+          .fa-info-circle {
+            color: $secondary;
+          }
 
           @include breakpoint(medium up) {
             height: 34px;

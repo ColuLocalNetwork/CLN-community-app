@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import FontAwesome from 'react-fontawesome'
 import BigNumber from 'bignumber.js'
 import Loader from 'components/Loader'
 import { REQUEST, PENDING, SUCCESS, FAILURE } from 'actions/constants'
@@ -97,7 +98,7 @@ export default class SummaryStep extends Component {
           </div>
 
           <div className='summary-step__text'>
-            <span>Your coin will be issued on the Ethereum {networkType}</span>
+            <span><FontAwesome name='info-circle' /> Your coin will be issued on the Ethereum {networkType}</span>
             <br />
             <span>After published a bridge will allow you to start using your coin on the Fuse-chain!</span>
           </div>
