@@ -17,9 +17,9 @@ export default class SummaryStep extends Component {
   renderTransactionStatus = (transactionStatus) => {
     switch (transactionStatus) {
       case REQUEST:
-        return (<button className='button button--normal' disabled>
-          Issue
-        </button>)
+        return (
+          <button className='button button--normal' disabled>Issue</button>
+        )
       case PENDING:
         return <Loader color='#3a3269' className='loader' />
       case SUCCESS:
@@ -56,7 +56,17 @@ export default class SummaryStep extends Component {
   }
 
   render () {
-    const { networkType, communitySymbol, communityLogo, totalSupply, communityName, contracts, createTokenSignature, transactionStatus, setNextStep } = this.props
+    const {
+      networkType,
+      communitySymbol,
+      communityLogo,
+      totalSupply,
+      communityName,
+      contracts, 
+      createTokenSignature,
+      transactionStatus,
+      setNextStep 
+    } = this.props
 
     const { showError } = this.state
     if (transactionStatus === PENDING) {

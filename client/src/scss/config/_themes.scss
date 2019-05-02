@@ -833,6 +833,14 @@ $themes: (
             padding: 20px;
           }
 
+          div.status.status--radius-all > div.status__button > button {
+            background-color: $secondary !important;
+
+            &:hover {
+              background-color: $hover !important;
+            }
+          }
+
         }
 
         @include element(inner) {
@@ -954,7 +962,16 @@ $themes: (
             margin-top: 1em;
           }
         }
-      
+
+        div > div > button.button-flip__front, div.congratulation > div.congratulation__btn > button {
+          background-color: $secondary !important;
+
+          &:hover {
+            background-color: $hover !important;
+          }
+        }
+
+        
       }
       
       @include block(progress) {
@@ -970,8 +987,8 @@ $themes: (
             width: 611px;
             min-height: 406px;
             @include xy-grid(vertical);
-            @include flex-align(justify, middle);
-            padding: 20px 50px;          
+            @include flex-align(spaced, middle);
+            padding: 20px 50px;
           }
     
           @include breakpoint(small only) {
@@ -1083,7 +1100,14 @@ $themes: (
         }
       }
     }
-    
+
+    .button-flip__wrapper > .button-flip > .button-flip__front, .status__button > button {
+      background-color: $secondary !important;
+
+      &:hover {
+        background-color: $hover !important;
+      }
+    }
   }
 }
 
