@@ -13,7 +13,7 @@ export default class MintBurnForm extends PureComponent {
     super(props)
 
     const { balance } = this.props
-    
+
     this.initialValues = {
       actionType: '',
       mintAmount: '',
