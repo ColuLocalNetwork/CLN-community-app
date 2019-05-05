@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { Formik, Field, ErrorMessage } from 'formik'
-import { object, string } from 'yup'
+import { object, string, number } from 'yup'
 import TransactionButton from 'components/common/TransactionButton'
 import Message from 'components/common/Message'
 
@@ -8,14 +8,16 @@ export default class TransferForm extends PureComponent {
   constructor (props) {
     super(props)
 
+    const { balance } = this.props
+
     this.initialValues = {
       to: '',
       amount: ''
     }
 
     this.validationSchema = object().shape({
-      to: string().normalize().label('To').required(),
-      amount: string().matches(/^\d+$/, 'Only numbers allowed').label('Amount').required()
+      to: string().normalize().label('To').required().isAddress(),
+      amount: number().max(parseInt(balance.replace(/,/g, ''))).required()
     })
   }
 
@@ -28,7 +30,7 @@ export default class TransferForm extends PureComponent {
     resetForm()
   }
 
-  renderForm = ({ handleSubmit }) => {
+  renderForm = ({ handleSubmit, errors, values, setFieldTouched, isSubmitting }) => {
     const {
       transactionStatus,
       transferMessage,
@@ -54,6 +56,7 @@ export default class TransferForm extends PureComponent {
         <div className='transfer-tab__content__to-field'>
           <span className='transfer-tab__content__to-field__text'>To</span>
           <Field
+            onFocus={() => setFieldTouched('to', true)}
             name='to'
             className='transfer-tab__content__to-field__input'
           />
@@ -62,14 +65,16 @@ export default class TransferForm extends PureComponent {
         <div className='transfer-tab__content__amount'>
           <span className='transfer-tab__content__amount__text'>Amount</span>
           <Field
+            onFocus={() => setFieldTouched('amount', true)}
             name='amount'
+            type='number'
             className='transfer-tab__content__amount__field'
           />
           <ErrorMessage name='amount' render={msg => <div className='input-error'>{msg}</div>} />
         </div>
 
         <div className='transfer-tab__content__button'>
-          <TransactionButton type='submit' />
+          <TransactionButton type='submit' disabled={isSubmitting} />
         </div>
       </form>
     )

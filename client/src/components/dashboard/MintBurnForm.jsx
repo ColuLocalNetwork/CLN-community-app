@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react'
 import { Formik, Field, ErrorMessage } from 'formik'
-import { object, string, mixed } from 'yup'
+import { object, mixed, number } from 'yup'
 import TransactionButton from 'components/common/TransactionButton'
 import Message from 'components/common/Message'
 import {FAILURE, SUCCESS, CONFIRMATION} from 'actions/constants'
@@ -12,10 +12,8 @@ export default class MintBurnForm extends PureComponent {
   constructor (props) {
     super(props)
 
-    this.state = {
-      actionType: 'mint'
-    }
-
+    const { balance } = this.props
+    
     this.initialValues = {
       actionType: '',
       mintAmount: '',
@@ -24,16 +22,16 @@ export default class MintBurnForm extends PureComponent {
 
     this.validationSchema = object().shape({
       actionType: mixed().oneOf(['mint', 'burn']),
-      mintAmount: string().matches(/^\d+$/, 'Only numbers allowed').label('Amount').when('actionType', (actionType, schema) => {
+      mintAmount: number().positive().label('Amount').when('actionType', (actionType, schema) => {
         return actionType === 'mint' ? schema.required() : schema.notRequired()
       }),
-      burnAmount: string().matches(/^\d+$/, 'Only numbers allowed').label('Amount').when('actionType', (actionType, schema) => {
+      burnAmount: number().max(parseInt(balance.replace(/,/g, ''))).label('Amount').when('actionType', (actionType, schema) => {
         return actionType === 'burn' ? schema.required() : schema.notRequired()
       })
     })
   }
 
-  onSubmit = async (values, { setFieldError, resetForm }) => {
+  onSubmit = async (values, { resetForm }) => {
     const { handleMintOrBurnClick } = this.props
     const {
       actionType
@@ -64,7 +62,7 @@ export default class MintBurnForm extends PureComponent {
     }
   }
 
-  renderForm = ({ handleSubmit, setFieldValue, setFieldError, setFieldTouched, values, errors, isSubmitting, touched }) => {
+  renderForm = ({ handleSubmit, setFieldValue, setFieldTouched, values, isSubmitting }) => {
     const {
       tokenNetworkType,
       token,
@@ -129,7 +127,9 @@ export default class MintBurnForm extends PureComponent {
               ? (
                 <Fragment>
                   <Field
+                    onFocus={() => setFieldTouched('mintAmount', true)}
                     className='transfer-tab__content__amount__field'
+                    type='number'
                     name='mintAmount'
                     placeholder='...'
                   />
@@ -138,8 +138,10 @@ export default class MintBurnForm extends PureComponent {
               ) : (
                 <Fragment>
                   <Field
+                    onFocus={() => setFieldTouched('burnAmount', true)}
                     className='transfer-tab__content__amount__field'
                     name='burnAmount'
+                    type='number'
                     placeholder='...'
                   />
                   <ErrorMessage name='burnAmount' render={msg => <div className='input-error'>{msg}</div>} />
@@ -149,7 +151,7 @@ export default class MintBurnForm extends PureComponent {
         </div>
         <div className='transfer-tab__content__button'>
           {
-            actionType && <TransactionButton type='submit' frontText={upperCase(actionType)} />
+            actionType && <TransactionButton type='submit' disabled={isSubmitting} frontText={upperCase(actionType)} />
           }
         </div>
       </form>

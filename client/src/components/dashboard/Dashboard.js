@@ -282,6 +282,7 @@ class Dashboard extends Component {
                     </div>
                     <hr className='transfer-tab__line' />
                     <MintBurnForm
+                      balance={balance ? formatWei(balance, 0) : 0}
                       handleMintOrBurnClick={this.handleMintOrBurnClick}
                       tokenNetworkType={tokenNetworkType}
                       token={token}

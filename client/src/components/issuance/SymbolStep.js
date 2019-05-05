@@ -31,6 +31,7 @@ export default class SymbolStep extends Component {
             id='communitySymbol'
             type='text'
             autoFocus
+            autoComplete='off'
             maxLength='4'
             minLength='2'
             defaultValue={this.state.customSymbol}
