@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react'
 import { Formik, Field, ErrorMessage } from 'formik'
-import { object, string, number } from 'yup'
 import TransactionButton from 'components/common/TransactionButton'
 import Message from 'components/common/Message'
+import transferShape from 'utils/validation/shapes/transfer'
 
 export default class TransferForm extends PureComponent {
   constructor (props) {
@@ -15,10 +15,7 @@ export default class TransferForm extends PureComponent {
       amount: ''
     }
 
-    this.validationSchema = object().shape({
-      to: string().normalize().label('To').required().isAddress(),
-      amount: number().max(parseInt(balance.replace(/,/g, ''))).required()
-    })
+    this.validationSchema = transferShape(balance && typeof balance.replace === 'function' ? balance.replace(/,/g, '') : 0)
   }
 
   onSubmit = async (values, { resetForm }) => {
@@ -56,7 +53,6 @@ export default class TransferForm extends PureComponent {
         <div className='transfer-tab__content__to-field'>
           <span className='transfer-tab__content__to-field__text'>To</span>
           <Field
-            onFocus={() => setFieldTouched('to', true)}
             name='to'
             className='transfer-tab__content__to-field__input'
           />
@@ -65,7 +61,6 @@ export default class TransferForm extends PureComponent {
         <div className='transfer-tab__content__amount'>
           <span className='transfer-tab__content__amount__text'>Amount</span>
           <Field
-            onFocus={() => setFieldTouched('amount', true)}
             name='amount'
             type='number'
             className='transfer-tab__content__amount__field'
