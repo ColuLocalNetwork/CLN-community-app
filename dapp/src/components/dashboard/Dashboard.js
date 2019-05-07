@@ -204,7 +204,8 @@ class Dashboard extends Component {
       metadata,
       history,
       match,
-      clearTransactionStatus
+      clearTransactionStatus,
+      error
     } = this.props
 
     const { tokenType } = token
@@ -254,6 +255,7 @@ class Dashboard extends Component {
                   </div>
                   <hr className='transfer-tab__line' />
                   <TransferForm
+                    error={error}
                     balance={balance ? formatWei(balance, 0) : 0}
                     transactionStatus={transactionStatus}
                     transferMessage={transferMessage}
@@ -282,6 +284,7 @@ class Dashboard extends Component {
                     </div>
                     <hr className='transfer-tab__line' />
                     <MintBurnForm
+                      error={error}
                       balance={balance ? formatWei(balance, 0) : 0}
                       handleMintOrBurnClick={this.handleMintOrBurnClick}
                       tokenNetworkType={tokenNetworkType}
@@ -315,15 +318,13 @@ class Dashboard extends Component {
             handleTransfer={this.handleTransfer}
             network={networkType}
           />
-          <div className='dashboard-entities'>
-            <EntityDirectory
-              history={this.props.history}
-              foreignTokenAddress={this.props.tokenAddress}
-              token={this.props.token}
-              loadBusinessListPopup={this.loadBusinessListPopup}
-              onlyOnFuse={this.onlyOnFuse}
-            />
-          </div>
+          <EntityDirectory
+            history={this.props.history}
+            foreignTokenAddress={this.props.tokenAddress}
+            token={this.props.token}
+            loadBusinessListPopup={this.loadBusinessListPopup}
+            onlyOnFuse={this.onlyOnFuse}
+          />
         </div>
         {
           this.props.token && accountAddress && this.props.dashboard.hasOwnProperty('userExists') &&

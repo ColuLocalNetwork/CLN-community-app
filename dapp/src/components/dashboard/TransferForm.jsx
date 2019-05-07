@@ -3,6 +3,7 @@ import { Formik, Field, ErrorMessage } from 'formik'
 import TransactionButton from 'components/common/TransactionButton'
 import Message from 'components/common/Message'
 import transferShape from 'utils/validation/shapes/transfer'
+import isEmpty from 'lodash/isEmpty'
 
 export default class TransferForm extends PureComponent {
   constructor (props) {
@@ -18,20 +19,30 @@ export default class TransferForm extends PureComponent {
     this.validationSchema = transferShape(balance && typeof balance.replace === 'function' ? balance.replace(/,/g, '') : 0)
   }
 
-  onSubmit = async (values, { resetForm }) => {
+  onSubmit = async (values) => {
     const { handleTransper } = this.props
-
     const { to, amount } = values
-
     await handleTransper({ to, amount })
-    resetForm()
   }
 
-  renderForm = ({ handleSubmit, errors, values, setFieldTouched, isSubmitting }) => {
+  transactionError = () => {
+    const { transactionStatus, transferMessage } = this.props
+    return transactionStatus && transactionStatus === 'FAILURE' && transferMessage
+  }
+
+  transactionDenied = () => {
+    const { error, transferMessage } = this.props
+    return this.transactionError() && transferMessage && error && typeof error.includes === 'function' && error.includes('denied')
+  }
+
+  transactionConfirmed = () => {
+    const { transactionStatus, transferMessage } = this.props
+    transactionStatus && (transactionStatus === 'SUCCESS' || transactionStatus === 'CONFIRMATION') && transferMessage
+  }
+
+  renderForm = ({ handleSubmit, isValid }) => {
     const {
-      transactionStatus,
-      transferMessage,
-      closeMessage
+      closeMessage,
     } = this.props
 
     return (
@@ -39,14 +50,21 @@ export default class TransferForm extends PureComponent {
 
         <Message
           message={'Your money has been sent successfully'}
-          isOpen={transactionStatus && (transactionStatus === 'SUCCESS' || transactionStatus === 'CONFIRMATION') && transferMessage}
+          isOpen={this.transactionConfirmed()}
           clickHandler={closeMessage}
           subTitle=''
         />
         <Message
           message={'Oops, something went wrong'}
           subTitle=''
-          isOpen={transactionStatus && transactionStatus === 'FAILURE' && transferMessage}
+          isOpen={this.transactionError()}
+          clickHandler={closeMessage}
+        />
+
+        <Message
+          message={'Oh no'}
+          subTitle={`You reject the action, That’s ok, try next time!`}
+          isOpen={this.transactionDenied()}
           clickHandler={closeMessage}
         />
 
@@ -69,7 +87,7 @@ export default class TransferForm extends PureComponent {
         </div>
 
         <div className='transfer-tab__content__button'>
-          <TransactionButton type='submit' disabled={isSubmitting} />
+          <TransactionButton type='submit' disabled={!isValid} />
         </div>
       </form>
     )
@@ -82,6 +100,7 @@ export default class TransferForm extends PureComponent {
         validationSchema={this.validationSchema}
         render={this.renderForm}
         onSubmit={this.onSubmit}
+        isInitialValid={false}
       />
     )
   }
