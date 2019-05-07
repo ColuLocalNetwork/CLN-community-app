@@ -59,7 +59,8 @@ module.exports = {
           return {
             HomeBridgeFactory: '0xFb5CC1688Ec06c57cbAB6cC34c33413154A666Fa',
             SimpleListFactory: '0x9FA04c6fc70B0ae20dAD9D7b36161bf1EdcbA0E2',
-            BridgeMapper: '0x9cb2820EA169D37aFa13C097776bDDB9b19d3C14'
+            BridgeMapper: '0x9cb2820EA169D37aFa13C097776bDDB9b19d3C14',
+            UsersRegistry: '0xD54C1B417502CDe8275cBf91B0A8dC820ccb8054'
           }
         }
       })
