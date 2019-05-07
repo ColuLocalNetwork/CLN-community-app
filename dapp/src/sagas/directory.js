@@ -48,19 +48,22 @@ function * getList ({ tokenAddress }) {
 
   yield put({ type: actions.GET_LIST.SUCCESS,
     response: {
-      listAddress: isZeroAddress(listAddress) ? null : listAddress
+      // listAddress: isZeroAddress(listAddress) ? null : listAddress
+      listAddress: '0x9662B31cd25f75dc421672C6F70A37124c07Fe39'
     } })
   return listAddress
 }
 
 function * addEntity ({ listAddress, data }) {
+  const communityAddress = '0xC6479913031d7cD56357db3be974AeA0ce086423'
   const accountAddress = yield select(getAccountAddress)
-  const SimpleListContract = getContract({ abiName: 'SimpleList',
-    address: listAddress
+  const CommunityContract = getContract({ abiName: 'Community',
+    address: communityAddress
   })
 
   const { hash } = yield call(createMetadata, { metadata: data })
-  const method = SimpleListContract.methods.addEntity(hash)
+  const userRoles = '0x0000000000000000000000000000000000000000000000000000000000000001'
+  const method = CommunityContract.methods.addEntity(data.account, userRoles)
   const transactionPromise = method.send({
     from: accountAddress
   })
