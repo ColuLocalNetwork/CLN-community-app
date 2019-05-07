@@ -1,6 +1,7 @@
-import React, { Component, useEffect } from 'react'
+import React, { Component, Fragment, useEffect } from 'react'
 import FontAwesome from 'react-fontawesome'
 import { connect } from 'react-redux'
+import classNames from 'classnames'
 import Loader from 'components/Loader'
 import { getClnBalance, getAccountAddress } from 'selectors/accounts'
 import { REQUEST, PENDING, SUCCESS } from 'actions/constants'
@@ -15,6 +16,22 @@ import { isOwner } from 'utils/token'
 import { fetchHomeToken } from 'actions/bridge'
 import plusIcon from 'images/add.svg'
 import { getTransaction } from 'selectors/transaction'
+import filterIcon from 'images/filter.svg'
+
+const filterOptions = [
+  {
+    label: 'Community users',
+    value: 'confirmed'
+  },
+  {
+    label: 'Pending users',
+    value: 'pending'
+  },
+  {
+    label: 'Community admins',
+    value: 'admins'
+  }
+]
 
 const EntityDirectoryDataFetcher = (props) => {
   useEffect(() => {
@@ -43,9 +60,14 @@ const EntityDirectoryDataFetcher = (props) => {
 class EntityDirectory extends Component {
   state = {
     showSearch: false,
-    search: ''
+    search: '',
+    showUsers: false,
+    filters: {
+      pending: false,
+      confirmed: true,
+      admins: false
+    }
   }
-  setQuitDashboard = () => this.props.history.goBack()
 
   showHomePage = (address) => {
     this.props.history.push('/')
@@ -71,11 +93,20 @@ class EntityDirectory extends Component {
   renderTransactionStatus = () => {
     if (this.props.signatureNeeded || this.props.transactionStatus === PENDING) {
       return (
-        <div className='dashboard-entity-loader'>
+        <div className='entities__loader'>
           <Loader color='#3a3269' className='loader' />
         </div>
       )
     }
+  }
+
+  handleRadioInput = (e) => {
+    const filters = {
+      pending: false,
+      confirmed: false,
+      admins: false
+    }
+    this.setState({ filters: { ...filters, [e.target.value]: true } })
   }
 
   setShowingSearch = () => this.setState({ showSearch: !this.state.showSearch })
@@ -88,7 +119,7 @@ class EntityDirectory extends Component {
         this.state.search.toLowerCase()) !== -1
     ) : entities
 
-  renderBusiness (entities) {
+  renderBusiness(entities) {
     if (entities.length) {
       return (
         entities.map((entity, index) =>
@@ -101,7 +132,57 @@ class EntityDirectory extends Component {
           />
         ))
     } else {
-      return <p className='emptyText'>There is no any entities</p>
+      return <p className='entities__items__empty'>There is no any entities</p>
+    }
+  }
+
+  renderItems = () => {
+    const { entities, transactionStatus } = this.props
+    const filteredBusiness = this.filterBySearch(this.state.search, entities)
+    
+    if (entities && entities.length) {
+      return this.renderBusiness(filteredBusiness)
+    } else {
+      return (
+        <div className='entities__empty-list'>
+          <div className='entities__empty-list__title'>Kinda sad in here, isn’t it?</div>
+          <div className='entities__empty-list__text'>You can keep watching Netflix later, add a business and let’s start Rock’n’Roll!</div>
+          <button
+            className='entities__empty-list__btn'
+            onClick={this.handleAddBusiness}
+            disabled={transactionStatus === REQUEST || transactionStatus === PENDING}
+          >
+            Add new business
+          </button>
+        </div>
+      )
+    }
+  }
+
+  renderContent = () => {
+    const { listAddress } = this.props
+
+    if (!listAddress) {
+      return (
+        <Fragment>
+          <div className='entities__not-deploy'>
+            <p className='entities__not-deploy__title'>Businesses List</p>
+            <p className='entities__not-deploy__text'>This thing needs be activated some kind of text and explanation</p>
+            <button
+              className='entities__not-deploy__btn'
+              onClick={this.props.loadBusinessListPopup}
+              disabled={!this.canDeployBusinessList()}
+            >
+              Deploy business list
+            </button>
+          </div>
+          <div className='entities__not-deploy__placeholder'>
+            <img src={EmptyBusinessList} />
+          </div>
+        </Fragment>
+      )
+    } else {
+      return this.renderItems()
     }
   }
 
@@ -109,94 +190,94 @@ class EntityDirectory extends Component {
     isOwner(this.props.token, this.props.accountAddress) &&
     this.props.homeTokenAddress
 
-  render () {
+  render() {
     const { network: { networkType } } = this.props
+    const { showUsers, filters } = this.state
 
-    const business = this.props.entities
-    const filteredBusiness = this.filterBySearch(this.state.search, business)
     return (
-      <div className='dashboard-entity-container'>
-        <button
-          className='quit-button ctrl-btn'
-          onClick={this.showHomePage}
-        >
-          <FontAwesome className='ctrl-icon' name='times' />
-        </button>
-        {!this.props.listAddress
-          ? <div className='dashboard-entity-content'>
-            <p className='dashboard-entity-content-title'>
-              Businesses List
-            </p>
-            <p className='dashboard-entity-content-text'>
-              This thing needs be activated some kind of text and explanation
-            </p>
-            <button
-              className='dashboard-transfer-btn'
-              onClick={this.props.loadBusinessListPopup}
-              disabled={!this.canDeployBusinessList()}
-            >
-              Deploy business list
-            </button>
-          </div>
-          : (
-            <React.Fragment>
-              <div className='dashboard-entity-content'>
-                <div className='dashboard-entity-content-flex'>
-                  <p className='dashboard-entity-content-title'>Businesses List</p>
-                  <button
-                    className='btn-entity-adding'
-                    onClick={this.handleAddBusiness}
-                    disabled={this.props.transactionStatus === REQUEST || this.props.transactionStatus === PENDING}
-                  >
+      <Fragment>
+        <div className='entities__wrapper'>
+          <div className='entities__container'>
+            <div className='entities__actions'>
+              <div className='entities__actions__filter'>
+                <p className='entities__actions__filter__icon'><img src={filterIcon} /></p>
+                <span>Filter&nbsp;|&nbsp;</span><span>Community users</span>
+                <div className='filter-options'>
+                  <ul className='options'>
                     {
-                      networkType === 'fuse'
-                        ? (
-                          <span className='dashboard-entity-content-plus-icon'>
-                            <a style={{ backgroundImage: `url(${plusIcon})` }} />
-                          </span>
-                        ) : (
-                          <span className='dashboard-entity-content-plus-icon'>
-                            <FontAwesome name='plus-circle' />
-                          </span>
+                      filterOptions.map(({ label, value }) => {
+                        return (
+                          <li key={value} className='options__item'>
+                            <label>{label}
+                            <input
+                              type='radio'
+                              name='filter'
+                              checked={filters[value]}
+                              value={value}
+                              onChange={this.handleRadioInput}
+                            />
+                              <span></span>
+                            </label>
+                          </li>
                         )
-                    } New Business
-                  </button>
-                </div>
-                <div className='dashboard-entity-search-content'>
-                  <button className='btn-entity-search' onClick={() => this.setShowingSearch()}>
-                    <FontAwesome name='search' />
-                  </button>
-                  <input value={this.state.search} onChange={this.setSearchValue} placeholder='Search a business...' />
+                      })
+                    }
+                  </ul>
                 </div>
               </div>
-              {business.length ? this.renderBusiness(filteredBusiness)
-                : <div className='dashboard-empty'>
-                  <div className='dashboard-empty-title'>Kinda sad in here, isn’t it?</div>
-                  <div className='dashboard-empty-text'>You can keep watching Netflix later, add a business and let’s start Rock’n’Roll!</div>
-                  <button
-                    className='dashboard-transfer-btn'
-                    onClick={this.handleAddBusiness}
-                    disabled={this.props.transactionStatus === REQUEST || this.props.transactionStatus === PENDING}
-                  >
-                    Add new business
-                  </button>
-                </div>
-              }
-            </React.Fragment>
-          )}
-        {this.renderTransactionStatus()}
-        {!this.props.listAddress && <div className='dashboard-empty-list'>
-          <img src={EmptyBusinessList} />
-        </div>}
-        <EntityDirectoryDataFetcher
-          fetchHomeToken={this.props.fetchHomeToken}
-          getList={this.props.getList}
-          listAddress={this.props.listAddress}
-          homeTokenAddress={this.props.homeTokenAddress}
-          foreignTokenAddress={this.props.foreignTokenAddress}
-          fetchBusinesses={this.props.fetchBusinesses}
-          transactionStatus={this.props.transactionStatus} />
-      </div>
+              <div className='entities__actions__buttons'>
+                <button
+                  className={classNames('entities__actions__buttons__btn', { 'entities__actions__buttons__btn--active': !showUsers })}
+                  onClick={() => this.setState({ showUsers: false })}
+                >Merchant</button>
+                <button
+                  className={classNames('entities__actions__buttons__btn', { 'entities__actions__buttons__btn--active': showUsers })}
+                  onClick={() => this.setState({ showUsers: true })}
+                  >User</button>
+              </div>
+              <div className='entities__actions__add'>
+                {
+                  networkType === 'fuse'
+                    ? (
+                      <span onClick={this.handleAddBusiness}>
+                        <a style={{ backgroundImage: `url(${plusIcon})` }} />
+                      </span>
+                    ) : (
+                      <span onClick={this.handleAddBusiness}>
+                        <FontAwesome name='plus-circle' />
+                      </span>
+                    )
+                }
+                {showUsers ? 'Add new user' : 'Add new business'}
+              </div>
+            </div>
+            <div className='entities__search'>
+              <button className='entities__search__icon' onClick={() => this.setShowingSearch()}>
+                <FontAwesome name='search' />
+              </button>
+              <input
+                value={this.state.search}
+                onChange={this.setSearchValue}
+                placeholder={showUsers ? 'Search a user...' : 'Search a business...'}
+              />
+            </div>
+            <div className='entities__items'>
+              {this.renderContent()}
+              {this.renderTransactionStatus()}
+            </div>
+          </div>
+    
+          <EntityDirectoryDataFetcher
+            fetchHomeToken={this.props.fetchHomeToken}
+            getList={this.props.getList}
+            listAddress={this.props.listAddress}
+            homeTokenAddress={this.props.homeTokenAddress}
+            foreignTokenAddress={this.props.foreignTokenAddress}
+            fetchBusinesses={this.props.fetchBusinesses}
+            transactionStatus={this.props.transactionStatus}
+          />
+        </div>
+      </Fragment>
     )
   }
 }
