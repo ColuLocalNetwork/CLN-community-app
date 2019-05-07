@@ -48,8 +48,7 @@ function * getList ({ tokenAddress }) {
 
   yield put({ type: actions.GET_LIST.SUCCESS,
     response: {
-      // listAddress: isZeroAddress(listAddress) ? null : listAddress
-      listAddress: '0x9662B31cd25f75dc421672C6F70A37124c07Fe39'
+      listAddress: isZeroAddress(listAddress) ? null : listAddress
     } })
   return listAddress
 }
@@ -62,6 +61,8 @@ function * addEntity ({ listAddress, data }) {
   })
 
   const { hash } = yield call(createMetadata, { metadata: data })
+  // TEMP:
+  console.log(hash)
   const userRoles = '0x0000000000000000000000000000000000000000000000000000000000000001'
   const method = CommunityContract.methods.addEntity(data.account, userRoles)
   const transactionPromise = method.send({
