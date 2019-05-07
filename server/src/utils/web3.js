@@ -19,6 +19,7 @@ const createWeb3 = (providerUrl) => {
 const send = async (web3, bridgeType, method, options) => {
   const { from } = options
   const gas = await method.estimateGas({ from })
+  const gasPrice = bridgeType === 'home' ? '1000000000' : undefined
   const account = await Account.findOneOrCreate({ bridgeType, address: from })
   let receipt
   try {
@@ -26,7 +27,7 @@ const send = async (web3, bridgeType, method, options) => {
   } catch (error) {
     const nonce = await web3.eth.getTransactionCount(from)
     account.nonce = nonce
-    receipt = await method.send({ ...options, gas, nonce: account.nonce })
+    receipt = await method.send({ gasPrice, gas, ...options, nonce: account.nonce })
   }
   account.nonce++
   await account.save()

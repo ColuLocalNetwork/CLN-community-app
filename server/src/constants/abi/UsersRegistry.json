@@ -1,0 +1,212 @@
+[
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x715018a6"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x8da5cb5b"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "isOwner",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x8f32d59b"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "users",
+    "outputs": [
+      {
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0xa87430ba"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xf2fde38b"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "userUri",
+        "type": "string"
+      }
+    ],
+    "name": "UserAdded",
+    "type": "event",
+    "signature": "0xa56e21173460286ea98fc3defc7671b9b8e2ff0c6acea8d6ed30b343724e23fa"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "UserRemoved",
+    "type": "event",
+    "signature": "0xe9dce8c992623ce791725b21e857e33248d1f190a25b5168313420eebdaae99d"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "userUri",
+        "type": "string"
+      }
+    ],
+    "name": "UserUpdated",
+    "type": "event",
+    "signature": "0xd6136f3cad7c60bfc24bbf1548f39f766ca8bce104bf9adde3deb6237dec51df"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event",
+    "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_account",
+        "type": "address"
+      },
+      {
+        "name": "_userUri",
+        "type": "string"
+      }
+    ],
+    "name": "addUser",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x4b68d431"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_account",
+        "type": "address"
+      }
+    ],
+    "name": "removeUser",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x98575188"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_account",
+        "type": "address"
+      },
+      {
+        "name": "_userUri",
+        "type": "string"
+      }
+    ],
+    "name": "updateUser",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xb0889819"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_userUri",
+        "type": "string"
+      }
+    ],
+    "name": "join",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x6a786b07"
+  }
+]

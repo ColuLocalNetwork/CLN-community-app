@@ -1,12 +1,14 @@
 const mongoose = require('mongoose')
-const deployBridge = require('@utils/bridge').deployBridge
-const deployMembersList = require('@utils/membersList').deployMembersList
-const addError = require('@utils/tokenProgress').addError
+const { deployBridge } = require('@utils/bridge')
+const { deployTransferManager } = require('@utils/transferManager')
+const { addError } = require('@utils/tokenProgress')
+const { transferOwnership } = require('@utils/token')
 const Token = mongoose.model('Token')
 
 const deployFunctions = {
   bridge: deployBridge,
-  membersList: deployMembersList
+  membersList: deployTransferManager,
+  transferOwnership: transferOwnership
 }
 
 const stepsOrder = ['bridge', 'membersList']
@@ -28,7 +30,7 @@ const deploy = async (tokenProgress, steps) => {
       } else {
         try {
           const deployFunction = deployFunctions[step]
-          await deployFunction(token)
+          await deployFunction(token, steps[step])
         } catch (error) {
           console.log(error)
           return addError(step, tokenProgress.tokenAddress, `step ${step} failed`)
