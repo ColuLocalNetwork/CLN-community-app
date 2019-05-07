@@ -37,8 +37,9 @@ class IssuanceWizard extends Component {
         label: 'Members list',
         checked: false,
         key: 'membersList'
-      }
+      },
     },
+    isOpen: false,
     currentDeploy: 'tokenIssued'
   }
 
@@ -77,7 +78,8 @@ class IssuanceWizard extends Component {
       symbol: this.state.communitySymbol,
       totalSupply: new BigNumber(this.state.totalSupply).multipliedBy(1e18)
     }
-    const { contracts } = this.state
+    const { contracts, isOpen } = this.state
+    
     const steps = Object.keys(contracts)
       .filter((contractName) => contracts[contractName].checked)
       .reduce((steps, contractName) => {
@@ -88,6 +90,7 @@ class IssuanceWizard extends Component {
         return steps
       }, {})
 
+    // contracts[contractName].key === 'membersList' && !isOpen ? { isClosed: true } : true
     const metadata = { communityLogo: this.state.communityLogo.name }
     this.props.createTokenWithMetadata(tokenData, metadata, this.state.communityType.value, steps)
   }
@@ -132,6 +135,10 @@ class IssuanceWizard extends Component {
     this.setState({ contracts: { ...contracts, [key]: { ...contracts[key], checked: value } } })
   }
 
+  setCommunityPrivacy = isOpen => {
+    this.setState({ isOpen })
+  }
+
   renderStepContent = () => {
     const {
       transactionStatus,
@@ -148,7 +155,8 @@ class IssuanceWizard extends Component {
       communitySymbol,
       totalSupply,
       contracts,
-      currentDeploy
+      currentDeploy,
+      isOpen
     } = this.state
 
     switch (activeStep) {
@@ -186,6 +194,8 @@ class IssuanceWizard extends Component {
       case 3:
         return (
           <Contracts
+            isOpen={isOpen}
+            setCommunityPrivacy={this.setCommunityPrivacy}
             contracts={contracts}
             setContracts={this.setContracts}
             setNextStep={this.setNextStep}
