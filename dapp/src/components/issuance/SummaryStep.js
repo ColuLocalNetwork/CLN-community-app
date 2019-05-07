@@ -8,6 +8,7 @@ import ReactGA from 'services/ga'
 import CommunityLogo from 'components/elements/CommunityLogo'
 import TransactionButton from 'components/common/TransactionButton'
 import Message from 'components/common/Message'
+import contractIcon from 'images/contract.svg'
 
 export default class SummaryStep extends Component {
   state = {
@@ -37,7 +38,7 @@ export default class SummaryStep extends Component {
     totalSupply: new BigNumber(this.props.totalSupply.toString()).multipliedBy(1e18)
   })
 
-  componentDidMount () {
+  componentDidMount() {
     ReactGA.event({
       category: 'Issuance',
       action: 'Load',
@@ -45,8 +46,8 @@ export default class SummaryStep extends Component {
     })
   }
 
-  componentDidUpdate (prevProps) {
-    if (this.transactionStatus === SUCCESS && prevProps.transactionStatus !== SUCCESS) {
+  componentDidUpdate(prevProps) {
+    if (this.props.transactionStatus === SUCCESS && prevProps.transactionStatus !== SUCCESS) {
       ReactGA.event({
         category: 'Issuance',
         action: 'Load',
@@ -55,7 +56,7 @@ export default class SummaryStep extends Component {
     }
   }
 
-  render () {
+  render() {
     const {
       networkType,
       communitySymbol,
@@ -98,10 +99,16 @@ export default class SummaryStep extends Component {
               </div>
               <div className='summary-step__content__item'>
                 <h4 className='summary-step__content__title'>Contracts</h4>
-                <div>
-                  <ul>
-                    {contractsItems.map(item => <li key={item}>{item}</li>)}
-                  </ul>
+                <div className='summary-step__content__contracts'>
+
+                  {
+                    contractsItems.map(item => (
+                      <div key={item}>
+                        <span className='summary-step__content__contracts__icon'><img src={contractIcon} /></span>
+                        {item}
+                      </div>
+                    ))
+                  }
                 </div>
               </div>
             </div>
