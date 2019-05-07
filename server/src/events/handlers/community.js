@@ -4,6 +4,7 @@ const Entity = mongoose.model('Entity')
 const handleTransferManagerSet = async (event) => {
   const token = event.address
   const communityAddress = event.returnValues.transferManager
+  console.log({ token, communityAddress })
 }
 
 const getEntityProps = (roles) => ({
