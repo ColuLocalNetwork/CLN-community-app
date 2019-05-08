@@ -1,6 +1,6 @@
 const givenWeb3 = require('@services/web3')
 const { web3, from, send } = require('@services/web3/home')
-const BasicTokenAbi = require('@constants/abi/BasicToken')
+const BasicTokenAbi = require('@fuse/token-factory-contracts/build/abi/BasicToken')
 
 const fetchTokenData = async (address) => {
   const tokenContractInstance = new givenWeb3.eth.Contract(BasicTokenAbi, address)
