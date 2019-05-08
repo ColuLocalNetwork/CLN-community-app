@@ -3,8 +3,8 @@ const Bridge = mongoose.model('Bridge')
 const Community = mongoose.model('Community')
 // const { handleReceipt } = require('@events/handlers')
 const { web3, from, send } = require('@services/web3/home')
-const CommunityTransferManagerABI = require('@constants/abi/CommunityTransferManager.json')
-// const IRestrictedTokenABI = require('@constants/abi/IRestrictedToken.json')
+const CommunityTransferManagerABI = require('@fuse/entities-contracts/build/abi/CommunityTransferManager')
+// const IRestrictedTokenABI = require('@fuse/entities-contracts/build/abi/IRestrictedToken')
 const CommunityTransferManagerBytecode = require('@constants/bytecode/CommunityTransferManager.json').data
 
 const deployTransferManager = async (token, step) => {
