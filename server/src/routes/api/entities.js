@@ -13,12 +13,11 @@ router.put('/:account', async (req, res) => {
 
   await addUser(account, uri)
 
-  const entity = await Entity.updateOne({ account }, { uri, type, name })
+  const entity = await Entity.findOneAndUpdate({ account }, { uri, type, name }, { new: true })
   return res.json({ data: entity })
 })
 
 router.get('/:account', async (req, res, next) => {
-  // const { listAddress, hash } = req.params
   const { account } = req.params
   const business = await Entity.findOne({ account }).lean()
 
