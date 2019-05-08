@@ -5,7 +5,7 @@ const Community = mongoose.model('Community')
 const { web3, from, send } = require('@services/web3/home')
 const CommunityTransferManagerABI = require('@fuse/entities-contracts/build/abi/CommunityTransferManager')
 // const IRestrictedTokenABI = require('@fuse/entities-contracts/build/abi/IRestrictedToken')
-const CommunityTransferManagerBytecode = require('@constants/bytecode/CommunityTransferManager.json').data
+const CommunityTransferManagerBytecode = require('@fuse/entities-contracts/build/bytecode/CommunityTransferManager')
 
 const deployTransferManager = async (token, step) => {
   console.log('Deploying community transfer manager')
