@@ -1,11 +1,11 @@
 const roles = require('./roles')
 
-const hasRoles = (entityRoles, rolesToCheck) => {
-  const sameRoles = parseInt(entityRoles, 16) & parseInt(rolesToCheck, 16)
-  return sameRoles === parseInt(rolesToCheck, 16)
+const hasRole = (roles, role) => {
+  const sameRoles = parseInt(roles, 16) & parseInt(role, 16)
+  return sameRoles === parseInt(role, 16)
 }
 
 module.exports = {
   roles,
-  hasRoles
+  hasRole
 }

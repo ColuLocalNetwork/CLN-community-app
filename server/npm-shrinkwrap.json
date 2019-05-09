@@ -12,10 +12,13 @@
         "regenerator-runtime": "^0.12.0"
       }
     },
+    "@fule/roles": {
+      "version": "file:../packages/roles"
+    },
     "@fuse/entities-contracts": {
       "version": "file:../contracts/entities",
       "requires": {
-        "openzeppelin-solidity": "^2.0.1",
+        "openzeppelin-solidity": "2.0.1",
         "truffle": "^5.0.14",
         "truffle-hdwallet-provider": "^1.0.8"
       }

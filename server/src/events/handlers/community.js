@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Entity = mongoose.model('Entity')
+const { hasRole, roles: { ADMIN_ROLE } } = require('@fuse/roles')
 
 const handleTransferManagerSet = async (event) => {
   const token = event.address
@@ -7,15 +8,11 @@ const handleTransferManagerSet = async (event) => {
   console.log({ token, communityAddress })
 }
 
-const getEntityProps = (roles) => ({
-  isAdmin: true
-})
-
 const handleEntityAdded = async (event) => {
   const communityAddress = event.address
   const { roles, account } = event.returnValues
 
-  const { isAdmin } = getEntityProps(roles)
+  const isAdmin = hasRole(roles, ADMIN_ROLE)
   return new Entity({
     communityAddress,
     account,
