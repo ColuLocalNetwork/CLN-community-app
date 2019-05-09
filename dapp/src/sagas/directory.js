@@ -48,13 +48,14 @@ function * getList ({ tokenAddress }) {
 
   yield put({ type: actions.GET_LIST.SUCCESS,
     response: {
-      listAddress: isZeroAddress(listAddress) ? null : listAddress
+      // listAddress: isZeroAddress(listAddress) ? null : listAddress
+      listAddress: '0xe76810AE61D68b1d06B1eC4946d358F4092565d3'
     } })
   return listAddress
 }
 
 function * addEntity ({ listAddress, data }) {
-  const communityAddress = '0xC6479913031d7cD56357db3be974AeA0ce086423'
+  const communityAddress = '0xe76810AE61D68b1d06B1eC4946d358F4092565d3'
   const accountAddress = yield select(getAccountAddress)
   const CommunityContract = getContract({ abiName: 'Community',
     address: communityAddress
