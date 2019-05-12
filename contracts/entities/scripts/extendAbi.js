@@ -10,7 +10,7 @@ const extendWithEvents = (contractToExtend, ...contracts) => {
   for (let contract of contracts) {
     const abi = require(path.join(abiPath, contract))
     const events = filterEvents(abi)
-    abiToExtend = [...abi, ...events]
+    abiToExtend = [...abiToExtend, ...events]
   }
   fs.writeFileSync(path.join(abiPath, contractToExtend + 'WithEvents.json'), JSON.stringify(abiToExtend, null, 4))
 }
