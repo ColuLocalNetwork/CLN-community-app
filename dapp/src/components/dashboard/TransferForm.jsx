@@ -3,7 +3,6 @@ import { Formik, Field, ErrorMessage } from 'formik'
 import TransactionButton from 'components/common/TransactionButton'
 import Message from 'components/common/Message'
 import transferShape from 'utils/validation/shapes/transfer'
-import isEmpty from 'lodash/isEmpty'
 
 export default class TransferForm extends PureComponent {
   constructor (props) {
@@ -37,12 +36,12 @@ export default class TransferForm extends PureComponent {
 
   transactionConfirmed = () => {
     const { transactionStatus, transferMessage } = this.props
-    transactionStatus && (transactionStatus === 'SUCCESS' || transactionStatus === 'CONFIRMATION') && transferMessage
+    return transactionStatus && (transactionStatus === 'SUCCESS' || transactionStatus === 'CONFIRMATION') && transferMessage
   }
 
   renderForm = ({ handleSubmit, isValid }) => {
     const {
-      closeMessage,
+      closeMessage
     } = this.props
 
     return (

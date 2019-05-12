@@ -37,7 +37,7 @@ class IssuanceWizard extends Component {
         label: 'Members list',
         checked: false,
         key: 'membersList'
-      },
+      }
     },
     isOpen: false,
     currentDeploy: 'tokenIssued'
@@ -79,7 +79,7 @@ class IssuanceWizard extends Component {
       totalSupply: new BigNumber(this.state.totalSupply).multipliedBy(1e18)
     }
     const { contracts, isOpen } = this.state
-    
+
     const steps = Object.keys(contracts)
       .filter((contractName) => contracts[contractName].checked)
       .reduce((steps, contractName) => {

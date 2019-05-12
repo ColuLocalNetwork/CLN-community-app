@@ -65,7 +65,7 @@ const EntityDirectoryDataFetcher = (props) => {
 }
 
 class EntityDirectory extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
