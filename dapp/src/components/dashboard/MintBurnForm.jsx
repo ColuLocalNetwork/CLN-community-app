@@ -19,7 +19,7 @@ export default class MintBurnForm extends PureComponent {
       mintAmount: '',
       burnAmount: ''
     }
-    
+
     this.validationSchema = mintBurnShape(balance && typeof balance.replace === 'function' ? balance.replace(/,/g, '') : 0)
   }
 
@@ -69,7 +69,7 @@ export default class MintBurnForm extends PureComponent {
       lastAction,
       accountAddress,
       closeMintMessage,
-      closeBurnMessage,
+      closeBurnMessage
     } = this.props
 
     const {
@@ -78,7 +78,7 @@ export default class MintBurnForm extends PureComponent {
 
     return (
       <form className='transfer-tab__content' onSubmit={handleSubmit}>
-        
+
         <Message
           message={`Your just ${lastAction && lastAction.actionType}ed ${lastAction && lastAction.mintBurnAmount} ${token.symbol} on ${tokenNetworkType} network`}
           isOpen={this.transactionConfirmed(actionType)}

@@ -38,7 +38,7 @@ export default class SummaryStep extends Component {
     totalSupply: new BigNumber(this.props.totalSupply.toString()).multipliedBy(1e18)
   })
 
-  componentDidMount() {
+  componentDidMount () {
     ReactGA.event({
       category: 'Issuance',
       action: 'Load',
@@ -46,7 +46,7 @@ export default class SummaryStep extends Component {
     })
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate (prevProps) {
     if (this.props.transactionStatus === SUCCESS && prevProps.transactionStatus !== SUCCESS) {
       ReactGA.event({
         category: 'Issuance',
@@ -56,7 +56,7 @@ export default class SummaryStep extends Component {
     }
   }
 
-  render() {
+  render () {
     const {
       networkType,
       communitySymbol,
