@@ -1,18 +1,6 @@
+const path = require('path')
+const { extendAbiWithEvents } = require('@fuse/contract-utils')
 
-const fs = require('fs')
-var path = require('path')
+const relPath = path.join(__dirname, '../')
 
-const filterEvents = (abi) => abi.filter(({ type }) => type === 'event')
-
-const extendWithEvents = (contractToExtend, ...contracts) => {
-  const abiPath = path.join(__dirname, '../build/abi')
-  let abiToExtend = require(path.join(abiPath, contractToExtend))
-  for (let contract of contracts) {
-    const abi = require(path.join(abiPath, contract))
-    const events = filterEvents(abi)
-    abiToExtend = [...abiToExtend, ...events]
-  }
-  fs.writeFileSync(path.join(abiPath, contractToExtend + 'WithEvents.json'), JSON.stringify(abiToExtend, null, 4))
-}
-
-extendWithEvents('Community', 'EntitiesList')
+extendAbiWithEvents(relPath, 'Community', 'EntitiesList')

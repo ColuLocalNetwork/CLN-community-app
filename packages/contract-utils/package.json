@@ -6,6 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "abi": "./bin/abi.js",
+    "bytecode": "./bin/bytecode.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"
