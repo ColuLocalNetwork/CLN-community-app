@@ -6,7 +6,7 @@ import { apiCall, createEntitiesFetch, tryTakeEvery } from './utils'
 import { getAccountAddress } from 'selectors/accounts'
 import { getAddress } from 'selectors/network'
 import { createMetadata } from 'sagas/metadata'
-import { isZeroAddress } from 'utils/web3'
+// import { isZeroAddress } from 'utils/web3'
 import { processReceipt } from 'services/api/misc'
 import { getHomeTokenAddress } from 'selectors/token'
 import * as api from 'services/api/business'
@@ -48,13 +48,14 @@ function * getList ({ tokenAddress }) {
 
   yield put({ type: actions.GET_LIST.SUCCESS,
     response: {
-      listAddress: isZeroAddress(listAddress) ? null : listAddress
+      // listAddress: isZeroAddress(listAddress) ? null : listAddress
+      listAddress: '0xe76810AE61D68b1d06B1eC4946d358F4092565d3'
     } })
   return listAddress
 }
 
 function * addEntity ({ listAddress, data }) {
-  const communityAddress = '0xC6479913031d7cD56357db3be974AeA0ce086423'
+  const communityAddress = '0x1f6627F17285d35ee8FC480AB1cd446f9b7Ab61B'
   const accountAddress = yield select(getAccountAddress)
   const CommunityContract = getContract({ abiName: 'Community',
     address: communityAddress

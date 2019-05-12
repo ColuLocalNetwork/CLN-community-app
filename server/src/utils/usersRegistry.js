@@ -8,8 +8,7 @@ const usersRegistryContract = new web3.eth.Contract(UsersRegistryABI, homeAddres
 const addUser = async (account, userUri) => {
   const method = usersRegistryContract.methods.addUser(account, userUri)
   return send(method, {
-    from,
-    gasPrice: '1000000000'
+    from
   })
 }
 

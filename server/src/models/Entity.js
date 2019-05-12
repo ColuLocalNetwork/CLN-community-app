@@ -13,7 +13,7 @@ module.exports = (mongoose) => {
     active: { type: Boolean, default: true }
   })
 
-  EntitySchema.index({ account: 1 }, { unique: true })
+  EntitySchema.index({ communityAddress: 1, account: 1 }, { unique: true })
 
   const Entity = mongoose.model('Entity', EntitySchema)
 
