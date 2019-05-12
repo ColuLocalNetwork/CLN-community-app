@@ -17,7 +17,7 @@ router.put('/:account', async (req, res) => {
     console.log('user already added to User Registry')
   }
 
-  const entity = await Entity.findOneAndUpdate({ account }, { uri, type, name }, { new: true })
+  const entity = await Entity.findOneAndUpdate({ account }, { uri, type, name }, { new: true, upsert: true })
   return res.json({ data: entity })
 })
 

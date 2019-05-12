@@ -38,6 +38,19 @@ export function * createMetadata ({ metadata }) {
   return { data, hash }
 }
 
+export function * createEntitiesMetadata ({ accountId, metadata }) {
+  const { data, hash, ...rest } = yield apiCall(api.createEntitiesMetadata, { accountId, metadata })
+  console.log({ data, hash, ...rest })
+  yield put({
+    type: actions.CREATE_METADATA.SUCCESS,
+    response: {
+      data,
+      hash
+    }
+  })
+  return { data, hash }
+}
+
 function * watchTokensFetched ({ response }) {
   const { result, entities } = response
   for (let tokenAddress of result) {
@@ -60,6 +73,7 @@ export default function * apiSaga () {
     tryTakeEvery(actions.CREATE_METADATA, createMetadata, 1),
     takeEvery(action => /^FETCH_TOKENS.*SUCCESS/.test(action.type), watchTokensFetched),
     takeEvery(action => /^FETCH_BUSINESS.*SUCCESS/.test(action.type), watchBusinessesFetched),
+    // takeEvery(action => /^FETCH_ENTITY.*SUCCESS/.test(action.type), watchEntityFetched),
     takeEvery(FETCH_TOKEN.SUCCESS, watchTokensFetched)
   ])
 }
