@@ -55,7 +55,7 @@ function * getList ({ tokenAddress }) {
 }
 
 function * addEntity ({ listAddress, data }) {
-  const communityAddress = '0x1f6627F17285d35ee8FC480AB1cd446f9b7Ab61B'
+  const communityAddress = '0x0E66D28068365B4e678c0C9813455C83402dD955'
   const accountAddress = yield select(getAccountAddress)
   const CommunityContract = getContract({ abiName: 'Community',
     address: communityAddress
