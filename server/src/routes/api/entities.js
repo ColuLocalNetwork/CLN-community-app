@@ -28,15 +28,17 @@ router.get('/:account', async (req, res, next) => {
   return res.json({ data: business })
 })
 
-const getQueryFilter = ({ query: { type, communityAddress } }) => ({ type, communityAddress })
+const getQueryFilter = ({ query: { type, communityAddress } }) =>
+  type ? { type, communityAddress } : { communityAddress }
 
 router.get('/', async (req, res, next) => {
   const queryFilter = getQueryFilter(req)
-
   let [ results, itemCount ] = await Promise.all([
     Entity.find(queryFilter).sort({ name: 1 }).limit(req.query.limit).skip(req.skip).lean(),
     Entity.estimatedDocumentCount({})
   ])
+
+  console.log(results)
 
   const pageCount = Math.ceil(itemCount / req.query.limit)
 
