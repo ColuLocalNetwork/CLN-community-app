@@ -5,9 +5,10 @@ import * as actions from 'actions/directory'
 import { apiCall, createEntitiesFetch, tryTakeEvery } from './utils'
 import { getAccountAddress } from 'selectors/accounts'
 import { getAddress } from 'selectors/network'
-import { createMetadata } from 'sagas/metadata'
+import { createMetadata, createEntitiesMetadata } from 'sagas/metadata'
 // import { isZeroAddress } from 'utils/web3'
 import { processReceipt } from 'services/api/misc'
+import * as tokenApi from 'services/api/token'
 import { getHomeTokenAddress } from 'selectors/token'
 import * as api from 'services/api/business'
 import { transactionFlow } from './transaction'
@@ -54,16 +55,12 @@ function * getList ({ tokenAddress }) {
   return listAddress
 }
 
-function * addEntity ({ listAddress, data }) {
-  const communityAddress = '0x1f6627F17285d35ee8FC480AB1cd446f9b7Ab61B'
+function * addUser ({ communityAddress, data }) {
   const accountAddress = yield select(getAccountAddress)
   const CommunityContract = getContract({ abiName: 'Community',
     address: communityAddress
   })
-
-  const { hash } = yield call(createMetadata, { metadata: data })
-  // TEMP:
-  console.log(hash)
+  yield call(createEntitiesMetadata, { accountId: data.account, metadata: data })
   const userRoles = '0x0000000000000000000000000000000000000000000000000000000000000001'
   const method = CommunityContract.methods.addEntity(data.account, userRoles)
   const transactionPromise = method.send({
@@ -72,6 +69,30 @@ function * addEntity ({ listAddress, data }) {
 
   const action = actions.ADD_ENTITY
   yield call(transactionFlow, { transactionPromise, action, sendReceipt: true })
+}
+
+function * addBusiness ({ communityAddress, data }) {
+  const accountAddress = yield select(getAccountAddress)
+  const CommunityContract = getContract({ abiName: 'Community',
+    address: communityAddress
+  })
+  const businessRoles = '0x0000000000000000000000000000000000000000000000000000000000000008'
+  const method = CommunityContract.methods.addEntity(data.account, businessRoles)
+  const transactionPromise = method.send({
+    from: accountAddress
+  })
+  const action = actions.ADD_ENTITY
+  yield call(transactionFlow, { transactionPromise, action, sendReceipt: true })
+  const response = yield call(createEntitiesMetadata, { accountId: data.account, metadata: data })
+  console.log({ response })
+}
+
+function * addEntity ({ communityAddress, data }) {
+  if (data.type === 'user') {
+    yield call(addUser, { communityAddress, data })
+  } else if (data.type === 'business') {
+    yield call(addBusiness, { communityAddress, data })
+  }
 }
 
 function * removeEntity ({ listAddress, hash }) {
@@ -129,6 +150,29 @@ export function * deactivateBusiness ({ listAddress, hash }) {
 const fetchBusinesses = createEntitiesFetch(actions.FETCH_BUSINESSES, api.fetchBusinesses)
 const fetchBusiness = createEntitiesFetch(actions.FETCH_BUSINESS, api.fetchBusiness)
 
+// const fetchEntities = createEntitiesFetch(actions.FETCH_BUSINESS, api.fetchBusiness)
+
+function * fetchCommunity ({ tokenAddress }) {
+  const { data } = yield apiCall(tokenApi.fetchCommunity, { tokenAddress })
+  yield put({ type: actions.FETCH_COMMUNITY.SUCCESS,
+    response: {
+      ...data
+    }
+  })
+}
+
+function * fetchEntities ({ communityAddress }) {
+  const { data } = yield apiCall(tokenApi.fetchCommunityEntities, { communityAddress })
+
+  yield put({ type: actions.FETCH_ENTITIES.SUCCESS,
+    response: {
+      entities: {
+        ...data
+      }
+    }
+  })
+}
+
 export default function * businessSaga () {
   yield all([
     tryTakeEvery(actions.CREATE_LIST, createList, 1),
@@ -139,6 +183,8 @@ export default function * businessSaga () {
     tryTakeEvery(actions.FETCH_BUSINESSES, fetchBusinesses, 1),
     tryTakeEvery(actions.FETCH_BUSINESS, fetchBusiness, 1),
     tryTakeEvery(actions.ACTIVATE_BUSINESS, activateBusiness, 1),
-    tryTakeEvery(actions.DEACTIVATE_BUSINESS, deactivateBusiness, 1)
+    tryTakeEvery(actions.DEACTIVATE_BUSINESS, deactivateBusiness, 1),
+    tryTakeEvery(actions.FETCH_COMMUNITY, fetchCommunity, 1),
+    tryTakeEvery(actions.FETCH_ENTITIES, fetchEntities, 1)
   ])
 }

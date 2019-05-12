@@ -1,5 +1,5 @@
 import union from 'lodash/union'
-import { GET_LIST, CREATE_LIST, FETCH_BUSINESSES, ADD_ENTITY, EDIT_ENTITY } from 'actions/directory'
+import { GET_LIST, CREATE_LIST, FETCH_BUSINESSES, ADD_ENTITY, EDIT_ENTITY, FETCH_COMMUNITY, FETCH_ENTITIES } from 'actions/directory'
 import { REQUEST, SUCCESS } from 'actions/constants'
 import { LOCATION_CHANGE } from 'connected-react-router'
 
@@ -25,6 +25,10 @@ export default (state = initialState, action) => {
       return { ...state, transactionHash: action.response.transactionHash, signatureNeeded: false }
     case EDIT_ENTITY.PENDING:
       return { ...state, editTransactionHash: action.response.transactionHash }
+    case FETCH_COMMUNITY.SUCCESS:
+      return { ...state, ...action.response }
+    case FETCH_ENTITIES.SUCCESS:
+      return { ...state, ...action.response }
     case LOCATION_CHANGE:
       if (action.payload.location.pathname === '/') {
         return initialState

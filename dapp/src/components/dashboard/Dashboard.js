@@ -311,6 +311,7 @@ class Dashboard extends Component {
             </Tabs>
           </div>
           <Bridge
+            bridgeDeployed={steps && steps.bridge}
             accountAddress={accountAddress}
             token={this.props.token}
             foreignTokenAddress={this.props.tokenAddress}

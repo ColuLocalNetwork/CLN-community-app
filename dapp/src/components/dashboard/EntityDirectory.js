@@ -6,7 +6,7 @@ import Loader from 'components/Loader'
 import { getClnBalance, getAccountAddress } from 'selectors/accounts'
 import { REQUEST, PENDING, SUCCESS } from 'actions/constants'
 import { getEntities } from 'selectors/directory'
-import { getList, addEntity, fetchBusinesses } from 'actions/directory'
+import { getList, addEntity, fetchBusinesses, fetchEntities, fetchCommunity } from 'actions/directory'
 import Entity from './Entity'
 import EmptyBusinessList from 'images/emptyBusinessList.png'
 import { loadModal, hideModal } from 'actions/ui'
@@ -38,9 +38,16 @@ const EntityDirectoryDataFetcher = (props) => {
     if (props.homeTokenAddress) {
       props.getList(props.homeTokenAddress)
     } else {
+      props.fetchCommunity(props.foreignTokenAddress)
       props.fetchHomeToken(props.foreignTokenAddress)
     }
   }, [props.homeTokenAddress])
+
+  useEffect(() => {
+    if (props.communityAddress) {
+      props.fetchEntities(props.communityAddress)
+    }
+  }, [props.communityAddress])
 
   useEffect(() => {
     if (props.listAddress) {
@@ -58,14 +65,18 @@ const EntityDirectoryDataFetcher = (props) => {
 }
 
 class EntityDirectory extends Component {
-  state = {
-    showSearch: false,
-    search: '',
-    showUsers: false,
-    filters: {
-      pending: false,
-      confirmed: true,
-      admins: false
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      showSearch: false,
+      search: '',
+      showUsers: false,
+      filters: {
+        pending: false,
+        confirmed: true,
+        admins: false
+      }
     }
   }
 
@@ -87,7 +98,7 @@ class EntityDirectory extends Component {
   }
 
   loadAddingModal = () => this.props.loadModal(ADD_DIRECTORY_ENTITY, {
-    submitEntity: (data) => this.props.addEntity(this.props.listAddress, { ...data, active: true })
+    submitEntity: (data) => this.props.addEntity(this.props.communityAddress, { ...data, type: 'business' })
   })
 
   renderTransactionStatus = () => {
@@ -119,7 +130,7 @@ class EntityDirectory extends Component {
         this.state.search.toLowerCase()) !== -1
     ) : entities
 
-  renderBusiness(entities) {
+  renderBusiness (entities) {
     if (entities.length) {
       return (
         entities.map((entity, index) =>
@@ -139,7 +150,8 @@ class EntityDirectory extends Component {
   renderItems = () => {
     const { entities, transactionStatus } = this.props
     const filteredBusiness = this.filterBySearch(this.state.search, entities)
-    
+    console.log({ entities })
+
     if (entities && entities.length) {
       return this.renderBusiness(filteredBusiness)
     } else {
@@ -160,9 +172,9 @@ class EntityDirectory extends Component {
   }
 
   renderContent = () => {
-    const { listAddress } = this.props
+    const { communityAddress } = this.props
 
-    if (!listAddress) {
+    if (!communityAddress) {
       return (
         <Fragment>
           <div className='entities__not-deploy'>
@@ -190,7 +202,7 @@ class EntityDirectory extends Component {
     isOwner(this.props.token, this.props.accountAddress) &&
     this.props.homeTokenAddress
 
-  render() {
+  render () {
     const { network: { networkType } } = this.props
     const { showUsers, filters } = this.state
 
@@ -209,14 +221,14 @@ class EntityDirectory extends Component {
                         return (
                           <li key={value} className='options__item'>
                             <label>{label}
-                            <input
-                              type='radio'
-                              name='filter'
-                              checked={filters[value]}
-                              value={value}
-                              onChange={this.handleRadioInput}
-                            />
-                              <span></span>
+                              <input
+                                type='radio'
+                                name='filter'
+                                checked={filters[value]}
+                                value={value}
+                                onChange={this.handleRadioInput}
+                              />
+                              <span />
                             </label>
                           </li>
                         )
@@ -233,7 +245,7 @@ class EntityDirectory extends Component {
                 <button
                   className={classNames('entities__actions__buttons__btn', { 'entities__actions__buttons__btn--active': showUsers })}
                   onClick={() => this.setState({ showUsers: true })}
-                  >User</button>
+                >User</button>
               </div>
               <div className='entities__actions__add'>
                 {
@@ -266,15 +278,18 @@ class EntityDirectory extends Component {
               {this.renderTransactionStatus()}
             </div>
           </div>
-    
+
           <EntityDirectoryDataFetcher
             fetchHomeToken={this.props.fetchHomeToken}
             getList={this.props.getList}
             listAddress={this.props.listAddress}
+            communityAddress={this.props.communityAddress}
             homeTokenAddress={this.props.homeTokenAddress}
             foreignTokenAddress={this.props.foreignTokenAddress}
             fetchBusinesses={this.props.fetchBusinesses}
             transactionStatus={this.props.transactionStatus}
+            fetchEntities={this.props.fetchEntities}
+            fetchCommunity={this.props.fetchCommunity}
           />
         </div>
       </Fragment>
@@ -298,7 +313,9 @@ const mapDispatchToProps = {
   loadModal,
   hideModal,
   fetchBusinesses,
-  fetchHomeToken
+  fetchHomeToken,
+  fetchEntities,
+  fetchCommunity
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EntityDirectory)

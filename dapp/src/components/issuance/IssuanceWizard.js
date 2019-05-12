@@ -85,12 +85,11 @@ class IssuanceWizard extends Component {
       .reduce((steps, contractName) => {
         steps = {
           ...steps,
-          [contracts[contractName].key]: true
+          [contracts[contractName].key]: contracts[contractName].key === 'membersList' && !isOpen ? { isClosed: true } : true
         }
         return steps
       }, {})
 
-    // contracts[contractName].key === 'membersList' && !isOpen ? { isClosed: true } : true
     const metadata = { communityLogo: this.state.communityLogo.name }
     this.props.createTokenWithMetadata(tokenData, metadata, this.state.communityType.value, steps)
   }
