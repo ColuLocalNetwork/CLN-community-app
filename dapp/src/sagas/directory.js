@@ -166,9 +166,7 @@ function * fetchEntities ({ communityAddress }) {
 
   yield put({ type: actions.FETCH_ENTITIES.SUCCESS,
     response: {
-      entities: {
-        ...data
-      }
+      ...data
     }
   })
 }

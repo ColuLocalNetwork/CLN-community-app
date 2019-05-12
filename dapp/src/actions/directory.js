@@ -1,6 +1,6 @@
 import { action, createEntityAction, createTransactionRequestTypes, createRequestTypes } from './utils'
 
-export const entityName = 'entities'
+export const entityName = 'communityEntities'
 
 const businessesAction = createEntityAction('businesses')
 const entitiesAction = createEntityAction(entityName)
