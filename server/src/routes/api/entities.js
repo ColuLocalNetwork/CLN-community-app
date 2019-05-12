@@ -11,7 +11,11 @@ router.put('/:account', async (req, res) => {
   const { hash } = await metadataUtils.createMetadata(req.body.metadata)
   const uri = `ipfs://${hash}`
 
-  await addUser(account, uri)
+  try {
+    await addUser(account, uri)
+  } catch (err) {
+    console.log('user already added to User Registry')
+  }
 
   const entity = await Entity.findOneAndUpdate({ account }, { uri, type, name }, { new: true })
   return res.json({ data: entity })

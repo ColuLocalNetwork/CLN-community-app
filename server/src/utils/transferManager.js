@@ -37,9 +37,11 @@ const deployTransferManager = async (token, step) => {
   // })
 
   // await handleReceipt(receipt)
+  const entitiesListAddress = await transferManagerContract.methods.entitiesList().call()
 
   return new Community({
     communityAddress,
+    entitiesListAddress,
     tokenAddress: token.address,
     homeTokenAddress,
     isClosed: step.isClosed
