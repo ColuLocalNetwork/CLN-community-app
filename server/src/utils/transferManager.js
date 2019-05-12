@@ -13,8 +13,7 @@ const deployTransferManager = async (token, step) => {
   const method = new web3.eth.Contract(CommunityTransferManagerABI).deploy({ data: CommunityTransferManagerBytecode })
   // console.log(method)
   const transferManagerContract = await send(method, {
-    from,
-    gasPrice: '1000000000'
+    from
   })
 
   const communityAddress = transferManagerContract._address
@@ -34,8 +33,7 @@ const deployTransferManager = async (token, step) => {
 
   // const setTransferManagerMethod = new web3.eth.Contract(IRestrictedTokenABI, homeTokenAddress).methods.setTransferManager(communityAddress)
   // const receipt = await send(setTransferManagerMethod, {
-  //   from,
-  //   gasPrice: '1000000000'
+  //   from
   // })
 
   // await handleReceipt(receipt)

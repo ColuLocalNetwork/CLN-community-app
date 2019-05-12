@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "truffle test",
-    "compile": "truffle compile && npm run abi",
+    "build": "truffle compile && npm run abi",
+    "compile": "truffle compile",
     "abi": "node ../../scripts/abi.js $PWD",
     "deploy-dev": "truffle migrate --network development",
     "deploy-ropsten": "truffle migrate --network ropsten",

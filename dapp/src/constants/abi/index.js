@@ -7,6 +7,6 @@ module.exports = {
   BasicToken: require('./BasicToken'),
   BasicForeignBridge: require('./BasicForeignBridge'),
   BasicHomeBridge: require('./BasicHomeBridge'),
-  Community: require('./Community.json'),
-  IRestrictedToken: require('./IRestrictedToken.json')
+  Community: require('@fuse/entities-contracts/build/abi/CommunityWithEvents'),
+  IRestrictedToken: require('./IRestrictedToken')
 }

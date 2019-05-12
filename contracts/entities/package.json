@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "truffle test",
-    "compile": "truffle compile && npm run abi && npm run bytecode",
-    "abi": "node ../../scripts/abi.js $PWD",
+    "build": "truffle compile && npm run abi && npm run bytecode",
+    "compile": "truffle compile",
+    "abi": "node ../../scripts/abi.js $PWD && node ./scripts/extendAbi.js",
     "bytecode": "node ../../scripts/bytecode.js $PWD",
     "deploy-dev": "truffle migrate",
     "deploy-fuse": "truffle migrate --network fuse --reset"
