@@ -13,12 +13,7 @@ const handleEntityAdded = async (event) => {
   const { communityAddress } = await Community.findOne({ entitiesListAddress }, 'communityAddress')
   const { roles, account } = event.returnValues
 
-  return new Entity({
-    communityAddress,
-    account,
-    roles,
-    active: true
-  }).save()
+  return Entity.findOneAndUpdate({ account }, { communityAddress, roles, account }, { new: true, upsert: true })
 }
 
 const handleEntityRemoved = async (event) => {
