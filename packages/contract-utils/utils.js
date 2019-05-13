@@ -1,7 +1,7 @@
 const fs = require('fs')
 var path = require('path')
 
-const extractFromContract = (relPath, contractPart) => {
+const createPropertyDir = (contractPart, relPath) => {
   const buildPath = path.join(relPath, './build/contracts')
   const destPath = path.join(relPath, `./build/${contractPart}`)
 
@@ -32,4 +32,20 @@ const extractFromContract = (relPath, contractPart) => {
   })
 }
 
-module.exports = extractFromContract
+const filterEvents = (abi) => abi.filter(({ type }) => type === 'event')
+
+const extendAbiWithEvents = (relPath, contractToExtend, ...contracts) => {
+  const abiPath = path.join(relPath, 'build/abi')
+  let abiToExtend = require(path.join(abiPath, contractToExtend))
+  for (let contract of contracts) {
+    const abi = require(path.join(abiPath, contract))
+    const events = filterEvents(abi)
+    abiToExtend = [...abiToExtend, ...events]
+  }
+  fs.writeFileSync(path.join(abiPath, contractToExtend + 'WithEvents.json'), JSON.stringify(abiToExtend, null, 4))
+}
+
+module.exports = {
+  createPropertyDir,
+  extendAbiWithEvents
+}

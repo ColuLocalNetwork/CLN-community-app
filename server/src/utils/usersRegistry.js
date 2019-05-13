@@ -12,6 +12,24 @@ const addUser = async (account, userUri) => {
   })
 }
 
+const updateUser = async (account, userUri) => {
+  const method = usersRegistryContract.methods.updateUser(account, userUri)
+  return send(method, {
+    from
+  })
+}
+
+const upsertUser = async (account, userUri) => {
+  const userExists = await usersRegistryContract.methods.users(account).call()
+  if (userExists) {
+    return updateUser(account, userUri)
+  } else {
+    return addUser(account, userUri)
+  }
+}
+
 module.exports = {
-  addUser
+  addUser,
+  updateUser,
+  upsertUser
 }
