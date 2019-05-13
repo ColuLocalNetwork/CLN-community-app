@@ -5,8 +5,8 @@ import classNames from 'classnames'
 import Loader from 'components/Loader'
 import { getClnBalance, getAccountAddress } from 'selectors/accounts'
 import { REQUEST, PENDING, SUCCESS } from 'actions/constants'
-import { getEntities } from 'selectors/directory'
-import { getList, addEntity, fetchBusinesses, fetchEntities, fetchCommunity } from 'actions/directory'
+import { getUsersEntities, getBusinessesEntities } from 'selectors/directory'
+import { addEntity, fetchCommunity, fetchUsersEntities, fetchBusinessesEntities } from 'actions/directory'
 import Entity from './Entity'
 import EmptyBusinessList from 'images/emptyBusinessList.png'
 import { loadModal, hideModal } from 'actions/ui'
@@ -35,31 +35,18 @@ const filterOptions = [
 
 const EntityDirectoryDataFetcher = (props) => {
   useEffect(() => {
-    if (props.homeTokenAddress) {
-      props.getList(props.homeTokenAddress)
-    } else {
-      props.fetchCommunity(props.foreignTokenAddress)
+    if (props.foreignTokenAddress) {
       props.fetchHomeToken(props.foreignTokenAddress)
+      props.fetchCommunity(props.foreignTokenAddress)
     }
-  }, [props.homeTokenAddress])
+  }, [props.foreignTokenAddress])
 
   useEffect(() => {
     if (props.communityAddress) {
-      props.fetchEntities(props.communityAddress)
+      props.fetchUsersEntities(props.communityAddress)
+      props.fetchBusinessesEntities(props.communityAddress)
     }
   }, [props.communityAddress])
-
-  useEffect(() => {
-    if (props.listAddress) {
-      props.fetchBusinesses(props.listAddress, 1)
-    }
-  }, [props.listAddress])
-
-  useEffect(() => {
-    if (props.listAddress && props.transactionStatus === SUCCESS) {
-      props.fetchBusinesses(props.listAddress, 1)
-    }
-  }, [props.transactionStatus])
 
   return null
 }
@@ -130,44 +117,64 @@ class EntityDirectory extends Component {
         this.state.search.toLowerCase()) !== -1
     ) : entities
 
-  renderBusiness (entities) {
+  renderMerchants (entities) {
     if (entities.length) {
       return (
-        entities.map((entity, index) =>
-          <Entity
-            key={index}
-            index={index}
-            entity={entity}
-            address={this.props.homeTokenAddress}
-            showProfile={() => this.showProfile(this.props.listAddress, this.props.listHashes[index])}
-          />
-        ))
+        entities.map((entity, index) => {
+          return (
+            <Entity
+              key={index}
+              index={index}
+              entity={entity}
+              address={this.props.homeTokenAddress}
+              showProfile={() => this.showProfile(this.props.communityAddress, this.props.merchants[index].account)}
+            />
+          )
+        }))
     } else {
-      return <p className='entities__items__empty'>There is no any entities</p>
+      return <p className='entities__items__empty'>There are no any entities</p>
     }
   }
 
   renderItems = () => {
-    const { entities, transactionStatus } = this.props
-    const filteredBusiness = this.filterBySearch(this.state.search, entities)
-    console.log({ entities })
+    const { showUsers } = this.state
+    const { transactionStatus, merchants, users } = this.props
+    const items = showUsers ? users : merchants
 
-    if (entities && entities.length) {
-      return this.renderBusiness(filteredBusiness)
+    const filteredItems = this.filterBySearch(this.state.search, items)
+
+    console.log({ merchants, users })
+    if (items && items.length) {
+      return this.renderMerchants(filteredItems)
     } else {
-      return (
-        <div className='entities__empty-list'>
-          <div className='entities__empty-list__title'>Kinda sad in here, isn’t it?</div>
-          <div className='entities__empty-list__text'>You can keep watching Netflix later, add a business and let’s start Rock’n’Roll!</div>
-          <button
-            className='entities__empty-list__btn'
-            onClick={this.handleAddBusiness}
-            disabled={transactionStatus === REQUEST || transactionStatus === PENDING}
-          >
-            Add new business
-          </button>
-        </div>
-      )
+      if (showUsers) {
+        return (
+          <div className='entities__empty-list'>
+            <div className='entities__empty-list__title'>Kinda sad in here, isn’t it?</div>
+            <div className='entities__empty-list__text'>You can keep watching Netflix later, add a user and let’s start Rock’n’Roll!</div>
+            <button
+              className='entities__empty-list__btn'
+              disabled={transactionStatus === REQUEST || transactionStatus === PENDING}
+            >
+              Add new user
+            </button>
+          </div>
+        )
+      } else {
+        return (
+          <div className='entities__empty-list'>
+            <div className='entities__empty-list__title'>Kinda sad in here, isn’t it?</div>
+            <div className='entities__empty-list__text'>You can keep watching Netflix later, add a business and let’s start Rock’n’Roll!</div>
+            <button
+              className='entities__empty-list__btn'
+              onClick={this.handleAddBusiness}
+              disabled={transactionStatus === REQUEST || transactionStatus === PENDING}
+            >
+              Add new merchant
+            </button>
+          </div>
+        )
+      }
     }
   }
 
@@ -251,16 +258,16 @@ class EntityDirectory extends Component {
                 {
                   networkType === 'fuse'
                     ? (
-                      <span onClick={this.handleAddBusiness}>
+                      <span onClick={!showUsers ? this.handleAddBusiness : null}>
                         <a style={{ backgroundImage: `url(${plusIcon})` }} />
                       </span>
                     ) : (
-                      <span onClick={this.handleAddBusiness}>
+                      <span onClick={!showUsers ? this.handleAddBusiness : null}>
                         <FontAwesome name='plus-circle' />
                       </span>
                     )
                 }
-                {showUsers ? 'Add new user' : 'Add new business'}
+                {showUsers ? 'Add new user' : 'Add new merchant'}
               </div>
             </div>
             <div className='entities__search'>
@@ -270,7 +277,7 @@ class EntityDirectory extends Component {
               <input
                 value={this.state.search}
                 onChange={this.setSearchValue}
-                placeholder={showUsers ? 'Search a user...' : 'Search a business...'}
+                placeholder={showUsers ? 'Search a user...' : 'Search a merchant...'}
               />
             </div>
             <div className='entities__items'>
@@ -281,15 +288,13 @@ class EntityDirectory extends Component {
 
           <EntityDirectoryDataFetcher
             fetchHomeToken={this.props.fetchHomeToken}
-            getList={this.props.getList}
-            listAddress={this.props.listAddress}
             communityAddress={this.props.communityAddress}
             homeTokenAddress={this.props.homeTokenAddress}
             foreignTokenAddress={this.props.foreignTokenAddress}
-            fetchBusinesses={this.props.fetchBusinesses}
             transactionStatus={this.props.transactionStatus}
-            fetchEntities={this.props.fetchEntities}
             fetchCommunity={this.props.fetchCommunity}
+            fetchBusinessesEntities={this.props.fetchBusinessesEntities}
+            fetchUsersEntities={this.props.fetchUsersEntities}
           />
         </div>
       </Fragment>
@@ -298,8 +303,10 @@ class EntityDirectory extends Component {
 }
 
 const mapStateToProps = (state, { match, foreignTokenAddress }) => ({
-  entities: getEntities(state),
+  // entities: getEntities(state),
   network: state.network,
+  users: getUsersEntities(state),
+  merchants: getBusinessesEntities(state),
   clnBalance: getClnBalance(state),
   accountAddress: getAccountAddress(state),
   homeTokenAddress: state.entities.bridges[foreignTokenAddress] && state.entities.bridges[foreignTokenAddress].homeTokenAddress,
@@ -308,14 +315,13 @@ const mapStateToProps = (state, { match, foreignTokenAddress }) => ({
 })
 
 const mapDispatchToProps = {
-  getList,
   addEntity,
   loadModal,
   hideModal,
-  fetchBusinesses,
   fetchHomeToken,
-  fetchEntities,
-  fetchCommunity
+  fetchCommunity,
+  fetchBusinessesEntities,
+  fetchUsersEntities
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EntityDirectory)

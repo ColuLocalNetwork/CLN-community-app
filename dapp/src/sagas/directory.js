@@ -1,7 +1,8 @@
-import { all, call, put, select } from 'redux-saga/effects'
+import { all, call, put, select, takeEvery } from 'redux-saga/effects'
 
 import { getContract } from 'services/contract'
 import * as actions from 'actions/directory'
+import { CREATE_METADATA } from 'actions/metadata'
 import { apiCall, createEntitiesFetch, tryTakeEvery } from './utils'
 import { getAccountAddress } from 'selectors/accounts'
 import { getAddress } from 'selectors/network'
@@ -9,8 +10,9 @@ import { createMetadata, createEntitiesMetadata } from 'sagas/metadata'
 // import { isZeroAddress } from 'utils/web3'
 import { processReceipt } from 'services/api/misc'
 import * as tokenApi from 'services/api/token'
+import * as entitiesApi from 'services/api/entities'
 import { getHomeTokenAddress } from 'selectors/token'
-import * as api from 'services/api/business'
+// import * as api from 'services/api/business'
 import { transactionFlow } from './transaction'
 
 function * createList ({ tokenAddress }) {
@@ -34,25 +36,6 @@ function * createList ({ tokenAddress }) {
       listAddress: receipt.events.SimpleListCreated.returnValues.list
     }
   })
-}
-
-function * getList ({ tokenAddress }) {
-  const contractAddress = yield select(getAddress, 'SimpleListFactory')
-  const options = { bridgeType: 'home' }
-  const SimpleListFactoryContract = getContract({
-    abiName: 'SimpleListFactory',
-    address: contractAddress,
-    options
-  })
-
-  const listAddress = yield SimpleListFactoryContract.methods.tokenToListMap(tokenAddress).call()
-
-  yield put({ type: actions.GET_LIST.SUCCESS,
-    response: {
-      // listAddress: isZeroAddress(listAddress) ? null : listAddress
-      listAddress: '0xe76810AE61D68b1d06B1eC4946d358F4092565d3'
-    } })
-  return listAddress
 }
 
 function * addUser ({ communityAddress, data }) {
@@ -83,8 +66,7 @@ function * addBusiness ({ communityAddress, data }) {
   })
   const action = actions.ADD_ENTITY
   yield call(transactionFlow, { transactionPromise, action, sendReceipt: true })
-  const response = yield call(createEntitiesMetadata, { accountId: data.account, metadata: data })
-  console.log({ response })
+  yield call(createEntitiesMetadata, { accountId: data.account, metadata: data })
 }
 
 function * addEntity ({ communityAddress, data }) {
@@ -147,10 +129,10 @@ export function * deactivateBusiness ({ listAddress, hash }) {
   })
 }
 
-const fetchBusinesses = createEntitiesFetch(actions.FETCH_BUSINESSES, api.fetchBusinesses)
-const fetchBusiness = createEntitiesFetch(actions.FETCH_BUSINESS, api.fetchBusiness)
+const fetchUsersEntities = createEntitiesFetch(actions.FETCH_USERS_ENTITIES, entitiesApi.fetchCommunityEntities)
+const fetchBusinessesEntities = createEntitiesFetch(actions.FETCH_BUSINESSES_ENTITIES, entitiesApi.fetchCommunityEntities)
 
-// const fetchEntities = createEntitiesFetch(actions.FETCH_BUSINESS, api.fetchBusiness)
+const fetchEntity = createEntitiesFetch(actions.FETCH_ENTITY, entitiesApi.fetchEntity)
 
 function * fetchCommunity ({ tokenAddress }) {
   const { data } = yield apiCall(tokenApi.fetchCommunity, { tokenAddress })
@@ -161,28 +143,28 @@ function * fetchCommunity ({ tokenAddress }) {
   })
 }
 
-function * fetchEntities ({ communityAddress }) {
-  const { data } = yield apiCall(tokenApi.fetchCommunityEntities, { communityAddress })
-
-  yield put({ type: actions.FETCH_ENTITIES.SUCCESS,
-    response: {
-      ...data
-    }
-  })
+function * watchEntityChanges ({ response }) {
+  const { data } = response
+  const { type, communityAddress } = data
+  if (type === 'user') {
+    yield put(actions.fetchUsersEntities(communityAddress))
+  } else if (type === 'business') {
+    yield put(actions.fetchBusinessesEntities(communityAddress))
+  }
 }
 
 export default function * businessSaga () {
   yield all([
     tryTakeEvery(actions.CREATE_LIST, createList, 1),
-    tryTakeEvery(actions.GET_LIST, getList, 1),
     tryTakeEvery(actions.ADD_ENTITY, addEntity, 1),
     tryTakeEvery(actions.REMOVE_ENTITY, removeEntity, 1),
     tryTakeEvery(actions.EDIT_ENTITY, editEntity, 1),
-    tryTakeEvery(actions.FETCH_BUSINESSES, fetchBusinesses, 1),
-    tryTakeEvery(actions.FETCH_BUSINESS, fetchBusiness, 1),
     tryTakeEvery(actions.ACTIVATE_BUSINESS, activateBusiness, 1),
     tryTakeEvery(actions.DEACTIVATE_BUSINESS, deactivateBusiness, 1),
     tryTakeEvery(actions.FETCH_COMMUNITY, fetchCommunity, 1),
-    tryTakeEvery(actions.FETCH_ENTITIES, fetchEntities, 1)
+    tryTakeEvery(actions.FETCH_USERS_ENTITIES, fetchUsersEntities, 1),
+    tryTakeEvery(actions.FETCH_BUSINESSES_ENTITIES, fetchBusinessesEntities, 1),
+    tryTakeEvery(actions.FETCH_ENTITY, fetchEntity, 1),
+    takeEvery(action => /^CREATE_METADATA.*SUCCESS/.test(action.type), watchEntityChanges)
   ])
 }
