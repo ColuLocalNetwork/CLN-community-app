@@ -3,7 +3,7 @@ const router = require('express').Router()
 const mongoose = require('mongoose')
 const Entity = mongoose.model('Entity')
 const metadataUtils = require('@utils/metadata')
-const { addUser } = require('@utils/usersRegistry')
+const { upsertUser } = require('@utils/usersRegistry')
 
 router.put('/:account', async (req, res) => {
   const { account } = req.params
@@ -12,9 +12,10 @@ router.put('/:account', async (req, res) => {
   const uri = `ipfs://${hash}`
 
   try {
-    await addUser(account, uri)
+    await upsertUser(account, uri)
   } catch (err) {
-    console.log('user already added to User Registry')
+    console.log('user cannot be added to User Registry')
+    throw err
   }
 
   const entity = await Entity.findOneAndUpdate({ account }, { uri, type, name }, { new: true, upsert: true })
@@ -23,7 +24,7 @@ router.put('/:account', async (req, res) => {
 
 router.get('/:account', async (req, res, next) => {
   const { account } = req.params
-  const business = await Entity.findOne({ account }).lean()
+  const business = await Entity.findOne({ account })
 
   return res.json({ data: business })
 })
@@ -34,7 +35,7 @@ const getQueryFilter = ({ query: { type, communityAddress } }) =>
 router.get('/', async (req, res, next) => {
   const queryFilter = getQueryFilter(req)
   let [ results, itemCount ] = await Promise.all([
-    Entity.find(queryFilter).sort({ name: 1 }).limit(req.query.limit).skip(req.skip).lean(),
+    Entity.find(queryFilter).sort({ name: 1 }).limit(req.query.limit).skip(req.skip),
     Entity.estimatedDocumentCount({})
   ])
 

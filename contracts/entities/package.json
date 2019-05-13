@@ -7,8 +7,8 @@
     "test": "truffle test",
     "build": "truffle compile && npm run abi && npm run bytecode",
     "compile": "truffle compile",
-    "abi": "node ../../scripts/abi.js $PWD && node ./scripts/extendAbi.js",
-    "bytecode": "node ../../scripts/bytecode.js $PWD",
+    "abi": "node_modules/@fuse/contract-utils/bin/abi.js $PWD && node ./scripts/extendAbi.js",
+    "bytecode": "node_modules/@fuse/contract-utils/bin/bytecode.js $PWD",
     "deploy-dev": "truffle migrate",
     "deploy-fuse": "truffle migrate --network fuse --reset"
   },
@@ -33,6 +33,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
-    "chai-bn": "^0.1.1"
+    "chai-bn": "^0.1.1",
+    "@fuse/contract-utils": "../../packages/contract-utils"
   }
 }

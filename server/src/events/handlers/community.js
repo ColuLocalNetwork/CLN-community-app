@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const Entity = mongoose.model('Entity')
 const Community = mongoose.model('Community')
-const { hasRole, roles: { ADMIN_ROLE } } = require('@fuse/roles')
 
 const handleTransferManagerSet = async (event) => {
   const token = event.address
@@ -14,17 +13,28 @@ const handleEntityAdded = async (event) => {
   const { communityAddress } = await Community.findOne({ entitiesListAddress }, 'communityAddress')
   const { roles, account } = event.returnValues
 
-  const isAdmin = hasRole(roles, ADMIN_ROLE)
-  return new Entity({
-    communityAddress,
-    account,
-    roles,
-    isAdmin,
-    active: true
-  }).save()
+  return Entity.findOneAndUpdate({ account }, { communityAddress, roles, account }, { new: true, upsert: true })
+}
+
+const handleEntityRemoved = async (event) => {
+  const entitiesListAddress = event.address
+  const { account } = event.returnValues
+  const { communityAddress } = await Community.findOne({ entitiesListAddress }, 'communityAddress')
+
+  return Entity.deleteOne({ account, communityAddress })
+}
+
+const handleEntityRolesUpdated = async (event) => {
+  const entitiesListAddress = event.address
+  const { communityAddress } = await Community.findOne({ entitiesListAddress }, 'communityAddress')
+  const { roles, account } = event.returnValues
+
+  return Entity.updateOne({ account, communityAddress }, { roles })
 }
 
 module.exports = {
   handleTransferManagerSet,
-  handleEntityAdded
+  handleEntityAdded,
+  handleEntityRemoved,
+  handleEntityRolesUpdated
 }
