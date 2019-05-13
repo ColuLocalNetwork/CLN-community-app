@@ -11,7 +11,7 @@ module.exports = (mongoose) => {
     type: { type: String },
     roles: { type: String, required: [true, "can't be blank"] },
     active: { type: Boolean, default: true }
-  })
+  }, { timestamps: true })
 
   EntitySchema.index({ communityAddress: 1, account: 1 }, { unique: true })
 
