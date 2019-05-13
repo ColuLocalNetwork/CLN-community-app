@@ -9,11 +9,12 @@ const eventsHandlers = {
   TokenCreated: token.handleTokenCreatedEvent,
   Transfer: token.handleTransferEvent,
   BridgeMappingUpdated: bridge.handleBridgeMappingUpdatedEvent,
-  // EntityAdded: business.handleEntityAddedEvent,
   EntityReplaced: business.handleEntityReplacedEvent,
   SimpleListCreated: business.handleSimpleListCreatedEvent,
   TransferManagerSet: community.handleTransferManagerSet,
-  EntityAdded: community.handleEntityAdded
+  EntityAdded: community.handleEntityAdded,
+  EntityRemoved: community.handleEntityRemoved,
+  EntityRolesUpdated: community.handleEntityRolesUpdated
 }
 
 const handleEvent = function (event) {

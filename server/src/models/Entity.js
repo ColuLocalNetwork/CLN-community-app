@@ -1,3 +1,4 @@
+const { hasRole, roles: { ADMIN_ROLE } } = require('@fuse/roles')
 
 module.exports = (mongoose) => {
   mongoose = mongoose || require('mongoose')
@@ -9,11 +10,19 @@ module.exports = (mongoose) => {
     name: { type: String },
     type: { type: String },
     roles: { type: String, required: [true, "can't be blank"] },
-    isAdmin: { type: String, default: false },
     active: { type: Boolean, default: true }
   })
 
   EntitySchema.index({ communityAddress: 1, account: 1 }, { unique: true })
+
+  EntitySchema.virtual('isAdmin').get(function () {
+    return hasRole(this.roles, ADMIN_ROLE)
+  })
+
+  EntitySchema.set('toJSON', {
+    versionKey: false,
+    virtuals: true
+  })
 
   const Entity = mongoose.model('Entity', EntitySchema)
 
