@@ -5,8 +5,8 @@ const Entity = mongoose.model('Entity')
 const metadataUtils = require('@utils/metadata')
 const { upsertUser } = require('@utils/usersRegistry')
 
-router.put('/:account', async (req, res) => {
-  const { account } = req.params
+router.put('/:communityAddress/:account', async (req, res) => {
+  const { account, communityAddress } = req.params
   const { name, type } = req.body.metadata
   const { hash } = await metadataUtils.createMetadata(req.body.metadata)
   const uri = `ipfs://${hash}`
@@ -18,21 +18,21 @@ router.put('/:account', async (req, res) => {
     throw err
   }
 
-  const entity = await Entity.findOneAndUpdate({ account }, { uri, type, name }, { new: true, upsert: true })
+  const entity = await Entity.findOneAndUpdate({ account, communityAddress }, { uri, type, name }, { new: true, upsert: true })
   return res.json({ data: entity })
 })
 
-router.get('/:account', async (req, res, next) => {
-  const { account } = req.params
-  const business = await Entity.findOne({ account })
+router.get('/:communityAddress/:account', async (req, res, next) => {
+  const { account, communityAddress } = req.params
+  const entity = await Entity.findOne({ account, communityAddress })
 
-  return res.json({ data: business })
+  return res.json({ data: entity })
 })
 
-const getQueryFilter = ({ query: { type, communityAddress } }) =>
-  type ? { type, communityAddress } : { communityAddress }
+const getQueryFilter = ({ query: { type } }) =>
+  type && { type }
 
-router.get('/', async (req, res, next) => {
+router.get('/:communityAddress', async (req, res, next) => {
   const queryFilter = getQueryFilter(req)
   let [ results, itemCount ] = await Promise.all([
     Entity.find(queryFilter).sort({ name: 1 }).limit(req.query.limit).skip(req.skip),
