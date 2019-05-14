@@ -1,5 +1,6 @@
 const CommunityTransferManager = artifacts.require('CommunityTransferManager.sol')
 const EntitiesList = artifacts.require('EntitiesList.sol')
+const truffleAssert = require('truffle-assertions')
 
 const { ERROR_MSG } = require('./setup')
 const {
@@ -39,7 +40,9 @@ contract('CommunityTransferManager', async (accounts) => {
 
   describe('#addRule', async () => {
     it('owner can add rule', async () => {
-      await transferManager.addRule(ADMIN_ROLE, NO_ROLES, { from: owner }).should.be.fulfilled
+      const result = await transferManager.addRule(ADMIN_ROLE, NO_ROLES, { from: owner }).should.be.fulfilled
+
+      truffleAssert.eventEmitted(result, 'RuleAdded')
     })
 
     it('only owner can add rule', async () => {
@@ -60,7 +63,9 @@ contract('CommunityTransferManager', async (accounts) => {
     })
 
     it('owner can remove rule', async () => {
-      await transferManager.removeRule(0, { from: owner }).should.be.fulfilled
+      const result = await transferManager.removeRule(0, { from: owner }).should.be.fulfilled
+
+      truffleAssert.eventEmitted(result, 'RuleRemoved')
     })
 
     it('only owner can remove rule', async () => {

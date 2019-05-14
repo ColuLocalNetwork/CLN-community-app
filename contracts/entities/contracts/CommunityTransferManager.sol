@@ -13,7 +13,7 @@ contract CommunityTransferManager is
   uint256 public constant maxRules = 20;
   
   event RuleAdded(bytes32 fromMask, bytes32 toMask, bool isMax, uint256 amount);
-  event RuleRemoved(uint256 index);
+  event RuleRemoved(uint256 index, bytes32 fromMask, bytes32 toMask, bool isMax, uint256 amount);
 
   /**
    * @dev Whitelist type transfer logic, Should be pluggable in the future.
@@ -56,12 +56,13 @@ contract CommunityTransferManager is
 
   function removeRule(uint256 _index) public onlyAdmin {
     require(_index < _rules.length);
+    Rule removedRule = _rules[_index];
 
     for (uint i = _index; i < _rules.length-1; i++) {
       _rules[i] = _rules[i+1];
     }
     _rules.length--;
 
-    emit RuleRemoved(_index);
+    emit RuleRemoved(_index, removedRule.fromMask(), removedRule.toMask(), removedRule.isMax(), removedRule.amount());
   }
 }
