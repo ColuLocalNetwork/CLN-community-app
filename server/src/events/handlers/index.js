@@ -14,7 +14,9 @@ const eventsHandlers = {
   TransferManagerSet: community.handleTransferManagerSet,
   EntityAdded: community.handleEntityAdded,
   EntityRemoved: community.handleEntityRemoved,
-  EntityRolesUpdated: community.handleEntityRolesUpdated
+  EntityRolesUpdated: community.handleEntityRolesUpdated,
+  RuleAdded: community.handleRuleAdded,
+  RuleRemoved: community.handleRuleRemoved
 }
 
 const handleEvent = function (event) {

@@ -1,5 +1,6 @@
 const Community = artifacts.require('Community.sol')
 const EntitiesList = artifacts.require('EntitiesList.sol')
+const truffleAssert = require('truffle-assertions')
 
 const {
   ADMIN_MASK,
@@ -25,6 +26,11 @@ contract('Community', async (accounts) => {
   }
 
   const validateNoEntity = (account) => validateEntity(account, { roles: NO_ROLES })
+
+  const eventEmitted = async (result, eventName) => {
+    const entitiesResult = await truffleAssert.createTransactionResult(entitiesList, result.tx)
+    truffleAssert.eventEmitted(entitiesResult, eventName)
+  }
 
   beforeEach(async () => {
     community = await Community.new()
@@ -55,7 +61,9 @@ contract('Community', async (accounts) => {
   describe('#join', () => {
     it('user can join community', async () => {
       const entity = { roles: USER_ROLE }
-      await community.join({ from: user }).should.be.fulfilled
+      const result = await community.join({ from: user }).should.be.fulfilled
+
+      eventEmitted(result, 'EntityAdded')
       await validateEntity(user, entity)
     })
 
@@ -71,7 +79,9 @@ contract('Community', async (accounts) => {
   describe('#addEntity', () => {
     it('owner can add user', async () => {
       const entity = { roles: USER_ROLE }
-      await community.addEntity(user, entity.roles, { from: owner }).should.be.fulfilled
+      const result = await community.addEntity(user, entity.roles, { from: owner }).should.be.fulfilled
+
+      eventEmitted(result, 'EntityAdded')
       await validateEntity(user, entity)
     })
 
@@ -83,13 +93,17 @@ contract('Community', async (accounts) => {
 
     it('owner can add business', async () => {
       const entity = { roles: BUSINESS_ROLE }
-      await community.addEntity(user, entity.roles, { from: owner }).should.be.fulfilled
+      const result = await community.addEntity(user, entity.roles, { from: owner }).should.be.fulfilled
+
+      eventEmitted(result, 'EntityAdded')
       await validateEntity(user, entity)
     })
 
     it('owner can add admin', async () => {
       const entity = { roles: ADMIN_ROLE }
-      await community.addEntity(user, entity.roles, { from: owner }).should.be.fulfilled
+      const result = await community.addEntity(user, entity.roles, { from: owner }).should.be.fulfilled
+
+      eventEmitted(result, 'EntityAdded')
       await validateEntity(user, entity)
       assert.isOk(await entitiesList.hasRoles(user, ADMIN_MASK).should.be.fulfilled)
     })
@@ -98,8 +112,11 @@ contract('Community', async (accounts) => {
       const entity = { roles: USER_ROLE }
       const anotherEntity = { roles: USER_ROLE }
 
-      await community.addEntity(user, entity.roles, { from: owner }).should.be.fulfilled
-      await community.addEntity(anotherUser, anotherEntity.roles, { from: owner }).should.be.fulfilled
+      const result1 = await community.addEntity(user, entity.roles, { from: owner }).should.be.fulfilled
+      const result2 = await community.addEntity(anotherUser, anotherEntity.roles, { from: owner }).should.be.fulfilled
+
+      eventEmitted(result1, 'EntityAdded')
+      eventEmitted(result2, 'EntityAdded')
 
       await validateEntity(user, entity)
       await validateEntity(anotherUser, anotherEntity)

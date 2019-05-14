@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Entity = mongoose.model('Entity')
 const Community = mongoose.model('Community')
+const { hasRole, roles: { APPROVED_ROLE } } = require('@fuse/roles')
 
 const handleTransferManagerSet = async (event) => {
   const token = event.address
@@ -32,9 +33,29 @@ const handleEntityRolesUpdated = async (event) => {
   return Entity.updateOne({ account, communityAddress }, { roles })
 }
 
+const handleRuleAdded = async (event) => {
+  const communityAddress = event.address
+  const { fromMask, toMask } = event.returnValues
+  console.log({ fromMask, toMask })
+  console.log(hasRole(fromMask, APPROVED_ROLE))
+  if (hasRole(fromMask, APPROVED_ROLE) && hasRole(toMask, APPROVED_ROLE)) {
+    return Community.updateOne({ communityAddress }, { isClosed: true })
+  }
+}
+
+const handleRuleRemoved = async (event) => {
+  const communityAddress = event.address
+  const { fromMask, toMask } = event.returnValues
+  if (hasRole(fromMask, APPROVED_ROLE) && hasRole(toMask, APPROVED_ROLE)) {
+    return Community.updateOne({ communityAddress }, { isClosed: false })
+  }
+}
+
 module.exports = {
   handleTransferManagerSet,
   handleEntityAdded,
   handleEntityRemoved,
-  handleEntityRolesUpdated
+  handleEntityRolesUpdated,
+  handleRuleAdded,
+  handleRuleRemoved
 }

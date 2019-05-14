@@ -27,8 +27,7 @@ const deployTransferManager = async (token, step) => {
     communityAddress,
     entitiesListAddress,
     tokenAddress: token.address,
-    homeTokenAddress,
-    isClosed: step.isClosed
+    homeTokenAddress
   }).save()
 
   const communityMethods = []

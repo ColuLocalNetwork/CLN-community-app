@@ -25,11 +25,13 @@ const send = async (web3, bridgeType, method, options) => {
   try {
     console.log(`[${bridgeType}] sending method ${method._method.name} from ${from} with nonce ${account.nonce}. gas price: ${gasPrice}, gas limit: ${gas}`)
     receipt = await method.send({ gasPrice, ...options, gas, nonce: account.nonce })
+    console.log(`[${bridgeType}] method ${method._method.name} succeeded in tx ${receipt.transactionHash}`)
   } catch (error) {
     const nonce = await web3.eth.getTransactionCount(from)
     account.nonce = nonce
     console.log(`[${bridgeType}] sending method ${method._method.name} from ${from} with nonce ${account.nonce}. gas price: ${gasPrice}, gas limit: ${gas}`)
     receipt = await method.send({ gasPrice, gas, ...options, nonce: account.nonce })
+    console.log(`[${bridgeType}] method ${method._method.name} succeeded in tx ${receipt.transactionHash}`)
   }
   account.nonce++
   await account.save()
