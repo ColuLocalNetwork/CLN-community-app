@@ -13,7 +13,7 @@ const {
 
 const { ERROR_MSG } = require('./setup')
 
-contract('Community', async (accounts) => {
+contract('Community', (accounts) => {
   let community, entitiesList
   const owner = accounts[0]
   const notOwner = accounts[1]
@@ -27,9 +27,9 @@ contract('Community', async (accounts) => {
 
   const validateNoEntity = (account) => validateEntity(account, { roles: NO_ROLES })
 
-  const eventEmitted = async (result, eventName) => {
+  const eventEmitted = async (result, ...args) => {
     const entitiesResult = await truffleAssert.createTransactionResult(entitiesList, result.tx)
-    truffleAssert.eventEmitted(entitiesResult, eventName)
+    truffleAssert.eventEmitted(entitiesResult, ...args)
   }
 
   beforeEach(async () => {
@@ -63,7 +63,7 @@ contract('Community', async (accounts) => {
       const entity = { roles: USER_ROLE }
       const result = await community.join({ from: user }).should.be.fulfilled
 
-      eventEmitted(result, 'EntityAdded')
+      eventEmitted(result, 'EntityAdded', { account: user, roles: entity.roles })
       await validateEntity(user, entity)
     })
 
@@ -95,7 +95,7 @@ contract('Community', async (accounts) => {
       const entity = { roles: BUSINESS_ROLE }
       const result = await community.addEntity(user, entity.roles, { from: owner }).should.be.fulfilled
 
-      eventEmitted(result, 'EntityAdded')
+      eventEmitted(result, 'EntityAdded', { account: user, roles: entity.roles })
       await validateEntity(user, entity)
     })
 
@@ -103,7 +103,7 @@ contract('Community', async (accounts) => {
       const entity = { roles: ADMIN_ROLE }
       const result = await community.addEntity(user, entity.roles, { from: owner }).should.be.fulfilled
 
-      eventEmitted(result, 'EntityAdded')
+      eventEmitted(result, 'EntityAdded', { account: user, roles: entity.roles })
       await validateEntity(user, entity)
       assert.isOk(await entitiesList.hasRoles(user, ADMIN_MASK).should.be.fulfilled)
     })
@@ -115,8 +115,8 @@ contract('Community', async (accounts) => {
       const result1 = await community.addEntity(user, entity.roles, { from: owner }).should.be.fulfilled
       const result2 = await community.addEntity(anotherUser, anotherEntity.roles, { from: owner }).should.be.fulfilled
 
-      eventEmitted(result1, 'EntityAdded')
-      eventEmitted(result2, 'EntityAdded')
+      eventEmitted(result1, 'EntityAdded', { account: user, roles: entity.roles })
+      eventEmitted(result2, 'EntityAdded', { account: anotherUser, roles: anotherEntity.roles })
 
       await validateEntity(user, entity)
       await validateEntity(anotherUser, anotherEntity)
@@ -140,7 +140,9 @@ contract('Community', async (accounts) => {
       await community.addEntity(user, entity.roles, { from: owner }).should.be.fulfilled
     })
     it('owner can remove entity', async () => {
-      await community.removeEntity(user, { from: owner }).should.be.fulfilled
+      const result = await community.removeEntity(user, { from: owner }).should.be.fulfilled
+
+      eventEmitted(result, 'EntityRemoved', { account: user })
       await validateNoEntity(user)
     })
 
@@ -157,7 +159,9 @@ contract('Community', async (accounts) => {
       await community.addEntity(user, entity.roles, { from: owner }).should.be.fulfilled
     })
     it('owner can add entity roles', async () => {
-      await community.addEnitityRoles(user, BUSINESS_MASK, { from: owner }).should.be.fulfilled
+      const result = await community.addEnitityRoles(user, BUSINESS_MASK, { from: owner }).should.be.fulfilled
+
+      eventEmitted(result, 'EntityRolesUpdated', { account: user, roles: BUSINESS_ROLE })
       await validateEntity(user, { roles: BUSINESS_ROLE })
     })
 
@@ -167,7 +171,9 @@ contract('Community', async (accounts) => {
     })
 
     it('adding the same role does not change the entity', async () => {
-      await community.addEnitityRoles(user, USER_ROLE, { from: owner }).should.be.fulfilled
+      const result = await community.addEnitityRoles(user, USER_ROLE, { from: owner }).should.be.fulfilled
+
+      eventEmitted(result, 'EntityRolesUpdated', { account: user, roles: USER_ROLE })
       await validateEntity(user, { roles: USER_ROLE })
     })
   })
@@ -179,18 +185,22 @@ contract('Community', async (accounts) => {
       await community.addEntity(user, entity.roles, { from: owner }).should.be.fulfilled
     })
 
-    it('owner can add entity roles', async () => {
-      await community.removeEnitityRoles(user, BUSINESS_MASK, { from: owner }).should.be.fulfilled
+    it('owner can remove entity roles', async () => {
+      const result = await community.removeEnitityRoles(user, BUSINESS_MASK, { from: owner }).should.be.fulfilled
+
+      eventEmitted(result, 'EntityRolesUpdated', { account: user, roles: USER_ROLE })
       await validateEntity(user, { roles: USER_ROLE })
     })
 
-    it('only owner can add entity roles', async () => {
+    it('only owner can remove entity roles', async () => {
       await community.removeEnitityRoles(user, BUSINESS_MASK, { from: notOwner }).should.be.rejectedWith(ERROR_MSG)
       await validateEntity(user, entity)
     })
 
     it('remove not existing role does not change the entity', async () => {
-      await community.removeEnitityRoles(user, ADMIN_MASK, { from: owner }).should.be.fulfilled
+      const result = await community.removeEnitityRoles(user, ADMIN_MASK, { from: owner }).should.be.fulfilled
+
+      eventEmitted(result, 'EntityRolesUpdated', { account: user, roles: BUSINESS_ROLE })
       await validateEntity(user, { roles: BUSINESS_ROLE })
     })
   })
