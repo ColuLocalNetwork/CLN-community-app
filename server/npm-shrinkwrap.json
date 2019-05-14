@@ -17,6 +17,7 @@
       "requires": {
         "openzeppelin-solidity": "2.0.1",
         "truffle": "^5.0.14",
+        "truffle-assertions": "^0.8.2",
         "truffle-hdwallet-provider": "^1.0.8"
       }
     },

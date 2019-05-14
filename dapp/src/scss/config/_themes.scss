@@ -729,11 +729,11 @@ $themes: (
             opacity: 0;
 
             &:checked + .indicator--read-only {
-              background: $secondary url(/assets/images/checkbox_valid.svg) center;
+              background: $secondary url(../../assets/images/checkbox_valid.svg) center;
               opacity: .5;
             }
             &:checked + .indicator:after {
-              background: $secondary url(/assets/images/checkbox_valid.svg) center;
+              background: $secondary url(../../assets/images/checkbox_valid.svg) center;
               opacity: 1;
             }
           }
