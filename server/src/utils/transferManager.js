@@ -35,8 +35,10 @@ const deployTransferManager = async (token, step) => {
   if (step.isClosed) {
     communityMethods.push(transferManagerContract.methods.addRule(APPROVED_ROLE, APPROVED_ROLE))
   }
+  const adminMultiRole = combineRoles(USER_ROLE, ADMIN_ROLE, APPROVED_ROLE)
+
   communityMethods.push(
-    transferManagerContract.methods.addEntity(token.owner, combineRoles(USER_ROLE, ADMIN_ROLE)))
+    transferManagerContract.methods.addEntity(token.owner, adminMultiRole))
 
   for (let method of communityMethods) {
     const receipt = await send(method, { from })
