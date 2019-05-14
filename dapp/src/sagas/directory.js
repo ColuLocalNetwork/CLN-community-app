@@ -2,18 +2,17 @@ import { all, call, put, select, takeEvery } from 'redux-saga/effects'
 
 import { getContract } from 'services/contract'
 import * as actions from 'actions/directory'
-import { CREATE_METADATA } from 'actions/metadata'
 import { apiCall, createEntitiesFetch, tryTakeEvery } from './utils'
 import { getAccountAddress } from 'selectors/accounts'
+import { getCommunityAddress } from 'selectors/directory'
 import { getAddress } from 'selectors/network'
 import { createMetadata, createEntitiesMetadata } from 'sagas/metadata'
-// import { isZeroAddress } from 'utils/web3'
 import { processReceipt } from 'services/api/misc'
 import * as tokenApi from 'services/api/token'
 import * as entitiesApi from 'services/api/entities'
 import { getHomeTokenAddress } from 'selectors/token'
-// import * as api from 'services/api/business'
 import { transactionFlow } from './transaction'
+import { roles } from '@fuse/roles'
 
 function * createList ({ tokenAddress }) {
   const accountAddress = yield select(getAccountAddress)
@@ -38,20 +37,67 @@ function * createList ({ tokenAddress }) {
   })
 }
 
+function * confirmUser ({ account }) {
+  const communityAddress = yield select(getCommunityAddress)
+  const accountAddress = yield select(getAccountAddress)
+  const CommunityContract = getContract({ abiName: 'Community',
+    address: communityAddress
+  })
+
+  const method = CommunityContract.methods.addEnitityRoles(account, roles.APPROVED_ROLE)
+  const transactionPromise = method.send({
+    from: accountAddress
+  })
+
+  const action = actions.CONFIRM_USER
+  yield call(transactionFlow, { transactionPromise, action, sendReceipt: true })
+}
+
+function * makeAdmin ({ account }) {
+  const communityAddress = yield select(getCommunityAddress)
+  const accountAddress = yield select(getAccountAddress)
+  const CommunityContract = getContract({ abiName: 'Community',
+    address: communityAddress
+  })
+
+  const method = CommunityContract.methods.addEnitityRoles(account, roles.ADMIN_ROLE)
+  const transactionPromise = method.send({
+    from: accountAddress
+  })
+
+  const action = actions.MAKE_ADMIN
+  yield call(transactionFlow, { transactionPromise, action, sendReceipt: true })
+}
+
+function * removeAsAdmin ({ account }) {
+  const communityAddress = yield select(getCommunityAddress)
+  const accountAddress = yield select(getAccountAddress)
+  const CommunityContract = getContract({ abiName: 'Community',
+    address: communityAddress
+  })
+
+  const method = CommunityContract.methods.removeEnitityRoles(account, roles.ADMIN_ROLE)
+  const transactionPromise = method.send({
+    from: accountAddress
+  })
+
+  const action = actions.REMOVE_AS_ADMIN
+  yield call(transactionFlow, { transactionPromise, action, sendReceipt: true })
+}
+
 function * addUser ({ communityAddress, data }) {
   const accountAddress = yield select(getAccountAddress)
   const CommunityContract = getContract({ abiName: 'Community',
     address: communityAddress
   })
-  yield call(createEntitiesMetadata, { accountId: data.account, metadata: data })
-  const userRoles = '0x0000000000000000000000000000000000000000000000000000000000000001'
-  const method = CommunityContract.methods.addEntity(data.account, userRoles)
+  const method = CommunityContract.methods.addEntity(data.account, roles.USER_ROLE)
   const transactionPromise = method.send({
     from: accountAddress
   })
 
   const action = actions.ADD_ENTITY
   yield call(transactionFlow, { transactionPromise, action, sendReceipt: true })
+  yield call(createEntitiesMetadata, { communityAddress, accountId: data.account, metadata: data })
 }
 
 function * addBusiness ({ communityAddress, data }) {
@@ -59,14 +105,13 @@ function * addBusiness ({ communityAddress, data }) {
   const CommunityContract = getContract({ abiName: 'Community',
     address: communityAddress
   })
-  const businessRoles = '0x0000000000000000000000000000000000000000000000000000000000000008'
-  const method = CommunityContract.methods.addEntity(data.account, businessRoles)
+  const method = CommunityContract.methods.addEntity(data.account, roles.BUSINESS_ROLE)
   const transactionPromise = method.send({
     from: accountAddress
   })
   const action = actions.ADD_ENTITY
   yield call(transactionFlow, { transactionPromise, action, sendReceipt: true })
-  yield call(createEntitiesMetadata, { accountId: data.account, metadata: data })
+  yield call(createEntitiesMetadata, { communityAddress, accountId: data.account, metadata: data })
 }
 
 function * addEntity ({ communityAddress, data }) {
@@ -77,56 +122,18 @@ function * addEntity ({ communityAddress, data }) {
   }
 }
 
-function * removeEntity ({ listAddress, hash }) {
+function * removeEntity ({ communityAddress, account }) {
   const accountAddress = yield select(getAccountAddress)
-  const SimpleListContract = getContract({ abiName: 'SimpleList',
-    address: listAddress
+  const CommunityContract = getContract({ abiName: 'Community',
+    address: communityAddress
   })
-
-  const transactionPromise = SimpleListContract.methods.deleteEntity(hash).send({
+  const method = CommunityContract.methods.removeEntity(account)
+  const transactionPromise = method.send({
     from: accountAddress
   })
 
-  const action = actions.REMOVE_DIRECTORY_ENTITY
+  const action = actions.REMOVE_ENTITY
   yield call(transactionFlow, { transactionPromise, action, sendReceipt: true })
-}
-
-function * editEntity ({ listAddress, hash, data }) {
-  const accountAddress = yield select(getAccountAddress)
-
-  const SimpleListContract = getContract({ abiName: 'SimpleList',
-    address: listAddress
-  })
-
-  const response = yield call(createMetadata, { metadata: data })
-  const newHash = response.hash
-
-  const transactionPromise = SimpleListContract.methods.replaceEntity(hash, newHash).send({
-    from: accountAddress
-  })
-
-  const action = actions.EDIT_ENTITY
-  return yield call(transactionFlow, { transactionPromise, action, sendReceipt: true })
-}
-
-export function * activateBusiness ({ listAddress, hash }) {
-  const data = yield select(state => state.entities.metadata[`ipfs://${hash}`])
-  const receipt = yield editEntity({ listAddress, hash, data: { ...data, active: true } })
-  yield put({ type: actions.ACTIVATE_BUSINESS.SUCCESS,
-    response: {
-      receipt
-    }
-  })
-}
-
-export function * deactivateBusiness ({ listAddress, hash }) {
-  const data = yield select(state => state.entities.metadata[`ipfs://${hash}`])
-  const receipt = yield editEntity({ listAddress, hash, data: { ...data, active: false } })
-  yield put({ type: actions.DEACTIVATE_BUSINESS.SUCCESS,
-    response: {
-      receipt
-    }
-  })
 }
 
 const fetchUsersEntities = createEntitiesFetch(actions.FETCH_USERS_ENTITIES, entitiesApi.fetchCommunityEntities)
@@ -144,11 +151,18 @@ function * fetchCommunity ({ tokenAddress }) {
 }
 
 function * watchEntityChanges ({ response }) {
+  const communityAddress = yield select(getCommunityAddress)
   const { data } = response
-  const { type, communityAddress } = data
-  if (type === 'user') {
+
+  if (data) {
+    const { type } = data
+    if (type === 'user') {
+      yield put(actions.fetchUsersEntities(communityAddress))
+    } else if (type === 'business') {
+      yield put(actions.fetchBusinessesEntities(communityAddress))
+    }
+  } else {
     yield put(actions.fetchUsersEntities(communityAddress))
-  } else if (type === 'business') {
     yield put(actions.fetchBusinessesEntities(communityAddress))
   }
 }
@@ -158,13 +172,13 @@ export default function * businessSaga () {
     tryTakeEvery(actions.CREATE_LIST, createList, 1),
     tryTakeEvery(actions.ADD_ENTITY, addEntity, 1),
     tryTakeEvery(actions.REMOVE_ENTITY, removeEntity, 1),
-    tryTakeEvery(actions.EDIT_ENTITY, editEntity, 1),
-    tryTakeEvery(actions.ACTIVATE_BUSINESS, activateBusiness, 1),
-    tryTakeEvery(actions.DEACTIVATE_BUSINESS, deactivateBusiness, 1),
     tryTakeEvery(actions.FETCH_COMMUNITY, fetchCommunity, 1),
     tryTakeEvery(actions.FETCH_USERS_ENTITIES, fetchUsersEntities, 1),
     tryTakeEvery(actions.FETCH_BUSINESSES_ENTITIES, fetchBusinessesEntities, 1),
     tryTakeEvery(actions.FETCH_ENTITY, fetchEntity, 1),
-    takeEvery(action => /^CREATE_METADATA.*SUCCESS/.test(action.type), watchEntityChanges)
+    tryTakeEvery(actions.MAKE_ADMIN, makeAdmin, 1),
+    tryTakeEvery(actions.REMOVE_AS_ADMIN, removeAsAdmin, 1),
+    tryTakeEvery(actions.CONFIRM_USER, confirmUser, 1),
+    takeEvery(action => /^(CREATE_METADATA|REMOVE_ENTITY|MAKE_ADMIN|REMOVE_AS_ADMIN).*SUCCESS/.test(action.type), watchEntityChanges)
   ])
 }

@@ -6,7 +6,7 @@ import TopNav from 'components/TopNav'
 import CopyToClipboard from 'components/common/CopyToClipboard'
 import { loadModal } from 'actions/ui'
 import { fetchMetadata } from 'actions/metadata'
-import { getList, fetchBusinesses, fetchBusiness, activateBusiness, deactivateBusiness, editEntity, fetchEntity } from 'actions/directory'
+import { getList, fetchBusinesses, fetchBusiness, editEntity, fetchEntity } from 'actions/directory'
 import { ADD_DIRECTORY_ENTITY, WRONG_NETWORK_MODAL } from 'constants/uiConstants'
 import ReactGA from 'services/ga'
 import { getBlockExplorerUrl } from 'utils/network'
@@ -15,7 +15,7 @@ import { getTransaction } from 'selectors/transaction'
 class EntityProfile extends Component {
   componentDidMount () {
     if (!this.props.entity) {
-      this.props.fetchEntity(this.props.account)
+      this.props.fetchEntity(this.props.communityAddress, this.props.account)
     }
   }
 
@@ -168,8 +168,6 @@ const mapDispatchToProps = {
   getList,
   fetchBusinesses,
   fetchBusiness,
-  activateBusiness,
-  deactivateBusiness,
   editEntity,
   fetchMetadata,
   fetchEntity

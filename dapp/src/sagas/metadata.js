@@ -38,8 +38,8 @@ export function * createMetadata ({ metadata }) {
   return { data, hash }
 }
 
-export function * createEntitiesMetadata ({ accountId, metadata }) {
-  const { data, hash } = yield apiCall(entitiesApi.createEntitiesMetadata, { accountId, metadata })
+export function * createEntitiesMetadata ({ communityAddress, accountId, metadata }) {
+  const { data, hash } = yield apiCall(entitiesApi.createEntitiesMetadata, { communityAddress, accountId, metadata })
   yield put({
     type: actions.CREATE_METADATA.SUCCESS,
     response: {

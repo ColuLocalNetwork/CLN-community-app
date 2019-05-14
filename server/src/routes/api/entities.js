@@ -29,17 +29,16 @@ router.get('/:communityAddress/:account', async (req, res, next) => {
   return res.json({ data: entity })
 })
 
-const getQueryFilter = ({ query: { type } }) =>
-  type && { type }
+const getQueryFilter = ({ query: { type }, params: { communityAddress } }) =>
+  type ? { type, communityAddress } : { communityAddress }
 
 router.get('/:communityAddress', async (req, res, next) => {
   const queryFilter = getQueryFilter(req)
+
   let [ results, itemCount ] = await Promise.all([
     Entity.find(queryFilter).sort({ name: 1 }).limit(req.query.limit).skip(req.skip),
     Entity.estimatedDocumentCount({})
   ])
-
-  console.log(results)
 
   const pageCount = Math.ceil(itemCount / req.query.limit)
 
