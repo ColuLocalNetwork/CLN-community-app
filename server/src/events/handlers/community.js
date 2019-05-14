@@ -36,8 +36,6 @@ const handleEntityRolesUpdated = async (event) => {
 const handleRuleAdded = async (event) => {
   const communityAddress = event.address
   const { fromMask, toMask } = event.returnValues
-  console.log({ fromMask, toMask })
-  console.log(hasRole(fromMask, APPROVED_ROLE))
   if (hasRole(fromMask, APPROVED_ROLE) && hasRole(toMask, APPROVED_ROLE)) {
     return Community.updateOne({ communityAddress }, { isClosed: true })
   }
