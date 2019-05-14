@@ -5,7 +5,7 @@ const { handleReceipt } = require('@events/handlers')
 const { web3, from, send } = require('@services/web3/home')
 const CommunityTransferManagerABI = require('@fuse/entities-contracts/build/abi/CommunityTransferManagerWithEvents')
 
-// const IRestrictedTokenABI = require('@fuse/entities-contracts/build/abi/IRestrictedToken')
+const IRestrictedTokenABI = require('@constants/abi/IRestrictedToken')
 const CommunityTransferManagerBytecode = require('@fuse/entities-contracts/build/bytecode/CommunityTransferManager')
 const { combineRoles, roles: { ADMIN_ROLE, USER_ROLE, APPROVED_ROLE } } = require('@fuse/roles')
 
@@ -44,10 +44,10 @@ const deployTransferManager = async (token, step) => {
     await handleReceipt(receipt)
   }
 
-  // const setTransferManagerMethod = new web3.eth.Contract(IRestrictedTokenABI, homeTokenAddress).methods.setTransferManager(communityAddress)
-  // const receipt = await send(setTransferManagerMethod, {
-  //   from
-  // })
+  const setTransferManagerMethod = new web3.eth.Contract(IRestrictedTokenABI, homeTokenAddress).methods.setTransferManager(communityAddress)
+  await send(setTransferManagerMethod, {
+    from
+  })
 }
 
 module.exports = {
