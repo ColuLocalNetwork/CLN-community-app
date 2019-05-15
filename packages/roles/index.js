@@ -7,7 +7,6 @@ const hasRole = (roles, role) => {
 }
 
 const combineRoles = (...roles) => {
-  // const combinedRole = parseInt(roles, 16) | parseInt(otherRoles, 16)
   const combinedRole = roles.reduce((accumulatedRole, role) => accumulatedRole | parseInt(role, 16), parseInt(roles[0], 16))
   return util.bufferToHex(util.setLengthLeft(combinedRole, 32))
 }

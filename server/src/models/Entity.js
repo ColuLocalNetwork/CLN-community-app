@@ -1,15 +1,3 @@
-const { hasRole, roles: { ADMIN_ROLE, USER_ROLE, BUSINESS_ROLE, APPROVED_ROLE } } = require('@fuse/roles')
-
-
-const getType = (roles) => {
-  if (hasRole(roles, BUSINESS_ROLE)) {
-    return 'business'
-  }
-  if (hasRole(roles, USER_ROLE)) {
-    return 'user'
-  }
-}
-
 module.exports = (mongoose) => {
   mongoose = mongoose || require('mongoose')
   const Schema = mongoose.Schema
@@ -19,36 +7,15 @@ module.exports = (mongoose) => {
     uri: { type: String },
     name: { type: String },
     roles: { type: String, required: [true, "can't be blank"] },
-    type: { type: String, required: [true, "can't be blank"] }
+    type: { type: String, required: [true, "can't be blank"] },
+    isAdmin: { type: Boolean },
+    isApproved: { type: Boolean }
   }, { timestamps: true })
 
   EntitySchema.index({ communityAddress: 1, account: 1 }, { unique: true })
 
-  EntitySchema.pre('save', function (next) {
-    this.type = getType(this.roles)
-    next()
-  })
-
-  EntitySchema.virtual('isAdmin').get(function () {
-    return hasRole(this.roles, ADMIN_ROLE)
-  })
-
-  EntitySchema.virtual('isApproved').get(function () {
-    return hasRole(this.roles, APPROVED_ROLE)
-  })
-
-  // EntitySchema.virtual('type').get(function () {
-  //   if (hasRole(this.roles, BUSINESS_ROLE)) {
-  //     return 'business'
-  //   }
-  //   if (hasRole(this.roles, USER_ROLE)) {
-  //     return 'user'
-  //   }
-  // })
-
   EntitySchema.set('toJSON', {
-    versionKey: false,
-    virtuals: true
+    versionKey: false
   })
 
   const Entity = mongoose.model('Entity', EntitySchema)
