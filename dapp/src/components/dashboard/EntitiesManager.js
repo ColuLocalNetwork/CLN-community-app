@@ -69,6 +69,7 @@ class EntitiesManager extends Component {
       search: '',
       showUsers: true,
       filters: {
+        pending: false,
         isApproved: true,
         isAdmin: false
       }
@@ -294,7 +295,6 @@ class EntitiesManager extends Component {
                               <ul className='options'>
                                 {
                                   filterOptions
-                                    // .filter(({ value }) => value === )
                                     .map(({ label, value }) =>
                                       <li key={value} className='options__item'>
                                         <label>{label}

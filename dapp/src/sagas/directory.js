@@ -179,6 +179,6 @@ export default function * businessSaga () {
     tryTakeEvery(actions.MAKE_ADMIN, makeAdmin, 1),
     tryTakeEvery(actions.REMOVE_AS_ADMIN, removeAsAdmin, 1),
     tryTakeEvery(actions.CONFIRM_USER, confirmUser, 1),
-    takeEvery(action => /^(CREATE_METADATA|REMOVE_ENTITY|MAKE_ADMIN|REMOVE_AS_ADMIN).*SUCCESS/.test(action.type), watchEntityChanges)
+    takeEvery(action => /^(CREATE_METADATA|REMOVE_ENTITY|MAKE_ADMIN|REMOVE_AS_ADMIN|CONFIRM_USER).*SUCCESS/.test(action.type), watchEntityChanges)
   ])
 }
