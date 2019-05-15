@@ -963,11 +963,12 @@ $themes: (
             flex-basis: 24%;
           }
   
-          >span {
+          > span {
             margin-top: 10px;
             font-size: .9em;
             color: $color-primary-dark;
             font-weight: 500;
+            text-align: center;
   
             @include breakpoint(small) {
               margin-bottom: 10px;
@@ -1000,17 +1001,24 @@ $themes: (
 
           @include element(contracts) {
             @include xy-grid(vertical);
+            flex-basis: 60%;
 
             @include element(icon) {
-              margin-right: 5px;
               
               > img {
+                margin-right: 5px;
                 background-size: contain;
                 background-repeat: no-repeat;
                 background-position: center;
                 width: 9px;
                 height: 11px;
               }
+            }
+
+            @include element(small) {
+              display: inline-block;
+              font-size: 0.65rem;
+              padding-left: 13px;
             }
           }
   
@@ -1028,7 +1036,7 @@ $themes: (
   
             > p, div {
               color: rgba(13, 45, 69, 0.6);
-              white-space: nowrap;
+              // white-space: nowrap;
             }
   
             ul {

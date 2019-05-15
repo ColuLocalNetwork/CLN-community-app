@@ -66,7 +66,8 @@ export default class SummaryStep extends Component {
       contracts,
       createTokenSignature,
       transactionStatus,
-      setNextStep
+      setNextStep,
+      isOpen
     } = this.props
 
     const { showError } = this.state
@@ -104,8 +105,17 @@ export default class SummaryStep extends Component {
                   {
                     contractsItems.map(item => (
                       <div key={item}>
-                        <span className='summary-step__content__contracts__icon'><img src={contractIcon} /></span>
-                        {item}
+                        <span className='summary-step__content__contracts__icon'><img src={contractIcon} />{item}</span>
+                        {
+                          item && item.includes('Members') && isOpen && (
+                            <span className='summary-step__content__contracts__small'>Open community</span>
+                          )
+                        }
+                        {
+                          item && item.includes('Members') && !isOpen && (
+                            <span className='summary-step__content__contracts__small'>Close community</span>
+                          )
+                        }
                       </div>
                     ))
                   }

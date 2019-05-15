@@ -5,17 +5,17 @@ import classNames from 'classnames'
 import Loader from 'components/Loader'
 import { getClnBalance, getAccountAddress } from 'selectors/accounts'
 import { REQUEST, PENDING } from 'actions/constants'
-import { getUsersEntities, getBusinessesEntities, checkIsAdmin } from 'selectors/directory'
+import { getUsersEntities, getBusinessesEntities, checkIsAdmin } from 'selectors/entities'
 import {
   addEntity,
   fetchCommunity,
   fetchUsersEntities,
   fetchBusinessesEntities,
   removeEntity,
-  makeAdmin,
-  removeAsAdmin,
+  addAdminRole,
+  removeAdminRole,
   confirmUser
-} from 'actions/directory'
+} from 'actions/communityEntities'
 import Entity from './Entity.jsx'
 import EmptyBusinessList from 'images/emptyBusinessList.png'
 import { loadModal, hideModal } from 'actions/ui'
@@ -137,14 +137,14 @@ class EntitiesManager extends Component {
     removeEntity(communityAddress, account)
   }
 
-  handleMakeAdmin = (account) => {
-    const { makeAdmin } = this.props
-    makeAdmin(account)
+  handleAddAdminRole = (account) => {
+    const { addAdminRole } = this.props
+    addAdminRole(account)
   }
 
-  handleRemoveAdmin = (account) => {
-    const { removeAsAdmin } = this.props
-    removeAsAdmin(account)
+  handleRemoveAdminRole = (account) => {
+    const { removeAdminRole } = this.props
+    removeAdminRole(account)
   }
 
   handleConfirmUser = (account) => {
@@ -161,8 +161,8 @@ class EntitiesManager extends Component {
             index={index}
             entity={entity}
             address={this.props.homeTokenAddress}
-            makeAdmin={this.handleMakeAdmin}
-            removeAdmin={this.handleRemoveAdmin}
+            addAdminRole={this.handleAddAdminRole}
+            removeAdminRole={this.handleRemoveAdminRole}
             handleRemove={this.handleRemoveEntity}
             confirmUser={this.handleConfirmUser}
             showProfile={() => this.showProfile(this.props.communityAddress, entity.account)}
@@ -394,16 +394,16 @@ const mapStateToProps = (state, { match, foreignTokenAddress }) => ({
   clnBalance: getClnBalance(state),
   accountAddress: getAccountAddress(state),
   homeTokenAddress: state.entities.bridges[foreignTokenAddress] && state.entities.bridges[foreignTokenAddress].homeTokenAddress,
-  ...state.screens.directory,
-  ...getTransaction(state, state.screens.directory.transactionHash),
+  ...state.screens.communityEntities,
+  ...getTransaction(state, state.screens.communityEntities.transactionHash),
   isAdmin: checkIsAdmin(state)
 })
 
 const mapDispatchToProps = {
   addEntity,
   confirmUser,
-  makeAdmin,
-  removeAsAdmin,
+  addAdminRole,
+  removeAdminRole,
   removeEntity,
   loadModal,
   hideModal,

@@ -16,8 +16,8 @@ const Entity = ({
   address,
   showProfile,
   handleRemove,
-  makeAdmin,
-  removeAdmin,
+  addAdminRole,
+  removeAdminRole,
   confirmUser
 }) => {
   return (
@@ -52,7 +52,7 @@ const Entity = ({
             type === 'user' && isApproved && !isAdmin && (
               <ul className='more__options'>
                 <li className='more__options__item' onClick={() => handleRemove(account)}>Remove</li>
-                <li className='more__options__item' onClick={() => makeAdmin(account)}>Make admin</li>
+                <li className='more__options__item' onClick={() => addAdminRole(account)}>Make admin</li>
               </ul>
             )
           }
@@ -60,7 +60,7 @@ const Entity = ({
             type === 'user' && isAdmin && isApproved && (
               <ul className='more__options'>
                 <li className='more__options__item' onClick={() => handleRemove(account)}>Remove</li>
-                <li className='more__options__item' onClick={() => removeAdmin(account)}>Remove as admin</li>
+                <li className='more__options__item' onClick={() => removeAdminRole(account)}>Remove as admin</li>
               </ul>
             )
           }
@@ -68,7 +68,7 @@ const Entity = ({
             type === 'user' && !isApproved && !isAdmin && (
               <ul className='more__options'>
                 <li className='more__options__item' onClick={() => confirmUser(account)}>Confirm</li>
-                <li className='more__options__item' onClick={() => makeAdmin(account)}>Make admin</li>
+                <li className='more__options__item' onClick={() => addAdminRole(account)}>Make admin</li>
               </ul>
             )
           }

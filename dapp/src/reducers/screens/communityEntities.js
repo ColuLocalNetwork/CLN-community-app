@@ -7,9 +7,9 @@ import {
   FETCH_USERS_ENTITIES,
   FETCH_BUSINESSES_ENTITIES,
   REMOVE_ENTITY,
-  MAKE_ADMIN,
-  REMOVE_AS_ADMIN
-} from 'actions/directory'
+  ADD_ADMIN_ROLE,
+  REMOVE_ADMIN_ROLE
+} from 'actions/communityEntities'
 import { REQUEST, SUCCESS } from 'actions/constants'
 import { LOCATION_CHANGE } from 'connected-react-router'
 
@@ -24,17 +24,17 @@ export default (state = initialState, action) => {
       return { ...state, transactionStatus: REQUEST }
     case CREATE_LIST.SUCCESS:
       return { ...state, ...action.response, transactionStatus: SUCCESS }
-    case MAKE_ADMIN.REQUEST:
+    case ADD_ADMIN_ROLE.REQUEST:
       return { ...state, transactionStatus: REQUEST, signatureNeeded: true }
-    case MAKE_ADMIN.PENDING:
+    case ADD_ADMIN_ROLE.PENDING:
       return { ...state, transactionHash: action.response.transactionHash, signatureNeeded: false }
-    case MAKE_ADMIN.SUCCESS:
+    case ADD_ADMIN_ROLE.SUCCESS:
       return { ...state, ...action.response }
-    case REMOVE_AS_ADMIN.REQUEST:
+    case REMOVE_ADMIN_ROLE.REQUEST:
       return { ...state, transactionStatus: REQUEST }
-    case REMOVE_AS_ADMIN.PENDING:
+    case REMOVE_ADMIN_ROLE.PENDING:
       return { ...state, transactionHash: action.response.transactionHash, signatureNeeded: false }
-    case REMOVE_AS_ADMIN.SUCCESS:
+    case REMOVE_ADMIN_ROLE.SUCCESS:
       return { ...state, ...action.response }
     case REMOVE_ENTITY.REQUEST:
       return { ...state, transactionStatus: REQUEST }

@@ -1,10 +1,10 @@
 import { all, call, put, select, takeEvery } from 'redux-saga/effects'
 
 import { getContract } from 'services/contract'
-import * as actions from 'actions/directory'
+import * as actions from 'actions/communityEntities'
 import { apiCall, createEntitiesFetch, tryTakeEvery } from './utils'
 import { getAccountAddress } from 'selectors/accounts'
-import { getCommunityAddress } from 'selectors/directory'
+import { getCommunityAddress } from 'selectors/entities'
 import { getAddress } from 'selectors/network'
 import { createEntitiesMetadata } from 'sagas/metadata'
 import { processReceipt } from 'services/api/misc'
@@ -53,7 +53,7 @@ function * confirmUser ({ account }) {
   yield call(transactionFlow, { transactionPromise, action, sendReceipt: true })
 }
 
-function * makeAdmin ({ account }) {
+function * addAdminRole ({ account }) {
   const communityAddress = yield select(getCommunityAddress)
   const accountAddress = yield select(getAccountAddress)
   const CommunityContract = getContract({ abiName: 'Community',
@@ -65,11 +65,11 @@ function * makeAdmin ({ account }) {
     from: accountAddress
   })
 
-  const action = actions.MAKE_ADMIN
+  const action = actions.ADD_ADMIN_ROLE
   yield call(transactionFlow, { transactionPromise, action, sendReceipt: true })
 }
 
-function * removeAsAdmin ({ account }) {
+function * removeAdminRole ({ account }) {
   const communityAddress = yield select(getCommunityAddress)
   const accountAddress = yield select(getAccountAddress)
   const CommunityContract = getContract({ abiName: 'Community',
@@ -81,7 +81,7 @@ function * removeAsAdmin ({ account }) {
     from: accountAddress
   })
 
-  const action = actions.REMOVE_AS_ADMIN
+  const action = actions.REMOVE_ADMIN_ROLE
   yield call(transactionFlow, { transactionPromise, action, sendReceipt: true })
 }
 
@@ -136,11 +136,6 @@ function * removeEntity ({ communityAddress, account }) {
   yield call(transactionFlow, { transactionPromise, action, sendReceipt: true })
 }
 
-const fetchUsersEntities = createEntitiesFetch(actions.FETCH_USERS_ENTITIES, entitiesApi.fetchCommunityEntities)
-const fetchBusinessesEntities = createEntitiesFetch(actions.FETCH_BUSINESSES_ENTITIES, entitiesApi.fetchCommunityEntities)
-
-const fetchEntity = createEntitiesFetch(actions.FETCH_ENTITY, entitiesApi.fetchEntity)
-
 function * fetchCommunity ({ tokenAddress }) {
   const { data } = yield apiCall(tokenApi.fetchCommunity, { tokenAddress })
   yield put({ type: actions.FETCH_COMMUNITY.SUCCESS,
@@ -167,7 +162,11 @@ function * watchEntityChanges ({ response }) {
   }
 }
 
-export default function * businessSaga () {
+const fetchUsersEntities = createEntitiesFetch(actions.FETCH_USERS_ENTITIES, entitiesApi.fetchCommunityEntities)
+const fetchBusinessesEntities = createEntitiesFetch(actions.FETCH_BUSINESSES_ENTITIES, entitiesApi.fetchCommunityEntities)
+const fetchEntity = createEntitiesFetch(actions.FETCH_ENTITY, entitiesApi.fetchEntity)
+
+export default function * commuityEntitiesSaga () {
   yield all([
     tryTakeEvery(actions.CREATE_LIST, createList, 1),
     tryTakeEvery(actions.ADD_ENTITY, addEntity, 1),
@@ -176,9 +175,9 @@ export default function * businessSaga () {
     tryTakeEvery(actions.FETCH_USERS_ENTITIES, fetchUsersEntities, 1),
     tryTakeEvery(actions.FETCH_BUSINESSES_ENTITIES, fetchBusinessesEntities, 1),
     tryTakeEvery(actions.FETCH_ENTITY, fetchEntity, 1),
-    tryTakeEvery(actions.MAKE_ADMIN, makeAdmin, 1),
-    tryTakeEvery(actions.REMOVE_AS_ADMIN, removeAsAdmin, 1),
+    tryTakeEvery(actions.ADD_ADMIN_ROLE, addAdminRole, 1),
+    tryTakeEvery(actions.REMOVE_ADMIN_ROLE, removeAdminRole, 1),
     tryTakeEvery(actions.CONFIRM_USER, confirmUser, 1),
-    takeEvery(action => /^(CREATE_METADATA|REMOVE_ENTITY|MAKE_ADMIN|REMOVE_AS_ADMIN|CONFIRM_USER).*SUCCESS/.test(action.type), watchEntityChanges)
+    takeEvery(action => /^(CREATE_METADATA|REMOVE_ENTITY|ADD_ADMIN_ROLE|REMOVE_ADMIN_ROLE|CONFIRM_USER).*SUCCESS/.test(action.type), watchEntityChanges)
   ])
 }

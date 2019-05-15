@@ -203,6 +203,7 @@ class IssuanceWizard extends Component {
       case 4:
         return (
           <SummaryStep
+            isOpen={isOpen}
             networkType={foreignNetwork}
             createTokenSignature={createTokenSignature}
             contracts={contracts}

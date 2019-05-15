@@ -6,7 +6,7 @@ import TopNav from 'components/TopNav'
 import CopyToClipboard from 'components/common/CopyToClipboard'
 import { loadModal } from 'actions/ui'
 import { fetchMetadata } from 'actions/metadata'
-import { getList, fetchBusinesses, fetchBusiness, editEntity, fetchEntity } from 'actions/directory'
+import { editEntity, fetchEntity } from 'actions/communityEntities'
 import { ADD_DIRECTORY_ENTITY, WRONG_NETWORK_MODAL } from 'constants/uiConstants'
 import ReactGA from 'services/ga'
 import { getBlockExplorerUrl } from 'utils/network'
@@ -38,22 +38,8 @@ class EntityProfile extends Component {
 
   showHomePage = (address) => this.props.history.push('/')
 
-  toggleHandler = (isChecked) => {
-    // if (isChecked) {
-    //   this.handleDeactivate()
-    // } else {
-    //   this.handleActivate()
-    // }
-  }
-
-  // handleDeactivate = () => this.onlyOnFuse(() => this.props.deactivateBusiness(this.props.listAddress, this.props.hash))
-
-  // handleActivate = () => this.onlyOnFuse(() => this.props.activateBusiness(this.props.listAddress, this.props.hash))
-
   handleEdit = () =>
     this.onlyOnFuse(() => this.props.loadModal(ADD_DIRECTORY_ENTITY, { submitEntity: this.editEntity, entity: this.props.entity }))
-
-  // editEntity = (data) => this.props.editEntity(this.props.listAddress, this.props.hash, data)
 
   render () {
     const { entity } = this.props
@@ -159,15 +145,12 @@ const mapStateToProps = (state, { match }) => ({
   entity: state.entities.communityEntities[match.params.account] &&
     state.entities.communityEntities[match.params.account].uri &&
     state.entities.metadata[state.entities.communityEntities[match.params.account].uri],
-  editEntityReceipt: state.screens.directory.editEntityReceipt,
-  ...getTransaction(state, state.screens.directory.editTransactionHash)
+  editEntityReceipt: state.screens.communityEntities.editEntityReceipt,
+  ...getTransaction(state, state.screens.communityEntities.editTransactionHash)
 })
 
 const mapDispatchToProps = {
   loadModal,
-  getList,
-  fetchBusinesses,
-  fetchBusiness,
   editEntity,
   fetchMetadata,
   fetchEntity
