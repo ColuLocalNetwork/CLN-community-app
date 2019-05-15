@@ -1,5 +1,5 @@
 {
-  "name": "contract-utils",
+  "name": "@fuse/contract-utils",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
