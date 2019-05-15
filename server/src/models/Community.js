@@ -13,11 +13,6 @@ module.exports = (mongoose) => {
   CommunitySchema.index({ communityAddress: 1 }, { unique: true })
   CommunitySchema.index({ homeTokenAddress: 1 }, { unique: true })
 
-  CommunitySchema.post('save', businessList => {
-    const { businessListDeployed } = require('@utils/tokenProgress')
-    businessListDeployed(businessList.tokenAddress)
-  })
-
   const Community = mongoose.model('Community', CommunitySchema)
 
   function community () {}
