@@ -10,7 +10,8 @@ const Entity = ({
     type,
     account,
     active,
-    isAdmin
+    isAdmin,
+    isApproved
   },
   address,
   showProfile,
@@ -25,7 +26,7 @@ const Entity = ({
         <FontAwesome name='bullseye' />
       </div>
       <div className='entities__entity__content'>
-        <span className='entities__entity__content__title'>{name}</span>
+        <span className='entities__entity__content__title'>{name || ' '}</span>
         {businessType && <div className='entities__entity__content__type'>{businessType}</div>}
         <div className='entities__entity__content__subtitle'>
           <span className='text-asset'>Account ID</span>

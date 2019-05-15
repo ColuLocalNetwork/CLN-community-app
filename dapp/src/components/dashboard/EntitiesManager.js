@@ -42,7 +42,7 @@ const filterOptions = [
   }
 ]
 
-const EntityDirectoryDataFetcher = (props) => {
+const EntitiesManagerDataFetcher = (props) => {
   useEffect(() => {
     if (props.foreignTokenAddress) {
       props.fetchHomeToken(props.foreignTokenAddress)
@@ -60,8 +60,8 @@ const EntityDirectoryDataFetcher = (props) => {
   return null
 }
 
-class EntitiesList extends Component {
-  constructor (props) {
+class EntitiesManager extends Component {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -187,7 +187,7 @@ class EntitiesList extends Component {
     if (items && items.length) {
       return this.renderList(filteredItems)
     } else {
-      if (!transactionStatus || this.props.signatureNeeded) {
+      if (!transactionStatus) {
         if (showUsers) {
           return (
             <div className='entities__empty-list'>
@@ -220,52 +220,47 @@ class EntitiesList extends Component {
     }
   }
 
-  renderContent = () => {
-    const { communityAddress } = this.props
+  renderNotDeployContent = () => {
     const { showUsers } = this.state
 
-    if (!communityAddress) {
-      if (showUsers) {
-        return (
-          <Fragment>
-            <div className='entities__not-deploy'>
-              <p className='entities__not-deploy__title'>Users List</p>
-              <p className='entities__not-deploy__text'>This thing needs be activated some kind of text and explanation</p>
-              <button
-                className='entities__not-deploy__btn'
-                onClick={this.props.loadBusinessListPopup}
-                disabled={!this.canDeployBusinessList()}
-              >
-                Deploy users list
-              </button>
-            </div>
-            <div className='entities__not-deploy__placeholder'>
-              <img src={EmptyBusinessList} />
-            </div>
-          </Fragment>
-        )
-      } else {
-        return (
-          <Fragment>
-            <div className='entities__not-deploy'>
-              <p className='entities__not-deploy__title'>Merchants List</p>
-              <p className='entities__not-deploy__text'>This thing needs be activated some kind of text and explanation</p>
-              <button
-                className='entities__not-deploy__btn'
-                onClick={this.props.loadBusinessListPopup}
-                disabled={!this.canDeployBusinessList()}
-              >
-                Deploy business list
-              </button>
-            </div>
-            <div className='entities__not-deploy__placeholder'>
-              <img src={EmptyBusinessList} />
-            </div>
-          </Fragment>
-        )
-      }
+    if (showUsers) {
+      return (
+        <Fragment>
+          <div className='entities__not-deploy'>
+            <p className='entities__not-deploy__title'>Members List</p>
+            <p className='entities__not-deploy__text'>This thing needs be activated some kind of text and explanation</p>
+            <button
+              className='entities__not-deploy__btn'
+              onClick={this.props.loadBusinessListPopup}
+              disabled={!this.canDeployBusinessList()}
+            >
+              Deploy members list
+          </button>
+          </div>
+          <div className='entities__not-deploy__placeholder'>
+            <img src={EmptyBusinessList} />
+          </div>
+        </Fragment>
+      )
     } else {
-      return this.renderItems()
+      return (
+        <Fragment>
+          <div className='entities__not-deploy'>
+            <p className='entities__not-deploy__title'>Merchants List</p>
+            <p className='entities__not-deploy__text'>This thing needs be activated some kind of text and explanation</p>
+            <button
+              className='entities__not-deploy__btn'
+              onClick={this.props.loadBusinessListPopup}
+              disabled={!this.canDeployBusinessList()}
+            >
+              Deploy business list
+          </button>
+          </div>
+          <div className='entities__not-deploy__placeholder'>
+            <img src={EmptyBusinessList} />
+          </div>
+        </Fragment>
+      )
     }
   }
 
@@ -273,96 +268,108 @@ class EntitiesList extends Component {
     isOwner(this.props.token, this.props.accountAddress) &&
     this.props.homeTokenAddress
 
-  render () {
-    const { network: { networkType }, isClosed, isAdmin } = this.props
+  render() {
+    const { network: { networkType }, isClosed, isAdmin, communityAddress } = this.props
     const { showUsers, filters } = this.state
     const val = Object.keys(filters).find((key) => filters[key])
     return (
       <Fragment>
         <div className='entities__wrapper'>
           <div className='entities__container'>
-            <div className='entities__actions'>
-              <div className='entities__actions__filter'>
-                {
-                  showUsers && (
-                    <Fragment>
-                      <p className='entities__actions__filter__icon'><img src={filterIcon} /></p>
-                      <span>Filter&nbsp;|&nbsp;</span> <span>{filterOptions.find(({ value }) => val === value).label}</span>
-                      <div className='filter-options'>
-                        <ul className='options'>
-                          {
-                            filterOptions
-                              .filter(({ value }) => value !== 'pending' && !isClosed)
-                              .map(({ label, value }) =>
-                                <li key={value} className='options__item'>
-                                  <label>{label}
-                                    <input
-                                      type='radio'
-                                      name='filter'
-                                      checked={filters[value]}
-                                      value={value}
-                                      onChange={this.handleRadioInput}
-                                    />
-                                    <span />
-                                  </label>
-                                </li>
-                              )
-                          }
-                        </ul>
-                      </div>
-                    </Fragment>
-                  )
-                }
-              </div>
-              <div className='entities__actions__buttons'>
-                <button
-                  className={classNames('entities__actions__buttons__btn', { 'entities__actions__buttons__btn--active': !showUsers })}
-                  onClick={() => this.setState({ showUsers: false })}
-                >Merchant</button>
-                <button
-                  className={classNames('entities__actions__buttons__btn', { 'entities__actions__buttons__btn--active': showUsers })}
-                  onClick={() => this.setState({ showUsers: true })}
-                >User</button>
-              </div>
-              <div className='entities__actions__add'>
-                {
-                  (isAdmin || !isClosed) && (
-                    <Fragment>
+            {
+              communityAddress ? (
+                <Fragment>
+                  <div className='entities__actions'>
+                    <div className='entities__actions__filter'>
                       {
-                        networkType === 'fuse'
-                          ? (
-                            <span onClick={this.handleAddBusiness}>
-                              <a style={{ backgroundImage: `url(${plusIcon})` }} />
-                            </span>
-                          ) : (
-                            <span onClick={this.handleAddBusiness}>
-                              <FontAwesome name='plus-circle' />
-                            </span>
-                          )
+                        showUsers && isAdmin && (
+                          <Fragment>
+                            <p className='entities__actions__filter__icon'><img src={filterIcon} /></p>
+                            <span>Filter&nbsp;|&nbsp;</span>
+                            <span>{filterOptions.find(({ value }) => val === value).label}</span>
+                            <div className='filter-options'>
+                              <ul className='options'>
+                                {
+                                  filterOptions
+                                    .filter(({ value }) => value !== 'pending' && !isClosed)
+                                    .map(({ label, value }) =>
+                                      <li key={value} className='options__item'>
+                                        <label>{label}
+                                          <input
+                                            type='radio'
+                                            name='filter'
+                                            checked={filters[value]}
+                                            value={value}
+                                            onChange={this.handleRadioInput}
+                                          />
+                                          <span />
+                                        </label>
+                                      </li>
+                                    )
+                                }
+                              </ul>
+                            </div>
+                          </Fragment>
+                        )
                       }
-                      {showUsers ? 'Add new user' : 'Add new merchant'}
-                    </Fragment>
-                  )
-                }
-              </div>
-            </div>
-            <div className='entities__search'>
-              <button className='entities__search__icon' onClick={() => this.setShowingSearch()}>
-                <FontAwesome name='search' />
-              </button>
-              <input
-                value={this.state.search}
-                onChange={this.setSearchValue}
-                placeholder={showUsers ? 'Search a user...' : 'Search a merchant...'}
-              />
-            </div>
-            <div className='entities__items'>
-              {this.renderTransactionStatus()}
-              {this.renderContent()}
-            </div>
+                    </div>
+                    <div className='entities__actions__buttons'>
+                      <button
+                        className={classNames('entities__actions__buttons__btn', { 'entities__actions__buttons__btn--active': !showUsers })}
+                        onClick={() => this.setState({ showUsers: false })}
+                      >Merchant</button>
+                      <button
+                        className={classNames('entities__actions__buttons__btn', { 'entities__actions__buttons__btn--active': showUsers })}
+                        onClick={() => this.setState({ showUsers: true })}
+                      >User</button>
+                    </div>
+                    <div className='entities__actions__add'>
+                      {
+                        (isAdmin || !isClosed) && (
+                          <Fragment>
+                            {
+                              networkType === 'fuse'
+                                ? (
+                                  <span onClick={this.handleAddBusiness}>
+                                    <a style={{ backgroundImage: `url(${plusIcon})` }} />
+                                  </span>
+                                ) : (
+                                  <span onClick={this.handleAddBusiness}>
+                                    <FontAwesome name='plus-circle' />
+                                  </span>
+                                )
+                            }
+                            {showUsers ? 'Add new user' : 'Add new merchant'}
+                          </Fragment>
+                        )
+                      }
+                    </div>
+                  </div>
+                  <div className='entities__search'>
+                    <button className='entities__search__icon' onClick={() => this.setShowingSearch()}>
+                      <FontAwesome name='search' />
+                    </button>
+                    <input
+                      value={this.state.search}
+                      onChange={this.setSearchValue}
+                      placeholder={showUsers ? 'Search a user...' : 'Search a merchant...'}
+                    />
+                  </div>
+                  <div className='entities__items'>
+                    {this.renderTransactionStatus()}
+                    {this.renderItems()}
+                  </div>
+                </Fragment>
+              ) : (
+                  <div className='entities__not-deploy__wrapper'>
+                    {this.renderNotDeployContent()}
+                  </div>
+                )
+            }
+
           </div>
 
-          <EntityDirectoryDataFetcher
+          <EntitiesManagerDataFetcher
             fetchHomeToken={this.props.fetchHomeToken}
             communityAddress={this.props.communityAddress}
             homeTokenAddress={this.props.homeTokenAddress}
@@ -372,7 +379,7 @@ class EntitiesList extends Component {
             fetchUsersEntities={this.props.fetchUsersEntities}
           />
         </div>
-      </Fragment>
+      </Fragment >
     )
   }
 }
@@ -403,4 +410,4 @@ const mapDispatchToProps = {
   fetchUsersEntities
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EntitiesList)
+export default connect(mapStateToProps, mapDispatchToProps)(EntitiesManager)

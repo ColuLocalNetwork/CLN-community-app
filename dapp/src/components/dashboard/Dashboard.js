@@ -16,7 +16,7 @@ import TopNav from 'components/TopNav'
 import Breadcrumbs from 'components/elements/Breadcrumbs'
 import ActivityContent from './ActivityContent'
 import Bridge from './Bridge'
-import EntitiesList from './EntitiesList'
+import EntitiesManager from './EntitiesManager'
 import { isOwner } from 'utils/token'
 import Tabs from 'components/common/Tabs'
 import Message from 'components/common/Message'
@@ -319,7 +319,7 @@ class Dashboard extends Component {
             handleTransfer={this.handleTransfer}
             network={networkType}
           />
-          <EntitiesList
+          <EntitiesManager
             history={this.props.history}
             foreignTokenAddress={this.props.tokenAddress}
             token={this.props.token}
