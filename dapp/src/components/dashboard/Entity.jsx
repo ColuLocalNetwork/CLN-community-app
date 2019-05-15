@@ -49,7 +49,7 @@ const Entity = ({
             )
           }
           {
-            type === 'user' && active && !isAdmin && (
+            type === 'user' && isApproved && !isAdmin && (
               <ul className='more__options'>
                 <li className='more__options__item' onClick={() => handleRemove(account)}>Remove</li>
                 <li className='more__options__item' onClick={() => makeAdmin(account)}>Make admin</li>
@@ -57,7 +57,7 @@ const Entity = ({
             )
           }
           {
-            type === 'user' && isAdmin && active && (
+            type === 'user' && isAdmin && isApproved && (
               <ul className='more__options'>
                 <li className='more__options__item' onClick={() => handleRemove(account)}>Remove</li>
                 <li className='more__options__item' onClick={() => removeAdmin(account)}>Remove as admin</li>
@@ -65,7 +65,7 @@ const Entity = ({
             )
           }
           {
-            type === 'user' && !active && !isAdmin && (
+            type === 'user' && !isApproved && !isAdmin && (
               <ul className='more__options'>
                 <li className='more__options__item' onClick={() => confirmUser(account)}>Confirm</li>
                 <li className='more__options__item' onClick={() => makeAdmin(account)}>Make admin</li>

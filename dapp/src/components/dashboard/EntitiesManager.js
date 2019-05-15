@@ -30,7 +30,7 @@ import filterIcon from 'images/filter.svg'
 const filterOptions = [
   {
     label: 'Community users',
-    value: 'confirmed'
+    value: 'isApproved'
   },
   {
     label: 'Pending users',
@@ -69,8 +69,7 @@ class EntitiesManager extends Component {
       search: '',
       showUsers: true,
       filters: {
-        pending: false,
-        confirmed: true,
+        isApproved: true,
         isAdmin: false
       }
     }
@@ -110,7 +109,7 @@ class EntitiesManager extends Component {
   handleRadioInput = (e) => {
     const filters = {
       pending: false,
-      confirmed: false,
+      isApproved: false,
       isAdmin: false
     }
     this.setState({ filters: { ...filters, [e.target.value]: true } })
@@ -129,7 +128,7 @@ class EntitiesManager extends Component {
   filterByRadio = (users) => {
     const { filters } = this.state
     const val = Object.keys(filters).find((key) => filters[key])
-    return users.filter((user) => val === 'confirmed' ? user : user[val])
+    return users.filter((user) => this.getFilter(val, user))
   }
 
   handleRemoveEntity = (account) => {
@@ -268,6 +267,10 @@ class EntitiesManager extends Component {
     isOwner(this.props.token, this.props.accountAddress) &&
     this.props.homeTokenAddress
 
+  getFilter(val, user) {
+    return val === 'isApproved' ? user.isApproved : val === 'pending' ? !user.isApproved : user.isAdmin;
+  }
+
   render () {
     const { network: { networkType }, isClosed, isAdmin, communityAddress } = this.props
     const { showUsers, filters } = this.state
@@ -291,7 +294,7 @@ class EntitiesManager extends Component {
                               <ul className='options'>
                                 {
                                   filterOptions
-                                    .filter(({ value }) => value !== 'pending' && !isClosed)
+                                    // .filter(({ value }) => value === )
                                     .map(({ label, value }) =>
                                       <li key={value} className='options__item'>
                                         <label>{label}
