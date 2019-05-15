@@ -1,4 +1,4 @@
-const { hasRole, roles: { ADMIN_ROLE } } = require('@fuse/roles')
+const { hasRole, roles: { ADMIN_ROLE, USER_ROLE, BUSINESS_ROLE, APPROVED_ROLE } } = require('@fuse/roles')
 
 module.exports = (mongoose) => {
   mongoose = mongoose || require('mongoose')
@@ -8,15 +8,26 @@ module.exports = (mongoose) => {
     communityAddress: { type: String, required: [true, "can't be blank"] },
     uri: { type: String },
     name: { type: String },
-    type: { type: String },
-    roles: { type: String, required: [true, "can't be blank"] },
-    active: { type: Boolean, default: true }
+    roles: { type: String, required: [true, "can't be blank"] }
   }, { timestamps: true })
 
   EntitySchema.index({ communityAddress: 1, account: 1 }, { unique: true })
 
   EntitySchema.virtual('isAdmin').get(function () {
     return hasRole(this.roles, ADMIN_ROLE)
+  })
+
+  EntitySchema.virtual('isApproved').get(function () {
+    return hasRole(this.roles, APPROVED_ROLE)
+  })
+
+  EntitySchema.virtual('type').get(function () {
+    if (hasRole(this.roles, BUSINESS_ROLE)) {
+      return 'business'
+    }
+    if (hasRole(this.roles, USER_ROLE)) {
+      return 'user'
+    }
   })
 
   EntitySchema.set('toJSON', {
