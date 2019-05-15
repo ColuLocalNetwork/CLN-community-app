@@ -267,8 +267,8 @@ class EntitiesManager extends Component {
     isOwner(this.props.token, this.props.accountAddress) &&
     this.props.homeTokenAddress
 
-  getFilter(val, user) {
-    return val === 'isApproved' ? user.isApproved : val === 'pending' ? !user.isApproved : user.isAdmin;
+  getFilter (val, user) {
+    return val === 'isApproved' ? user.isApproved : val === 'pending' ? !user.isApproved : user.isAdmin
   }
 
   render () {
