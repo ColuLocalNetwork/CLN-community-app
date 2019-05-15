@@ -30,6 +30,3 @@ export const deployBridge = (apiRoot, { foreignTokenAddress }) =>
 
 export const fetchCommunity = (apiRoot, { tokenAddress }) =>
   request.get(`${apiRoot}/communities?tokenAddress=${tokenAddress}`).then(response => response.body)
-
-export const fetchCommunityEntities = (apiRoot, { communityAddress }) =>
-  request.get(`${apiRoot}/entities?communityAddress=${communityAddress}`).then(response => response.body)

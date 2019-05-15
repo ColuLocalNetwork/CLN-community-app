@@ -122,7 +122,7 @@ $themes: (
     }
     
     .transfer-tab__content__button {
-      > button {
+      button.button-flip__front {
         @if $name == 'fuse' {
           background: linear-gradient(97deg, #98faac, #fae83e);
           color: $dark;

@@ -9,7 +9,7 @@ const IRestrictedTokenABI = require('@constants/abi/IRestrictedToken')
 const CommunityTransferManagerBytecode = require('@fuse/entities-contracts/build/bytecode/CommunityTransferManager')
 const { combineRoles, roles: { ADMIN_ROLE, USER_ROLE, APPROVED_ROLE } } = require('@fuse/roles')
 
-const deployTransferManager = async (token, step) => {
+const deployCommunity = async (token, step) => {
   console.log('Deploying community transfer manager')
 
   const method = new web3.eth.Contract(CommunityTransferManagerABI).deploy({ data: CommunityTransferManagerBytecode })
@@ -52,5 +52,5 @@ const deployTransferManager = async (token, step) => {
 }
 
 module.exports = {
-  deployTransferManager
+  deployCommunity
 }

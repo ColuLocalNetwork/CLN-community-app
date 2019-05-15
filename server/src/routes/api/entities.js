@@ -40,8 +40,6 @@ router.get('/:communityAddress', async (req, res, next) => {
     Entity.countDocuments(queryFilter)
   ])
 
-  console.log(results)
-
   const pageCount = Math.ceil(itemCount / req.query.limit)
 
   res.json({
