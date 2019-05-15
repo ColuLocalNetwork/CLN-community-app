@@ -28,11 +28,11 @@
   "dependencies": {
     "openzeppelin-solidity": "2.0.1",
     "truffle": "^5.0.14",
-    "truffle-assertions": "^0.9.0",
-    "truffle-hdwallet-provider": "^1.0.8"
+    "truffle-hdwallet-provider": "^1.0.8",
+    "@fuse/contract-utils": "../../packages/contract-utils"
   },
   "devDependencies": {
-    "@fuse/contract-utils": "../../packages/contract-utils",
+    "truffle-assertions": "^0.9.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "chai-bn": "^0.1.1"

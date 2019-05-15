@@ -9,7 +9,9 @@
     "build": "webpack --mode production",
     "lint": "standard",
     "lint-fix": "standard --fix",
-    "test": "NODE_PATH=./src mocha --require babel-core/register --recursive"
+    "test": "NODE_PATH=./src mocha --require babel-core/register --recursive",
+    "bootstrap": "sh ../scripts/bootstrap.sh",
+    "lerna:bootstrap": "lerna bootstrap"
   },
   "repository": {
     "type": "git",

@@ -7,7 +7,9 @@
     "start": "node ./src/app.js",
     "dev": "nodemon ./src/app.js",
     "lint": "standard",
-    "lint-fix": "standard --fix"
+    "lint-fix": "standard --fix",
+    "bootstrap": "sh ../scripts/bootstrap.sh",
+    "lerna:bootstrap": "lerna bootstrap"
   },
   "repository": {
     "type": "git",
@@ -34,6 +36,9 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.3.1",
+    "@fuse/entities-contracts": "../contracts/entities/",
+    "@fuse/roles": "../packages/roles",
+    "@fuse/token-factory-contracts": "../contracts/token-factory/",
     "@sendgrid/client": "^6.3.0",
     "@sendgrid/mail": "^6.3.1",
     "agenda": "^2.0.2",
@@ -60,12 +65,10 @@
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
     "validator": "^10.10.0",
-    "web3": "^1.0.0-beta.37",
-    "@fuse/token-factory-contracts": "../contracts/token-factory/",
-    "@fuse/entities-contracts": "../contracts/entities/",
-    "@fuse/roles": "../packages/roles"
+    "web3": "^1.0.0-beta.37"
   },
   "devDependencies": {
+    "lerna": "^3.14.0",
     "nodemon": "^1.18.11",
     "standard": "^12.0.1"
   }
