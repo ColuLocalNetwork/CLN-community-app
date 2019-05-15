@@ -2,7 +2,24 @@
 
 set -e
 
-cd dapp
+
+cd contracts/entities
+
+if ! [ -n "$NO_INSTALL" ]
+then
+  npm install --registry https://registry.npmjs.org/
+fi
+npm run build
+
+
+cd ../token-factory
+if ! [ -n "$NO_INSTALL" ]
+then
+  npm install --registry https://registry.npmjs.org/
+fi
+npm run build
+
+cd ../../dapp
 
 if ! [ -n "$NO_INSTALL" ]
 then
