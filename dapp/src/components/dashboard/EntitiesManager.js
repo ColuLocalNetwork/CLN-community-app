@@ -61,7 +61,7 @@ const EntitiesManagerDataFetcher = (props) => {
 }
 
 class EntitiesManager extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -235,7 +235,7 @@ class EntitiesManager extends Component {
               disabled={!this.canDeployBusinessList()}
             >
               Deploy members list
-          </button>
+            </button>
           </div>
           <div className='entities__not-deploy__placeholder'>
             <img src={EmptyBusinessList} />
@@ -254,7 +254,7 @@ class EntitiesManager extends Component {
               disabled={!this.canDeployBusinessList()}
             >
               Deploy business list
-          </button>
+            </button>
           </div>
           <div className='entities__not-deploy__placeholder'>
             <img src={EmptyBusinessList} />
@@ -268,7 +268,7 @@ class EntitiesManager extends Component {
     isOwner(this.props.token, this.props.accountAddress) &&
     this.props.homeTokenAddress
 
-  render() {
+  render () {
     const { network: { networkType }, isClosed, isAdmin, communityAddress } = this.props
     const { showUsers, filters } = this.state
     const val = Object.keys(filters).find((key) => filters[key])
@@ -361,10 +361,10 @@ class EntitiesManager extends Component {
                   </div>
                 </Fragment>
               ) : (
-                  <div className='entities__not-deploy__wrapper'>
-                    {this.renderNotDeployContent()}
-                  </div>
-                )
+                <div className='entities__not-deploy__wrapper'>
+                  {this.renderNotDeployContent()}
+                </div>
+              )
             }
 
           </div>

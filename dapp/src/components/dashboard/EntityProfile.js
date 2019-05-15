@@ -50,8 +50,8 @@ class EntityProfile extends Component {
 
   // handleActivate = () => this.onlyOnFuse(() => this.props.activateBusiness(this.props.listAddress, this.props.hash))
 
-  // handleEdit = () =>
-  //   this.onlyOnFuse(() => this.props.loadModal(ADD_DIRECTORY_ENTITY, { submitEntity: this.editEntity, entity: this.props.entity }))
+  handleEdit = () =>
+    this.onlyOnFuse(() => this.props.loadModal(ADD_DIRECTORY_ENTITY, { submitEntity: this.editEntity, entity: this.props.entity }))
 
   // editEntity = (data) => this.props.editEntity(this.props.listAddress, this.props.hash, data)
 
