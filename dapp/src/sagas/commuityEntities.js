@@ -5,37 +5,11 @@ import * as actions from 'actions/communityEntities'
 import { apiCall, createEntitiesFetch, tryTakeEvery } from './utils'
 import { getAccountAddress } from 'selectors/accounts'
 import { getCommunityAddress } from 'selectors/entities'
-import { getAddress } from 'selectors/network'
 import { createEntitiesMetadata } from 'sagas/metadata'
-import { processReceipt } from 'services/api/misc'
 import * as tokenApi from 'services/api/token'
 import * as entitiesApi from 'services/api/entities'
-import { getHomeTokenAddress } from 'selectors/token'
 import { transactionFlow } from './transaction'
 import { roles } from '@fuse/roles'
-
-function * createList ({ tokenAddress }) {
-  const accountAddress = yield select(getAccountAddress)
-  const contractAddress = yield select(getAddress, 'SimpleListFactory')
-  const SimpleListFactoryContract = getContract({ abiName: 'SimpleListFactory',
-    address: contractAddress
-  })
-  const homeTokenAddress = yield select(getHomeTokenAddress, tokenAddress)
-
-  const method = SimpleListFactoryContract.methods.createSimpleList(homeTokenAddress)
-  const receipt = yield method.send({
-    from: accountAddress
-  })
-
-  yield apiCall(processReceipt, { receipt })
-
-  yield put({ type: actions.CREATE_LIST.SUCCESS,
-    tokenAddress,
-    response: {
-      listAddress: receipt.events.SimpleListCreated.returnValues.list
-    }
-  })
-}
 
 function * confirmUser ({ account }) {
   const communityAddress = yield select(getCommunityAddress)
@@ -168,7 +142,6 @@ const fetchEntity = createEntitiesFetch(actions.FETCH_ENTITY, entitiesApi.fetchE
 
 export default function * commuityEntitiesSaga () {
   yield all([
-    tryTakeEvery(actions.CREATE_LIST, createList, 1),
     tryTakeEvery(actions.ADD_ENTITY, addEntity, 1),
     tryTakeEvery(actions.REMOVE_ENTITY, removeEntity, 1),
     tryTakeEvery(actions.FETCH_COMMUNITY, fetchCommunity, 1),

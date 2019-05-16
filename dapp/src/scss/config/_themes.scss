@@ -1001,10 +1001,10 @@ $themes: (
 
           @include element(contracts) {
             @include xy-grid(vertical);
-            flex-basis: 60%;
+            flex-basis: 50%;
 
             @include element(icon) {
-              
+              white-space: nowrap;              
               > img {
                 margin-right: 5px;
                 background-size: contain;
@@ -1036,7 +1036,6 @@ $themes: (
   
             > p, div {
               color: rgba(13, 45, 69, 0.6);
-              // white-space: nowrap;
             }
   
             ul {

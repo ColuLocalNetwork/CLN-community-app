@@ -1,6 +1,5 @@
 import union from 'lodash/union'
 import {
-  CREATE_LIST,
   ADD_ENTITY,
   EDIT_ENTITY,
   FETCH_COMMUNITY,
@@ -10,7 +9,7 @@ import {
   ADD_ADMIN_ROLE,
   REMOVE_ADMIN_ROLE
 } from 'actions/communityEntities'
-import { REQUEST, SUCCESS } from 'actions/constants'
+import { REQUEST } from 'actions/constants'
 import { LOCATION_CHANGE } from 'connected-react-router'
 
 const initialState = {
@@ -20,10 +19,6 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case CREATE_LIST.REQUEST:
-      return { ...state, transactionStatus: REQUEST }
-    case CREATE_LIST.SUCCESS:
-      return { ...state, ...action.response, transactionStatus: SUCCESS }
     case ADD_ADMIN_ROLE.REQUEST:
       return { ...state, transactionStatus: REQUEST, signatureNeeded: true }
     case ADD_ADMIN_ROLE.PENDING:

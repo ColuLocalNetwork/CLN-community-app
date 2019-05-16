@@ -35,7 +35,7 @@ class IssuanceWizard extends Component {
       },
       membersList: {
         label: 'Members list',
-        checked: false,
+        checked: true,
         key: 'membersList'
       }
     },

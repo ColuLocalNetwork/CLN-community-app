@@ -4,8 +4,6 @@ export const entityName = 'communityEntities'
 
 const entitiesAction = createEntityAction(entityName)
 
-export const CREATE_LIST = createTransactionRequestTypes('CREATE_LIST')
-
 export const FETCH_COMMUNITY = createRequestTypes('GET_COMMUNITY')
 export const FETCH_ENTITIES = createRequestTypes('FETCH_ENTITIES')
 export const FETCH_USERS_ENTITIES = createRequestTypes('FETCH_USERS_ENTITIES')
@@ -19,8 +17,6 @@ export const REMOVE_ADMIN_ROLE = createTransactionRequestTypes('REMOVE_ADMIN_ROL
 export const CONFIRM_USER = createTransactionRequestTypes('CONFIRM_USER')
 
 export const FETCH_ENTITY = createRequestTypes('FETCH_ENTITY')
-
-export const createList = (tokenAddress) => action(CREATE_LIST.REQUEST, { tokenAddress })
 
 export const fetchCommunity = (tokenAddress) => action(FETCH_COMMUNITY.REQUEST, { tokenAddress })
 

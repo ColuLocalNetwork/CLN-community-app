@@ -7,10 +7,9 @@ import { fetchToken, fetchTokenStatistics, transferToken, mintToken, burnToken, 
 import { isUserExists } from 'actions/user'
 import { getClnBalance, getAccountAddress, getBalances } from 'selectors/accounts'
 import { formatWei } from 'utils/format'
-import { USER_DATA_MODAL, WRONG_NETWORK_MODAL, BUSINESS_LIST_MODAL, BRIDGE_MODAL, NO_DATA_ABOUT_OWNER_MODAL } from 'constants/uiConstants'
+import { USER_DATA_MODAL, WRONG_NETWORK_MODAL, BRIDGE_MODAL, NO_DATA_ABOUT_OWNER_MODAL } from 'constants/uiConstants'
 import { loadModal, hideModal } from 'actions/ui'
 import { deployBridge } from 'actions/bridge'
-import { createList } from 'actions/communityEntities'
 import TokenProgress from './TokenProgress'
 import TopNav from 'components/TopNav'
 import Breadcrumbs from 'components/elements/Breadcrumbs'
@@ -149,16 +148,6 @@ class Dashboard extends Component {
     }
   }
 
-  loadBusinessListPopup = () => {
-    this.onlyOnFuse(() => {
-      this.props.loadModal(BUSINESS_LIST_MODAL, {
-        tokenAddress: this.props.tokenAddress,
-        isOwner: isOwner(this.props.token, this.props.accountAddress),
-        buttonAction: this.props.createList
-      })
-    })
-  }
-
   handleMintOrBurnClick = (actionType, amount) => {
     const { burnToken, mintToken, tokenAddress } = this.props
     if (actionType === 'mint') {
@@ -231,7 +220,6 @@ class Dashboard extends Component {
               match={match}
               loadBridgePopup={this.loadBridgePopup}
               loadUserDataModal={this.loadUserDataModal}
-              loadBusinessListPopup={this.loadBusinessListPopup}
             />
             <Tabs>
               <div label='Stats'>
@@ -323,7 +311,6 @@ class Dashboard extends Component {
             history={this.props.history}
             foreignTokenAddress={this.props.tokenAddress}
             token={this.props.token}
-            loadBusinessListPopup={this.loadBusinessListPopup}
             onlyOnFuse={this.onlyOnFuse}
           />
         </div>
@@ -363,7 +350,6 @@ const mapDispatchToProps = {
   loadModal,
   hideModal,
   deployBridge,
-  createList,
   transferToken,
   mintToken,
   burnToken,

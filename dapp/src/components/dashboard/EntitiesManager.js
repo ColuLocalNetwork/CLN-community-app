@@ -253,7 +253,7 @@ class EntitiesManager extends Component {
               onClick={this.props.loadBusinessListPopup}
               disabled={!this.canDeployBusinessList()}
             >
-              Deploy business list
+              Deploy Members list
             </button>
           </div>
           <div className='entities__not-deploy__placeholder'>
@@ -281,7 +281,7 @@ class EntitiesManager extends Component {
         <div className='entities__wrapper'>
           <div className='entities__container'>
             {
-              communityAddress ? (
+              communityAddress && (
                 <Fragment>
                   <div className='entities__actions'>
                     <div className='entities__actions__filter'>
@@ -363,10 +363,6 @@ class EntitiesManager extends Component {
                     {this.renderItems()}
                   </div>
                 </Fragment>
-              ) : (
-                <div className='entities__not-deploy__wrapper'>
-                  {this.renderNotDeployContent()}
-                </div>
               )
             }
 
