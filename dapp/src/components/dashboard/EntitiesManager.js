@@ -174,6 +174,7 @@ class EntitiesManager extends Component {
             removeAdminRole={this.handleRemoveAdminRole}
             handleRemove={this.handleRemoveEntity}
             confirmUser={this.handleConfirmUser}
+            onlyOnFuse={this.props.onlyOnFuse}
             showProfile={() => this.showProfile(this.props.communityAddress, entity.account)}
           />
         ))
