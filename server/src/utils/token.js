@@ -2,13 +2,13 @@ const givenWeb3 = require('@services/web3')
 const { web3, from, send } = require('@services/web3/home')
 const BasicTokenAbi = require('@fuse/token-factory-contracts/build/abi/BasicToken')
 
-const fetchTokenData = async (address) => {
+const fetchTokenData = async (address, { tokenUri } = {}) => {
   const tokenContractInstance = new givenWeb3.eth.Contract(BasicTokenAbi, address)
   const [name, symbol, totalSupply, tokenURI] = await Promise.all([
     tokenContractInstance.methods.name().call(),
     tokenContractInstance.methods.symbol().call(),
     tokenContractInstance.methods.totalSupply().call(),
-    tokenContractInstance.methods.tokenURI().call()
+    tokenUri && tokenContractInstance.methods.tokenURI().call()
   ])
 
   return { name, symbol, totalSupply, tokenURI }

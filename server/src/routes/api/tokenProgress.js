@@ -13,10 +13,10 @@ router.post('/deploy/:tokenAddress', async (req, res, next) => {
   const { tokenAddress } = req.params
   const { steps } = req.body
 
-  // const tokenProgress = await TokenProgress.findOne({ tokenAddress })
-  // if (!tokenProgress || !tokenProgress.steps.tokenIssued) {
-  //   return res.status(400).json({ errror: 'No token issued' })
-  // }
+  const tokenProgress = await TokenProgress.findOne({ tokenAddress })
+  if (!tokenProgress || !tokenProgress.steps.tokenIssued) {
+    return res.status(400).json({ errror: 'No token issued' })
+  }
 
   deploy(tokenProgress, { ...steps, transferOwnership: true })
 

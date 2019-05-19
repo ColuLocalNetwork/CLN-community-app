@@ -21,7 +21,7 @@ const handleTokenCreatedEvent = async (event) => {
     tokenType: tokenTypeEnumToString[eventArgs.tokenType]
   }
 
-  const fetchedTokenData = await tokenUtils.fetchTokenData(address)
+  const fetchedTokenData = await tokenUtils.fetchTokenData(address, { tokenUri: true })
 
   return token.create({ ...tokenData, ...fetchedTokenData })
 }

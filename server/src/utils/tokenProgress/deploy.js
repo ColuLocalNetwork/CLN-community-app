@@ -2,31 +2,22 @@ const mongoose = require('mongoose')
 const { deployBridge } = require('@utils/bridge')
 const { deployCommunity } = require('@utils/community')
 const { stepFailed, stepDone } = require('@utils/tokenProgress')
-const { transferOwnership, fetchTokenData } = require('@utils/token')
+const { transferOwnership } = require('@utils/token')
 const Token = mongoose.model('Token')
-const TokenProgress = mongoose.model('TokenProgress')
 
 const deployFunctions = {
-  tokenIssued: console.log,
   bridge: deployBridge,
   membersList: deployCommunity,
   transferOwnership: transferOwnership
 }
 
-const stepsOrder = ['tokenIssued', 'bridge', 'membersList']
+const stepsOrder = ['bridge', 'membersList']
 
 const mandatorySteps = {
   bridge: true
 }
 
-const deploy = async (tokenAddress, steps) => {
-  if (steps.tokenIssued && steps.tokenIssued.isImported) {
-    await fetchTokenData()
-  }
-  const tokenProgress = await TokenProgress.findOne({ tokenAddress })
-  if (!tokenProgress || !tokenProgress.steps.tokenIssued) {
-    return stepFailed('tokenIssued', tokenAddress, 'No such token issued')
-  }
+const deploy = async (tokenProgress, steps) => {
   const token = await Token.findOne({ address: tokenProgress.tokenAddress })
 
   if (!token) {

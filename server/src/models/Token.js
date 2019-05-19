@@ -14,12 +14,12 @@ module.exports = (mongoose) => {
     tokenURI: { type: String },
     totalSupply: { type: mongoose.Types.Decimal128, required: [true, "can't be blank"] },
     owner: { type: String, required: [true, "can't be blank"] },
-    factoryAddress: { type: String, required: [true, "can't be blank"] },
+    factoryAddress: { type: String },
     blockNumber: { type: Number },
     tokenType: { type: String, required: [true, "can't be blank"] }
   }, { timestamps: true })
 
-  TokenSchema.index({ address: 1 }, { unique: true })
+  TokenSchema.index({ address: 1 })
   TokenSchema.index({ owner: 1 })
   TokenSchema.index({ blockNumber: -1 })
 
