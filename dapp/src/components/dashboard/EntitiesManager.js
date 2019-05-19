@@ -122,7 +122,7 @@ class EntitiesManager extends Component {
 
   filterBySearch = (search, entities) =>
     search ? entities.filter(entity =>
-      entity.name.toLowerCase().search(
+      entity && entity.name && entity.name.toLowerCase().search(
         this.state.search.toLowerCase()) !== -1
     ) : entities
 
@@ -165,6 +165,7 @@ class EntitiesManager extends Component {
             removeAdminRole={this.handleRemoveAdminRole}
             handleRemove={this.handleRemoveEntity}
             confirmUser={this.handleConfirmUser}
+            onlyOnFuse={this.props.onlyOnFuse}
             showProfile={() => this.showProfile(this.props.communityAddress, entity.account)}
           />
         ))
@@ -319,11 +320,11 @@ class EntitiesManager extends Component {
                     <div className='entities__actions__buttons'>
                       <button
                         className={classNames('entities__actions__buttons__btn', { 'entities__actions__buttons__btn--active': !showUsers })}
-                        onClick={() => this.setState({ showUsers: false })}
+                        onClick={() => this.setState({ showUsers: false, search: '' })}
                       >Merchant</button>
                       <button
                         className={classNames('entities__actions__buttons__btn', { 'entities__actions__buttons__btn--active': showUsers })}
-                        onClick={() => this.setState({ showUsers: true })}
+                        onClick={() => this.setState({ showUsers: true, search: '' })}
                       >User</button>
                     </div>
                     <div className='entities__actions__add'>
