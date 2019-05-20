@@ -17,50 +17,50 @@ export default ({ hideModal, name, network, tokenName, tokenAmount, foreignToken
             <span>Network</span>
             <span>{network}</span>
           </div>
-					<div className='show-more__content__item'>
+          <div className='show-more__content__item'>
             <span>Token name</span>
             <span>{tokenName}</span>
           </div>
-					<div className='show-more__content__item'>
+          <div className='show-more__content__item'>
             <span>CLN tokens amount</span>
             <span>{tokenAmount}</span>
           </div>
-		 		  <div className='show-more__content__item'>
+          <div className='show-more__content__item'>
             <span>Token foreign address</span>
-						<span className='address'>
-							{formatAddress(foreignTokenAddress)}
-							<CopyToClipboard text={foreignTokenAddress}>
-								<FontAwesome name='clone' />
-							</CopyToClipboard>
-						</span>
-				  </div>
-				  <div className='show-more__content__item'>
-				  	<span>Token home address</span>
-						<span className='address'>
-							{formatAddress(homeTokenAddress)}
-							<CopyToClipboard text={homeTokenAddress}>
-								<FontAwesome name='clone' />
-							</CopyToClipboard>
-						</span>
-				  </div>
-					<div className='show-more__content__item'>
-				  	<span>Bridge foreign address</span>
-						<span className='address'>
-							{formatAddress(foreignBridgeAddress)}
-							<CopyToClipboard text={foreignBridgeAddress}>
-								<FontAwesome name='clone' />
-							</CopyToClipboard>	
-						</span>
-				  </div>
-					<div className='show-more__content__item'>
-				  	<span>Bridge home address</span>
-						<span className='address'>
-							{formatAddress(homeBridgeAddress)}
-							<CopyToClipboard text={homeBridgeAddress}>
-								<FontAwesome name='clone' />
-							</CopyToClipboard>
-						</span>
-				  </div>
+            <span className='address'>
+              {formatAddress(foreignTokenAddress)}
+              <CopyToClipboard text={foreignTokenAddress}>
+                <FontAwesome name='clone' />
+              </CopyToClipboard>
+            </span>
+          </div>
+          <div className='show-more__content__item'>
+            <span>Token home address</span>
+            <span className='address'>
+              {formatAddress(homeTokenAddress)}
+              <CopyToClipboard text={homeTokenAddress}>
+                <FontAwesome name='clone' />
+              </CopyToClipboard>
+            </span>
+          </div>
+          <div className='show-more__content__item'>
+            <span>Bridge foreign address</span>
+            <span className='address'>
+              {formatAddress(foreignBridgeAddress)}
+              <CopyToClipboard text={foreignBridgeAddress}>
+                <FontAwesome name='clone' />
+              </CopyToClipboard>
+            </span>
+          </div>
+          <div className='show-more__content__item'>
+            <span>Bridge home address</span>
+            <span className='address'>
+              {formatAddress(homeBridgeAddress)}
+              <CopyToClipboard text={homeBridgeAddress}>
+                <FontAwesome name='clone' />
+              </CopyToClipboard>
+            </span>
+          </div>
         </div>
       </div>
     </Modal>

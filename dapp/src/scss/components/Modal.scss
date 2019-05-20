@@ -24,6 +24,7 @@
     text-align: center;
     padding: 4px;
     cursor: pointer;
+		margin: auto;
 
     @media (max-width: $breakpoint-tablet) {
       &.fullscreen {
