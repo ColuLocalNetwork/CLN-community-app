@@ -1,9 +1,9 @@
-const givenWeb3 = require('@services/web3')
-const { web3, from, send } = require('@services/web3/home')
+const foreign = require('@services/web3/foreign')
+const home = require('@services/web3/home')
 const BasicTokenAbi = require('@fuse/token-factory-contracts/build/abi/BasicToken')
 
 const fetchTokenData = async (address, { tokenUri } = {}) => {
-  const tokenContractInstance = new givenWeb3.eth.Contract(BasicTokenAbi, address)
+  const tokenContractInstance = new foreign.web3.eth.Contract(BasicTokenAbi, address)
   const [name, symbol, totalSupply, tokenURI] = await Promise.all([
     tokenContractInstance.methods.name().call(),
     tokenContractInstance.methods.symbol().call(),
@@ -15,12 +15,12 @@ const fetchTokenData = async (address, { tokenUri } = {}) => {
 }
 
 const transferOwnhership = async (token) => {
-  const tokenContractInstance = new web3.eth.Contract(BasicTokenAbi, token.address)
+  const tokenContractInstance = new home.web3.eth.Contract(BasicTokenAbi, token.address)
 
   const method = tokenContractInstance.methods.transferOwnhership(token.owner)
 
-  return send(method, {
-    from
+  return home.send(method, {
+    from: home.from
   })
 }
 

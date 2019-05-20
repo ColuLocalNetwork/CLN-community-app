@@ -20,8 +20,6 @@ async function initConfig () {
 async function init () {
   await initConfig()
 
-  const agenda = require('./services/agenda')
-
   console.log(util.inspect(config, { depth: null }))
 
   var isProduction = process.env.NODE_ENV === 'production'
@@ -54,11 +52,11 @@ async function init () {
     console.error(error)
     process.exit(1)
   })
-
   require('./models')(mongoose)
 
   app.use(require('./routes'))
 
+  const agenda = require('./services/agenda')
   if (config.get('agenda.start')) {
     agenda.start()
   }

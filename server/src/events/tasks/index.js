@@ -3,9 +3,12 @@ const processPastTransferEvents = require('./transfer').processPastTransferEvent
 const processPastBridgeMappingEvents = require('./bridge').processPastBridgeMappingEvents
 const TokenFactoryAbi = require('@fuse/token-factory-contracts/build/abi/TokenFactory')
 const { web3 } = require('@services/web3/foreign')
-const addresses = require('@utils/network').addresses
+// const addresses = require('@utils/network').addresses
+const config = require('config')
 
-const tokenFactory = new web3.eth.Contract(TokenFactoryAbi, addresses.TokenFactory)
+console.log(config.get('network.foreign.addresses.TokenFactory'))
+
+const tokenFactory = new web3.eth.Contract(TokenFactoryAbi, config.get('network.foreign.addresses.TokenFactory'))
 const processPastTokenCreatedEvents = processPastEvents.bind(null, 'TokenCreated', tokenFactory)
 
 module.exports = {
