@@ -23,7 +23,7 @@ import { loadModal, hideModal } from 'actions/ui'
 import { ADD_DIRECTORY_ENTITY } from 'constants/uiConstants'
 import ReactGA from 'services/ga'
 import { isOwner } from 'utils/token'
-import { fetchHomeToken } from 'actions/bridge'
+import { fetchHomeToken, fetchHomeBridge, fetchForeignBridge } from 'actions/bridge'
 import plusIcon from 'images/add.svg'
 import { getTransaction } from 'selectors/transaction'
 import filterIcon from 'images/filter.svg'
@@ -47,6 +47,8 @@ const EntitiesManagerDataFetcher = (props) => {
   useEffect(() => {
     if (props.foreignTokenAddress) {
       props.fetchHomeToken(props.foreignTokenAddress)
+      props.fetchHomeBridge(props.foreignTokenAddress)
+      props.fetchForeignBridge(props.foreignTokenAddress)
       props.fetchCommunity(props.foreignTokenAddress)
     }
   }, [props.foreignTokenAddress])
@@ -395,6 +397,8 @@ class EntitiesManager extends Component {
             fetchBusinessesEntities={this.props.fetchBusinessesEntities}
             fetchUsersEntities={this.props.fetchUsersEntities}
             toggleSuccess={this.props.toggleSuccess}
+            fetchHomeBridge={this.props.fetchHomeBridge}
+            fetchForeignBridge={this.props.fetchForeignBridge}
           />
         </div>
       </Fragment >
@@ -426,7 +430,9 @@ const mapDispatchToProps = {
   fetchCommunity,
   fetchBusinessesEntities,
   fetchUsersEntities,
-  toggleCommunityMode
+  toggleCommunityMode,
+  fetchHomeBridge,
+  fetchForeignBridge
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EntitiesManager)
