@@ -161,12 +161,6 @@ class EntitiesManager extends Component {
     onlyOnFuse(toggleCommunityMode(communityAddress, isClosed))
   }
 
-  handleToggleCommunityMode = (event) => {
-    const isClosed = event.target.checked
-    const { communityAddress, toggleCommunityMode } = this.props
-    toggleCommunityMode(communityAddress, isClosed)
-  }
-
   renderList = (entities) => {
     if (entities.length) {
       return (
@@ -180,7 +174,6 @@ class EntitiesManager extends Component {
             removeAdminRole={this.handleRemoveAdminRole}
             handleRemove={this.handleRemoveEntity}
             confirmUser={this.handleConfirmUser}
-            onlyOnFuse={this.props.onlyOnFuse}
             showProfile={() => this.showProfile(this.props.communityAddress, entity.account)}
           />
         ))
