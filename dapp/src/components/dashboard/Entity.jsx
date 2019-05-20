@@ -5,12 +5,8 @@ import { getBlockExplorerUrl } from 'utils/network'
 import classNames from 'classnames'
 
 export default class Entity extends PureComponent {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      isOpen: false
-    }
+  state = {
+    isOpen: false
   }
 
   componentDidMount () {

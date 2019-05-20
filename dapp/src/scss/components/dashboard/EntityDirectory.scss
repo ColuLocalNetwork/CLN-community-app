@@ -34,7 +34,7 @@
       position: relative;
       cursor: pointer;
       z-index: 1;
-      width: 20%;
+      flex-basis: 30%;
 
       @include element(icon) {
         display: inline-block;
@@ -156,6 +156,13 @@
     }
 
     @include element(buttons) {
+
+      @include element(wrapper) {
+        @include xy-grid();
+        @include flex-align(center, middle);
+        flex-basis: 40%;
+      }
+
       @include xy-grid();
       @include flex-align(center, middle);
       // margin: 0 auto;
@@ -192,11 +199,25 @@
     }
 
     @include element(add) {
-      font-size: 11px;
-      @include xy-grid();
-      @include flex-align(null, middle);
-      width: 20%;
+      
+      @include element(wrapper) {
+        font-size: 11px;
+        @include xy-grid();
+        @include flex-align(justify, middle);
+        flex-basis: 30%;
+        
+        > div {
+          @include xy-grid();
+          @include flex-align(null, middle);
+        }
+      }
 
+      @include element (community) {
+        > span {
+          margin-left: 5px;
+        }
+      }
+      
       > span {
         width: 20px;
         height: 20px;
