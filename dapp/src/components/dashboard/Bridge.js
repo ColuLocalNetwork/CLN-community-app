@@ -145,7 +145,7 @@ class Bridge extends Component {
 
     const balance = balances[homeNetwork === bridgeStatus.from.network ? homeTokenAddress : foreignTokenAddress]
     const formatted = new BigNumber(balance).div(1e18).toFormat(2, 1)
-    
+
     return (
       <div className='dashboard-bridge'>
         <div className='dashboard-network'>
