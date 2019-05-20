@@ -1,5 +1,6 @@
 const tokenUtils = require('@utils/token')
 const mongoose = require('mongoose')
+const config = require('config')
 const { isZeroAddress } = require('@utils/network')
 
 const token = mongoose.token
@@ -18,7 +19,8 @@ const handleTokenCreatedEvent = async (event) => {
     factoryAddress: event.address,
     blockNumber: event.blockNumber,
     owner: eventArgs.issuer,
-    tokenType: tokenTypeEnumToString[eventArgs.tokenType]
+    tokenType: tokenTypeEnumToString[eventArgs.tokenType],
+    networkType: config.get('network.foreign.name')
   }
 
   const fetchedTokenData = await tokenUtils.fetchTokenData(address, { tokenUri: true })

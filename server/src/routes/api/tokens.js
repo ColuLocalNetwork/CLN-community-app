@@ -21,10 +21,9 @@ router.get('/', async (req, res) => {
 
 router.post('/:address', async (req, res) => {
   const { address } = req.params
-  const { owner } = req.body
   const tokenData = await fetchTokenData(address)
   console.log(tokenData)
-  const token = await new Token({ ...tokenData, owner, address, tokenType: 'imported' }).save()
+  const token = await new Token({ ...tokenData, address, tokenType: 'imported' }).save()
   return res.json({ data: token })
 })
 
