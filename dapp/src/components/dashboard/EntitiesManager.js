@@ -99,7 +99,7 @@ class EntitiesManager extends Component {
   }
 
   loadAddingModal = () => this.props.loadModal(ADD_DIRECTORY_ENTITY, {
-    submitEntity: (data) => this.props.addEntity(this.props.communityAddress, { ...data, type: this.state.showUsers ? 'user' : 'business' })
+    submitEntity: (data) => this.props.addEntity(this.props.communityAddress, { ...data, type: this.state.showUsers ? 'user' : 'business' }, this.props.isClosed)
   })
 
   renderTransactionStatus = () => {
@@ -139,28 +139,28 @@ class EntitiesManager extends Component {
 
   handleRemoveEntity = (account) => {
     const { removeEntity, communityAddress, onlyOnFuse } = this.props
-    onlyOnFuse(removeEntity(communityAddress, account))
+    onlyOnFuse(() => removeEntity(communityAddress, account))
   }
 
   handleAddAdminRole = (account) => {
     const { addAdminRole, onlyOnFuse } = this.props
-    onlyOnFuse(addAdminRole(account))
+    onlyOnFuse(() => addAdminRole(account))
   }
 
   handleRemoveAdminRole = (account) => {
     const { removeAdminRole, onlyOnFuse } = this.props
-    onlyOnFuse(removeAdminRole(account))
+    onlyOnFuse(() => removeAdminRole(account))
   }
 
   handleConfirmUser = (account) => {
     const { confirmUser, onlyOnFuse } = this.props
-    onlyOnFuse(confirmUser(account))
+    onlyOnFuse(() => confirmUser(account))
   }
 
   handleToggleCommunityMode = (event) => {
     const isClosed = event.target.checked
     const { communityAddress, toggleCommunityMode, onlyOnFuse } = this.props
-    onlyOnFuse(toggleCommunityMode(communityAddress, isClosed))
+    onlyOnFuse(() => toggleCommunityMode(communityAddress, isClosed))
   }
 
   renderList = (entities) => {
@@ -176,6 +176,7 @@ class EntitiesManager extends Component {
             removeAdminRole={this.handleRemoveAdminRole}
             handleRemove={this.handleRemoveEntity}
             confirmUser={this.handleConfirmUser}
+            isAdmin={this.props.isAdmin}
             showProfile={() => this.showProfile(this.props.communityAddress, entity.account)}
           />
         ))
@@ -196,7 +197,22 @@ class EntitiesManager extends Component {
     }
 
     if (items && items.length) {
-      return this.renderList(filteredItems)
+      return (
+        <Fragment>
+          <div className='entities__search'>
+            <button className='entities__search__icon' onClick={() => this.setShowingSearch()}>
+              <FontAwesome name='search' />
+            </button>
+            <input
+              value={this.state.search}
+              onChange={this.setSearchValue}
+              placeholder={showUsers ? 'Search a user...' : 'Search a merchant...'}
+            />
+          </div>
+          {this.renderTransactionStatus()}
+          {this.renderList(filteredItems)}
+        </Fragment>
+      )
     } else {
       if (!transactionStatus) {
         if (showUsers) {
@@ -206,6 +222,7 @@ class EntitiesManager extends Component {
               <div className='entities__empty-list__text'>You can keep watching Netflix later, add a user and let’s start Rock’n’Roll!</div>
               <button
                 className='entities__empty-list__btn'
+                onClick={this.handleAddBusiness}
                 disabled={transactionStatus === REQUEST || transactionStatus === PENDING}
               >
                 Add new user
@@ -341,7 +358,7 @@ class EntitiesManager extends Component {
                     </div>
                     <div className='entities__actions__add__wrapper'>
                       {
-                        (isAdmin || !isClosed) && (
+                        isAdmin && (
                           <div className='entities__actions__add'>
                             {
                               networkType === 'fuse'
@@ -359,27 +376,20 @@ class EntitiesManager extends Component {
                           </div>
                         )
                       }
-                      <div className='entities__actions__add__community'>
-                        <label className='toggle'>
-                          <input type='checkbox' value={isClosed} checked={isClosed} onChange={this.handleToggleCommunityMode} />
-                          <div className='toggle-wrapper'><span className='toggle' /></div>
-                        </label>
-                        <span>{ !isClosed ? 'Open' : 'Close' } community</span>
-                      </div>
+                      {
+                        isAdmin && (
+                          <div className='entities__actions__add__community'>
+                            <label className='toggle'>
+                              <input type='checkbox' value={isClosed} checked={isClosed} onChange={this.handleToggleCommunityMode} />
+                              <div className='toggle-wrapper'><span className='toggle' /></div>
+                            </label>
+                            <span>{ !isClosed ? 'Open' : 'Close' } community</span>
+                          </div>
+                        )
+                      }
                     </div>
                   </div>
-                  <div className='entities__search'>
-                    <button className='entities__search__icon' onClick={() => this.setShowingSearch()}>
-                      <FontAwesome name='search' />
-                    </button>
-                    <input
-                      value={this.state.search}
-                      onChange={this.setSearchValue}
-                      placeholder={showUsers ? 'Search a user...' : 'Search a merchant...'}
-                    />
-                  </div>
                   <div className='entities__items'>
-                    {this.renderTransactionStatus()}
                     {this.renderItems()}
                   </div>
                 </Fragment>
