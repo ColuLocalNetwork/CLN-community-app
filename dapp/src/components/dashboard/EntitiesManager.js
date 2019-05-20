@@ -136,29 +136,29 @@ class EntitiesManager extends Component {
   }
 
   handleRemoveEntity = (account) => {
-    const { removeEntity, communityAddress } = this.props
-    removeEntity(communityAddress, account)
+    const { removeEntity, communityAddress, onlyOnFuse } = this.props
+    onlyOnFuse(removeEntity(communityAddress, account))
   }
 
   handleAddAdminRole = (account) => {
-    const { addAdminRole } = this.props
-    addAdminRole(account)
+    const { addAdminRole, onlyOnFuse } = this.props
+    onlyOnFuse(addAdminRole(account))
   }
 
   handleRemoveAdminRole = (account) => {
-    const { removeAdminRole } = this.props
-    removeAdminRole(account)
+    const { removeAdminRole, onlyOnFuse } = this.props
+    onlyOnFuse(removeAdminRole(account))
   }
 
   handleConfirmUser = (account) => {
-    const { confirmUser } = this.props
-    confirmUser(account)
+    const { confirmUser, onlyOnFuse } = this.props
+    onlyOnFuse(confirmUser(account))
   }
 
   handleToggleCommunityMode = (event) => {
     const isClosed = event.target.checked
-    const { communityAddress, toggleCommunityMode } = this.props
-    toggleCommunityMode(communityAddress, isClosed)
+    const { communityAddress, toggleCommunityMode, onlyOnFuse } = this.props
+    onlyOnFuse(toggleCommunityMode(communityAddress, isClosed))
   }
 
   renderList = (entities) => {
@@ -174,7 +174,6 @@ class EntitiesManager extends Component {
             removeAdminRole={this.handleRemoveAdminRole}
             handleRemove={this.handleRemoveEntity}
             confirmUser={this.handleConfirmUser}
-            onlyOnFuse={this.props.onlyOnFuse}
             showProfile={() => this.showProfile(this.props.communityAddress, entity.account)}
           />
         ))
