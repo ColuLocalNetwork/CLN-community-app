@@ -4,10 +4,10 @@ import "./EntitiesList.sol";
 
 contract Community {
     EntitiesList public entitiesList;
-    
+
     bytes32 public constant userMask = bytes32(1);
     bytes32 public constant adminMask = bytes32(2);
-    
+
     constructor () public {
         entitiesList = new EntitiesList();
         entitiesList.addEntity(msg.sender, userMask | adminMask);
@@ -30,7 +30,7 @@ contract Community {
         entitiesList.addEntity(_account, _roles);
     }
 
-    function removeEntity(address _account) onlyAdmin public {
+    function removeEntity(address _account) public onlyAdmin {
         entitiesList.removeEntity(_account);
     }
 
