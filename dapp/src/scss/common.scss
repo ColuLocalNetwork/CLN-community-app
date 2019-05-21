@@ -19,6 +19,10 @@
 	@include element(image) {
     padding-top: 1em;
 	}
+
+	@include element(text) {
+		padding-top: 1em;
+	}
 }
 
 @include block(show-more) {
