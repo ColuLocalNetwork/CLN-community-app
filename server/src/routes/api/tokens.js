@@ -2,8 +2,6 @@ const router = require('express').Router()
 const mongoose = require('mongoose')
 const Token = mongoose.model('Token')
 const paginate = require('express-paginate')
-const config = require('config')
-const { fetchTokenData } = require('@utils/token')
 
 router.get('/', async (req, res) => {
   const [ results, itemCount ] = await Promise.all([
@@ -18,14 +16,6 @@ router.get('/', async (req, res) => {
     has_more: paginate.hasNextPages(req)(pageCount),
     data: results
   })
-})
-
-router.post('/:address', async (req, res) => {
-  const { address } = req.params
-  const { tokenURI } = req.body
-  const tokenData = await fetchTokenData(address)
-  const token = await new Token({ ...tokenData, tokenURI, address, tokenType: 'imported', networkType: config.get('network.foreign.name') }).save()
-  return res.json({ data: token })
 })
 
 router.get('/owner/:owner', async (req, res) => {
