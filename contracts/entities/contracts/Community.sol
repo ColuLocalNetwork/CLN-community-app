@@ -5,10 +5,13 @@ import "./EntitiesList.sol";
 contract Community {
     EntitiesList public entitiesList;
 
+    string public name;
+
     bytes32 public constant userMask = bytes32(1);
     bytes32 public constant adminMask = bytes32(2);
 
-    constructor () public {
+    constructor (string _name) public {
+        name = _name;
         entitiesList = new EntitiesList();
         entitiesList.addEntity(msg.sender, userMask | adminMask);
     }

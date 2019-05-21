@@ -36,9 +36,8 @@ const handleHomeBridgeDeployed = async (event) => {
     networkType: config.get('network.home.name')
   }
 
-  console.log('start')
   const fetchedTokenData = await tokenUtils.fetchTokenData(address, { tokenURI: false }, web3)
-  console.log({ fetchedTokenData })
+
   return new Token({
     ...tokenData,
     ...fetchedTokenData

@@ -16,11 +16,18 @@ const createWeb3 = (providerUrl) => {
   return { from: account.address, web3 }
 }
 
+const getMethodName = (method) => method._method.name || method._method.signature
+
 const send = async (web3, bridgeType, method, options) => {
   const doSend = async () => {
-    console.log(`[${bridgeType}] sending method ${method._method.name} from ${from} with nonce ${account.nonce}. gas price: ${gasPrice}, gas limit: ${gas}`)
+    const methodName = getMethodName(method)
+    console.log(`[${bridgeType}] sending method ${methodName} from ${from} with nonce ${account.nonce}. gas price: ${gasPrice}, gas limit: ${gas}`)
     receipt = await method.send({ gasPrice, ...options, gas, nonce: account.nonce })
-    console.log(`[${bridgeType}] method ${method._method.name} succeeded in tx ${receipt.transactionHash}`)
+    if (methodName === 'constructor') {
+      console.log(`[${bridgeType}] contract ${receipt._address} deployed`)
+    } else {
+      console.log(`[${bridgeType}] method ${method._method.name} succeeded in tx ${receipt.transactionHash}`)
+    }
   }
 
   const { from } = options

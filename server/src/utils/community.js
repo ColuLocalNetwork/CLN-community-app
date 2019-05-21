@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-// const Bridge = mongoose.model('Bridge')
 const Community = mongoose.model('Community')
 const { handleReceipt } = require('@events/handlers')
 const { web3, from, send } = require('@services/web3/home')
@@ -12,7 +11,7 @@ const { combineRoles, roles: { ADMIN_ROLE, USER_ROLE, APPROVED_ROLE } } = requir
 const deployCommunity = async (token, step, results, accountAddress) => {
   console.log('Deploying community transfer manager')
 
-  const method = new web3.eth.Contract(CommunityTransferManagerABI).deploy({ data: CommunityTransferManagerBytecode })
+  const method = new web3.eth.Contract(CommunityTransferManagerABI).deploy({ data: CommunityTransferManagerBytecode, arguments: [step.name] })
   const transferManagerContract = await send(method, {
     from
   })
@@ -21,8 +20,6 @@ const deployCommunity = async (token, step, results, accountAddress) => {
 
   const communityAddress = transferManagerContract._address
 
-  // const { homeTokenAddress } = await Bridge.findOne({ foreignTokenAddress: token.address })
-  console.log(results)
   const { homeTokenAddress } = results.bridge
 
   new Community({
