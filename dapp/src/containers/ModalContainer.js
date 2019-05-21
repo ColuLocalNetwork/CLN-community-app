@@ -8,6 +8,7 @@ import LoadingModal from 'components/LoadingModal'
 import ErrorBoundary from 'components/ErrorBoundary'
 import UserDatatModal from 'components/issuance/UserDatatModal'
 import AddEntityModal from 'components/dashboard/AddEntityModal'
+import AddUserModal from 'components/dashboard/AddUserModal'
 import BusinessListModal from 'components/dashboard/BusinessListModal'
 import BridgeModal from 'components/dashboard/BridgeModal'
 import NoDataAboutOwnerModal from 'components/dashboard/NoDataAboutOwnerModal'
@@ -24,7 +25,8 @@ import {
   BRIDGE_MODAL,
   NO_DATA_ABOUT_OWNER_MODAL,
   SHOW_MORE_MODAL,
-  QR_MODAL
+  QR_MODAL,
+  ADD_USER_MODAL
 } from 'constants/uiConstants'
 
 const renderModal = (modalComponent, props) =>
@@ -42,7 +44,8 @@ const MODAL_COMPONENTS = {
   [BRIDGE_MODAL]: BridgeModal,
   [NO_DATA_ABOUT_OWNER_MODAL]: NoDataAboutOwnerModal,
   [SHOW_MORE_MODAL]: ShowMoreModal,
-  [QR_MODAL]: QrModal
+  [QR_MODAL]: QrModal,
+  [ADD_USER_MODAL]: AddUserModal
 }
 
 const ModalContainer = (props) => {

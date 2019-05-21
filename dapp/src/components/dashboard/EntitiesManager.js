@@ -20,7 +20,7 @@ import {
 import Entity from './Entity.jsx'
 import EmptyBusinessList from 'images/emptyBusinessList.png'
 import { loadModal, hideModal } from 'actions/ui'
-import { ADD_DIRECTORY_ENTITY } from 'constants/uiConstants'
+import { ADD_DIRECTORY_ENTITY, ADD_USER_MODAL } from 'constants/uiConstants'
 import ReactGA from 'services/ga'
 import { isOwner } from 'utils/token'
 import { fetchHomeToken, fetchHomeBridge, fetchForeignBridge } from 'actions/bridge'
@@ -98,9 +98,20 @@ class EntitiesManager extends Component {
     this.props.onlyOnFuse(this.loadAddingModal)
   }
 
+  handleAddUser = () => {
+    this.props.onlyOnFuse(this.loadAddUserModal)
+  }
+
   loadAddingModal = () => this.props.loadModal(ADD_DIRECTORY_ENTITY, {
-    submitEntity: (data) => this.props.addEntity(this.props.communityAddress, { ...data, type: this.state.showUsers ? 'user' : 'business' }, this.props.isClosed)
+    submitEntity: (data) => this.props.addEntity(this.props.communityAddress, { ...data, type: 'business' }, this.props.isClosed)
   })
+
+  loadAddUserModal = () => {
+    const { loadModal } = this.props
+    loadModal(ADD_USER_MODAL, {
+      submitEntity: (data) => this.props.addEntity(this.props.communityAddress, { ...data, type: 'user' }, this.props.isClosed)
+    })
+  }
 
   renderTransactionStatus = () => {
     if (this.props.signatureNeeded || this.props.transactionStatus === PENDING) {
@@ -164,6 +175,8 @@ class EntitiesManager extends Component {
   }
 
   renderList = (entities) => {
+    const { metadata, isAdmin, communityAddress, homeTokenAddress } = this.props
+
     if (entities.length) {
       return (
         entities.map((entity, index) =>
@@ -171,13 +184,14 @@ class EntitiesManager extends Component {
             key={index}
             index={index}
             entity={entity}
-            address={this.props.homeTokenAddress}
+            address={homeTokenAddress}
             addAdminRole={this.handleAddAdminRole}
             removeAdminRole={this.handleRemoveAdminRole}
             handleRemove={this.handleRemoveEntity}
             confirmUser={this.handleConfirmUser}
-            isAdmin={this.props.isAdmin}
-            showProfile={() => this.showProfile(this.props.communityAddress, entity.account)}
+            isAdmin={isAdmin}
+            metadata={metadata[entity.uri]}
+            showProfile={() => this.showProfile(communityAddress, entity.account)}
           />
         ))
     } else {
@@ -222,7 +236,7 @@ class EntitiesManager extends Component {
               <div className='entities__empty-list__text'>You can keep watching Netflix later, add a user and let’s start Rock’n’Roll!</div>
               <button
                 className='entities__empty-list__btn'
-                onClick={this.handleAddBusiness}
+                onClick={this.handleAddUser}
                 disabled={transactionStatus === REQUEST || transactionStatus === PENDING}
               >
                 Add new user
@@ -363,11 +377,11 @@ class EntitiesManager extends Component {
                             {
                               networkType === 'fuse'
                                 ? (
-                                  <span onClick={this.handleAddBusiness}>
+                                  <span onClick={showUsers ? this.handleAddUser : this.handleAddBusiness}>
                                     <a style={{ backgroundImage: `url(${plusIcon})` }} />
                                   </span>
                                 ) : (
-                                  <span onClick={this.handleAddBusiness}>
+                                  <span onClick={showUsers ? this.handleAddUser : this.handleAddBusiness}>
                                     <FontAwesome name='plus-circle' />
                                   </span>
                                 )
@@ -425,7 +439,8 @@ const mapStateToProps = (state, { match, foreignTokenAddress }) => ({
   homeTokenAddress: state.entities.bridges[foreignTokenAddress] && state.entities.bridges[foreignTokenAddress].homeTokenAddress,
   ...state.screens.communityEntities,
   ...getTransaction(state, state.screens.communityEntities.transactionHash),
-  isAdmin: checkIsAdmin(state)
+  isAdmin: checkIsAdmin(state),
+  metadata: state.entities.metadata
 })
 
 const mapDispatchToProps = {

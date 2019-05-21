@@ -7,7 +7,7 @@
 	@include element(title) {
 		display: inline-block;
 		text-transform: uppercase;
-		font-size: 0.875rem;
+		font-size: 14rem;
 		text-align: start;
 		font-weight: bold;
 		color: $color-primary-dark;
@@ -20,6 +20,7 @@
     padding-top: 1em;
 	}
 }
+
 @include block(show-more) {
 	@include element(wrapper) {
 	}
@@ -27,7 +28,7 @@
 	@include element(header) {
 		display: block;
 		text-transform: uppercase;
-		font-size: 0.875rem;
+		font-size: 14rem;
 		text-align: start;
 		font-weight: bold;
 		color: $color-primary-dark;
@@ -41,7 +42,7 @@
 		@include element(item) {
 			@include xy-grid();
 			@include flex-align(justify, middle);
-			font-size: 11px;
+			font-size: 11rem;
 			padding: 1em 0;
 			width: 100%;
 
@@ -58,7 +59,7 @@
 				.fa-clone {
           margin-left: 10px;
           font-weight: 400;
-          font-size: 12px;
+          font-size: 12rem;
           color: $color-arrow;
           &:hover {
 						cursor: pointer;
@@ -123,7 +124,7 @@
 		color: #fff;
 		text-shadow: 1px 1px #000;
 		font-family: tahoma;
-		font-size: 11px;
+		font-size: 11rem;
 	}
 	> input:checked ~ .toggle-wrapper {
 		background: linear-gradient(97deg, #98faac, #fae83e);
@@ -152,7 +153,7 @@
 			margin-right: 10px;
 
 			> span {
-				font-size: 7px !important;
+				font-size: 7rem !important;
 				margin-top: -5px;
 			}
 		}
@@ -314,12 +315,12 @@
 
 	@include modifier(normal){
 		width: 105px;
-		font-size: 13px;
+		font-size: 13rem;
 	}
 
 	@include modifier(big) {
 		width: 160px;
-		font-size: 15px;
+		font-size: 15rem;
 	}
 
 	&:focus,
@@ -367,7 +368,7 @@
 		display: inline-block;
 		outline: none;
 		line-height: 42px;
-		font-size: 13px;
+		font-size: 13rem;
 		cursor: pointer;
 		font-weight: bold;
 		border: none;
@@ -432,25 +433,25 @@
 	padding: 20px 70px;
 
 	@include element(title) {
-		font-size: 1.250em;
+		font-size: 20rem;
 		font-weight: bold;
 		line-height: 1.25;
 	}
 
 	@include element(sub-title) {
-		font-size: 1.250em;
+		font-size: 20rem;
 		font-weight: 500;
 		line-height: 1.65;
 	}
 
 	@include element(what) {
-		font-size: 1em;
+		font-size: 16rem;
     line-height: 1.25;
 		margin: 1em 0;
 	}
 
 	@include element(text) {
-		font-size: 0.813em;
+		font-size: 13rem;
     line-height: 1.35;
 	}
 
@@ -458,7 +459,7 @@
 		margin-top: 1.5em;
 		> button {
 			width: auto;
-			font-size: 0.875em;
+			font-size: 14rem;
 			text-transform: uppercase;
 			padding: 0 1em;
 		}
@@ -487,7 +488,7 @@
 	}
 
   @include element(title) {
-    font-size: 1.250em;
+    font-size: 20rem;
     font-weight: 500;
     line-height: 1.35;
 		letter-spacing: 0.5px;
@@ -504,7 +505,7 @@
 	}
 
 	@include element(sub-title) {
-    font-size: 1.125em;
+    font-size: 18rem;
     font-weight: normal;
 		margin-top: 15px;
 		max-width: 30%;
@@ -521,7 +522,7 @@
 
   @include element(icon) {
     margin: 1em auto;
-    font-size: 20px;
+    font-size: 20rem;
 	}
 
 	@include element(loader) {
@@ -568,7 +569,7 @@
 			display: inline-block;
 			border-radius: 30px;
 			background-color: $color-ropsten;
-			font-size: .8em;
+			font-size: 12.8rem;
 			color: $color-white;
 			// padding: 10px 30px;
 			width: 84px;
@@ -614,7 +615,7 @@
   justify-content: center;
   &-text {
     color: $color-white;
-    font-size: 20px;
+    font-size: 20rem;
     font-weight: 500;
     line-height: 1.35;
     letter-spacing: 0.5px;
@@ -633,7 +634,7 @@
   }
   &-confirmation {
     color: $color-white;
-    font-size: 18px;
+    font-size: 18rem;
     font-weight: normal;
     margin-top: 15px;
   }
@@ -678,7 +679,7 @@
 	position: absolute;
 	bottom: -1em;
 	color: $color-red;
-	font-size: 0.7em;
+	font-size: 11rem;
 	line-height: 1.25;
 
 	@include modifier(bold) {
@@ -739,7 +740,7 @@
 
 .positive-number {
   color: $color-step-field;
-  font-size: 10px;
+  font-size: 10rem;
   font-weight: bold;
 }
 
@@ -784,13 +785,13 @@
 			width: 100%;
 			font-weight: bold;
 			@media (max-width: $breakpoint-tablet) {
-				font-size: 20px;
+				font-size: 20rem;
 				margin: 0;
 			}
 		}
 
 		h1 {
-			font-size: 18px;
+			font-size: 18rem;
 			margin-bottom: 2px;
 			text-transform: uppercase;
 			font-weight: bold;
@@ -798,13 +799,13 @@
 
 		.price-wrapper {
       padding: 3px 0px;
-			font-size: 14px;
+			font-size: 14rem;
 			@include flex-box();
 			align-items: center;
 			h2 {
 				-webkit-margin-before: 0;
    				-webkit-margin-after: 0;
-				font-size: 14px;
+				font-size: 14rem;
 				text-align: left;
 				color: #696868;
 				margin: 0;
@@ -829,7 +830,7 @@
 			}
 			@media (max-width: $breakpoint-tablet) {
         padding: 1px 0px;
-				font-size: 12px;
+				font-size: 12rem;
 				margin: 0;
 			}
 		}
@@ -853,7 +854,7 @@
 		margin: 0 10px 0 3px;
 	}
 	div {
-		font-size: 10px;
+		font-size: 10rem;
 		//line-height: 2.6;
 		letter-spacing: 0.2px;
 		color: #8d9293;
@@ -861,7 +862,7 @@
     	align-items: center;
 	}
 	.cc-to-cln {
-		font-size: 10px;
+		font-size: 10rem;
 		//line-height: 2.6;
 		letter-spacing: 0.2px;
 		color: #8d9293;
@@ -885,7 +886,7 @@
 			margin: 15px 0 18px;
 		}
 		.tx-link {
-			font-size: 14px;
+			font-size: 14rem;
 			font-weight: 300;
 			line-height: 2.57;
 			letter-spacing: -0.1px;
@@ -897,7 +898,7 @@
   		text-overflow: ellipsis;
 		}
 		.status {
-   			font-size: 14px;
+   			font-size: 14rem;
    			font-weight: 700;
    			line-height: 2.57;
    			letter-spacing: -0.1px;
@@ -930,7 +931,7 @@
 .symbol-btn {
 	border-radius: 30px;
   background-color: $color-ropsten;
-	font-size: 1em;
+	font-size: 16rem;
 	color: $color-white;
 	padding: 16px 40px;
 	text-transform: uppercase;
@@ -995,7 +996,7 @@
 		.error-text {
 			margin-top: 5px;
 			color: $color-red;
-			font-size: 12px;
+			font-size: 12rem;
 		}
 	}
 	input {
@@ -1035,7 +1036,7 @@
 }
 
 .coin-status {
-	font-size: 10px;
+	font-size: 10rem;
 	color: $color-white;
 	text-transform: uppercase;
 	padding-left: 20px;
@@ -1059,8 +1060,8 @@
 				animation: scaleIn 4s infinite cubic-bezier(.36, .11, .89, .32);
 				border-radius: 50%;
 				background-color: deepskyblue;
-				width: 11px;
-				height: 11px;
+				width: 11rem;
+				height: 11rem;
 				position: absolute;
 				opacity: 0;
 				top: -3px;
@@ -1090,7 +1091,7 @@
 
 .add-btn {
 	font-family: $font-family-lato;
-	font-size: 11px;
+	font-size: 11rem;
   font-weight: bold;
 	color: $color-symbol-field-brdr;
 	text-decoration: underline;
@@ -1106,7 +1107,7 @@
 		margin-left: 10px;
 		display: inline-block;
 		color: white;
-		font-size: 14px;
+		font-size: 14rem;
 	}
 	&:hover {
 		color: $color-hover-details;
@@ -1134,7 +1135,7 @@
 	}
 }
 .btn-download {
-	font-size: 13px;
+	font-size: 13rem;
 	text-align: center;
  	color: $color-text-gray;
 	text-decoration: underline;
@@ -1154,7 +1155,7 @@
 .btn-adding {
 	text-transform: uppercase;
 	color: $color-white;
-	font-size: 12px;
+	font-size: 12rem;
 	border-radius: 3px;
 	padding: 6px 12px;
 	background: $color-step-field;

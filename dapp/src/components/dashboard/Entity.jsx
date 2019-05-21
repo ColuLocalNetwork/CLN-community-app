@@ -37,6 +37,7 @@ export default class Entity extends PureComponent {
         isAdmin: hasAdminRole,
         isApproved
       },
+      metadata,
       showProfile,
       handleRemove,
       addAdminRole,
@@ -49,11 +50,12 @@ export default class Entity extends PureComponent {
 
     return (
       <div className='entities__entity'>
-        <div className='entities__entity__logo' onClick={() => showProfile()}>
+        <div className='entities__entity__logo' onClick={type !== 'user' ? () => showProfile() : null}>
           <FontAwesome name='bullseye' />
         </div>
-        <div className='entities__entity__content' onClick={() => showProfile()}>
-          <span className='entities__entity__content__title'>{name || ' '}</span>
+        <div className='entities__entity__content' onClick={type !== 'user' ? () => showProfile() : null}>
+          {name && <span className='entities__entity__content__title'>{name || ' '}</span>}
+          {metadata && metadata.firstName && <span className='entities__entity__content__title'>{`${metadata.firstName} ${metadata.lastName}` || ' '}</span>}
           {businessType && <div className='entities__entity__content__type'>{businessType}</div>}
           <div className='entities__entity__content__subtitle'>
             <span className='text-asset'>Account ID</span>
