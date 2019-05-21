@@ -17,12 +17,13 @@ const mandatorySteps = {
   bridge: true
 }
 
-const deploy = async (tokenProgress, steps) => {
+const deploy = async (tokenProgress, steps, accountAddress) => {
   const token = await Token.findOne({ address: tokenProgress.tokenAddress })
 
   if (!token) {
     return stepFailed('tokenIssued', tokenProgress.tokenAddress, 'No such token issued')
   }
+  const results = {}
   for (let stepName of stepsOrder) {
     if (steps[stepName]) {
       if (tokenProgress.steps[stepName]) {
@@ -31,7 +32,7 @@ const deploy = async (tokenProgress, steps) => {
         try {
           console.log(`starting step ${stepName}`)
           const deployFunction = deployFunctions[stepName]
-          await deployFunction(token, steps[stepName])
+          results[stepName] = await deployFunction(token, steps[stepName], results, accountAddress)
           await stepDone(stepName, token.address)
         } catch (error) {
           console.log(error)

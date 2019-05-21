@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Bridge = mongoose.model('Bridge')
+// const Bridge = mongoose.model('Bridge')
 const Community = mongoose.model('Community')
 const { handleReceipt } = require('@events/handlers')
 const { web3, from, send } = require('@services/web3/home')
@@ -9,7 +9,7 @@ const IRestrictedTokenABI = require('@constants/abi/IRestrictedToken')
 const CommunityTransferManagerBytecode = require('@fuse/entities-contracts/build/bytecode/CommunityTransferManager')
 const { combineRoles, roles: { ADMIN_ROLE, USER_ROLE, APPROVED_ROLE } } = require('@fuse/roles')
 
-const deployCommunity = async (token, step) => {
+const deployCommunity = async (token, step, results, accountAddress) => {
   console.log('Deploying community transfer manager')
 
   const method = new web3.eth.Contract(CommunityTransferManagerABI).deploy({ data: CommunityTransferManagerBytecode })
@@ -21,7 +21,9 @@ const deployCommunity = async (token, step) => {
 
   const communityAddress = transferManagerContract._address
 
-  const { homeTokenAddress } = await Bridge.findOne({ foreignTokenAddress: token.address })
+  // const { homeTokenAddress } = await Bridge.findOne({ foreignTokenAddress: token.address })
+  console.log(results)
+  const { homeTokenAddress } = results.bridge
 
   new Community({
     communityAddress,
@@ -38,7 +40,7 @@ const deployCommunity = async (token, step) => {
   const adminMultiRole = combineRoles(USER_ROLE, ADMIN_ROLE, APPROVED_ROLE)
 
   communityMethods.push(
-    transferManagerContract.methods.addEntity(token.owner, adminMultiRole))
+    transferManagerContract.methods.addEntity(accountAddress, adminMultiRole))
 
   for (let method of communityMethods) {
     const receipt = await send(method, { from })

@@ -22,8 +22,9 @@ router.get('/', async (req, res) => {
 
 router.post('/:address', async (req, res) => {
   const { address } = req.params
+  const { tokenURI } = req.body
   const tokenData = await fetchTokenData(address)
-  const token = await new Token({ ...tokenData, address, tokenType: 'imported', networkType: config.get('network.foreign.name') }).save()
+  const token = await new Token({ ...tokenData, tokenURI, address, tokenType: 'imported', networkType: config.get('network.foreign.name') }).save()
   return res.json({ data: token })
 })
 
