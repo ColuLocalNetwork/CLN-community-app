@@ -23,7 +23,7 @@ const handleTokenCreatedEvent = async (event) => {
     networkType: config.get('network.foreign.name')
   }
 
-  const fetchedTokenData = await tokenUtils.fetchTokenData(address, { tokenUri: true })
+  const fetchedTokenData = await tokenUtils.fetchTokenData(address, { tokenURI: true })
 
   return token.create({ ...tokenData, ...fetchedTokenData })
 }

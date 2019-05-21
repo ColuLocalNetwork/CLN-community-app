@@ -18,7 +18,7 @@ router.post('/deploy/:tokenAddress', async (req, res, next) => {
     return res.status(400).json({ errror: 'No token issued' })
   }
 
-  deploy(tokenProgress, { ...steps, transferOwnership: true })
+  deploy(tokenProgress, { ...steps })
 
   return res.json({ data: tokenProgress })
 })

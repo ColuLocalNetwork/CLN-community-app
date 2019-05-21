@@ -2,6 +2,7 @@ const router = require('express').Router()
 const mongoose = require('mongoose')
 const Token = mongoose.model('Token')
 const paginate = require('express-paginate')
+const config = require('config')
 const { fetchTokenData } = require('@utils/token')
 
 router.get('/', async (req, res) => {
@@ -22,8 +23,7 @@ router.get('/', async (req, res) => {
 router.post('/:address', async (req, res) => {
   const { address } = req.params
   const tokenData = await fetchTokenData(address)
-  console.log(tokenData)
-  const token = await new Token({ ...tokenData, address, tokenType: 'imported' }).save()
+  const token = await new Token({ ...tokenData, address, tokenType: 'imported', networkType: config.get('network.foreign.name') }).save()
   return res.json({ data: token })
 })
 

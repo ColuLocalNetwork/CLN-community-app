@@ -48,6 +48,8 @@ async function deployHomeBridge (token, { web3, from, send }) {
     from
   })
 
+  await handleReceipt(receipt)
+
   const event = receipt.events.HomeBridgeDeployed
 
   const result = {
