@@ -31,7 +31,7 @@ const send = async (web3, bridgeType, method, options) => {
   }
 
   const { from } = options
-  const gas = await method.estimateGas({ from })
+  const gas = Math.max(await method.estimateGas({ from }), config.get('network.misc.minGasLimit'))
   const gasPrice = bridgeType === 'home' ? '1000000000' : undefined
   const account = await Account.findOneOrCreate({ bridgeType, address: from })
   let receipt
