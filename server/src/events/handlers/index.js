@@ -8,6 +8,7 @@ const community = require('./community')
 const eventsHandlers = {
   TokenCreated: token.handleTokenCreatedEvent,
   Transfer: token.handleTransferEvent,
+  OwnershipTransferred: token.handleOwnershipTransferredEvent,
   BridgeMappingUpdated: bridge.handleBridgeMappingUpdatedEvent,
   HomeBridgeDeployed: bridge.handleHomeBridgeDeployed,
   EntityReplaced: business.handleEntityReplacedEvent,

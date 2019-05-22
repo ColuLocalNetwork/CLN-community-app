@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const { deployBridge } = require('@utils/bridge')
 const { deployCommunity } = require('@utils/community')
 const { stepFailed, stepDone } = require('@utils/tokenProgress')
-const { transferOwnership } = require('@utils/token')
+const { transferOwnership } = require('@utils/token/ownership')
 const Token = mongoose.model('Token')
 
 const deployFunctions = {

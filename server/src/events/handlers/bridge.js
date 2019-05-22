@@ -31,7 +31,6 @@ const handleHomeBridgeDeployed = async (event) => {
     address,
     factoryAddress: event.address,
     blockNumber: event.blockNumber,
-    // owner: eventArgs.issuer,
     tokenType: 'basic',
     networkType: config.get('network.home.name')
   }

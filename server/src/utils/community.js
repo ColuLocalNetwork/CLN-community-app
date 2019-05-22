@@ -11,7 +11,8 @@ const { combineRoles, roles: { ADMIN_ROLE, USER_ROLE, APPROVED_ROLE } } = requir
 const deployCommunity = async (token, step, results, accountAddress) => {
   console.log('Deploying community transfer manager')
 
-  const method = new web3.eth.Contract(CommunityTransferManagerABI).deploy({ data: CommunityTransferManagerBytecode, arguments: [step.name] })
+  const method = new web3.eth.Contract(CommunityTransferManagerABI).deploy({
+    data: CommunityTransferManagerBytecode, arguments: [step.name] })
   const transferManagerContract = await send(method, {
     from
   })
