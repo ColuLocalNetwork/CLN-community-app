@@ -91,7 +91,8 @@ function * createTokenWithMetadata ({ tokenData, metadata, tokenType, steps }) {
 
 function * deployChosenContracts ({ response: { steps, receipt } }) {
   const tokenAddress = receipt.events[0].address
-  yield apiCall(api.deployChosenContracts, { tokenAddress, steps })
+  const accountAddress = yield select(getAccountAddress)
+  yield apiCall(api.deployChosenContracts, { tokenAddress, steps, accountAddress })
 }
 
 function * fetchTokenStatistics ({ tokenAddress, activityType, interval }) {

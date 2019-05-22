@@ -9,6 +9,7 @@ const eventsHandlers = {
   TokenCreated: token.handleTokenCreatedEvent,
   Transfer: token.handleTransferEvent,
   BridgeMappingUpdated: bridge.handleBridgeMappingUpdatedEvent,
+  HomeBridgeDeployed: bridge.handleHomeBridgeDeployed,
   EntityReplaced: business.handleEntityReplacedEvent,
   SimpleListCreated: business.handleSimpleListCreatedEvent,
   TransferManagerSet: community.handleTransferManagerSet,
@@ -21,14 +22,18 @@ const eventsHandlers = {
 
 const handleEvent = function (event) {
   const eventName = event.event
+  const blockNumber = event.blockNumber
   if (eventsHandlers.hasOwnProperty(eventName)) {
+    console.log(`Starting to process event ${eventName} at ${blockNumber} blockNumber`)
     return eventsHandlers[eventName](event).then(() => {
-      const blockNumber = event.blockNumber
-      console.log(`recieved ${eventName} event at ${blockNumber} blockNumber`)
+      console.log(`Done to process ${eventName} event at ${blockNumber} blockNumber`)
       eventUtils.addNewEvent({
         eventName,
         ...event
       })
+    }).catch(err => {
+      console.log(`Failed to process ${eventName} event at ${blockNumber} blockNumber`)
+      throw err
     })
   }
 }

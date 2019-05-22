@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const Token = mongoose.model('Token')
 const paginate = require('express-paginate')
 
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res) => {
   const [ results, itemCount ] = await Promise.all([
     Token.find({}).sort({ blockNumber: -1 }).limit(req.query.limit).skip(req.skip),
     Token.estimatedDocumentCount()

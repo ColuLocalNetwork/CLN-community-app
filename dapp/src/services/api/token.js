@@ -14,9 +14,9 @@ export const fetchToken = (apiRoot, { tokenAddress }) =>
 export const fetchTokenProgress = (apiRoot, { tokenAddress }) =>
   request.get(`${apiRoot}/tokens/progress/${tokenAddress}`).then(response => response.body)
 
-export const deployChosenContracts = (apiRoot, { tokenAddress, steps }) =>
+export const deployChosenContracts = (apiRoot, { tokenAddress, steps, accountAddress }) =>
   request.post(`${apiRoot}/tokens/progress/deploy/${tokenAddress}`)
-    .send({ steps })
+    .send({ steps, accountAddress })
     .then(response => response.body)
 
 export const fetchTokenStatistics = (apiRoot, { tokenAddress, activityType, interval }) =>

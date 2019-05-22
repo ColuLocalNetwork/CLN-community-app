@@ -20,8 +20,6 @@ async function initConfig () {
 async function init () {
   await initConfig()
 
-  const agenda = require('./services/agenda')
-
   console.log(util.inspect(config, { depth: null }))
 
   var isProduction = process.env.NODE_ENV === 'production'
@@ -49,16 +47,15 @@ async function init () {
 
   mongoose.set('debug', config.get('mongo.debug'))
 
-  // cloning options object cause mongoose is filling it with unneeded data about the connection
   mongoose.connect(config.get('mongo.uri'), config.get('mongo.options')).catch((error) => {
     console.error(error)
     process.exit(1)
   })
-
   require('./models')(mongoose)
 
   app.use(require('./routes'))
 
+  const agenda = require('./services/agenda')
   if (config.get('agenda.start')) {
     agenda.start()
   }

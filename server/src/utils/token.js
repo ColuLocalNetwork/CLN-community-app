@@ -1,30 +1,30 @@
-const givenWeb3 = require('@services/web3')
-const { web3, from, send } = require('@services/web3/home')
+const foreign = require('@services/web3/foreign')
+const home = require('@services/web3/home')
 const BasicTokenAbi = require('@fuse/token-factory-contracts/build/abi/BasicToken')
 
-const fetchTokenData = async (address) => {
-  const tokenContractInstance = new givenWeb3.eth.Contract(BasicTokenAbi, address)
+const fetchTokenData = async (address, fields = {}, web3 = foreign.web3) => {
+  const tokenContractInstance = new web3.eth.Contract(BasicTokenAbi, address)
   const [name, symbol, totalSupply, tokenURI] = await Promise.all([
     tokenContractInstance.methods.name().call(),
     tokenContractInstance.methods.symbol().call(),
     tokenContractInstance.methods.totalSupply().call(),
-    tokenContractInstance.methods.tokenURI().call()
+    fields.tokenURI ? tokenContractInstance.methods.tokenURI().call() : undefined
   ])
 
   return { name, symbol, totalSupply, tokenURI }
 }
 
-const transferOwnhership = async (token) => {
-  const tokenContractInstance = new web3.eth.Contract(BasicTokenAbi, token.address)
+const transferOwnership = async (token, stepName, results, accountAddress) => {
+  const tokenContractInstance = new home.web3.eth.Contract(BasicTokenAbi, token.address)
 
-  const method = tokenContractInstance.methods.transferOwnhership(token.owner)
+  const method = tokenContractInstance.methods.transferOwnership(accountAddress)
 
-  return send(method, {
-    from
+  return home.send(method, {
+    from: home.from
   })
 }
 
 module.exports = {
   fetchTokenData,
-  transferOwnhership
+  transferOwnership
 }

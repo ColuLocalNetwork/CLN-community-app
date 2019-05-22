@@ -54,6 +54,10 @@ export default class SummaryStep extends Component {
         label: 'Issued'
       })
     }
+
+    if (this.props.transactionStatus === PENDING) {
+      this.props.setNextStep()
+    }
   }
 
   render () {
@@ -66,15 +70,10 @@ export default class SummaryStep extends Component {
       contracts,
       createTokenSignature,
       transactionStatus,
-      setNextStep,
       isOpen
     } = this.props
 
     const { showError } = this.state
-    if (transactionStatus === PENDING) {
-      setNextStep()
-      return ''
-    }
 
     const contractsItems = Object.values(contracts)
       .filter((contract) => contract.checked)
