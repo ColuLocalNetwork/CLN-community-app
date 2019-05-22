@@ -11,35 +11,37 @@ const deployFunctions = {
   transferOwnership: transferOwnership
 }
 
-const stepsOrder = ['bridge', 'membersList']
+const stepsOrder = ['bridge', 'membersList', 'transferOwnership']
 
 const mandatorySteps = {
   bridge: true
 }
 
-const deploy = async (tokenProgress, steps) => {
+const deploy = async (tokenProgress, steps, accountAddress) => {
   const token = await Token.findOne({ address: tokenProgress.tokenAddress })
 
   if (!token) {
     return stepFailed('tokenIssued', tokenProgress.tokenAddress, 'No such token issued')
   }
-  for (let step of stepsOrder) {
-    if (steps[step]) {
-      if (tokenProgress.steps[step]) {
-        console.log(`${step} already deployed`)
+  const results = {}
+  for (let stepName of stepsOrder) {
+    if (steps[stepName]) {
+      if (tokenProgress.steps[stepName]) {
+        console.log(`${stepName} already deployed`)
       } else {
         try {
-          const deployFunction = deployFunctions[step]
-          await deployFunction(token, steps[step])
-          await stepDone(step, token.address)
+          console.log(`starting step ${stepName}`)
+          const deployFunction = deployFunctions[stepName]
+          results[stepName] = await deployFunction(token, steps[stepName], results, accountAddress)
+          await stepDone(stepName, token.address)
         } catch (error) {
           console.log(error)
-          return stepFailed(step, tokenProgress.tokenAddress, `step ${step} failed`)
+          return stepFailed(stepName, tokenProgress.tokenAddress, `step ${stepName} failed`)
         }
       }
     } else {
-      if (mandatorySteps[step] && !tokenProgress.steps[step]) {
-        return stepFailed(step, tokenProgress.tokenAddress, `step ${step} should be mandatory`)
+      if (mandatorySteps[stepName] && !tokenProgress.steps[stepName]) {
+        return stepFailed(stepName, tokenProgress.tokenAddress, `step ${stepName} should be mandatory`)
       }
     }
   }

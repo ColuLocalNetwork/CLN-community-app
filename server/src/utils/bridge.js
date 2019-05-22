@@ -2,8 +2,8 @@ const config = require('config')
 const ForeignBridgeFactoryABI = require('@constants/abi/ForeignBridgeFactory.json')
 const HomeBridgeFactoryABI = require('@constants/abi/HomeBridgeFactory.json')
 const BridgeMapperABI = require('@constants/abi/BridgeMapper.json')
-const foreignAddressess = require('@utils/network').addresses
-const homeAddresses = config.get('web3.addresses.fuse')
+const foreignAddressess = config.get('network.foreign.addresses')
+const homeAddresses = config.get('network.home.addresses')
 const { fetchGasPrice, isZeroAddress } = require('@utils/network')
 const { handleReceipt } = require('@events/handlers')
 const home = require('@services/web3/home')
@@ -47,6 +47,8 @@ async function deployHomeBridge (token, { web3, from, send }) {
   const receipt = await send(method, {
     from
   })
+
+  await handleReceipt(receipt)
 
   const event = receipt.events.HomeBridgeDeployed
 
