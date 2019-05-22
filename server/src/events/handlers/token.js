@@ -1,5 +1,6 @@
 const tokenUtils = require('@utils/token')
 const mongoose = require('mongoose')
+const Token = mongoose.model('Token')
 const config = require('config')
 const { isZeroAddress } = require('@utils/network')
 
@@ -28,6 +29,14 @@ const handleTokenCreatedEvent = async (event) => {
   return token.create({ ...tokenData, ...fetchedTokenData })
 }
 
+const handleOwnershipTransferredEvent = async (event) => {
+  const eventArgs = event.returnValues
+  const { address } = event
+  const owner = eventArgs.newOwner
+
+  return Token.updateOne({ address, networkType: config.get('network.home.name') }, { owner })
+}
+
 const handleTransferEvent = (event) => {
   const tokenAddress = event.address
   const { from, to, value } = event.returnValues
@@ -41,5 +50,6 @@ const handleTransferEvent = (event) => {
 
 module.exports = {
   handleTokenCreatedEvent,
-  handleTransferEvent
+  handleTransferEvent,
+  handleOwnershipTransferredEvent
 }

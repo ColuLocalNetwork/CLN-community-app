@@ -28,7 +28,8 @@ module.exports = {
   },
   network: {
     misc: {
-      pageSize: 1000
+      pageSize: 1000,
+      minGasLimit: 50000
     },
     home: {
       name: 'fuse',

@@ -14,15 +14,16 @@ import {
   removeEntity,
   addAdminRole,
   removeAdminRole,
-  confirmUser
+  confirmUser,
+  toggleCommunityMode
 } from 'actions/communityEntities'
 import Entity from './Entity.jsx'
 import EmptyBusinessList from 'images/emptyBusinessList.png'
 import { loadModal, hideModal } from 'actions/ui'
-import { ADD_DIRECTORY_ENTITY } from 'constants/uiConstants'
+import { ADD_DIRECTORY_ENTITY, ADD_USER_MODAL } from 'constants/uiConstants'
 import ReactGA from 'services/ga'
 import { isOwner } from 'utils/token'
-import { fetchHomeToken } from 'actions/bridge'
+import { fetchHomeToken, fetchHomeBridge, fetchForeignBridge } from 'actions/bridge'
 import plusIcon from 'images/add.svg'
 import { getTransaction } from 'selectors/transaction'
 import filterIcon from 'images/filter.svg'
@@ -46,9 +47,17 @@ const EntitiesManagerDataFetcher = (props) => {
   useEffect(() => {
     if (props.foreignTokenAddress) {
       props.fetchHomeToken(props.foreignTokenAddress)
+      props.fetchHomeBridge(props.foreignTokenAddress)
+      props.fetchForeignBridge(props.foreignTokenAddress)
       props.fetchCommunity(props.foreignTokenAddress)
     }
   }, [props.foreignTokenAddress])
+
+  useEffect(() => {
+    if (props.toggleSuccess) {
+      props.fetchCommunity(props.foreignTokenAddress)
+    }
+  }, [props.toggleSuccess])
 
   useEffect(() => {
     if (props.communityAddress) {
@@ -61,18 +70,14 @@ const EntitiesManagerDataFetcher = (props) => {
 }
 
 class EntitiesManager extends Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      showSearch: false,
-      search: '',
-      showUsers: true,
-      filters: {
-        pending: false,
-        isApproved: true,
-        isAdmin: false
-      }
+  state = {
+    showSearch: false,
+    search: '',
+    showUsers: true,
+    filters: {
+      pending: false,
+      isApproved: true,
+      isAdmin: false
     }
   }
 
@@ -93,9 +98,20 @@ class EntitiesManager extends Component {
     this.props.onlyOnFuse(this.loadAddingModal)
   }
 
+  handleAddUser = () => {
+    this.props.onlyOnFuse(this.loadAddUserModal)
+  }
+
   loadAddingModal = () => this.props.loadModal(ADD_DIRECTORY_ENTITY, {
-    submitEntity: (data) => this.props.addEntity(this.props.communityAddress, { ...data, type: this.state.showUsers ? 'user' : 'business' })
+    submitEntity: (data) => this.props.addEntity(this.props.communityAddress, { ...data, type: 'business' }, this.props.isClosed)
   })
+
+  loadAddUserModal = () => {
+    const { loadModal } = this.props
+    loadModal(ADD_USER_MODAL, {
+      submitEntity: (data) => this.props.addEntity(this.props.communityAddress, { ...data, type: 'user' }, this.props.isClosed)
+    })
+  }
 
   renderTransactionStatus = () => {
     if (this.props.signatureNeeded || this.props.transactionStatus === PENDING) {
@@ -122,7 +138,7 @@ class EntitiesManager extends Component {
 
   filterBySearch = (search, entities) =>
     search ? entities.filter(entity =>
-      entity.name.toLowerCase().search(
+      entity && entity.name && entity.name.toLowerCase().search(
         this.state.search.toLowerCase()) !== -1
     ) : entities
 
@@ -133,26 +149,34 @@ class EntitiesManager extends Component {
   }
 
   handleRemoveEntity = (account) => {
-    const { removeEntity, communityAddress } = this.props
-    removeEntity(communityAddress, account)
+    const { removeEntity, communityAddress, onlyOnFuse } = this.props
+    onlyOnFuse(() => removeEntity(communityAddress, account))
   }
 
   handleAddAdminRole = (account) => {
-    const { addAdminRole } = this.props
-    addAdminRole(account)
+    const { addAdminRole, onlyOnFuse } = this.props
+    onlyOnFuse(() => addAdminRole(account))
   }
 
   handleRemoveAdminRole = (account) => {
-    const { removeAdminRole } = this.props
-    removeAdminRole(account)
+    const { removeAdminRole, onlyOnFuse } = this.props
+    onlyOnFuse(() => removeAdminRole(account))
   }
 
   handleConfirmUser = (account) => {
-    const { confirmUser } = this.props
-    confirmUser(account)
+    const { confirmUser, onlyOnFuse } = this.props
+    onlyOnFuse(() => confirmUser(account))
+  }
+
+  handleToggleCommunityMode = (event) => {
+    const isClosed = event.target.checked
+    const { communityAddress, toggleCommunityMode, onlyOnFuse } = this.props
+    onlyOnFuse(() => toggleCommunityMode(communityAddress, isClosed))
   }
 
   renderList = (entities) => {
+    const { metadata, isAdmin, communityAddress, homeTokenAddress } = this.props
+
     if (entities.length) {
       return (
         entities.map((entity, index) =>
@@ -160,12 +184,14 @@ class EntitiesManager extends Component {
             key={index}
             index={index}
             entity={entity}
-            address={this.props.homeTokenAddress}
+            address={homeTokenAddress}
             addAdminRole={this.handleAddAdminRole}
             removeAdminRole={this.handleRemoveAdminRole}
             handleRemove={this.handleRemoveEntity}
             confirmUser={this.handleConfirmUser}
-            showProfile={() => this.showProfile(this.props.communityAddress, entity.account)}
+            isAdmin={isAdmin}
+            metadata={metadata[entity.uri]}
+            showProfile={() => this.showProfile(communityAddress, entity.account)}
           />
         ))
     } else {
@@ -185,7 +211,22 @@ class EntitiesManager extends Component {
     }
 
     if (items && items.length) {
-      return this.renderList(filteredItems)
+      return (
+        <Fragment>
+          <div className='entities__search'>
+            <button className='entities__search__icon' onClick={() => this.setShowingSearch()}>
+              <FontAwesome name='search' />
+            </button>
+            <input
+              value={this.state.search}
+              onChange={this.setSearchValue}
+              placeholder={showUsers ? 'Search a user...' : 'Search a merchant...'}
+            />
+          </div>
+          {this.renderTransactionStatus()}
+          {this.renderList(filteredItems)}
+        </Fragment>
+      )
     } else {
       if (!transactionStatus) {
         if (showUsers) {
@@ -195,6 +236,7 @@ class EntitiesManager extends Component {
               <div className='entities__empty-list__text'>You can keep watching Netflix later, add a user and let’s start Rock’n’Roll!</div>
               <button
                 className='entities__empty-list__btn'
+                onClick={this.handleAddUser}
                 disabled={transactionStatus === REQUEST || transactionStatus === PENDING}
               >
                 Add new user
@@ -316,50 +358,52 @@ class EntitiesManager extends Component {
                         )
                       }
                     </div>
-                    <div className='entities__actions__buttons'>
-                      <button
-                        className={classNames('entities__actions__buttons__btn', { 'entities__actions__buttons__btn--active': !showUsers })}
-                        onClick={() => this.setState({ showUsers: false })}
-                      >Merchant</button>
-                      <button
-                        className={classNames('entities__actions__buttons__btn', { 'entities__actions__buttons__btn--active': showUsers })}
-                        onClick={() => this.setState({ showUsers: true })}
-                      >User</button>
+                    <div className='entities__actions__buttons__wrapper'>
+                      <div className='entities__actions__buttons'>
+                        <button
+                          className={classNames('entities__actions__buttons__btn', { 'entities__actions__buttons__btn--active': !showUsers })}
+                          onClick={() => this.setState({ showUsers: false, search: '' })}
+                        >Merchant</button>
+                        <button
+                          className={classNames('entities__actions__buttons__btn', { 'entities__actions__buttons__btn--active': showUsers })}
+                          onClick={() => this.setState({ showUsers: true, search: '' })}
+                        >User</button>
+                      </div>
                     </div>
-                    <div className='entities__actions__add'>
+                    <div className='entities__actions__add__wrapper'>
                       {
-                        (isAdmin || !isClosed) && (
-                          <Fragment>
+                        isAdmin && (
+                          <div className='entities__actions__add'>
                             {
                               networkType === 'fuse'
                                 ? (
-                                  <span onClick={this.handleAddBusiness}>
+                                  <span onClick={showUsers ? this.handleAddUser : this.handleAddBusiness}>
                                     <a style={{ backgroundImage: `url(${plusIcon})` }} />
                                   </span>
                                 ) : (
-                                  <span onClick={this.handleAddBusiness}>
+                                  <span onClick={showUsers ? this.handleAddUser : this.handleAddBusiness}>
                                     <FontAwesome name='plus-circle' />
                                   </span>
                                 )
                             }
                             {showUsers ? 'Add new user' : 'Add new merchant'}
-                          </Fragment>
+                          </div>
+                        )
+                      }
+                      {
+                        isAdmin && (
+                          <div className='entities__actions__add__community'>
+                            <label className='toggle'>
+                              <input type='checkbox' value={isClosed} checked={isClosed} onChange={this.handleToggleCommunityMode} />
+                              <div className='toggle-wrapper'><span className='toggle' /></div>
+                            </label>
+                            <span>{ !isClosed ? 'Open' : 'Close' } community</span>
+                          </div>
                         )
                       }
                     </div>
                   </div>
-                  <div className='entities__search'>
-                    <button className='entities__search__icon' onClick={() => this.setShowingSearch()}>
-                      <FontAwesome name='search' />
-                    </button>
-                    <input
-                      value={this.state.search}
-                      onChange={this.setSearchValue}
-                      placeholder={showUsers ? 'Search a user...' : 'Search a merchant...'}
-                    />
-                  </div>
                   <div className='entities__items'>
-                    {this.renderTransactionStatus()}
                     {this.renderItems()}
                   </div>
                 </Fragment>
@@ -376,6 +420,9 @@ class EntitiesManager extends Component {
             fetchCommunity={this.props.fetchCommunity}
             fetchBusinessesEntities={this.props.fetchBusinessesEntities}
             fetchUsersEntities={this.props.fetchUsersEntities}
+            toggleSuccess={this.props.toggleSuccess}
+            fetchHomeBridge={this.props.fetchHomeBridge}
+            fetchForeignBridge={this.props.fetchForeignBridge}
           />
         </div>
       </Fragment >
@@ -392,7 +439,8 @@ const mapStateToProps = (state, { match, foreignTokenAddress }) => ({
   homeTokenAddress: state.entities.bridges[foreignTokenAddress] && state.entities.bridges[foreignTokenAddress].homeTokenAddress,
   ...state.screens.communityEntities,
   ...getTransaction(state, state.screens.communityEntities.transactionHash),
-  isAdmin: checkIsAdmin(state)
+  isAdmin: checkIsAdmin(state),
+  metadata: state.entities.metadata
 })
 
 const mapDispatchToProps = {
@@ -406,7 +454,10 @@ const mapDispatchToProps = {
   fetchHomeToken,
   fetchCommunity,
   fetchBusinessesEntities,
-  fetchUsersEntities
+  fetchUsersEntities,
+  toggleCommunityMode,
+  fetchHomeBridge,
+  fetchForeignBridge
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EntitiesManager)
