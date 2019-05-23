@@ -21,12 +21,12 @@ const eventsHandlers = {
   RuleRemoved: community.handleRuleRemoved
 }
 
-const handleEvent = function (event) {
+const handleEvent = function (event, receipt) {
   const eventName = event.event
   const blockNumber = event.blockNumber
   if (eventsHandlers.hasOwnProperty(eventName)) {
     console.log(`Starting to process event ${eventName} at ${blockNumber} blockNumber`)
-    return eventsHandlers[eventName](event).then(() => {
+    return eventsHandlers[eventName](event, receipt).then(() => {
       console.log(`Done to process ${eventName} event at ${blockNumber} blockNumber`)
       eventUtils.addNewEvent({
         eventName,
@@ -45,10 +45,10 @@ const handleReceipt = async (receipt) => {
   for (let [eventName, event] of events) {
     if (eventsHandlers.hasOwnProperty(eventName)) {
       if (Array.isArray(event)) {
-        const eventPromisses = event.map((singleEvent) => handleEvent(singleEvent))
+        const eventPromisses = event.map((singleEvent) => handleEvent(singleEvent, receipt))
         promisses = [...promisses, ...eventPromisses]
       } else {
-        promisses.push(handleEvent(event))
+        promisses.push(handleEvent(event, receipt))
       }
     }
   }

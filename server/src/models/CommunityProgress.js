@@ -4,12 +4,11 @@ module.exports = (mongoose) => {
   const Schema = mongoose.Schema
 
   const CommunityProgressSchema = new Schema({
-    communityAddress: { type: String, required: [true, "can't be blank"] },
-    steps: { type: Object, default: {} },
-    stepErrors: { type: Object }
-  }, { timestamps: true })
+    communityAddress: { type: String },
+    steps: { type: Object, default: {} }
+  }, { timestamps: true, minimize: false })
 
-  CommunityProgressSchema.index({ communityAddress: 1 }, { unique: true })
+  CommunityProgressSchema.index({ communityAddress: 1 })
 
   CommunityProgressSchema.set('toJSON', {
     versionKey: false

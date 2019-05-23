@@ -10,9 +10,9 @@ const handleTransferManagerSet = async (event) => {
   console.log({ token, communityAddress })
 }
 
-const handleEntityAdded = async (event) => {
-  const entitiesListAddress = event.address
-  const { communityAddress } = await Community.findOne({ entitiesListAddress }, 'communityAddress')
+const handleEntityAdded = async (event, receipt) => {
+  const communityAddress = receipt.to
+  // const { communityAddress } = await Community.findOne({ entitiesListAddress }, 'communityAddress')
   const { roles, account } = event.returnValues
   const derivedFields = deriveFromRoles(roles)
 
