@@ -4,7 +4,6 @@ module.exports = (mongoose) => {
   const Schema = mongoose.Schema
   const CommunitySchema = new Schema({
     communityAddress: { type: String, required: [true, "can't be blank"] },
-    entitiesListAddress: { type: String, required: [true, "can't be blank"] },
     homeTokenAddress: { type: String, required: [true, "can't be blank"] },
     foreignTokenAddress: { type: String, required: [true, "can't be blank"] },
     homeBridgeAddress: { type: String, required: [true, "can't be blank"] },

@@ -12,24 +12,21 @@ const handleTransferManagerSet = async (event) => {
 
 const handleEntityAdded = async (event, receipt) => {
   const communityAddress = receipt.to
-  // const { communityAddress } = await Community.findOne({ entitiesListAddress }, 'communityAddress')
   const { roles, account } = event.returnValues
   const derivedFields = deriveFromRoles(roles)
 
   return Entity.findOneAndUpdate({ account, communityAddress }, { ...derivedFields, communityAddress, roles, account }, { new: true, upsert: true })
 }
 
-const handleEntityRemoved = async (event) => {
-  const entitiesListAddress = event.address
+const handleEntityRemoved = async (event, receipt) => {
+  const communityAddress = receipt.to
   const { account } = event.returnValues
-  const { communityAddress } = await Community.findOne({ entitiesListAddress }, 'communityAddress')
 
   return Entity.deleteOne({ account, communityAddress })
 }
 
-const handleEntityRolesUpdated = async (event) => {
-  const entitiesListAddress = event.address
-  const { communityAddress } = await Community.findOne({ entitiesListAddress }, 'communityAddress')
+const handleEntityRolesUpdated = async (event, receipt) => {
+  const communityAddress = receipt.to
   const { roles, account } = event.returnValues
   const derivedFields = deriveFromRoles(roles)
 

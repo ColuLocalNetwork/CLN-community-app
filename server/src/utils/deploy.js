@@ -51,12 +51,11 @@ const deploy = async (communityProgress) => {
     }
   }
   const { steps } = communityProgress
-  const { communityAddress, entitiesListAddress } = steps.community.results
+  const { communityAddress } = steps.community.results
   const { homeTokenAddress, foreignTokenAddress, foreignBridgeAddress, homeBridgeAddress } = steps.bridge.results
 
   new Community({
     communityAddress,
-    entitiesListAddress,
     homeTokenAddress,
     foreignTokenAddress,
     foreignBridgeAddress,

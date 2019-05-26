@@ -12,8 +12,6 @@ const deployCommunity = async (communityProgress) => {
     from
   })
 
-  const entitiesListAddress = await transferManagerContract.methods.entitiesList().call()
-
   const communityAddress = transferManagerContract._address
 
   const communityMethods = []
@@ -32,8 +30,7 @@ const deployCommunity = async (communityProgress) => {
   }
 
   return {
-    communityAddress,
-    entitiesListAddress
+    communityAddress
   }
 }
 
