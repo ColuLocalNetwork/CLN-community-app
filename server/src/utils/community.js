@@ -30,7 +30,8 @@ const deployCommunity = async (communityProgress) => {
   }
 
   return {
-    communityAddress
+    communityAddress,
+    isClosed
   }
 }
 
