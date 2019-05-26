@@ -10,9 +10,21 @@ router.get('/', async (req, res, next) => {
   return res.json({ data: community })
 })
 
+router.get('/progress/:id', async (req, res, next) => {
+  const { id } = req.params
+  const communityProgress = await CommunityProgress.findById(id)
+  return res.json({ data: communityProgress })
+})
+
+router.get('/progress', async (req, res, next) => {
+  const { communityAddress } = req.query
+  const communityProgress = await CommunityProgress.findOne({ communityAddress })
+  return res.json({ data: communityProgress })
+})
+
 router.get('/:communityAddress', async (req, res, next) => {
-  const { listAddress } = req.params
-  const community = await Community.findOne({ listAddress }).lean()
+  const { communityAddress } = req.params
+  const community = await Community.findOne({ communityAddress }).lean()
   return res.json({ data: community })
 })
 
@@ -22,12 +34,6 @@ router.post('/deploy', async (req, res, next) => {
 
   deploy(communityProgress)
 
-  return res.json({ data: communityProgress })
-})
-
-router.get('/progress/:communityAddress', async (req, res, next) => {
-  const { communityAddress } = req.params
-  const communityProgress = await CommunityProgress.findOne({ communityAddress })
   return res.json({ data: communityProgress })
 })
 
