@@ -54,9 +54,7 @@ const deploy = async (communityProgress) => {
   const { communityAddress, entitiesListAddress } = steps.community.results
   const { homeTokenAddress, foreignTokenAddress, foreignBridgeAddress, homeBridgeAddress } = steps.bridge.results
 
-  await CommunityProgress.findByIdAndUpdate(communityProgress._id, { communityAddress, done: true })
-
-  return new Community({
+  new Community({
     communityAddress,
     entitiesListAddress,
     homeTokenAddress,
@@ -64,6 +62,10 @@ const deploy = async (communityProgress) => {
     foreignBridgeAddress,
     homeBridgeAddress
   }).save()
+
+  await CommunityProgress.findByIdAndUpdate(communityProgress._id, { communityAddress, done: true })
+  
+  console.log('Community deploy is done')
 }
 
 module.exports = deploy
