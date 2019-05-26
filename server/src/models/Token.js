@@ -1,4 +1,3 @@
-const { tokenIssued, detailsGiven } = require('@utils/tokenProgress')
 const BigNumber = require('bignumber.js')
 
 const transform = (doc, ret, options) => ({ ...ret, totalSupply: doc.totalSupply ? doc.totalSupply.toString() : undefined })
@@ -32,18 +31,6 @@ module.exports = (mongoose) => {
   TokenSchema.set('toObject', {
     versionKey: false,
     transform
-  })
-
-  TokenSchema.post('save', token => {
-    tokenIssued(token.address)
-  })
-
-  TokenSchema.post('save', async token => {
-    const User = mongoose.model('User')
-    const user = await User.findOne({ accountAddress: token.owner })
-    if (user) {
-      detailsGiven(token.address)
-    }
   })
 
   const Token = mongoose.model('Token', TokenSchema)

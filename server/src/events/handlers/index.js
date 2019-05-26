@@ -1,6 +1,5 @@
 const eventUtils = require('@utils/event')
 
-const business = require('./business')
 const token = require('./token')
 const bridge = require('./bridge')
 const community = require('./community')
@@ -11,8 +10,6 @@ const eventsHandlers = {
   OwnershipTransferred: token.handleOwnershipTransferredEvent,
   BridgeMappingUpdated: bridge.handleBridgeMappingUpdatedEvent,
   HomeBridgeDeployed: bridge.handleHomeBridgeDeployed,
-  EntityReplaced: business.handleEntityReplacedEvent,
-  SimpleListCreated: business.handleSimpleListCreatedEvent,
   TransferManagerSet: community.handleTransferManagerSet,
   EntityAdded: community.handleEntityAdded,
   EntityRemoved: community.handleEntityRemoved,

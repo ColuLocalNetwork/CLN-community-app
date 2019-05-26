@@ -64,7 +64,7 @@ const deploy = async (communityProgress) => {
   }).save()
 
   await CommunityProgress.findByIdAndUpdate(communityProgress._id, { communityAddress, done: true })
-  
+
   console.log('Community deploy is done')
 }
 

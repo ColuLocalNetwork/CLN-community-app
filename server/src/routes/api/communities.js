@@ -16,16 +16,18 @@ router.get('/:communityAddress', async (req, res, next) => {
   return res.json({ data: community })
 })
 
-// const getCommunityProgress = ({ communityAddress }) => communityAddress ? CommunityProgress.find({ communityAddress }) : new CommunityProgress()
-
 router.post('/deploy', async (req, res, next) => {
-  // const communityProgress = await getCommunityProgress(req.query)
-  // const { foreignTokenAddress } = req.params
   const { steps } = req.body
   const communityProgress = await new CommunityProgress({ steps: { ...steps, transferOwnership: true } }).save()
 
   deploy(communityProgress)
 
+  return res.json({ data: communityProgress })
+})
+
+router.get('/progress/:communityAddress', async (req, res, next) => {
+  const { communityAddress } = req.params
+  const communityProgress = await CommunityProgress.findOne({ communityAddress })
   return res.json({ data: communityProgress })
 })
 
