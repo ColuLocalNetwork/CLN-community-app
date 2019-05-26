@@ -46,6 +46,8 @@ async function init () {
   })
 
   mongoose.set('debug', config.get('mongo.debug'))
+  mongoose.set('useFindAndModify', false)
+  mongoose.set('useCreateIndex', true)
 
   mongoose.connect(config.get('mongo.uri'), config.get('mongo.options')).catch((error) => {
     console.error(error)
