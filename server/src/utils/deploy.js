@@ -1,20 +1,14 @@
 const mongoose = require('mongoose')
 const { deployBridge } = require('@utils/bridge')
 const { deployCommunity } = require('@utils/community')
-// const { stepFailed, stepDone } = require('@utils/tokenProgress')
-// const { transferOwnership } = require('@utils/token')
+const { transferOwnership } = require('@utils/token/ownership')
 const CommunityProgress = mongoose.model('CommunityProgress')
 const Community = mongoose.model('Community')
-// const deployFunctions = {
-//   community: deployCommunity,
-//   bridge: deployBridge,
-//   transferOwnership: transferOwnership
-// }
 
 const deployFunctions = {
   community: deployCommunity,
-  bridge: () => deployBridge,
-  transferOwnership: () => ({ })
+  bridge: deployBridge,
+  transferOwnership
 }
 
 const stepsOrder = ['community', 'bridge', 'transferOwnership']
@@ -29,8 +23,8 @@ const deploy = async (communityProgress) => {
     const currentStep = communityProgress.steps[stepName]
 
     const stepFailed = async (msg, error) => {
-      console.log(msg)
       console.error(error)
+      console.log(msg)
       currentStep.error = msg
       await communityProgress.save()
       return error || Error(msg)
@@ -47,22 +41,28 @@ const deploy = async (communityProgress) => {
         console.log(`starting step ${stepName}`)
         const deployFunction = deployFunctions[stepName]
         const results = await deployFunction(communityProgress)
-        communityProgress = await CommunityProgress.findByIdAndUpdate(communityProgress._id, { [`steps.${stepName}`]: { ...currentStep, done: true, results } })
+        communityProgress = await CommunityProgress.findByIdAndUpdate(communityProgress._id,
+          { [`steps.${stepName}`]: { ...currentStep, done: true, results } },
+          { new: true })
         console.log(`step ${stepName} done`)
       } catch (error) {
         throw stepFailed(`step ${stepName} failed`, error)
       }
     }
   }
-  const { steps } = communityProgress.steps
-  const { communityAddress, entitiesListAddress } = steps.community
-  const { homeTokenAddress, foreignTokenAddress } = steps.bridge
+  const { steps } = communityProgress
+  const { communityAddress, entitiesListAddress } = steps.community.results
+  const { homeTokenAddress, foreignTokenAddress, foreignBridgeAddress, homeBridgeAddress } = steps.bridge.results
+
+  await CommunityProgress.findByIdAndUpdate(communityProgress._id, { communityAddress, done: true })
 
   return new Community({
     communityAddress,
     entitiesListAddress,
     homeTokenAddress,
-    foreignTokenAddress
+    foreignTokenAddress,
+    foreignBridgeAddress,
+    homeBridgeAddress
   }).save()
 }
 

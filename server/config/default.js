@@ -41,9 +41,9 @@ module.exports = {
         BridgeMapper: '0x41063a48F46EE7E20E7EbAd0185992724B4Ee56c'
       },
       addressesRopsten: {
-        HomeBridgeFactory: '0xc40c690AaB6c218cbEd4d55970020fDF3a0210cC',
+        HomeBridgeFactory: '0xf01c10D1253061164153116925B7a9b11b0D903C',
         SimpleListFactory: '0x9FA04c6fc70B0ae20dAD9D7b36161bf1EdcbA0E2',
-        BridgeMapper: '0xE92139Ae1d18Febf8cB68fF5D39Cd2c235677070',
+        BridgeMapper: '0x0f4b2805522c471191f6a605B4E4795bb571e053',
         UsersRegistry: '0xD54C1B417502CDe8275cBf91B0A8dC820ccb8054'
       },
       addresses: defer(function () {
@@ -68,7 +68,7 @@ module.exports = {
       addressesRopsten: {
         ColuLocalNetwork: '0x41C9d91E96b933b74ae21bCBb617369CBE022530',
         TokenFactory: '0xE307a14b078030d81801e46F89285dbf5B4aa3F0',
-        ForeignBridgeFactory: '0x98C876777F03961e81fB3F1793a4fE03f1efeD54'
+        ForeignBridgeFactory: '0x4197122e1ff952D2BaEd1Fe8C10779fc9fd9dBCb'
       },
       addresses: defer(function () {
         if (this.network.foreign.name === 'mainnet') {
@@ -83,7 +83,9 @@ module.exports = {
   mongo: {
     uri: 'mongodb://localhost/CLN-community-app',
     debug: true,
-    options: {}
+    options: {
+      useNewUrlParser: true
+    }
   },
   mail: {
     sendgrid: {

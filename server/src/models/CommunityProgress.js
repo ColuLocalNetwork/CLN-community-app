@@ -5,7 +5,8 @@ module.exports = (mongoose) => {
 
   const CommunityProgressSchema = new Schema({
     communityAddress: { type: String },
-    steps: { type: Object, default: {} }
+    steps: { type: Object, default: {} },
+    done: { type: Boolean }
   }, { timestamps: true, minimize: false })
 
   CommunityProgressSchema.index({ communityAddress: 1 })

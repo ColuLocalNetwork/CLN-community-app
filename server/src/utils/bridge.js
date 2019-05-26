@@ -67,6 +67,7 @@ async function deployHomeBridge (token, { web3, from, send }) {
 }
 
 async function addBridgeMapping (
+  communityAddress,
   foreignToken,
   homeToken,
   foreignBridge,
@@ -81,6 +82,7 @@ async function addBridgeMapping (
   })
 
   const method = mapper.methods.addBridgeMapping(
+    communityAddress,
     foreignToken,
     homeToken,
     foreignBridge,
@@ -99,7 +101,7 @@ async function addBridgeMapping (
 
 async function deployBridge (communityProgress) {
   const { communityAddress } = communityProgress.steps.community.results
-  const { foreignTokenAddress } = communityProgress.steps.bridge.results
+  const { foreignTokenAddress } = communityProgress.steps.bridge.args
 
   const token = await Token.findOne({ address: foreignTokenAddress })
 
