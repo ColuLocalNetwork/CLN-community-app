@@ -15,23 +15,25 @@ const stepsOrder = ['community', 'bridge', 'transferOwnership']
 
 const mandatorySteps = {
   bridge: true,
-  community: true
+  community: true,
+  transferOwnership: true
 }
 
 const deploy = async (communityProgress) => {
   for (let stepName of stepsOrder) {
     const currentStep = communityProgress.steps[stepName]
 
-    const stepFailed = async (msg, error) => {
+    const stepFailed = async (errorMsg, error) => {
       console.error(error)
-      console.log(msg)
-      currentStep.error = msg
-      await communityProgress.save()
-      return error || Error(msg)
+      console.log(errorMsg)
+      await CommunityProgress.findByIdAndUpdate(communityProgress._id,
+        { [`steps.${stepName}`]: { ...currentStep, done: false, error: errorMsg } },
+        { new: true })
+      return error || Error(errorMsg)
     }
 
     if (!currentStep && mandatorySteps[stepName]) {
-      throw stepFailed(`step ${stepName} should be mandatory, communityProgress: ${communityProgress}`)
+      throw stepFailed(`step ${stepName} should be mandatory`)
     }
 
     if (communityProgress.steps[stepName.done]) {
