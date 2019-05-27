@@ -90,9 +90,24 @@ function * createTokenWithMetadata ({ tokenData, metadata, tokenType, steps }) {
 }
 
 function * deployChosenContracts ({ response: { steps, receipt } }) {
-  const tokenAddress = receipt.events[0].address
-  const accountAddress = yield select(getAccountAddress)
-  yield apiCall(api.deployChosenContracts, { tokenAddress, steps, accountAddress })
+  const foreignTokenAddress = receipt.events.TokenCreated.returnValues.token
+  const { data: { _id: id } } = yield apiCall(api.deployChosenContracts, { steps: { ...steps, bridge: { args: { foreignTokenAddress } } } })
+  yield put({
+    type: actions.DEPLOY_TOKEN.SUCCESS,
+    response: {
+      id
+    }
+  })
+}
+
+function * deployExistingToken ({ steps }) {
+  const { data: { _id } } = yield apiCall(api.deployChosenContracts, { steps })
+  yield put({
+    type: actions.DEPLOY_TOKEN.SUCCESS,
+    response: {
+      id: _id
+    }
+  })
 }
 
 function * fetchTokenStatistics ({ tokenAddress, activityType, interval }) {
@@ -108,29 +123,49 @@ function * fetchTokenStatistics ({ tokenAddress, activityType, interval }) {
   })
 }
 
-function * fetchTokenProgress ({ tokenAddress }) {
-  const response = yield apiCall(api.fetchTokenProgress, { tokenAddress })
+function * fetchTokenProgress ({ communityAddress }) {
+  const response = yield apiCall(api.fetchTokenProgress, { communityAddress })
+  const { data: { steps, done = false } } = response
+  const keys = Object.keys(steps)
+    .reduce((obj, key) => ({
+      ...obj,
+      [key]: steps[key] && steps[key].done,
+      transferOwnership: done,
+      done
+    }), {})
 
   yield put({
     type: actions.FETCH_TOKEN_PROGRESS.SUCCESS,
-    tokenAddress,
+    communityAddress,
     response: {
-      steps: response.data.steps
+      steps: { ...keys }
     }
   })
 }
 
-function * fetchDeployProgress ({ tokenAddress }) {
-  const response = yield apiCall(api.fetchTokenProgress, { tokenAddress: tokenAddress.tokenAddress })
+function * fetchDeployProgress ({ id }) {
+  const response = yield apiCall(api.fetchDeployProgress, { id })
+  const { data: { steps, done = false, communityAddress } } = response
 
-  const { data } = response
-  const { steps, stepErrors } = data
+  const stepErrors = Object.keys(steps)
+    .reduce((obj, key) => ({
+      ...obj,
+      [key]: steps[key] && steps[key].errors
+    }), {})
+
+  const keys = Object.keys(steps)
+    .reduce((obj, key) => ({
+      ...obj,
+      [key]: steps[key] && steps[key].done,
+      transferOwnership: done,
+      done
+    }), {})
 
   yield put({
     type: actions.FETCH_DEPLOY_PROGRESS.SUCCESS,
+    communityAddress,
     response: {
-      tokenAddress: tokenAddress.tokenAddress,
-      steps,
+      steps: { ...keys },
       stepErrors
     }
   })
@@ -193,6 +228,7 @@ export default function * tokenSaga () {
     takeEvery([DEPLOY_BRIDGE.SUCCESS, ADD_USER.SUCCESS], fetchTokenProgress),
     takeEvery([actions.MINT_TOKEN.SUCCESS, actions.BURN_TOKEN.SUCCESS], watchTokenChanges),
     takeEvery(actions.CREATE_TOKEN_WITH_METADATA.SUCCESS, deployChosenContracts),
+    tryTakeEvery(actions.DEPLOY_EXISTING_TOKEN, deployExistingToken),
     tryTakeEvery(actions.FETCH_DEPLOY_PROGRESS, fetchDeployProgress)
   ])
 }

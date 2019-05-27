@@ -436,6 +436,10 @@
 	text-align: center;
 	padding: 20px 70px;
 
+	@include breakpoint(small down) {
+		padding: 20px 30px;
+	}
+
 	@include element(title) {
 		font-size: 20rem;
 		font-weight: bold;

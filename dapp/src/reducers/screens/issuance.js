@@ -1,5 +1,11 @@
-import { CREATE_TOKEN, CREATE_TOKEN_WITH_METADATA, FETCH_DEPLOY_PROGRESS } from 'actions/token'
-import { REQUEST, FAILURE } from 'actions/constants'
+import {
+  CREATE_TOKEN,
+  CREATE_TOKEN_WITH_METADATA,
+  FETCH_DEPLOY_PROGRESS,
+  DEPLOY_EXISTING_TOKEN,
+  DEPLOY_TOKEN
+} from 'actions/token'
+import { REQUEST, FAILURE, PENDING } from 'actions/constants'
 import { LOCATION_CHANGE } from 'connected-react-router'
 import pick from 'lodash/pick'
 
@@ -8,14 +14,27 @@ const initialState = {
   transactionHash: null,
   transactionStatus: null,
   steps: {
+    tokenIssued: false,
+    community: false,
     bridge: false,
-    membersList: false,
-    tokenIssued: false
+    transferOwnership: false
   }
 }
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case DEPLOY_TOKEN.SUCCESS:
+      return {
+        ...state,
+        deployResponse: { ...action.response },
+        transactionStatus: PENDING,
+        steps: { ...state.steps, tokenIssued: true },
+        communityAddress: action.communityAddress
+      }
+    case DEPLOY_EXISTING_TOKEN.REQUEST:
+      return { ...state, transactionStatus: REQUEST, tokenIssued: true }
+    case DEPLOY_EXISTING_TOKEN.SUCCESS:
+      return { ...state, transactionStatus: 'SUCCESS' }
     case CREATE_TOKEN_WITH_METADATA.REQUEST:
       return { ...state, transactionStatus: REQUEST, createTokenSignature: true }
     case CREATE_TOKEN_WITH_METADATA.FAILURE:
