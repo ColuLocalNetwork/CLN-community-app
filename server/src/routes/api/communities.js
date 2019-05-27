@@ -30,7 +30,7 @@ router.get('/:communityAddress', async (req, res, next) => {
 
 router.post('/deploy', async (req, res, next) => {
   const { steps } = req.body
-  const communityProgress = await new CommunityProgress({ steps: { ...steps, transferOwnership: true } }).save()
+  const communityProgress = await new CommunityProgress({ steps }).save()
 
   deploy(communityProgress)
 
