@@ -67,8 +67,8 @@ class DeployProgress extends PureComponent {
   }
 
   goToDashboard = () => {
-    const { history, foreignNetwork, tokenAddress } = this.props
-    history.push(`/view/dashboard/${foreignNetwork}/${tokenAddress}`)
+    const { history, foreignNetwork, communityAddress } = this.props
+    history.push(`/view/dashboard/${foreignNetwork}/${communityAddress}`)
   }
 
   stepHasError = (step) => {
@@ -101,21 +101,23 @@ class DeployProgress extends PureComponent {
     return (
       <div className='progress__wrapper'>
         <div className='progress__img'>
-          <div className='progress__loader' />
+          <div className={classNames('progress__loader', { 'progress__loader--stop': hasErrors })} />
         </div>
         {
           deployProgressSteps
             .filter(({ key }) => key === 'tokenIssued' || contracts[key].checked)
             .map(({ label, loaderText, key }) => {
               return (
-                <div key={key} className={classNames('progress__item', { 'progress__item--active': currentStep === key })}>
+                <div key={key} className={classNames('progress__item', { 'progress__item--active': currentStep === key && !this.stepHasError(key) })}>
                   <div className={classNames('progress__item__label')}>
                     { steps && steps[key] && <FontAwesome name='check' /> }
                     { this.stepHasError(key) && <FontAwesome name='times' /> }
                     {label}
                   </div>
                   {
-                    currentStep === key && <div className='progress__item__loaderText'>{loaderText}</div>
+                    currentStep === key &&
+                    !this.stepHasError(key) &&
+                    <div className='progress__item__loaderText'>{loaderText}</div>
                   }
                 </div>
               )

@@ -2,6 +2,7 @@ import { createRequestTypes, createEntityAction, createTransactionRequestTypes, 
 
 export const entityName = 'tokens'
 const tokenAction = createEntityAction(entityName)
+const communitiesAction = createEntityAction('communities')
 
 export const CLEAR_TRANSACTION_STATUS = createRequestTypes('CLEAR_TRANSACTION_STATUS')
 
@@ -10,6 +11,7 @@ export const FETCH_TOKENS_BY_OWNER = createRequestTypes('FETCH_TOKENS_BY_OWNER')
 export const FETCH_TOKEN_LIST = createRequestTypes('FETCH_TOKEN_LIST')
 
 export const FETCH_TOKEN = createRequestTypes('FETCH_TOKEN')
+export const FETCH_COMMUNITY_DATA = createRequestTypes('FETCH_COMMUNITY_DATA')
 
 export const FETCH_CLN_TOKEN = createRequestTypes('FETCH_CLN_TOKEN')
 
@@ -33,6 +35,7 @@ export const fetchTokensByOwner = (owner) => tokenAction(FETCH_TOKENS_BY_OWNER.R
 export const fetchTokenList = (accountAddress) => tokenAction(FETCH_TOKEN_LIST.REQUEST, { accountAddress })
 
 export const fetchToken = (tokenAddress) => tokenAction(FETCH_TOKEN.REQUEST, { tokenAddress })
+export const fetchCommunityData = (communityAddress) => communitiesAction(FETCH_COMMUNITY_DATA.REQUEST, { communityAddress })
 
 export const fetchClnToken = () => tokenAction(FETCH_CLN_TOKEN.REQUEST)
 

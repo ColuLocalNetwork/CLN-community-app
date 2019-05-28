@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-// import classNames from 'classnames'
 import web3 from 'web3'
-import { fetchTokenProgress, fetchToken, fetchTokenStatistics, transferToken, mintToken, burnToken, clearTransactionStatus } from 'actions/token'
+import { fetchCommunityData, fetchTokenProgress, fetchToken, fetchTokenStatistics, transferToken, mintToken, burnToken, clearTransactionStatus } from 'actions/token'
 import { isUserExists } from 'actions/user'
 import { getClnBalance, getAccountAddress, getBalances } from 'selectors/accounts'
 import { formatWei } from 'utils/format'
@@ -51,17 +50,17 @@ class Dashboard extends Component {
   }
 
   handleIntervalChange = (userType, intervalValue) => {
-    this.props.fetchTokenStatistics(this.props.tokenAddress, userType, intervalValue)
+    const { token: { foreignTokenAddress } } = this.props
+    if (foreignTokenAddress) {
+      const { fetchTokenStatistics } = this.props
+      fetchTokenStatistics(foreignTokenAddress, userType, intervalValue)
+    }
   }
 
   componentDidMount () {
     if (!this.props.token) {
-      // this.props.fetchToken(this.props.tokenAddress)
-      console.log({ tokenAddress: this.props.tokenAddress })
-      this.props.fetchTokenProgress(this.props.tokenAddress)
-    }
-    if (this.props.accountAddress) {
-      this.props.isUserExists(this.props.accountAddress)
+      this.props.fetchCommunityData(this.props.communityAddress)
+      this.props.fetchTokenProgress(this.props.communityAddress)
     }
     if (this.props.networkType !== 'fuse' && this.props.tokenNetworkType !== this.props.networkType) {
       this.props.loadModal(WRONG_NETWORK_MODAL, { supportedNetworks: [this.props.tokenNetworkType], handleClose: this.showHomePage })
@@ -73,36 +72,18 @@ class Dashboard extends Component {
     if (this.props.dashboard.informationAdded && !prevProps.dashboard.informationAdded) {
       this.props.hideModal()
     }
-
-    if (this.props.accountAddress && !prevProps.accountAddress) {
-      this.props.isUserExists(this.props.accountAddress)
+    if (this.props.communityAddress && !prevProps.communityAddress) {
+      this.props.fetchCommunityData(this.props.communityAddress)
+      this.props.fetchTokenProgress(this.props.communityAddress)
     }
-
-    // if (this.props.transactionStatus === SUCCESS && (!prevProps.transactionStatus || prevProps.transactionStatus === PENDING)) {
-    //   this.setState({
-    //     ...this.state
-    //   })
-    // }
-
-    // if (this.props.transactionStatus === SUCCESS && (!prevProps.transactionStatus || prevProps.transactionStatus === PENDING)) {
-    //   if (this.props.transferSuccess) {
-    //     this.setState({ ...this.state, transferMessage: true })
-    //   } else if (this.props.burnSuccess) {
-    //     this.setState({ ...this.state, burnMessage: true })
-    //   } else if (this.props.mintSuccess) {
-    //     this.setState({ ...this.state, mintMessage: true })
-    //   }
-    // }
-
-    // if (this.props.transactionStatus === FAILURE && (!prevProps.transactionStatus || prevProps.transactionStatus === PENDING)) {
-    //   if (this.props.transferSuccess === false) {
-    //     this.setState({ ...this.state, transferMessage: true })
-    //   } else if (this.props.burnSuccess === false) {
-    //     this.setState({ ...this.state, burnMessage: true })
-    //   } else if (this.props.mintSuccess === false) {
-    //     this.setState({ ...this.state, mintMessage: true })
-    //   }
-    // }
+    if ((this.props.community && this.props.community.foreignTokenAddress) && !prevProps.community) {
+      const { fetchToken, community: { foreignTokenAddress } } = this.props
+      fetchToken(foreignTokenAddress)
+    }
+    if (this.props.accountAddress && !prevProps.accountAddress) {
+      const { isUserExists } = this.props
+      isUserExists(this.props.accountAddress)
+    }
   }
 
   componentWillUnmount () {
@@ -120,29 +101,37 @@ class Dashboard extends Component {
   }
 
   loadUserDataModal = () => {
-    if (isOwner(this.props.token, this.props.accountAddress)) {
-      this.props.loadModal(USER_DATA_MODAL, { tokenAddress: this.props.tokenAddress })
+    const { token, loadModal, accountAddress, community: { owner } } = this.props
+    const { address: tokenAddress } = token
+    if (isOwner({ owner }, accountAddress)) {
+      loadModal(USER_DATA_MODAL, { tokenAddress })
     } else {
-      this.props.loadModal(NO_DATA_ABOUT_OWNER_MODAL, { tokenAddress: this.props.tokenAddress })
+      loadModal(NO_DATA_ABOUT_OWNER_MODAL, { tokenAddress })
     }
   }
 
-  loadBridgePopup = () => this.props.loadModal(BRIDGE_MODAL, {
-    tokenAddress: this.props.tokenAddress,
-    isOwner: isOwner(this.props.token, this.props.accountAddress),
-    buttonAction: this.props.deployBridge
-  })
+  loadBridgePopup = () => {
+    const { loadModal, deployBridge, token, accountAddress, community: { owner } } = this.props
+    const { address: tokenAddress } = token
+    loadModal(BRIDGE_MODAL, {
+      tokenAddress,
+      isOwner: isOwner({ owner }, accountAddress),
+      buttonAction: deployBridge
+    })
+  }
 
   onlyOnFuse = (successFunc) => {
-    if (this.props.networkType === 'fuse') {
+    const { networkType } = this.props
+    if (networkType === 'fuse') {
       successFunc()
     } else {
-      this.props.loadModal(WRONG_NETWORK_MODAL, { supportedNetworks: ['fuse'] })
+      const { loadModal } = this.props
+      loadModal(WRONG_NETWORK_MODAL, { supportedNetworks: ['fuse'] })
     }
   }
 
   handleMintOrBurnClick = (actionType, amount) => {
-    const { burnToken, mintToken, tokenAddress } = this.props
+    const { burnToken, mintToken, token: { address: tokenAddress } } = this.props
     if (actionType === 'mint') {
       mintToken(tokenAddress, web3.utils.toWei(String(amount)))
     } else {
@@ -153,7 +142,7 @@ class Dashboard extends Component {
   }
 
   handleTransper = ({ to: toField, amount }) => {
-    const { transferToken, tokenAddress } = this.props
+    const { transferToken, token: { address: tokenAddress } } = this.props
     transferToken(tokenAddress, toField, web3.utils.toWei(String(amount)))
   }
 
@@ -170,7 +159,6 @@ class Dashboard extends Component {
       accountAddress,
       transactionStatus,
       balances,
-      tokenAddress,
       dashboard,
       isTransfer,
       isMinting,
@@ -187,12 +175,15 @@ class Dashboard extends Component {
       transferSuccess,
       burnSuccess,
       mintSuccess,
-      error
+      error,
+      community
     } = this.props
 
-    // const { tokenType } = token
+    const { address: tokenAddress } = token
+    const { communityAddress } = community
+
     const balance = balances[tokenAddress]
-    const { admin, user, steps } = dashboard
+    const { admin, user, steps, userExists, owner } = dashboard
     return [
       <TopNav
         key={0}
@@ -243,25 +234,28 @@ class Dashboard extends Component {
           <Bridge
             bridgeDeployed={steps && steps.bridge}
             accountAddress={accountAddress}
-            token={this.props.token}
-            foreignTokenAddress={this.props.tokenAddress}
+            token={token}
+            foreignTokenAddress={tokenAddress}
+            isOwner={() => isOwner({ owner }, accountAddress)}
             loadBridgePopup={this.loadBridgePopup}
             handleTransfer={this.handleTransfer}
+            communityAddress={communityAddress}
             network={networkType}
           />
           <EntitiesManager
-            history={this.props.history}
-            foreignTokenAddress={this.props.tokenAddress}
-            token={this.props.token}
+            communityAddress={communityAddress}
+            history={history}
+            foreignTokenAddress={tokenAddress}
+            token={token}
             onlyOnFuse={this.onlyOnFuse}
           />
         </div>
         {
-          this.props.token && accountAddress && this.props.dashboard.hasOwnProperty('userExists') &&
+          token && accountAddress && dashboard.hasOwnProperty('userExists') &&
           <UserDataModal
-            token={this.props.token}
+            token={token}
             accountAddress={accountAddress}
-            userExists={this.props.dashboard.userExists}
+            userExists={userExists}
             loadUserDataModal={this.loadUserDataModal}
           />
         }
@@ -273,8 +267,13 @@ class Dashboard extends Component {
 const mapStateToProps = (state, { match }) => ({
   ...state.screens.token,
   networkType: state.network.networkType,
-  token: state.entities.tokens[match.params.address],
-  tokenAddress: match.params.address,
+  token: state.entities.communities &&
+    state.entities.tokens &&
+    state.entities.communities[match.params.address] &&
+    state.entities.communities[match.params.address].foreignTokenAddress &&
+    state.entities.tokens[state.entities.communities[match.params.address].foreignTokenAddress],
+  community: state.entities.communities && state.entities.communities[match.params.address],
+  communityAddress: match.params.address,
   tokenNetworkType: match.params.networkType,
   metadata: state.entities.metadata,
   dashboard: state.screens.dashboard,
@@ -287,6 +286,7 @@ const mapStateToProps = (state, { match }) => ({
 
 const mapDispatchToProps = {
   fetchTokenStatistics,
+  fetchCommunityData,
   fetchToken,
   fetchTokenProgress,
   isUserExists,

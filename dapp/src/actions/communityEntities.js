@@ -4,7 +4,7 @@ export const entityName = 'communityEntities'
 
 const entitiesAction = createEntityAction(entityName)
 
-export const FETCH_COMMUNITY = createRequestTypes('GET_COMMUNITY')
+export const FETCH_COMMUNITY = createRequestTypes('FETCH_COMMUNITY')
 export const FETCH_ENTITIES = createRequestTypes('FETCH_ENTITIES')
 export const FETCH_USERS_ENTITIES = createRequestTypes('FETCH_USERS_ENTITIES')
 export const FETCH_BUSINESSES_ENTITIES = createRequestTypes('FETCH_BUSINESSES_ENTITIES')
@@ -19,7 +19,7 @@ export const CONFIRM_USER = createTransactionRequestTypes('CONFIRM_USER')
 
 export const FETCH_ENTITY = createRequestTypes('FETCH_ENTITY')
 
-export const fetchCommunity = (tokenAddress) => action(FETCH_COMMUNITY.REQUEST, { tokenAddress })
+export const fetchCommunity = (communityAddress) => action(FETCH_COMMUNITY.REQUEST, { communityAddress })
 
 export const fetchUsersEntities = (communityAddress, entityType = 'user') => entitiesAction(FETCH_USERS_ENTITIES.REQUEST, { communityAddress, entityType })
 export const fetchBusinessesEntities = (communityAddress, entityType = 'business') => entitiesAction(FETCH_BUSINESSES_ENTITIES.REQUEST, { communityAddress, entityType })

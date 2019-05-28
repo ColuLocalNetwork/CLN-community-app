@@ -94,7 +94,7 @@ class IssuanceWizard extends Component {
         [contracts[contractName].key]: contracts[contractName].key === 'bridge'
           ? { args: { foreignTokenAddress: null } }
           : contracts[contractName].key === 'community'
-            ? { args: { isClosed: isOpen, name: this.state.communityName, adminAddress } }
+            ? { args: { isClosed: !isOpen, name: this.state.communityName, adminAddress } }
             : {}
       }), {})
 

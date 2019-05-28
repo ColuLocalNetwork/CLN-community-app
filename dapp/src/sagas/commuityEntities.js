@@ -32,7 +32,7 @@ function * toggleCommunityMode ({ communityAddress, isClosed }) {
   const CommunityContract = getContract({ abiName: 'CommunityTransferManager',
     address: communityAddress
   })
-  if (isClosed) {
+  if (!isClosed) {
     const method = CommunityContract.methods.addRule(roles.APPROVED_ROLE, roles.APPROVED_ROLE)
     const transactionPromise = method.send({
       from: accountAddress
@@ -135,8 +135,8 @@ function * removeEntity ({ communityAddress, account }) {
   yield call(transactionFlow, { transactionPromise, action, sendReceipt: true })
 }
 
-function * fetchCommunity ({ tokenAddress }) {
-  const { data } = yield apiCall(tokenApi.fetchCommunity, { tokenAddress })
+function * fetchCommunity ({ communityAddress }) {
+  const { data } = yield apiCall(tokenApi.fetchCommunity, { communityAddress })
   yield put({ type: actions.FETCH_COMMUNITY.SUCCESS,
     response: {
       ...data

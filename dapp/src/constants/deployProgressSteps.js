@@ -16,7 +16,7 @@ const deployProgress = [
   },
   {
     label: 'Transfer ownership to the user',
-    loaderText: 'Transfer ownership to the user',
+    // loaderText: 'Transfer ownership to the user',
     key: 'transferOwnership'
   }
 ]

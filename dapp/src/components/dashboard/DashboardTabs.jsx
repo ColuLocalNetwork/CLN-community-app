@@ -77,7 +77,7 @@ export default ({
           <span className='symbol'>{symbol}</span>
         </div>
         <hr className='transfer-tab__line' />
-        <div className='transfer-tab__content' ref={content => (this.content = content)}>
+        <div className='transfer-tab__content'>
           <ActivityContent stats={user} userType='user' title='users' handleChange={handleIntervalChange} />
           <ActivityContent stats={admin} userType='admin' handleChange={handleIntervalChange} />
         </div>

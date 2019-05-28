@@ -48,7 +48,7 @@ export default (state = initialState, action) => {
     case CREATE_TOKEN.FAILURE:
       return { ...state, ...action.response, createTokenSignature: false }
     case FETCH_DEPLOY_PROGRESS.SUCCESS:
-      return { ...state, ...action.response, steps: { ...state.steps, ...action.response.steps } }
+      return { ...state, ...action.response, steps: { ...state.steps, ...action.response.steps }, communityAddress: action.communityAddress }
     case LOCATION_CHANGE:
       if (action.payload.location.pathname === '/view/issuance') {
         return { ...initialState }

@@ -11,6 +11,7 @@ import {
   TOGGLE_COMMNITY_MODE
 } from 'actions/communityEntities'
 import { REQUEST } from 'actions/constants'
+import { FETCH_TOKEN_PROGRESS } from 'actions/token'
 import { LOCATION_CHANGE } from 'connected-react-router'
 import omit from 'lodash/omit'
 
@@ -53,14 +54,18 @@ export default (state = initialState, action) => {
       return { ...state, signatureNeeded: true }
     case ADD_ENTITY.PENDING:
       return { ...state, transactionHash: action.response.transactionHash, signatureNeeded: false }
+    case ADD_ENTITY.SUCCESS:
+      return { ...state, fetchEntities: true }
     case EDIT_ENTITY.PENDING:
       return { ...state, editTransactionHash: action.response.transactionHash }
+    case FETCH_TOKEN_PROGRESS.SUCCESS:
+      return { ...state, ...action.response }
     case FETCH_COMMUNITY.SUCCESS:
       return { ...state, ...action.response }
     case FETCH_USERS_ENTITIES.SUCCESS:
-      return { ...state, usersResults: union(state.usersResults, action.response.result) }
+      return { ...state, usersResults: union(state.usersResults, action.response.result), fetchEntities: false }
     case FETCH_BUSINESSES_ENTITIES.SUCCESS:
-      return { ...state, merchantsResults: union(state.merchantsResults, action.response.result) }
+      return { ...state, merchantsResults: union(state.merchantsResults, action.response.result), fetchEntities: false }
     case LOCATION_CHANGE:
       if (action.payload.location.pathname === '/') {
         return initialState
