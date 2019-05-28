@@ -3,6 +3,7 @@ const Entity = mongoose.model('Entity')
 const Community = mongoose.model('Community')
 const { hasRole, roles: { APPROVED_ROLE } } = require('@fuse/roles')
 const { deriveFromRoles } = require('@utils/roles')
+const { web3 } = require('@services/web3/home')
 
 const handleTransferManagerSet = async (event) => {
   const token = event.address
@@ -11,7 +12,7 @@ const handleTransferManagerSet = async (event) => {
 }
 
 const handleEntityAdded = async (event, receipt) => {
-  const communityAddress = receipt.to
+  const communityAddress = web3.utils.toChecksumAddress(receipt.to)
   const { roles, account } = event.returnValues
   const derivedFields = deriveFromRoles(roles)
 
@@ -19,14 +20,14 @@ const handleEntityAdded = async (event, receipt) => {
 }
 
 const handleEntityRemoved = async (event, receipt) => {
-  const communityAddress = receipt.to
+  const communityAddress = web3.utils.toChecksumAddress(receipt.to)
   const { account } = event.returnValues
 
   return Entity.deleteOne({ account, communityAddress })
 }
 
 const handleEntityRolesUpdated = async (event, receipt) => {
-  const communityAddress = receipt.to
+  const communityAddress = web3.utils.toChecksumAddress(receipt.to)
   const { roles, account } = event.returnValues
   const derivedFields = deriveFromRoles(roles)
 

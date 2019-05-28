@@ -11,11 +11,14 @@ export const fetchTokensByOwner = (apiRoot, { owner }) =>
 export const fetchToken = (apiRoot, { tokenAddress }) =>
   request.get(`${apiRoot}/tokens/${tokenAddress}`).then(response => response.body)
 
-export const fetchTokenProgress = (apiRoot, { tokenAddress }) =>
-  request.get(`${apiRoot}/tokens/progress/${tokenAddress}`).then(response => response.body)
+export const fetchTokenProgress = (apiRoot, { communityAddress }) =>
+  request.get(`${apiRoot}/communities/progress?communityAddress=${communityAddress}`).then(response => response.body)
 
-export const deployChosenContracts = (apiRoot, { tokenAddress, steps, accountAddress }) =>
-  request.post(`${apiRoot}/tokens/progress/deploy/${tokenAddress}`)
+export const fetchDeployProgress = (apiRoot, { id }) =>
+  request.get(`${apiRoot}/communities/progress/${id}`).then(response => response.body)
+
+export const deployChosenContracts = (apiRoot, { steps, accountAddress }) =>
+  request.post(`${apiRoot}/communities/deploy`)
     .send({ steps, accountAddress })
     .then(response => response.body)
 
@@ -28,5 +31,5 @@ export const fetchTokenList = (apiRoot, { accountAddress, networkSide }) =>
 export const deployBridge = (apiRoot, { foreignTokenAddress }) =>
   request.post(`${apiRoot}/bridges/${foreignTokenAddress}`).then(response => response.body)
 
-export const fetchCommunity = (apiRoot, { tokenAddress }) =>
-  request.get(`${apiRoot}/communities?tokenAddress=${tokenAddress}`).then(response => response.body)
+export const fetchCommunity = (apiRoot, { communityAddress }) =>
+  request.get(`${apiRoot}/communities/${communityAddress}`).then(response => response.body)
