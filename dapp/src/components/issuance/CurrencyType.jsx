@@ -39,9 +39,6 @@ const Option = (props) => {
 export default ({ communityType = { text: '' }, setCommunityType, nextAttribute, setExistingToken }) => {
   const handleClick = (item) => {
     setCommunityType(item)
-    // if (isMobileOnly) {
-    //   nextAttribute()
-    // }
   }
 
   return (

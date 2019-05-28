@@ -35,7 +35,7 @@ export const fetchTokensByOwner = (owner) => tokenAction(FETCH_TOKENS_BY_OWNER.R
 export const fetchTokenList = (accountAddress) => tokenAction(FETCH_TOKEN_LIST.REQUEST, { accountAddress })
 
 export const fetchToken = (tokenAddress) => tokenAction(FETCH_TOKEN.REQUEST, { tokenAddress })
-export const fetchCommunityData = (communityAddress) => communitiesAction(FETCH_COMMUNITY_DATA.REQUEST, { communityAddress })
+export const fetchCommunity = (communityAddress) => communitiesAction(FETCH_COMMUNITY_DATA.REQUEST, { communityAddress })
 
 export const fetchClnToken = () => tokenAction(FETCH_CLN_TOKEN.REQUEST)
 

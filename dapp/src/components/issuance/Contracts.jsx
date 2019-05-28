@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react'
 import FontAwesome from 'react-fontawesome'
 import ContractsType from 'constants/contractsType'
-// import classNames from 'classnames'
 
 export default class Contracts extends PureComponent {
   render () {

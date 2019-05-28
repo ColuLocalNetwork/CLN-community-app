@@ -18,7 +18,7 @@ const entityPut = createEntityPut(actions.entityName)
 
 const fetchTokens = createEntitiesFetch(actions.FETCH_TOKENS, api.fetchTokens)
 const fetchToken = createEntitiesFetch(actions.FETCH_TOKEN, api.fetchToken)
-const fetchCommunityData = createEntitiesFetch(actions.FETCH_COMMUNITY_DATA, api.fetchCommunity)
+const fetchCommunity = createEntitiesFetch(actions.FETCH_COMMUNITY_DATA, api.fetchCommunity)
 const fetchTokensByOwner = createEntitiesFetch(actions.FETCH_TOKENS_BY_OWNER, api.fetchTokensByOwner)
 
 export const fetchTokenList = createEntitiesFetch(actions.FETCH_TOKEN_LIST, api.fetchTokenList)
@@ -230,7 +230,7 @@ export default function * tokenSaga () {
     tryTakeEvery(actions.FETCH_TOKENS_BY_OWNER, fetchTokensByOwner, 1),
     tryTakeEvery(actions.FETCH_TOKEN_LIST, fetchTokenList, 1),
     tryTakeEvery(actions.FETCH_TOKEN, fetchToken, 1),
-    tryTakeEvery(actions.FETCH_COMMUNITY_DATA, fetchCommunityData, 1),
+    tryTakeEvery(actions.FETCH_COMMUNITY_DATA, fetchCommunity, 1),
     tryTakeEvery(actions.FETCH_CLN_TOKEN, fetchClnToken),
     tryTakeEvery(actions.CREATE_TOKEN, createToken, 1),
     tryTakeEvery(actions.CREATE_TOKEN_WITH_METADATA, createTokenWithMetadata, 1),

@@ -9,9 +9,6 @@ const logos = ['CoinIcon1.svg', 'CoinIcon2.svg', 'CoinIcon3.svg']
 const LogosOptions = ({ communityType, communityLogo, setCommunityLogo, communitySymbol, nextAttribute, networkType }) => {
   const handleClick = (logo, key) => {
     setCommunityLogo({ name: logo, icon: logos[key] })
-    // if (isMobileOnly) {
-    //   nextAttribute()
-    // }
   }
 
   let items

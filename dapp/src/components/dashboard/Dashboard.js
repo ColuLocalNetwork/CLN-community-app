@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import web3 from 'web3'
-import { fetchCommunityData, fetchTokenProgress, fetchToken, fetchTokenStatistics, transferToken, mintToken, burnToken, clearTransactionStatus } from 'actions/token'
+import { fetchCommunity, fetchTokenProgress, fetchToken, fetchTokenStatistics, transferToken, mintToken, burnToken, clearTransactionStatus } from 'actions/token'
 import { isUserExists } from 'actions/user'
 import { getClnBalance, getAccountAddress, getBalances } from 'selectors/accounts'
 import { formatWei } from 'utils/format'
@@ -59,7 +59,7 @@ class Dashboard extends Component {
 
   componentDidMount () {
     if (!this.props.token) {
-      this.props.fetchCommunityData(this.props.communityAddress)
+      this.props.fetchCommunity(this.props.communityAddress)
       this.props.fetchTokenProgress(this.props.communityAddress)
     }
     if (this.props.networkType !== 'fuse' && this.props.tokenNetworkType !== this.props.networkType) {
@@ -73,7 +73,7 @@ class Dashboard extends Component {
       this.props.hideModal()
     }
     if (this.props.communityAddress && !prevProps.communityAddress) {
-      this.props.fetchCommunityData(this.props.communityAddress)
+      this.props.fetchCommunity(this.props.communityAddress)
       this.props.fetchTokenProgress(this.props.communityAddress)
     }
     if ((this.props.community && this.props.community.foreignTokenAddress) && !prevProps.community) {
@@ -286,7 +286,7 @@ const mapStateToProps = (state, { match }) => ({
 
 const mapDispatchToProps = {
   fetchTokenStatistics,
-  fetchCommunityData,
+  fetchCommunity,
   fetchToken,
   fetchTokenProgress,
   isUserExists,
