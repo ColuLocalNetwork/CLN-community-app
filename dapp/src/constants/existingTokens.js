@@ -13,3 +13,7 @@ export const existingTokens = () => ([
     isDisabled: true
   }
 ])
+
+export const checkImportedToken = (token) => {
+  return existingTokens().find(({ value, label }) => value === token.address && token.symbol === label)
+}
