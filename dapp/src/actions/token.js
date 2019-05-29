@@ -30,8 +30,8 @@ export const TRANSFER_TOKEN = createTransactionRequestTypes('TRANSFER_TOKEN')
 export const MINT_TOKEN = createTransactionRequestTypes('MINT_TOKEN')
 export const BURN_TOKEN = createTransactionRequestTypes('BURN_TOKEN')
 
-export const fetchTokens = (page) => tokenAction(FETCH_TOKENS.REQUEST, { page })
-export const fetchTokensByOwner = (owner) => tokenAction(FETCH_TOKENS_BY_OWNER.REQUEST, { owner })
+export const fetchTokens = (networkType, page) => tokenAction(FETCH_TOKENS.REQUEST, { networkType, page })
+export const fetchTokensByOwner = (networkType, owner) => tokenAction(FETCH_TOKENS_BY_OWNER.REQUEST, { networkType, owner })
 export const fetchTokenList = (accountAddress) => tokenAction(FETCH_TOKEN_LIST.REQUEST, { accountAddress })
 
 export const fetchToken = (tokenAddress) => tokenAction(FETCH_TOKEN.REQUEST, { tokenAddress })
