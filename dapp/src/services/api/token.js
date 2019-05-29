@@ -1,11 +1,11 @@
 import request from 'superagent'
 
-export const fetchTokens = (apiRoot, { page }) =>
-  request.get(`${apiRoot}/tokens?page=${page}`)
+export const fetchTokens = (apiRoot, { networkType, page }) =>
+  request.get(`${apiRoot}/tokens?networkType=${networkType}&page=${page}`)
     .then(response => response.body)
 
-export const fetchTokensByOwner = (apiRoot, { owner }) =>
-  request.get(`${apiRoot}/tokens/owner/${owner}`)
+export const fetchTokensByOwner = (apiRoot, { networkType, owner }) =>
+  request.get(`${apiRoot}/tokens/owner/${owner}?networkType=${networkType}`)
     .then(response => response.body)
 
 export const fetchToken = (apiRoot, { tokenAddress }) =>
