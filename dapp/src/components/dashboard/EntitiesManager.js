@@ -8,7 +8,6 @@ import { REQUEST, PENDING } from 'actions/constants'
 import { getUsersEntities, getBusinessesEntities, checkIsAdmin } from 'selectors/entities'
 import {
   addEntity,
-  fetchCommunity,
   fetchUsersEntities,
   fetchBusinessesEntities,
   removeEntity,
@@ -17,6 +16,7 @@ import {
   confirmUser,
   toggleCommunityMode
 } from 'actions/communityEntities'
+import { fetchCommunity } from 'actions/token'
 import Entity from './Entity.jsx'
 import EmptyBusinessList from 'images/emptyBusinessList.png'
 import { loadModal, hideModal } from 'actions/ui'
@@ -93,13 +93,12 @@ class EntitiesManager extends Component {
   }
 
   loadAddingModal = () => this.props.loadModal(ADD_DIRECTORY_ENTITY, {
-    submitEntity: (data) => this.props.addEntity(this.props.communityAddress, { ...data, type: 'business' }, this.props.isClosed)
+    submitEntity: (data) => this.props.addEntity(this.props.community.communityAddress, { ...data, type: 'business' }, this.props.isClosed)
   })
-
   loadAddUserModal = () => {
     const { loadModal } = this.props
     loadModal(ADD_USER_MODAL, {
-      submitEntity: (data) => this.props.addEntity(this.props.communityAddress, { ...data, type: 'user' }, this.props.isClosed)
+      submitEntity: (data) => this.props.addEntity(this.props.community.communityAddress, { ...data, type: 'user' }, this.props.isClosed)
     })
   }
 
@@ -139,7 +138,7 @@ class EntitiesManager extends Component {
   }
 
   handleRemoveEntity = (account) => {
-    const { removeEntity, communityAddress, onlyOnFuse } = this.props
+    const { removeEntity, community: { communityAddress }, onlyOnFuse } = this.props
     onlyOnFuse(() => removeEntity(communityAddress, account))
   }
 
@@ -160,12 +159,12 @@ class EntitiesManager extends Component {
 
   handleToggleCommunityMode = (event) => {
     const isClosed = event.target.checked
-    const { communityAddress, toggleCommunityMode, onlyOnFuse } = this.props
+    const { community: { communityAddress }, toggleCommunityMode, onlyOnFuse } = this.props
     onlyOnFuse(() => toggleCommunityMode(communityAddress, isClosed))
   }
 
   renderList = (entities) => {
-    const { metadata, isAdmin, communityAddress, homeTokenAddress } = this.props
+    const { metadata, isAdmin, community: { communityAddress, homeTokenAddress } } = this.props
 
     if (entities.length) {
       return (
@@ -302,14 +301,29 @@ class EntitiesManager extends Component {
 
   canDeployBusinessList = () => !this.props.signatureNeeded &&
     isOwner(this.props.token, this.props.accountAddress) &&
-    this.props.homeTokenAddress
+    this.props.community.homeTokenAddress
 
   getFilter (val, user) {
     return val === 'isApproved' ? user.isApproved : val === 'pending' ? !user.isApproved : user.isAdmin
   }
 
   render () {
-    const { network: { networkType }, isClosed, isAdmin, communityAddress } = this.props
+    const {
+      community,
+      isAdmin,
+      fetchCommunity,
+      fetchBusinessesEntities,
+      fetchUsersEntities,
+      toggleSuccess,
+      network: { networkType }
+    } = this.props
+    const {
+      communityAddress,
+      homeTokenAddress,
+      foreignTokenAddress,
+      isClosed
+    } = community
+
     const { showUsers, filters } = this.state
     const val = Object.keys(filters).find((key) => filters[key])
     return (
@@ -407,13 +421,13 @@ class EntitiesManager extends Component {
           </div>
 
           <EntitiesManagerDataFetcher
-            communityAddress={this.props.communityAddress}
-            homeTokenAddress={this.props.homeTokenAddress}
-            foreignTokenAddress={this.props.foreignTokenAddress}
-            fetchCommunity={this.props.fetchCommunity}
-            fetchBusinessesEntities={this.props.fetchBusinessesEntities}
-            fetchUsersEntities={this.props.fetchUsersEntities}
-            toggleSuccess={this.props.toggleSuccess}
+            communityAddress={communityAddress}
+            homeTokenAddress={homeTokenAddress}
+            foreignTokenAddress={foreignTokenAddress}
+            fetchCommunity={fetchCommunity}
+            fetchBusinessesEntities={fetchBusinessesEntities}
+            fetchUsersEntities={fetchUsersEntities}
+            toggleSuccess={toggleSuccess}
           />
         </div>
       </Fragment >
@@ -421,13 +435,12 @@ class EntitiesManager extends Component {
   }
 }
 
-const mapStateToProps = (state, { match, foreignTokenAddress }) => ({
+const mapStateToProps = (state) => ({
   network: state.network,
   users: getUsersEntities(state),
   merchants: getBusinessesEntities(state),
   clnBalance: getClnBalance(state),
   accountAddress: getAccountAddress(state),
-  homeTokenAddress: state.entities.bridges[foreignTokenAddress] && state.entities.bridges[foreignTokenAddress].homeTokenAddress,
   ...state.screens.communityEntities,
   ...getTransaction(state, state.screens.communityEntities.transactionHash),
   isAdmin: checkIsAdmin(state),
