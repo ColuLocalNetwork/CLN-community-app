@@ -76,7 +76,7 @@ class CommunitiesList extends Component {
               getScrollParent={this.getScrollParent}
             >
               {addresses.map(address =>
-                <div className='cell medium-12 large-8 small-24 list-item' key={address}>
+                <div className='medium-12 large-8 small-24 list-item' key={address}>
                   <Community
                     networkType={networkType}
                     token={tokens[address]}

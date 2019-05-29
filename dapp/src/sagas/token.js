@@ -143,7 +143,6 @@ function * fetchTokenProgress ({ communityAddress }) {
 
   yield put({
     type: actions.FETCH_TOKEN_PROGRESS.SUCCESS,
-    communityAddress,
     response: {
       ...data,
       steps: { ...keys }

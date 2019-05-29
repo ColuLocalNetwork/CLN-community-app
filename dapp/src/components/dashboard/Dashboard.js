@@ -21,8 +21,8 @@ import DashboardTabs from './DashboardTabs'
 const LOAD_USER_DATA_MODAL_TIMEOUT = 2000
 
 class UserDataModal extends React.Component {
-  componentDidMount (prevProps) {
-    if (this.props.token.owner === this.props.accountAddress && !this.props.userExists) {
+  componentDidMount () {
+    if (this.props.owner === this.props.accountAddress && !this.props.userExists) {
       this.timerId = setTimeout(this.props.loadUserDataModal, LOAD_USER_DATA_MODAL_TIMEOUT)
     }
   }
@@ -35,7 +35,7 @@ class UserDataModal extends React.Component {
 }
 
 UserDataModal.propTypes = {
-  token: PropTypes.object.isRequired,
+  owner: PropTypes.string.isRequired,
   accountAddress: PropTypes.string.isRequired,
   loadUserDataModal: PropTypes.func.isRequired,
   userExists: PropTypes.bool
@@ -101,7 +101,7 @@ class Dashboard extends Component {
   }
 
   loadUserDataModal = () => {
-    const { token, loadModal, accountAddress, community: { owner } } = this.props
+    const { token, loadModal, accountAddress, dashboard: { owner } } = this.props
     const { address: tokenAddress } = token
     if (isOwner({ owner }, accountAddress)) {
       loadModal(USER_DATA_MODAL, { tokenAddress })
@@ -111,7 +111,7 @@ class Dashboard extends Component {
   }
 
   loadBridgePopup = () => {
-    const { loadModal, deployBridge, token, accountAddress, community: { owner } } = this.props
+    const { loadModal, deployBridge, token, accountAddress, dashboard: { owner } } = this.props
     const { address: tokenAddress } = token
     loadModal(BRIDGE_MODAL, {
       tokenAddress,
@@ -243,9 +243,9 @@ class Dashboard extends Component {
             network={networkType}
           />
           <EntitiesManager
-            communityAddress={communityAddress}
+            {...dashboard}
+            community={community}
             history={history}
-            foreignTokenAddress={tokenAddress}
             token={token}
             onlyOnFuse={this.onlyOnFuse}
           />
@@ -253,7 +253,7 @@ class Dashboard extends Component {
         {
           token && accountAddress && dashboard.hasOwnProperty('userExists') &&
           <UserDataModal
-            token={token}
+            owner={owner}
             accountAddress={accountAddress}
             userExists={userExists}
             loadUserDataModal={this.loadUserDataModal}
