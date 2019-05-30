@@ -417,6 +417,12 @@ $themes: (
           @include flex-align(null, middle);
           margin: 32px 0 0;
         }
+  
+        //   @include modifier(name) {
+        //     font-weight: normal;
+        //     color: $color-step;
+        //   }
+        // }
 
         @include element(title) {
           font-size: 1.313em;
@@ -1034,7 +1040,7 @@ $themes: (
       @include block(summary-step) {
         
         @include element(wrapper) {
-          box-shadow: 0 0 11rem 0 rgba(0, 0, 0, 0.25);
+          box-shadow: 0 0 11px 0 rgba(0, 0, 0, 0.25);
           position: relative;
           margin: auto;
           border-radius: 10px;
@@ -1143,7 +1149,7 @@ $themes: (
                 background-repeat: no-repeat;
                 background-position: center;
                 width: 9px;
-                height: 11rem;
+                height: 11px;
               }
             }
 
@@ -1222,7 +1228,7 @@ $themes: (
   
         @include element(wrapper) {
           color:  $color-primary-dark;
-          box-shadow: 0 0 11rem 0 rgba(0, 0, 0, 0.25);
+          box-shadow: 0 0 11px 0 rgba(0, 0, 0, 0.25);
           border-radius: 10px;
           margin: 0 auto;
           position: absolute;
