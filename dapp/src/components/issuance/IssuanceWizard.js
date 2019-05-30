@@ -171,6 +171,7 @@ class IssuanceWizard extends Component {
       case 0:
         return (
           <NameCurrencyStep
+            networkType={foreignNetwork}
             communityName={communityName}
             handleChangeCommunityName={this.handleChangeCommunityName}
             setNextStep={this.setNextStep}

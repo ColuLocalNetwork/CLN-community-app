@@ -36,7 +36,7 @@ const Option = (props) => {
   )
 }
 
-export default ({ communityType = { text: '' }, setCommunityType, nextAttribute, setExistingToken }) => {
+export default ({ communityType = { text: '' }, setCommunityType, networkType, setExistingToken }) => {
   const handleClick = (item) => {
     setCommunityType(item)
   }
@@ -66,7 +66,7 @@ export default ({ communityType = { text: '' }, setCommunityType, nextAttribute,
                             className='attributes__types__select'
                             classNamePrefix='attributes__types__select__prefix'
                             components={{ Option }}
-                            options={existingTokens()}
+                            options={existingTokens(networkType)}
                             placeholder={'Choose token'}
                             onChange={(val, e) => setExistingToken(val)}
                           />
@@ -97,7 +97,7 @@ export default ({ communityType = { text: '' }, setCommunityType, nextAttribute,
                             className='attributes__types__select'
                             classNamePrefix='attributes__types__select__prefix'
                             components={{ Option }}
-                            options={existingTokens()}
+                            options={existingTokens(networkType)}
                             placeholder={'Choose token'}
                             onChange={(val) => setExistingToken(val)}
                           />

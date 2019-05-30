@@ -42,7 +42,7 @@ class TokenProgress extends Component {
 
     let importedAddress
     if (token && token.tokenType === 'imported') {
-      const { value } = checkImportedToken(token)
+      const { value } = checkImportedToken(token, networkType)
       importedAddress = value
     }
 
