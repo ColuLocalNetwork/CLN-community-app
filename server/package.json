@@ -24,7 +24,7 @@
       "contract"
     ],
     "ignore": [
-      "doc"
+      "docs"
     ]
   },
   "_moduleAliases": {
