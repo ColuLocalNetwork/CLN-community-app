@@ -84,8 +84,7 @@ class TopNav extends Component {
 
   renderAccountSection = () => {
     const { profile } = this.state
-    console.log({ temp: this.props.network.networkType })
-    
+
     if (!this.props.network.accountAddress) {
       return (
         <div className={classNames('top-nav-text profile empty-wallet', { 'profile--open': profile })} onClick={this.showConnectMetamask}>
