@@ -1,6 +1,6 @@
 import React from 'react'
 import { isMobile } from 'react-device-detect'
-import ModalContainer from 'containers/ModalContainer.jsx'
+import ModalContainer from 'containers/ModalContainer'
 import classNames from 'classnames'
 import 'scss/main.scss'
 
