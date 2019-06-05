@@ -13,14 +13,6 @@ const Community = mongoose.model('Community')
  */
 
 /**
- * @apiDefine CommunityProgressData
- * @apiSuccess {String} _id Id of the deploy progress
- * @apiSuccess {Object} steps Steps with info about each step
- * @apiSuccess {String} communityAddress Community address if deploy process is completed
- * @apiSuccess {Boolean} done Done status if the deploy process is completed
- */
-
-/**
  * @api {get} /communities/:communityAddress Fetch community by community address
  * @apiName GetCommunity
  * @apiGroup Community
