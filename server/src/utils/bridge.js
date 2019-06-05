@@ -11,12 +11,13 @@ const home = require('@services/web3/home')
 const foreign = require('@services/web3/foreign')
 const mongoose = require('mongoose')
 const Token = mongoose.model('Token')
+const { setLengthLeft } = require('ethereumjs-util')
 
 const TOKEN_DECIMALS = 18
 
-async function deployForeignBridge (token, { web3, from, send }) {
+async function deployForeignBridge (token, { web3, createContract, from, send }) {
   console.log('Deploying foreign bridge using factory')
-  const foreignFactory = new web3.eth.Contract(ForeignBridgeFactoryABI, foreignAddressess.ForeignBridgeFactory)
+  const foreignFactory = createContract(ForeignBridgeFactoryABI, foreignAddressess.ForeignBridgeFactory)
 
   const method = foreignFactory.methods.deployForeignBridge(token.address)
 
@@ -38,12 +39,10 @@ async function deployForeignBridge (token, { web3, from, send }) {
   return result
 }
 
-async function deployHomeBridge (token, { web3, from, send }) {
+async function deployHomeBridge (token, { createContract, from, send }) {
   console.log('Deploying home bridge using factory')
 
-  const homeFactory = new web3.eth.Contract(HomeBridgeFactoryABI, homeAddresses.HomeBridgeFactory, {
-    from
-  })
+  const homeFactory = createContract(HomeBridgeFactoryABI, homeAddresses.HomeBridgeFactory)
 
   const method = homeFactory.methods.deployHomeBridge(token.name, token.symbol, TOKEN_DECIMALS)
 
@@ -74,15 +73,14 @@ async function addBridgeMapping (
   homeBridge,
   foreignBlockNumber,
   homeBlockNumber,
-  { web3, from, send }) {
+  { web3, createContract, from, send }) {
   console.log('Add bridge mapping')
 
-  const mapper = new web3.eth.Contract(BridgeMapperABI, homeAddresses.BridgeMapper, {
-    from
-  })
+  const mapper = createContract(BridgeMapperABI, homeAddresses.BridgeMapper)
+  const key = setLengthLeft(communityAddress, 32)
 
   const method = mapper.methods.addBridgeMapping(
-    communityAddress,
+    key,
     foreignToken,
     homeToken,
     foreignBridge,
@@ -130,7 +128,7 @@ async function deployBridge (communityProgress) {
 
   await handleReceipt(receipt)
 
-  const setTransferManagerMethod = new home.web3.eth.Contract(IRestrictedTokenABI, homeTokenAddress).methods.setTransferManager(communityAddress)
+  const setTransferManagerMethod = home.createContract(IRestrictedTokenABI, homeTokenAddress).methods.setTransferManager(communityAddress)
   await home.send(setTransferManagerMethod, {
     from: home.from
   })
