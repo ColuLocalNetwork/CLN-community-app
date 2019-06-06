@@ -36,7 +36,7 @@ module.exports = {
       bridgeType: 'home',
       contract: {
         options: {
-          transactionConfirmationBlocks: 1
+          transactionConfirmationBlocks: 2
         }
       },
       provider: 'http://rpc.fuse.io',
@@ -64,7 +64,7 @@ module.exports = {
       bridgeType: 'foreign',
       contract: {
         options: {
-          transactionConfirmationBlocks: 1
+          transactionConfirmationBlocks: 2
         }
       },
       provider: defer(function () {

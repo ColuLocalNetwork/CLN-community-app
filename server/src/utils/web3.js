@@ -26,12 +26,7 @@ const send = async (web3, bridgeType, method, options) => {
     const methodName = getMethodName(method)
     console.log(`[${bridgeType}] sending method ${methodName} from ${from} with nonce ${account.nonce}. gas price: ${gasPrice}, gas limit: ${gas}`)
     receipt = await method.send({ gasPrice, ...options, gas, nonce: account.nonce, chainId: bridgeType === 'home' ? 121 : undefined })
-
-    if (methodName === 'constructor') {
-      console.log(`[${bridgeType}] contract ${receipt._address} deployed`)
-    } else {
-      console.log(`[${bridgeType}] method ${methodName} succeeded in tx ${receipt.transactionHash}`)
-    }
+    console.log(`[${bridgeType}] method ${methodName} succeeded in tx ${receipt.transactionHash}`)
   }
 
   const { from } = options
