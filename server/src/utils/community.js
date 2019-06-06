@@ -24,9 +24,9 @@ const deployCommunity = async (communityProgress) => {
   }
   const adminMultiRole = combineRoles(USER_ROLE, ADMIN_ROLE, APPROVED_ROLE)
 
-  communityMethods.push(
-    transferManagerContract.methods.addEntity(adminAddress, adminMultiRole))
-  communityMethods[1].methodName = 'addEntity'
+  const addEntityMethod = transferManagerContract.methods.addEntity(adminAddress, adminMultiRole)
+  addEntityMethod.methodName = 'addEntity'
+  communityMethods.push(addEntityMethod)
 
   for (let method of communityMethods) {
     const receipt = await send(method, { from })
