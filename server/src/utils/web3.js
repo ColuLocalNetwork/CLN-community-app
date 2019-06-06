@@ -19,8 +19,7 @@ const createWeb3 = (providerUrl) => {
 const createContract = (web3, bridgeType, abi, address) =>
   new web3.eth.Contract(abi, address, config.get(`network.${bridgeType}.contract.options`))
 
-// const getMethodName = (method) => method._method.name || method._method.signature
-const getMethodName = () => 'unknown'
+const getMethodName = (method) => method.methodName || 'unknown'
 
 const send = async (web3, bridgeType, method, options) => {
   const doSend = async () => {

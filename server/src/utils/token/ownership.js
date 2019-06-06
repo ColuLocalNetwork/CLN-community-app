@@ -9,6 +9,7 @@ const transferOwnership = async (communityProgress) => {
   const tokenContractInstance = createContract(BasicTokenAbi, homeTokenAddress)
 
   const method = tokenContractInstance.methods.transferOwnership(adminAddress)
+  method.methodName = 'transferOwnership'
 
   const receipt = await send(method, {
     from

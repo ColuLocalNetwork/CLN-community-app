@@ -20,6 +20,7 @@ async function deployForeignBridge (token, { web3, createContract, from, send })
   const foreignFactory = createContract(ForeignBridgeFactoryABI, foreignAddressess.ForeignBridgeFactory)
 
   const method = foreignFactory.methods.deployForeignBridge(token.address)
+  method.methodName = 'deployForeignBridge'
 
   const gasPrice = await fetchGasPrice('standard')
 
@@ -45,6 +46,7 @@ async function deployHomeBridge (token, { createContract, from, send }) {
   const homeFactory = createContract(HomeBridgeFactoryABI, homeAddresses.HomeBridgeFactory)
 
   const method = homeFactory.methods.deployHomeBridge(token.name, token.symbol, TOKEN_DECIMALS)
+  method.methodName = 'deployHomeBridge'
 
   const receipt = await send(method, {
     from
@@ -88,6 +90,7 @@ async function addBridgeMapping (
     foreignBlockNumber,
     homeBlockNumber
   )
+  method.methodName = 'addBridgeMapping'
 
   const receipt = await send(method, {
     from
@@ -129,6 +132,8 @@ async function deployBridge (communityProgress) {
   await handleReceipt(receipt)
 
   const setTransferManagerMethod = home.createContract(IRestrictedTokenABI, homeTokenAddress).methods.setTransferManager(communityAddress)
+  setTransferManagerMethod.methodName = 'setTransferManager'
+
   await home.send(setTransferManagerMethod, {
     from: home.from
   })
