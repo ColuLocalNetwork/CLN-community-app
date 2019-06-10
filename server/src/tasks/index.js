@@ -1,6 +1,8 @@
 const processPastEvents = require('./utils').processPastEvents
 const processPastTransferEvents = require('./transfer').processPastTransferEvents
 const processPastBridgeMappingEvents = require('./bridge').processPastBridgeMappingEvents
+const deploy = require('./community').deploy
+
 const TokenFactoryAbi = require('@fuse/token-factory-contracts/build/abi/TokenFactory')
 const { web3 } = require('@services/web3/foreign')
 const config = require('config')
@@ -11,5 +13,6 @@ const processPastTokenCreatedEvents = processPastEvents.bind(null, 'TokenCreated
 module.exports = {
   processPastTokenCreatedEvents,
   processPastTransferEvents,
-  processPastBridgeMappingEvents
+  processPastBridgeMappingEvents,
+  deploy
 }

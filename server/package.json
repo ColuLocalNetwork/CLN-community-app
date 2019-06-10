@@ -34,7 +34,7 @@
     "@routes": "./src/routes",
     "@utils": "./src/utils",
     "@services": "./src/services",
-    "@jobs": "./src/jobs",
+    "@tasks": "./src/tasks",
     "@events": "./src/events"
   },
   "license": "MIT",
