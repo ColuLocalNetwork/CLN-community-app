@@ -19,6 +19,20 @@ const createWeb3 = (providerUrl) => {
 const createContract = (web3, bridgeType, abi, address) =>
   new web3.eth.Contract(abi, address, config.get(`network.${bridgeType}.contract.options`))
 
+const createMethod = (contract, methodName, ...args) => {
+  const { inspect } = require('util')
+  console.log(`creating method ${methodName} with arguments: ${inspect(...args)}}`)
+
+  let method
+  if (methodName === 'deploy') {
+    method = contract[methodName](...args)
+  } else {
+    method = contract.methods[methodName](...args)
+  }
+  method.methodName = methodName
+  return method
+}
+
 const getMethodName = (method) => method.methodName || 'unknown'
 
 const send = async (web3, bridgeType, method, options) => {
@@ -49,5 +63,6 @@ const send = async (web3, bridgeType, method, options) => {
 module.exports = {
   createWeb3,
   createContract,
+  createMethod,
   send
 }

@@ -1,4 +1,4 @@
-const { createContract, send, from } = require('@services/web3/home')
+const { createContract, createMethod, send, from } = require('@services/web3/home')
 const BasicTokenAbi = require('@fuse/token-factory-contracts/build/abi/BasicToken')
 const { handleReceipt } = require('@events/handlers')
 
@@ -8,8 +8,7 @@ const transferOwnership = async (communityProgress) => {
 
   const tokenContractInstance = createContract(BasicTokenAbi, homeTokenAddress)
 
-  const method = tokenContractInstance.methods.transferOwnership(adminAddress)
-  method.methodName = 'transferOwnership'
+  const method = createMethod(tokenContractInstance, 'transferOwnership', adminAddress)
 
   const receipt = await send(method, {
     from

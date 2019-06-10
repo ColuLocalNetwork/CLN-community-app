@@ -1,5 +1,5 @@
 const config = require('config')
-const { createWeb3, createContract, send } = require('@utils/web3')
+const { createWeb3, createContract, createMethod, send } = require('@utils/web3')
 
 const bridgeType = 'home'
 
@@ -9,5 +9,6 @@ module.exports = {
   from,
   web3,
   createContract: createContract.bind(null, web3, bridgeType),
+  createMethod,
   send: send.bind(null, web3, bridgeType)
 }
