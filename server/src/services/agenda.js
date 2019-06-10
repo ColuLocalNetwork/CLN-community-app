@@ -1,21 +1,21 @@
 const config = require('config')
 const Agenda = require('agenda')
-const tasks = require('@events/tasks')
+const jobs = require('@jobs')
 
 const agenda = new Agenda({ db: { address: config.get('mongo.uri'), options: config.get('mongo.options') } })
 
 agenda.define('processPastTokenCreatedEvents', async (job, done) => {
-  await tasks.processPastTokenCreatedEvents()
+  await jobs.processPastTokenCreatedEvents()
   done()
 })
 
 agenda.define('processPastTransferEvents', async (job, done) => {
-  await tasks.processPastTransferEvents()
+  await jobs.processPastTransferEvents()
   done()
 })
 
 agenda.define('processPastBridgeMappingEvents', async (job, done) => {
-  await tasks.processPastBridgeMappingEvents()
+  await jobs.processPastBridgeMappingEvents()
   done()
 })
 
