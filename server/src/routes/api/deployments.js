@@ -56,7 +56,7 @@ router.post('/', async (req, res, next) => {
   const communityProgress = await new CommunityProgress({ steps }).save()
 
   // deploy(communityProgress)
-  agenda.now('deploy', { communityProgress })
+  agenda.now('deploy', { communityProgressId: communityProgress._id })
   return res.json({ data: communityProgress })
 })
 

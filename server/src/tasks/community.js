@@ -19,7 +19,9 @@ const mandatorySteps = {
   transferOwnership: true
 }
 
-const deploy = async ({ communityProgress }) => {
+const deploy = async ({ communityProgressId }) => {
+  let communityProgress = await CommunityProgress.findById(communityProgressId)
+
   for (let stepName of stepsOrder) {
     const currentStep = communityProgress.steps[stepName]
 
@@ -36,7 +38,7 @@ const deploy = async ({ communityProgress }) => {
       throw stepFailed(`step ${stepName} should be mandatory`)
     }
 
-    if (communityProgress.steps[stepName.done]) {
+    if (communityProgress.steps[stepName].done) {
       console.log(`${stepName} already deployed`)
     } else {
       try {
