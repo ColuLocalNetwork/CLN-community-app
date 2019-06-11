@@ -7,8 +7,8 @@ const foreignAddressess = config.get('network.foreign.addresses')
 const homeAddresses = config.get('network.home.addresses')
 const { fetchGasPrice, isZeroAddress } = require('@utils/network')
 const { handleReceipt } = require('@events/handlers')
-const home = require('@services/web3/home')
-const foreign = require('@services/web3/foreign')
+// const home = require('@services/web3/home')
+// const foreign = require('@services/web3/foreign')
 const mongoose = require('mongoose')
 const Token = mongoose.model('Token')
 const { setLengthLeft } = require('ethereumjs-util')
@@ -97,7 +97,7 @@ async function addBridgeMapping (
   return receipt
 }
 
-async function deployBridge (communityProgress) {
+async function deployBridge ({ home, foreign }, communityProgress) {
   const { communityAddress } = communityProgress.steps.community.results
   const { foreignTokenAddress } = communityProgress.steps.bridge.args
   const { name } = communityProgress.steps.community.args
@@ -145,13 +145,6 @@ async function deployBridge (communityProgress) {
   }
 }
 
-async function bridgeMappingExists (tokenAddress) {
-  const mapper = new home.web3.eth.Contract(BridgeMapperABI, homeAddresses.BridgeMapper)
-  const homeAddress = await mapper.methods.homeTokenByForeignToken(tokenAddress).call()
-  return homeAddress && !isZeroAddress(homeAddress)
-}
-
 module.exports = {
-  deployBridge,
-  bridgeMappingExists
+  deployBridge
 }

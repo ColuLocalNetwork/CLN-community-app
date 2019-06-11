@@ -7,11 +7,18 @@ const agenda = new Agenda({ db: { address: config.get('mongo.uri'), options: con
 const getConfig = (taskName) => config.has(`agenda.tasks.${taskName}`) ? config.get(`agenda.tasks.${taskName}`) : {}
 
 Object.entries(tasks).forEach(([taskName, task]) => {
-  console.log(`adding definition of task ${taskName}`)
-  agenda.define(taskName, getConfig(taskName), async (job, done) => {
-    job.attrs.data ? await task(job.attrs.data) : await task()
+  const runJob = async (job, done) => {
+    try {
+      job.attrs.data ? await task(job.attrs.data) : await task()
+    } catch (err) {
+      console.log({ err })
+      return done(err)
+    }
     done()
-  })
+  }
+
+  console.log(`adding definition of task ${taskName}`)
+  agenda.define(taskName, getConfig(taskName), runJob)
 })
 
 async function start () {
@@ -20,7 +27,7 @@ async function start () {
   agenda.on('start', job => console.info(`Job ${job.attrs.name} starting. id: ${job.attrs._id}`))
   agenda.on('complete', job => console.info(`Job ${job.attrs.name} finished. id: ${job.attrs._id}`))
   agenda.on('success', job => console.info(`Job ${job.attrs.name} succeeded. id: ${job.attrs._id}`))
-  agenda.on('fail', job => console.warn(`Job ${job.attrs.name} failed`))
+  agenda.on('fail', (error, job) => console.error(`Job ${job.attrs.name} failed. id: ${job.attrs._id}. ${error}`))
 
   await agenda.start()
 

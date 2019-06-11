@@ -16,7 +16,7 @@ const createWeb3 = (providerUrl) => {
   return { from: account.address, web3 }
 }
 
-const createContract = (web3, bridgeType, abi, address) =>
+const createContract = ({ web3, bridgeType }, abi, address) =>
   new web3.eth.Contract(abi, address, config.get(`network.${bridgeType}.contract.options`))
 
 const createMethod = (contract, methodName, ...args) => {
@@ -35,34 +35,49 @@ const createMethod = (contract, methodName, ...args) => {
 
 const getMethodName = (method) => method.methodName || 'unknown'
 
-const send = async (web3, bridgeType, method, options) => {
+const send = async ({ web3, bridgeType, address }, method, options) => {
   const doSend = async () => {
     const methodName = getMethodName(method)
-    console.log(`[${bridgeType}] sending method ${methodName} from ${from} with nonce ${account.nonce}. gas price: ${gasPrice}, gas limit: ${gas}`)
-    receipt = await method.send({ gasPrice, ...options, gas, nonce: account.nonce, chainId: bridgeType === 'home' ? 121 : undefined })
+    const nonce = account.nonces[bridgeType]
+    console.log(`[${bridgeType}] sending method ${methodName} from ${from} with nonce ${nonce}. gas price: ${gasPrice}, gas limit: ${gas}`)
+    receipt = await method.send({ gasPrice, ...options, gas, nonce: nonce, chainId: bridgeType === 'home' ? 121 : undefined })
     console.log(`[${bridgeType}] method ${methodName} succeeded in tx ${receipt.transactionHash}`)
   }
 
-  const { from } = options
+  const from = address
   const gas = await method.estimateGas({ from })
   const gasPrice = bridgeType === 'home' ? '1000000000' : undefined
-  const account = await Account.findOneOrCreate({ bridgeType, address: from })
+  const account = await Account.findOne({ address })
   let receipt
   try {
     await doSend()
   } catch (error) {
     const nonce = await web3.eth.getTransactionCount(from)
-    account.nonce = nonce
+    account.nonces[bridgeType] = nonce
     await doSend()
   }
-  account.nonce++
-  await account.save()
+  account.nonces[bridgeType]++
+  await Account.updateOne({ address }, { [`nonces.${bridgeType}`]: account.nonces[bridgeType] })
   return receipt
+}
+
+const createNetwork = (bridgeType, account) => {
+  const web3 = new Web3(config.get(`network.${bridgeType}.provider`))
+  web3.eth.accounts.wallet.add(add0xPrefix(config.get('secrets.fuse.bridge.privateKey')))
+
+  return {
+    from: account.address,
+    web3,
+    createContract: createContract.bind(null, { web3, bridgeType, address: account.address }),
+    createMethod,
+    send: send.bind(null, { web3, bridgeType, address: account.address })
+  }
 }
 
 module.exports = {
   createWeb3,
   createContract,
   createMethod,
-  send
+  send,
+  createNetwork
 }

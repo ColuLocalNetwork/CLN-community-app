@@ -1,13 +1,15 @@
 const mongoose = require('mongoose')
-const Account = mongoose.model('Token')
+const Account = mongoose.model('Account')
 
-const lockAccount = async (bridgeType) => {
-  return Account.updateOne({ bridgeType, isLocked: false }, { isLocked: true, lockingTime: new Date() })
+const lockAccount = async () => {
+  // const a = await Account.findOne({ bridgeType, isLocked: false })
+  // console.log({ a })
+  // return a
+  return Account.findOneAndUpdate({ isLocked: false }, { isLocked: true, lockingTime: new Date() })
 }
 
-const unlockAccount = async (bridgeType, account) => {
-  return Account.updateOne({ bridgeType, account }, { isLocked: false, lockingTime: null })
-}
+const unlockAccount = async (address) =>
+  Account.findOneAndUpdate({ address }, { isLocked: false, lockingTime: null })
 
 module.exports = {
   lockAccount,
