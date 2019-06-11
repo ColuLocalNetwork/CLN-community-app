@@ -111,7 +111,7 @@ module.exports = {
     startPeriodicTasks: true,
     tasks: {
       deploy: {
-        concurrency: 1
+        concurrency: 2
       }
     }
   }

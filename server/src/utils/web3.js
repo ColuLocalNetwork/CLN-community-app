@@ -1,7 +1,11 @@
 const Web3 = require('web3')
+const web3Utils = require('web3-utils')
 const config = require('config')
+const { fromMasterSeed } = require('ethereumjs-wallet/hdkey')
 const mongoose = require('mongoose')
 const Account = mongoose.model('Account')
+
+const wallet = fromMasterSeed(config.get('secrets.accounts.seed'))
 
 function add0xPrefix (str) {
   if (str.indexOf('0x') === 0) {
@@ -61,9 +65,18 @@ const send = async ({ web3, bridgeType, address }, method, options) => {
   return receipt
 }
 
+const getPrivateKey = (account) => {
+  const derivedWallet = wallet.deriveChild(account.childIndex).getWallet()
+  const derivedAddress = derivedWallet.getChecksumAddressString()
+  if (account.address !== derivedAddress) {
+    throw new Error(`Account address does not match with the private key. account address: ${account.address}, derived: ${derivedAddress}`)
+  }
+  return add0xPrefix(web3Utils.bytesToHex(derivedWallet.getPrivateKey()))
+}
+
 const createNetwork = (bridgeType, account) => {
   const web3 = new Web3(config.get(`network.${bridgeType}.provider`))
-  web3.eth.accounts.wallet.add(add0xPrefix(config.get('secrets.fuse.bridge.privateKey')))
+  web3.eth.accounts.wallet.add(getPrivateKey(account))
 
   return {
     from: account.address,

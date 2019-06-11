@@ -4,6 +4,7 @@ module.exports = (mongoose) => {
   const Schema = mongoose.Schema
   const AccountSchema = new Schema({
     address: { type: String, required: [true, "can't be blank"] },
+    childIndex: { type: Number, required: [true, "can't be blank"] },
     nonces: { type: Object, default: {} },
     isLocked: { type: Boolean, default: false },
     lockingTime: { type: Date }

@@ -26,7 +26,6 @@ const performStep = async ({ home, foreign }, communityProgress, stepName) => {
   const currentStep = communityProgress.steps[stepName]
 
   const stepFailed = async (errorMsg, error) => {
-    console.error(error)
     console.log(errorMsg)
     await CommunityProgress.findByIdAndUpdate(communityProgress._id,
       { [`steps.${stepName}`]: { ...currentStep, done: false, error: errorMsg } },
@@ -63,8 +62,6 @@ const deploy = async ({ communityProgressId }) => {
 
   try {
     let communityProgress = await CommunityProgress.findById(communityProgressId)
-
-    console.log({ account })
 
     const home = createNetwork('home', account)
     const foreign = createNetwork('foreign', account)
