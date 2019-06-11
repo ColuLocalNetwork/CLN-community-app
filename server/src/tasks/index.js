@@ -1,7 +1,7 @@
 const processPastEvents = require('./utils').processPastEvents
 const processPastTransferEvents = require('./transfer').processPastTransferEvents
 const processPastBridgeMappingEvents = require('./bridge').processPastBridgeMappingEvents
-const deploy = require('./community').deploy
+const deploy = require('./deployment').deploy
 
 const TokenFactoryAbi = require('@fuse/token-factory-contracts/build/abi/TokenFactory')
 const { web3 } = require('@services/web3/foreign')

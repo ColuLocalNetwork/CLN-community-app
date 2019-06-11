@@ -5,6 +5,7 @@ module.exports = (mongoose) => {
 
   const CommunityProgressSchema = new Schema({
     communityAddress: { type: String },
+    deployingAccountAddress: { type: String },
     steps: { type: Object, default: {} },
     done: { type: Boolean }
   }, { timestamps: true, minimize: false })

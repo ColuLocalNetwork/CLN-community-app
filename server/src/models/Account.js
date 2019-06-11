@@ -5,7 +5,9 @@ module.exports = (mongoose) => {
   const AccountSchema = new Schema({
     address: { type: String, required: [true, "can't be blank"] },
     bridgeType: { type: String, required: [true, "can't be blank"] },
-    nonce: { type: Number, default: 0 }
+    nonce: { type: Number, default: 0 },
+    isLocked: { type: Boolean, default: false },
+    lockingTime: { type: Date }
   })
 
   AccountSchema.statics.findOneOrCreate = async function findOneOrCreate (condition) {

@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
-const { deployBridge } = require('@utils/bridge')
-const { deployCommunity } = require('@utils/community')
-const { transferOwnership } = require('@utils/token/ownership')
+const { deployBridge } = require('./bridge')
+const { deployCommunity } = require('./community')
+const { transferOwnership } = require('./token')
+const { lockAccount, unlockAccount } = require('@utils/account')
 const CommunityProgress = mongoose.model('CommunityProgress')
 const Community = mongoose.model('Community')
 
@@ -21,6 +22,9 @@ const mandatorySteps = {
 
 const deploy = async ({ communityProgressId }) => {
   let communityProgress = await CommunityProgress.findById(communityProgressId)
+
+  const account = await lockAccount()
+  communityProgress = CommunityProgress.findByIdAndUpdate(communityProgress._id, { account })
 
   for (let stepName of stepsOrder) {
     const currentStep = communityProgress.steps[stepName]
@@ -68,6 +72,7 @@ const deploy = async ({ communityProgressId }) => {
   }).save()
 
   await CommunityProgress.findByIdAndUpdate(communityProgress._id, { communityAddress, done: true })
+  await unlockAccount(account)
 
   console.log('Community deploy is done')
 }
