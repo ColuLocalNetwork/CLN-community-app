@@ -6,6 +6,7 @@ const IRestrictedTokenABI = require('@constants/abi/IRestrictedToken')
 const foreignAddressess = config.get('network.foreign.addresses')
 const homeAddresses = config.get('network.home.addresses')
 const { fetchGasPrice } = require('@utils/network')
+const { generateSignature } = require('@utils/web3')
 const { handleReceipt } = require('@events/handlers')
 const mongoose = require('mongoose')
 const Token = mongoose.model('Token')
@@ -77,7 +78,7 @@ async function addBridgeMapping (
   const mapper = createContract(BridgeMapperABI, homeAddresses.BridgeMapper)
   const key = setLengthLeft(communityAddress, 32)
 
-  const method = createMethod(mapper, 'addBridgeMapping',
+  const addBridgeMappingArguments = [
     key,
     foreignToken,
     homeToken,
@@ -85,6 +86,17 @@ async function addBridgeMapping (
     homeBridge,
     foreignBlockNumber,
     homeBlockNumber
+  ]
+
+  const signature = await generateSignature(
+    mapper.methods.getAddBridgeMappingHash,
+    addBridgeMappingArguments,
+    config.get('secrets.fuse.bridge.privateKey')
+  )
+
+  const method = createMethod(mapper, 'addBridgeMapping',
+    ...addBridgeMappingArguments,
+    signature
   )
 
   const receipt = await send(method, {

@@ -1,5 +1,5 @@
 const Web3 = require('web3')
-const web3Utils = require('web3-utils')
+const ethUtils = require('ethereumjs-util')
 const config = require('config')
 const { fromMasterSeed } = require('ethereumjs-wallet/hdkey')
 const mongoose = require('mongoose')
@@ -7,16 +7,9 @@ const Account = mongoose.model('Account')
 
 const wallet = fromMasterSeed(config.get('secrets.accounts.seed'))
 
-function add0xPrefix (str) {
-  if (str.indexOf('0x') === 0) {
-    return str
-  }
-  return `0x${str}`
-}
-
 const createWeb3 = (providerUrl) => {
   const web3 = new Web3(providerUrl)
-  const account = web3.eth.accounts.wallet.add(add0xPrefix(config.get('secrets.fuse.bridge.privateKey')))
+  const account = web3.eth.accounts.wallet.add(ethUtils.addHexPrefix(config.get('secrets.fuse.bridge.privateKey')))
   return { from: account.address, web3 }
 }
 
@@ -71,7 +64,7 @@ const getPrivateKey = (account) => {
   if (account.address !== derivedAddress) {
     throw new Error(`Account address does not match with the private key. account address: ${account.address}, derived: ${derivedAddress}`)
   }
-  return add0xPrefix(web3Utils.bytesToHex(derivedWallet.getPrivateKey()))
+  return ethUtils.addHexPrefix(ethUtils.bufferToHex(derivedWallet.getPrivateKey()))
 }
 
 const createNetwork = (bridgeType, account) => {
@@ -87,8 +80,17 @@ const createNetwork = (bridgeType, account) => {
   }
 }
 
+const toBufferStripPrefix = (str) => Buffer.from(ethUtils.stripHexPrefix(str), 'hex')
+
+const generateSignature = async (method, methodArguments, privateKey) => {
+  const msg = await method(...methodArguments).call()
+  const vrs = ethUtils.ecsign(toBufferStripPrefix(msg), toBufferStripPrefix(privateKey))
+  return ethUtils.toRpcSig(vrs.v, vrs.r, vrs.s)
+}
+
 module.exports = {
   createWeb3,
+  generateSignature,
   createContract,
   createMethod,
   send,
