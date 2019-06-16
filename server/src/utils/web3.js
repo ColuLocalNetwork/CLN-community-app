@@ -4,7 +4,7 @@ const config = require('config')
 const { fromMasterSeed } = require('ethereumjs-wallet/hdkey')
 const mongoose = require('mongoose')
 const Account = mongoose.model('Account')
-
+const { fetchGasPrice } = require('@utils/network')
 const wallet = fromMasterSeed(config.get('secrets.accounts.seed'))
 
 const createWeb3 = (providerUrl) => {
@@ -32,6 +32,8 @@ const createMethod = (contract, methodName, ...args) => {
 
 const getMethodName = (method) => method.methodName || 'unknown'
 
+const getGasPrice = (bridgeType) => bridgeType === 'home' ? '1000000000' : fetchGasPrice('fast')
+
 const send = async ({ web3, bridgeType, address }, method, options) => {
   const doSend = async () => {
     const methodName = getMethodName(method)
@@ -43,7 +45,7 @@ const send = async ({ web3, bridgeType, address }, method, options) => {
 
   const from = address
   const gas = await method.estimateGas({ from })
-  const gasPrice = bridgeType === 'home' ? '1000000000' : undefined
+  const gasPrice = await getGasPrice(bridgeType)
   const account = await Account.findOne({ address })
   let receipt
   try {

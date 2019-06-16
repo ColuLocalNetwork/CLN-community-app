@@ -1,8 +1,8 @@
 const router = require('express').Router()
 const mongoose = require('mongoose')
 const CommunityProgress = mongoose.model('CommunityProgress')
-// const deploy = require('@utils/deploy')
 const { agenda } = require('@services/agenda')
+
 /**
  * @apiDefine DeploymentData
  * @apiSuccess {String} _id Id of the deploy progress
@@ -55,7 +55,6 @@ router.post('/', async (req, res, next) => {
   const { steps } = req.body
   const communityProgress = await new CommunityProgress({ steps }).save()
 
-  // deploy(communityProgress)
   agenda.now('deploy', { communityProgressId: communityProgress._id })
   return res.json({ data: communityProgress })
 })
