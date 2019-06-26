@@ -20,6 +20,7 @@ import { getAccountAddress } from 'selectors/accounts'
 import { checkIsAdmin } from 'selectors/entities'
 import { getToken } from 'selectors/dashboard'
 import { fetchEntities } from 'actions/communityEntities'
+import { changeNetwork } from 'services/web3'
 
 class DashboardLayout extends PureComponent {
   state = {
@@ -61,8 +62,10 @@ class DashboardLayout extends PureComponent {
     if (networkType === 'fuse') {
       successFunc()
     } else {
-      const { loadModal } = this.props
-      loadModal(WRONG_NETWORK_MODAL, { supportedNetworks: ['fuse'] })
+      changeNetwork('fuse')
+      successFunc()
+      // const { loadModal } = this.props
+      // loadModal(WRONG_NETWORK_MODAL, { supportedNetworks: ['fuse'] })
     }
   }
 
