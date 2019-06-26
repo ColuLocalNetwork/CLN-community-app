@@ -36,6 +36,10 @@ if (!window.ethereum) {
 export const changeNetwork = (network) => {
   console.log(`change to network ${network}`)
   portis.changeNetwork(network)
+  givenWeb3.eth.net.getId().then((networkVersion) => {
+    console.log({ networkVersion: portis.provider.networkVersion })
+    console.log(networkVersion)
+  })
   console.log({ networkVersion: portis.provider.networkVersion })
 }
 

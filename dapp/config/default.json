@@ -35,7 +35,8 @@
     },
     "options": {
       "fuse": {
-        "gasPrice": 1e9
+        "gasPrice": 1e9,
+        "transactionConfirmationBlocks": 1
       }
     }
   },
