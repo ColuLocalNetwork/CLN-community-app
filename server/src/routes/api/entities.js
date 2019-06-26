@@ -3,7 +3,6 @@ const router = require('express').Router()
 const mongoose = require('mongoose')
 const Entity = mongoose.model('Entity')
 const metadataUtils = require('@utils/metadata')
-const { getMetadata } = require('@utils/metadata')
 const Community = mongoose.model('Community')
 const Token = mongoose.model('Token')
 const { sortBy, keyBy } = require('lodash')
@@ -109,17 +108,11 @@ const getQueryFilter = ({ query: { type }, params: { communityAddress } }) =>
  */
 router.get('/:communityAddress', async (req, res, next) => {
   const queryFilter = getQueryFilter(req)
-  const { withMetadata } = req.query
 
   let [ results, itemCount ] = await Promise.all([
-    Entity.find(queryFilter).sort({ name: 1 }).limit(req.query.limit).skip(req.skip),
+    Entity.find(queryFilter).sort({ name: 1 }).limit(req.query.limit).skip(req.skip).populate('profile'),
     Entity.countDocuments(queryFilter)
   ])
-
-  if (withMetadata) {
-    const metadatas = await Promise.all(results.map(result => result.uri ? getMetadata(result.uri.split('://')[1]).catch(console.error) : null))
-    results = results.map((result, index) => ({ ...result.toObject(), metadata: metadatas[index] && metadatas[index].data }))
-  }
 
   const pageCount = Math.ceil(itemCount / req.query.limit)
 

@@ -13,7 +13,8 @@ import {
   addAdminRole,
   removeAdminRole,
   confirmUser,
-  toggleCommunityMode
+  toggleCommunityMode,
+  joinCommunity
 } from 'actions/communityEntities'
 import { fetchCommunity } from 'actions/token'
 import { loadModal, hideModal } from 'actions/ui'
@@ -81,10 +82,16 @@ class Users extends Component {
     this.props.onlyOnFuse(this.loadAddUserModal)
   }
 
-  loadAddUserModal = () => {
-    const { loadModal } = this.props
+  handleJoinCommunity = () => {
+    this.props.onlyOnFuse(() => this.loadAddUserModal(true))
+  }
+
+  loadAddUserModal = (isJoin) => {
+    const submitEntity = isJoin ? this.props.joinCommunity : this.props.addEntity
+    const { loadModal, accountAddress } = this.props
     loadModal(ADD_USER_MODAL, {
-      submitEntity: (data) => this.props.addEntity(this.props.community.communityAddress, { ...data, type: 'user' }, this.props.isClosed)
+      entity: isJoin ? { account: accountAddress } : undefined,
+      submitEntity: (data) => submitEntity(this.props.community.communityAddress, { ...data, type: 'user' }, this.props.isClosed)
     })
   }
 
@@ -275,12 +282,12 @@ class Users extends Component {
         <div className='entities__header'>
           <h2 className='entities__header__title'>Users list</h2>
           {
-            isAdmin && (
+            (
               <div className='entities__header__add grid-x align-middle'>
-                <span onClick={this.handleAddUser}>
+                <span onClick={isAdmin ? this.handleAddUser : this.handleJoinCommunity}>
                   <a style={{ backgroundImage: `url(${plusIcon})` }} />
                 </span>
-                Add new user
+                {isAdmin ? 'Add new user' : 'Join'}
               </div>
             )
           }
@@ -324,6 +331,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
+  joinCommunity,
   addEntity,
   confirmUser,
   addAdminRole,

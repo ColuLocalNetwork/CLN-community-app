@@ -19,6 +19,7 @@ import NavBar from 'components/common/NavBar'
 import { getAccountAddress } from 'selectors/accounts'
 import { checkIsAdmin } from 'selectors/entities'
 import { fetchEntities } from 'actions/communityEntities'
+import SignIn from 'components/common/SignIn'
 
 class DashboardLayout extends PureComponent {
   state = {
@@ -72,12 +73,13 @@ class DashboardLayout extends PureComponent {
       return null
     }
     const { open } = this.state
-    const { match, token, community, metadata, networkType, communityAddress } = this.props
+    const { match, token, community, metadata, networkType, communityAddress, accountAddress } = this.props
 
     const { address: tokenAddress, name } = token
     const { isClosed } = community
     return (
       <div className='Dashboard'>
+        {accountAddress ? <SignIn accountAddress={accountAddress} /> : undefined}
         <div className='Dashboard__container'>
           {
             !isMobile
