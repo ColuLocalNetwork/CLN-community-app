@@ -39,6 +39,12 @@
       "fuse": {
         "gasPrice": 1e9,
         "transactionConfirmationBlocks": 1
+      },
+      "ropsten": {
+        "transactionConfirmationBlocks": 1
+      },
+      "main": {
+        "transactionConfirmationBlocks": 2
       }
     }
   },

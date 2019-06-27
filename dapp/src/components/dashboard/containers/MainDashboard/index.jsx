@@ -10,7 +10,7 @@ import { Route, Switch } from 'react-router-dom'
 import Users from '../../pages/Users'
 import Businesses from '../../pages/Businesses'
 import Header from '../../components/Header'
-// import { WRONG_NETWORK_MODAL } from 'constants/uiConstants'
+import { WRONG_NETWORK_MODAL } from 'constants/uiConstants'
 import Sidebar from 'react-sidebar'
 import { isMobile } from 'react-device-detect'
 import FontAwesome from 'react-fontawesome'
@@ -20,7 +20,7 @@ import { getAccountAddress } from 'selectors/accounts'
 import { checkIsAdmin } from 'selectors/entities'
 import { getToken } from 'selectors/dashboard'
 import { fetchEntities } from 'actions/communityEntities'
-import { changeNetwork } from 'services/web3'
+import { changeNetwork } from 'actions/network'
 
 class DashboardLayout extends PureComponent {
   state = {
@@ -58,14 +58,15 @@ class DashboardLayout extends PureComponent {
   }
 
   onlyOnFuse = (successFunc) => {
-    const { networkType } = this.props
+    const { networkType, isPortis } = this.props
     if (networkType === 'fuse') {
       successFunc()
-    } else {
-      changeNetwork('fuse')
+    } else if (isPortis) {
+      this.props.changeNetwork('fuse')
       successFunc()
-      // const { loadModal } = this.props
-      // loadModal(WRONG_NETWORK_MODAL, { supportedNetworks: ['fuse'] })
+    } else {
+      const { loadModal } = this.props
+      loadModal(WRONG_NETWORK_MODAL, { supportedNetworks: ['fuse'] })
     }
   }
 
@@ -129,6 +130,7 @@ const mapStateToProps = (state, { match }) => ({
   accountAddress: getAccountAddress(state),
   networkType: state.network.networkType,
   token: getToken(state, match.params.address),
+  isPortis: state.network.isPortis,
   community: state.entities.communities && state.entities.communities[match.params.address],
   communityAddress: match.params.address,
   tokenNetworkType: getForeignNetwork(state),
@@ -145,7 +147,8 @@ const mapDispatchToProps = {
   isUserExists,
   loadModal,
   hideModal,
-  fetchEntities
+  fetchEntities,
+  changeNetwork
 }
 
 export default connect(
