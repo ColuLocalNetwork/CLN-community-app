@@ -13,25 +13,13 @@
       }
     },
     "@fuse/entities-contracts": {
-      "version": "file:../contracts/entities",
-      "requires": {
-        "openzeppelin-solidity": "2.0.1",
-        "truffle": "^5.0.14",
-        "truffle-assertions": "^0.9.0",
-        "truffle-hdwallet-provider": "^1.0.8"
-      }
+      "version": "file:../contracts/entities"
     },
     "@fuse/roles": {
-      "version": "file:../packages/roles",
-      "requires": {
-        "ethereumjs-util": "^6.1.0"
-      }
+      "version": "file:../packages/roles"
     },
     "@fuse/token-factory-contracts": {
-      "version": "file:../contracts/token-factory",
-      "requires": {
-        "openzeppelin-solidity": "^2.2.0"
-      }
+      "version": "file:../contracts/token-factory"
     },
     "@rigwild/apidoc-markdown": {
       "version": "2.0.2",
@@ -129,9 +117,9 @@
       }
     },
     "acorn": {
-      "version": "6.1.1",
-      "resolved": "https://registry.npmjs.org/acorn/-/acorn-6.1.1.tgz",
-      "integrity": "sha512-jPTiwtOxaHNaAPg/dmrJ/beuzLRnXtB0kQPQ8JpotKJgTB6rX6c8mlf315941pyjBSaPg8NHXS9fhP4u17DpGA==",
+      "version": "6.4.1",
+      "resolved": "https://registry.npmjs.org/acorn/-/acorn-6.4.1.tgz",
+      "integrity": "sha512-ZVA9k326Nwrj3Cj9jlh3wGFutC2ZornPNARZwsNYqQYgN0EsV2d53w5RN/co65Ohn4sUAUtb1rSUAOD6XN9idA==",
       "dev": true
     },
     "acorn-jsx": {
