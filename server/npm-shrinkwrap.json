@@ -13,25 +13,13 @@
       }
     },
     "@fuse/entities-contracts": {
-      "version": "file:../contracts/entities",
-      "requires": {
-        "openzeppelin-solidity": "2.0.1",
-        "truffle": "^5.0.14",
-        "truffle-assertions": "^0.9.0",
-        "truffle-hdwallet-provider": "^1.0.8"
-      }
+      "version": "file:../contracts/entities"
     },
     "@fuse/roles": {
-      "version": "file:../packages/roles",
-      "requires": {
-        "ethereumjs-util": "^6.1.0"
-      }
+      "version": "file:../packages/roles"
     },
     "@fuse/token-factory-contracts": {
-      "version": "file:../contracts/token-factory",
-      "requires": {
-        "openzeppelin-solidity": "^2.2.0"
-      }
+      "version": "file:../contracts/token-factory"
     },
     "@rigwild/apidoc-markdown": {
       "version": "2.0.2",
@@ -403,13 +391,13 @@
       "dev": true
     },
     "aws-sdk": {
-      "version": "2.405.0",
-      "resolved": "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.405.0.tgz",
-      "integrity": "sha512-krgJBy/5FFGFjlOoODLH4ryXqUSQKz6He6QdIboKXvjIEV2CNxsoB+tFaThKD3SZmFcRxoWjho7R17dIlswTtQ==",
+      "version": "2.814.0",
+      "resolved": "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.814.0.tgz",
+      "integrity": "sha512-empd1m/J/MAkL6d9OeRpmg9thobULu0wk4v8W3JToaxGi2TD7PIdvE6yliZKyOVAdJINhBWEBhxR4OUIHhcGbQ==",
       "requires": {
-        "buffer": "4.9.1",
+        "buffer": "4.9.2",
         "events": "1.1.1",
-        "ieee754": "1.1.8",
+        "ieee754": "1.1.13",
         "jmespath": "0.15.0",
         "querystring": "0.2.0",
         "sax": "1.2.1",
@@ -418,20 +406,10 @@
         "xml2js": "0.4.19"
       },
       "dependencies": {
-        "buffer": {
-          "version": "4.9.1",
-          "resolved": "https://registry.npmjs.org/buffer/-/buffer-4.9.1.tgz",
-          "integrity": "sha1-bRu2AbB6TvztlwlBMgkwJ8lbwpg=",
-          "requires": {
-            "base64-js": "^1.0.2",
-            "ieee754": "^1.1.4",
-            "isarray": "^1.0.0"
-          }
-        },
         "ieee754": {
-          "version": "1.1.8",
-          "resolved": "https://registry.npmjs.org/ieee754/-/ieee754-1.1.8.tgz",
-          "integrity": "sha1-vjPUCsEO8ZJnAfbwii2G+/0a0+Q="
+          "version": "1.1.13",
+          "resolved": "https://registry.npmjs.org/ieee754/-/ieee754-1.1.13.tgz",
+          "integrity": "sha512-4vf7I2LYV/HaWerSo3XmlMkp5eZ83i+/CDluXi/IGTs/O1sejBNhTtnxzmRZfvOUqj7lZjqHkeTvpgSFDlWZTg=="
         }
       }
     },
@@ -776,6 +754,16 @@
       "version": "1.1.0",
       "resolved": "https://registry.npmjs.org/bson/-/bson-1.1.0.tgz",
       "integrity": "sha512-9Aeai9TacfNtWXOYarkFJRW2CWo+dRon+fuLZYJmvLV3+MiUp0bEI6IAZfXEIg7/Pl/7IWlLaDnhzTsD81etQA=="
+    },
+    "buffer": {
+      "version": "4.9.2",
+      "resolved": "https://registry.npmjs.org/buffer/-/buffer-4.9.2.tgz",
+      "integrity": "sha512-xq+q3SRMOxGivLhBNaUdC64hDTQwejJ+H0T/NB1XMtTVEwNTrfFF3gAxiyW0Bu/xWEGhjVKgUcMhCrUy2+uCWg==",
+      "requires": {
+        "base64-js": "^1.0.2",
+        "ieee754": "^1.1.4",
+        "isarray": "^1.0.0"
+      }
     },
     "buffer-equal-constant-time": {
       "version": "1.0.1",
