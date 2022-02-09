@@ -13,25 +13,13 @@
       }
     },
     "@fuse/entities-contracts": {
-      "version": "file:../contracts/entities",
-      "requires": {
-        "openzeppelin-solidity": "2.0.1",
-        "truffle": "^5.0.14",
-        "truffle-assertions": "^0.9.0",
-        "truffle-hdwallet-provider": "^1.0.8"
-      }
+      "version": "file:../contracts/entities"
     },
     "@fuse/roles": {
-      "version": "file:../packages/roles",
-      "requires": {
-        "ethereumjs-util": "^6.1.0"
-      }
+      "version": "file:../packages/roles"
     },
     "@fuse/token-factory-contracts": {
-      "version": "file:../contracts/token-factory",
-      "requires": {
-        "openzeppelin-solidity": "^2.2.0"
-      }
+      "version": "file:../contracts/token-factory"
     },
     "@rigwild/apidoc-markdown": {
       "version": "2.0.2",
@@ -6536,13 +6524,10 @@
       "dev": true
     },
     "undefsafe": {
-      "version": "2.0.2",
-      "resolved": "https://registry.npmjs.org/undefsafe/-/undefsafe-2.0.2.tgz",
-      "integrity": "sha1-Il9rngM3Zj4Njnz9aG/Cg2zKznY=",
-      "dev": true,
-      "requires": {
-        "debug": "^2.2.0"
-      }
+      "version": "2.0.5",
+      "resolved": "https://registry.npmjs.org/undefsafe/-/undefsafe-2.0.5.tgz",
+      "integrity": "sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==",
+      "dev": true
     },
     "union-value": {
       "version": "1.0.0",
