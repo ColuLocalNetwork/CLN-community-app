@@ -13,25 +13,13 @@
       }
     },
     "@fuse/entities-contracts": {
-      "version": "file:../contracts/entities",
-      "requires": {
-        "openzeppelin-solidity": "2.0.1",
-        "truffle": "^5.0.14",
-        "truffle-assertions": "^0.9.0",
-        "truffle-hdwallet-provider": "^1.0.8"
-      }
+      "version": "file:../contracts/entities"
     },
     "@fuse/roles": {
-      "version": "file:../packages/roles",
-      "requires": {
-        "ethereumjs-util": "^6.1.0"
-      }
+      "version": "file:../packages/roles"
     },
     "@fuse/token-factory-contracts": {
-      "version": "file:../contracts/token-factory",
-      "requires": {
-        "openzeppelin-solidity": "^2.2.0"
-      }
+      "version": "file:../contracts/token-factory"
     },
     "@rigwild/apidoc-markdown": {
       "version": "2.0.2",
@@ -378,11 +366,18 @@
       "dev": true
     },
     "async": {
-      "version": "2.6.1",
-      "resolved": "https://registry.npmjs.org/async/-/async-2.6.1.tgz",
-      "integrity": "sha512-fNEiL2+AZt6AlAw/29Cr0UDe4sRAHCpEHh54WMz+Bb7QfNcFw4h3loofyJpLeQs4Yx7yuqu/2dLgM5hKOs6HlQ==",
+      "version": "2.6.4",
+      "resolved": "https://registry.npmjs.org/async/-/async-2.6.4.tgz",
+      "integrity": "sha512-mzo5dfJYwAn29PeiJ0zvwTo04zj8HDJj0Mn8TD7sno7q12prdbnasKJHhkm2c1LgrhlJ0teaea8860oxi51mGA==",
       "requires": {
-        "lodash": "^4.17.10"
+        "lodash": "^4.17.14"
+      },
+      "dependencies": {
+        "lodash": {
+          "version": "4.17.21",
+          "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz",
+          "integrity": "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="
+        }
       }
     },
     "async-each": {
@@ -4655,6 +4650,14 @@
         "sliced": "1.0.1"
       },
       "dependencies": {
+        "async": {
+          "version": "2.6.1",
+          "resolved": "https://registry.npmjs.org/async/-/async-2.6.1.tgz",
+          "integrity": "sha512-fNEiL2+AZt6AlAw/29Cr0UDe4sRAHCpEHh54WMz+Bb7QfNcFw4h3loofyJpLeQs4Yx7yuqu/2dLgM5hKOs6HlQ==",
+          "requires": {
+            "lodash": "^4.17.10"
+          }
+        },
         "mongodb": {
           "version": "3.1.10",
           "resolved": "https://registry.npmjs.org/mongodb/-/mongodb-3.1.10.tgz",
