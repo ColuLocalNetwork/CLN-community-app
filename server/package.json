@@ -50,7 +50,7 @@
     "aws-sdk": "^2.405.0",
     "bignumber.js": "^8.1.1",
     "body-parser": "^1.18.3",
-    "config": "^1.30.0",
+    "config": "^3.3.8",
     "cors": "2.7.1",
     "debug": "2.6.9",
     "eth-sig-util": "^2.1.1",
